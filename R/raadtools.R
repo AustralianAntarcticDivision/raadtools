@@ -11,12 +11,34 @@
 ##' @keywords package
 NULL
 
-## TODO: must fix how this works
-## something like getOption <- function(x) {if (x %in% c("default.datadir", "etc") try(file.exists(x)) else base::getOption(x)} ??
-options(default.datadir = '//aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data',
-datapath = "\\\\aad.gov.au/files/Transfer/toolbox/data",
-cachepath = "\\\\aad.gov.au\\files\\Transfer\\toolbox\\datacache")
 
+.possiblepaths <- function() {
+    list(default.datadir =  c("//aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data",
+                       "/Volumes/files/data"))
+}
+.trysetpath <- function() {
+    possibles <- .possiblepaths()[["default.datadir"]]
+    success <- FALSE
+    for (i in seq_along(possibles)) {
+        fi <- file.info(possibles[i])
+        if (!is.na(fi$isdir) & fi$isdir) {
+            options(default.datadir = possibles[i])
+            success <- TRUE
+        }
+    }
+    success
+}
+.onLoad <- function() {
+    pathwasset <- .trysetpath()
+    if (!pathwasset) {
+        cat("Warning: could not find data repository at any of",
+            paste(normalizePath(.possiblepaths()[["default.datadir"]], mustWork = FALSE), collapse = "\n"), sep = "\n")
+        cat("\n")
+        cat("Consider setting the option for your system\n")
+        cat('For example: options(default.datadir = "', gsub("\\\\", "/", normalizePath("/myrepository/data", mustWork = FALSE)), '")', '\n', sep = "")
+
+    }
+}
 
 ##' Load \code{data.frame} of file path and dates of NSIDC sea ice concentration data.
 ##'
@@ -147,9 +169,9 @@ readice <- function(date = as.Date("1978-11-01"), time.resolution = "daily", zer
 
 ##' Stable conversion to POSIXct from character and Date
 ##'
-##' Conversion to POSIXct ensuring no local time zone applied. Currently supported is character, Date and 
+##' Conversion to POSIXct ensuring no local time zone applied. Currently supported is character, Date and
 ##' anything understood by \code{\link[base]{as.POSIXct}}.
-##' 
+##'
 ##' @param x input date-time stamp, character, Date or other supported type.
 ##' @param \dots ignored
 ##' @return the vector \code{x} converted (if necessary) to \code{POSIXct}

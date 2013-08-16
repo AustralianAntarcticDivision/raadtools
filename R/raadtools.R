@@ -28,14 +28,14 @@ NULL
     }
     success
 }
-.onLoad <- function() {
+.onAttach <- function(libname, pkgname) {
     pathwasset <- .trysetpath()
     if (!pathwasset) {
-        cat("Warning: could not find data repository at any of",
-            paste(normalizePath(.possiblepaths()[["default.datadir"]], mustWork = FALSE), collapse = "\n"), sep = "\n")
-        cat("\n")
-        cat("Consider setting the option for your system\n")
-        cat('For example: options(default.datadir = "', gsub("\\\\", "/", normalizePath("/myrepository/data", mustWork = FALSE)), '")', '\n', sep = "")
+        packageStartupMessage("Warning: could not find data repository at any of",
+            paste(normalizePath(.possiblepaths()[["default.datadir"]], mustWork = FALSE), collapse = "\n"), sep = "\n\n")
+    
+        packageStartupMessage("Consider setting the option for your system\n")
+        packageStartupMessage('For example: options(default.datadir = "', gsub("\\\\", "/", normalizePath("/myrepository/data", mustWork = FALSE)), '")', '\n', sep = "")
 
     }
 }
@@ -66,13 +66,12 @@ icefiles <- function(time.resolution = c("daily", "monthly")) {
     ##    }
     ##}
     files <- NULL
-    load(file.path(getOption("cachepath"), sprintf("%s_icefiles.Rdata", time.resolution)))
+    load(file.path(getOption("default.datadir"), "cache", sprintf("%s_icefiles.Rdata", time.resolution)))
     files
 }
 
 ##' @title raadtools-internal
 ##' @rdname raadtools-internal
-##' @export
 ##' @keywords internal
 .updateicefiles <- function(datadir = getOption("default.datadir")) {
 
@@ -113,6 +112,7 @@ icefiles <- function(time.resolution = c("daily", "monthly")) {
 ##' @param zeroNA mask zero values as NA
 ##' @param rescale rescale values from integer range?
 ##' @param datadir root directory where data is stored
+##' @export
 ##' @return \code{\link{raster}} object
 ##' @seealso \code{\link{icefiles}} for details on the repository of data files, \code{\link{raster}} for the return value
 readice <- function(date = as.Date("1978-11-01"), time.resolution = "daily", zeroNA = TRUE, rescale = TRUE, datadir = getOption("default.datadir")) {

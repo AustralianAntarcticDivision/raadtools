@@ -11,12 +11,34 @@
 ##' @keywords package
 NULL
 
-## TODO: must fix how this works
-## something like getOption <- function(x) {if (x %in% c("default.datadir", "etc") try(file.exists(x)) else base::getOption(x)} ??
-options(default.datadir = '//aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data',
-datapath = "\\\\aad.gov.au/files/Transfer/toolbox/data",
-cachepath = "\\\\aad.gov.au\\files\\Transfer\\toolbox\\datacache")
 
+.possiblepaths <- function() {
+    list(default.datadir =  c("//aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data",
+                       "/Volumes/files/data"))
+}
+.trysetpath <- function() {
+    possibles <- .possiblepaths()[["default.datadir"]]
+    success <- FALSE
+    for (i in seq_along(possibles)) {
+        fi <- file.info(possibles[i])
+        if (!is.na(fi$isdir) & fi$isdir) {
+            options(default.datadir = possibles[i])
+            success <- TRUE
+        }
+    }
+    success
+}
+.onAttach <- function(libname, pkgname) {
+    pathwasset <- .trysetpath()
+    if (!pathwasset) {
+        packageStartupMessage("Warning: could not find data repository at any of",
+            paste(normalizePath(.possiblepaths()[["default.datadir"]], mustWork = FALSE), collapse = "\n"), sep = "\n\n")
+
+        packageStartupMessage("Consider setting the option for your system\n")
+        packageStartupMessage('For example: options(default.datadir = "', gsub("\\\\", "/", normalizePath("/myrepository/data", mustWork = FALSE)), '")', '\n', sep = "")
+
+    }
+}
 
 ##' Load \code{data.frame} of file path and dates of NSIDC sea ice concentration data.
 ##'
@@ -44,14 +66,11 @@ icefiles <- function(time.resolution = c("daily", "monthly")) {
     ##    }
     ##}
     files <- NULL
-    load(file.path(getOption("cachepath"), sprintf("%s_icefiles.Rdata", time.resolution)))
+    load(file.path(getOption("default.datadir"), "cache", sprintf("%s_icefiles.Rdata", time.resolution)))
     files
 }
 
-##' @title raadtools-internal
-##' @rdname raadtools-internal
-##' @export
-##' @keywords internal
+
 .updateicefiles <- function(datadir = getOption("default.datadir")) {
 
 
@@ -91,6 +110,7 @@ icefiles <- function(time.resolution = c("daily", "monthly")) {
 ##' @param zeroNA mask zero values as NA
 ##' @param rescale rescale values from integer range?
 ##' @param datadir root directory where data is stored
+##' @export
 ##' @return \code{\link{raster}} object
 ##' @seealso \code{\link{icefiles}} for details on the repository of data files, \code{\link{raster}} for the return value
 readice <- function(date = as.Date("1978-11-01"), time.resolution = "daily", zeroNA = TRUE, rescale = TRUE, datadir = getOption("default.datadir")) {
@@ -139,7 +159,7 @@ readice <- function(date = as.Date("1978-11-01"), time.resolution = "daily", zer
         dat[r100] <- NA
         dat[r0] <- NA
     }
-     r <- raster(t(matrix(dat, dims[1])), template = raster(GridTopology(c(-3937501, -3937501), c(25000, 25000), dims)))
+     r <- raster(t(matrix(dat, dims[1])), template = raster(GridTopology(c(-3937500, -3937500), c(25000, 25000), dims)))
     projection(r) <- stersouth
     r <- setZ(r, icyf$date[windex])
     r
@@ -147,9 +167,9 @@ readice <- function(date = as.Date("1978-11-01"), time.resolution = "daily", zer
 
 ##' Stable conversion to POSIXct from character and Date
 ##'
-##' Conversion to POSIXct ensuring no local time zone applied. Currently supported is character, Date and 
+##' Conversion to POSIXct ensuring no local time zone applied. Currently supported is character, Date and
 ##' anything understood by \code{\link[base]{as.POSIXct}}.
-##' 
+##'
 ##' @param x input date-time stamp, character, Date or other supported type.
 ##' @param \dots ignored
 ##' @return the vector \code{x} converted (if necessary) to \code{POSIXct}
@@ -164,6 +184,7 @@ timedateFrom <- function(x, ...) {
 ##' @docType data
 ##' @references \url{http://www.spatialreference.org}
 ##' @keywords data
+##' @export
 NULL
 commonprojections <- list(longlat = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0",
                           polar = "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",

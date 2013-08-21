@@ -33,7 +33,7 @@ NULL
     if (!pathwasset) {
         packageStartupMessage("Warning: could not find data repository at any of",
             paste(normalizePath(.possiblepaths()[["default.datadir"]], mustWork = FALSE), collapse = "\n"), sep = "\n\n")
-    
+
         packageStartupMessage("Consider setting the option for your system\n")
         packageStartupMessage('For example: options(default.datadir = "', gsub("\\\\", "/", normalizePath("/myrepository/data", mustWork = FALSE)), '")', '\n', sep = "")
 
@@ -55,80 +55,35 @@ NULL
 ##' @return data.frame of \code{file} and \code{date}
 icefiles <- function(time.resolution = c("daily", "monthly")) {
     time.resolution <- match.arg(time.resolution)
-    ## check to see if someone saved the file list recently
-    ##icyf <- getOption("icyfiles")
-    ##if (!is.null(icyf)) {
-    ##    checktime <- attr(icyf, "timedate")
-    ##    if (time.resolution == attr(icyf, "time.resolution")) {
-    ##        dtime <- Sys.time() - checktime
-            ## if it's recent, return the saved object, otherwise proceed
-    ##        if (unclass(dtime) < (2 * 24 * 3600)) return(icyf)
-    ##    }
-    ##}
+
     files <- NULL
     load(file.path(getOption("default.datadir"), "cache", sprintf("%s_icefiles.Rdata", time.resolution)))
     files
 }
 
-##' @title raadtools-internal
-##' @rdname raadtools-internal
-##' @keywords internal
-.updateicefiles <- function(datadir = getOption("default.datadir")) {
-
-
-    for (time.resolution in c("daily", "monthly")) {
-        subpath <- file.path("seaice", "smmr_ssmi_nasateam", time.resolution)
-        fs <- list.files(file.path(datadir, subpath) , recursive = TRUE, pattern = "s.bin$", full.names = FALSE)
-
-        datepart <- sapply(strsplit(basename(fs), "_"), "[", 2)
-        if(time.resolution == "monthly") datepart <- paste0(datepart, "01")
-
-        icdates <- as.POSIXct(strptime(datepart, "%Y%m%d"), tz = "GMT")
-
-        files <- data.frame(file = file.path(subpath, fs), date = icdates, stringsAsFactors = FALSE)
-
-        ## take the "last" duplicated   (should be lexicographically f0n > f0m)
-        bad <- rev(duplicated(rev(icdates)))
-
-        files <- files[!bad, ]
-        files <- files[order(files$date), ]
-        ##attr(files, "timedate") <- Sys.time()
-        ##attr(files, "time.resolution") <- time.resolution
-        ##options(icyfiles = files)
-        fpath <- file.path(getOption("cachepath"), sprintf("%s_icefiles.Rdata", time.resolution))
-        save(files, file = fpath)
-        print(sprintf("saved %s", fpath))
-    }
-
-}
 
 
 ##' Read NSIDC sea ice data from daily or monthly files
 ##'
 ##' Sea ice data is read from files managed by \code{\link{icefiles}}
 ##'
-##' @param date date of data to read, will find something within a short window
+##' @param date date or date range of data to read, will find something within a short window
 ##' @param time.resolution time resoution data to read, daily or monthly
 ##' @param zeroNA mask zero values as NA
 ##' @param rescale rescale values from integer range?
-##' @param datadir root directory where data is stored
+##' @param ... reserved for future use, currently ignored
 ##' @export
 ##' @return \code{\link{raster}} object
 ##' @seealso \code{\link{icefiles}} for details on the repository of data files, \code{\link{raster}} for the return value
-readice <- function(date = as.Date("1978-11-01"), time.resolution = "daily", zeroNA = TRUE, rescale = TRUE, datadir = getOption("default.datadir")) {
+readice <- function(date = as.Date("1978-11-01"),
+                    time.resolution = "daily",
+                    zeroNA = TRUE, rescale = TRUE, ...) {
+    datadir = getOption("default.datadir")
     date <- timedateFrom(date)
-    stersouth <-  commonprojections[["polar"]]
-    #if (date > timedateFrom("2011-12-31") & date < timedateFrom("2013-01-01") & time.resolution == "monthly") {
-    #    ## special case for 2012
-    #    warning("This function is running a special case for the 2012 data (NOT AN ERROR, JUST LETTING YOU KNOW)")
-    #    load("\\\\aad.gov.au\\files\\Transfer\\Michael Sumner\\seaice\\ice2012_monthly.Rdata")
-    #    imonth <- as.numeric(format(date, "%m"))
-    #    if (raster) return(ice2012[[imonth]]) else return(as(ice2012, "SpatialGridDataFrame"))
+    stersouth <-  "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
 
-    #}
     dims <- c(316, 332)
-    ## actual topology of the ice data in Polar Stereographic
-    ##gt <- GridTopology(c(-3937501, -3937501), c(25000, 25000), c(316, 332))
+
     icyf <- icefiles(time.resolution = time.resolution)
 
     windex <- which.min(abs(date - icyf$date)) ##findInterval(date, icyf$date)
@@ -161,7 +116,7 @@ readice <- function(date = as.Date("1978-11-01"), time.resolution = "daily", zer
         dat[r100] <- NA
         dat[r0] <- NA
     }
-     r <- raster(t(matrix(dat, dims[1])), template = raster(GridTopology(c(-3937501, -3937501), c(25000, 25000), dims)))
+    r <- raster(t(matrix(dat, dims[1])), template = raster(GridTopology(c(-3937500, -3937500), c(25000, 25000), dims)))
     projection(r) <- stersouth
     r <- setZ(r, icyf$date[windex])
     r
@@ -182,10 +137,18 @@ timedateFrom <- function(x, ...) {
 
 ##' This is a list of often used projections, in PROJ.4
 ##'
+##' @details Each element can be looked up by name, see Examples
 ##' @name commonprojections
 ##' @docType data
 ##' @references \url{http://www.spatialreference.org}
+##' @section Warning This should be use only for a convenient reference to look up the projection strings commonly in use. There's
+##' no guarantee that this would be appropriate and you should seek cartographic expertise.
+##' @seealso \code{\link[raster]{projection}}, \code{\link[sp]{CRS}}, \code{\link[sp]{proj4string}}
 ##' @keywords data
+##' @examples
+##' names(commonprojections)
+##' commonprojections[["polar"]]
+##' @export
 NULL
 commonprojections <- list(longlat = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0",
                           polar = "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",

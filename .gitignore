@@ -9,11 +9,8 @@
 .Rhistory
 *~
 .R~
-#DESCRIPTION#
 NAMESPACE
 man/*.Rd
-R/*.R~
-*~
 auto/
 *.tex
 *.aux

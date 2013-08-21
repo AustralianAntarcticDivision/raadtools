@@ -79,19 +79,19 @@ readice <- function(date = as.Date("1978-11-01"),
                     zeroNA = TRUE, rescale = TRUE, ...) {
     datadir = getOption("default.datadir")
     date <- timedateFrom(date)
+    if (all(is.na(date))) stop("no input dates are valid")
+    if (length(date) > 1L) {
+      date <- date[!is.na(date)][1]
+      warning("date input is longer than 1, returning only first valid date")
+    }
     stersouth <-  "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
     dims <- c(316, 332)
     icyf <- icefiles(time.resolution = time.resolution)
 
     windex <- which.min(abs(date - icyf$date)) ##findInterval(date, icyf$date)
-    ##print(windex)
-    ##windex <- max(c(1, windex))
-    ##windex <- min(c(windex, nrow(icyf)))
 
-    ##if (windex < 1 | windex > nrow(icyf)) stop(sprintf("cannot find ice data file including time %s", format(date)))
     dtime <- abs(difftime(date, icyf$date[windex], units = c("days")))
     if (time.resolution == "daily") {
-
         if (dtime > 1.5) stop(sprintf("no ice data file within 1.5 days of %s", format(date)))
     }
      if (time.resolution == "monthly") {
@@ -115,6 +115,7 @@ readice <- function(date = as.Date("1978-11-01"),
     }
     r <- raster(t(matrix(dat, dims[1])), template = raster(GridTopology(c(-3937500, -3937500), c(25000, 25000), dims)))
     projection(r) <- stersouth
+    names(r) <- icyf$file[windex]
     r <- setZ(r, icyf$date[windex])
     r
 }
@@ -138,7 +139,8 @@ timedateFrom <- function(x, ...) {
 ##' @name commonprojections
 ##' @docType data
 ##' @references \url{http://www.spatialreference.org}
-##' @section Warning This should be use only for a convenient reference to look up the projection strings commonly in use. There's
+##' @section Warning:
+##' This should be use only for a convenient reference to look up the projection strings commonly in use. There's
 ##' no guarantee that this would be appropriate and you should seek cartographic expertise.
 ##' @seealso \code{\link[raster]{projection}}, \code{\link[sp]{CRS}}, \code{\link[sp]{proj4string}}
 ##' @keywords data

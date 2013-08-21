@@ -9,6 +9,7 @@
 .Rhistory
 NAMESPACE
 man/*.Rd
+R/*.R~
 *~
 auto/
 *.tex

@@ -7,6 +7,9 @@
 *.Rhistory
 .Rbuildignore
 .Rhistory
+*~
+.R~
+#DESCRIPTION#
 NAMESPACE
 man/*.Rd
 R/*.R~
@@ -24,6 +27,3 @@ auto/
 *.dvi
 *.pdf
 .Rproj.user
-*~
-.R~
-#DESCRIPTION#

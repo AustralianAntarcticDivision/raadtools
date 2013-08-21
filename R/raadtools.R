@@ -55,7 +55,6 @@ NULL
 ##' @return data.frame of \code{file} and \code{date}
 icefiles <- function(time.resolution = c("daily", "monthly")) {
     time.resolution <- match.arg(time.resolution)
-
     files <- NULL
     load(file.path(getOption("default.datadir"), "cache", sprintf("%s_icefiles.Rdata", time.resolution)))
     files
@@ -81,9 +80,7 @@ readice <- function(date = as.Date("1978-11-01"),
     datadir = getOption("default.datadir")
     date <- timedateFrom(date)
     stersouth <-  "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
-
     dims <- c(316, 332)
-
     icyf <- icefiles(time.resolution = time.resolution)
 
     windex <- which.min(abs(date - icyf$date)) ##findInterval(date, icyf$date)

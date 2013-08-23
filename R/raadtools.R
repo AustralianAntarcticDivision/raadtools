@@ -66,39 +66,58 @@ icefiles <- function(time.resolution = c("daily", "monthly")) {
 ##'
 ##' Sea ice data is read from files managed by \code{\link{icefiles}}
 ##'
-##' @param date date or date range of data to read, will find something within a short window
+##' @param date specific date or dates, see Details
 ##' @param time.resolution time resoution data to read, daily or monthly
 ##' @param zeroNA mask zero values as NA
 ##' @param rescale rescale values from integer range?
 ##' @param ... reserved for future use, currently ignored
+##' @details When the input date/s are processed the nearest match
+##' within a short window is found for each date. Duplicated matches
+##' are removed and no interpolation is done, so the output series may
+##' not have the same length as the input date vector. See
+##' \code{\link{icefiles}} to see the raw list of files used.
 ##' @export
 ##' @return \code{\link{raster}} object
 ##' @seealso \code{\link{icefiles}} for details on the repository of data files, \code{\link{raster}} for the return value
 readice <- function(date = as.Date("1978-11-01"),
-                    time.resolution = "daily",
-                    zeroNA = TRUE, rescale = TRUE, ...) {
+                    time.resolution = c("daily", "monthly"),
+                    zeroNA = TRUE, rescale = TRUE,
+                    reportonly = FALSE, ...) {
     datadir = getOption("default.datadir")
     date <- timedateFrom(date)
-    stersouth <-  "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
-    dims <- c(316, 332)
+    ## sanity checks
+    if (all(is.na(date))) stop("no input dates are valid")
+    if (any(is.na(date))) {
+        warning("not all input dates are valid")
+        date <- date[!is.na(date)]
+    }
+    time.resolution <- match.arg(time.resolution)
+    ## file catalogue
     icyf <- icefiles(time.resolution = time.resolution)
 
-    windex <- which.min(abs(date - icyf$date)) ##findInterval(date, icyf$date)
-    ##print(windex)
-    ##windex <- max(c(1, windex))
-    ##windex <- min(c(windex, nrow(icyf)))
+    dtimetest <- switch(time.resolution,
+                        daily = 1.5,
+                        monthly = 15)
 
-    ##if (windex < 1 | windex > nrow(icyf)) stop(sprintf("cannot find ice data file including time %s", format(date)))
-    dtime <- abs(difftime(date, icyf$date[windex], units = c("days")))
-    if (time.resolution == "daily") {
+    ## find indices into files that are requested
+    ## and flag any that are out of bounds
 
-        if (dtime > 1.5) stop(sprintf("no ice data file within 1.5 days of %s", format(date)))
+    ## index of files matching dates
+    windex <- integer(length(date))
+    ## vector indicating which dates were out of bounds
+    baddates <- logical(length(windex))
+    for (i in seq_along(date)) {
+        dtime <- abs(difftime(date[i], icyf$date, units = c("days")))
+        windex[i] <- which.min(dtime)
+        if (dtime[windex[i]] > dtimetest) baddates[i] <- NA  ##stop(sprintf("no ice data file within %s days of %s", dtimetest)
     }
-     if (time.resolution == "monthly") {
-        if (dtime > 15) stop(sprintf("no ice data file within 15 days of %s", format(date)))
-    }
 
-
+    ## build report on which input dates were flagged as invalid and duplicated
+    dupedates <- duplicated(windex)
+    dupedates[is.na(baddates)] <- FALSE
+    badness <- list(baddates = dates[is.na(baddates)], dupedates = dates[dupedates])
+    if (report) return(badness)
+windex <- windex[1]
     con <- file(file.path(datadir, icyf$file[windex]), open = "rb")
     trash <- readBin(con, "integer", size = 1, n = 300)
     dat <- readBin(con, "integer", size = 1, n = prod(dims), endian = "little", signed = FALSE)
@@ -113,7 +132,11 @@ readice <- function(date = as.Date("1978-11-01"),
         dat[r100] <- NA
         dat[r0] <- NA
     }
-    r <- raster(t(matrix(dat, dims[1])), template = raster(GridTopology(c(-3937500, -3937500), c(25000, 25000), dims)))
+
+    stersouth <-  "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
+    dims <- c(316, 332)
+
+                                r <- raster(t(matrix(dat, dims[1])), template = raster(GridTopology(c(-3937500, -3937500), c(25000, 25000), dims)))
     projection(r) <- stersouth
     r <- setZ(r, icyf$date[windex])
     r

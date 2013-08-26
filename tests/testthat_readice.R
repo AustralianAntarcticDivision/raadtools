@@ -36,6 +36,6 @@ test_that("missing values are greater in number for setNA",
 
 
 ## first test for readmulti
-##test_that("valid multi dates is returned as a raster object", {
-##         expect_that(readice("2000-01-01", "2000-01-10"), is_a("RasterBrick"))
-##})
+test_that("valid multi dates is returned as a raster object", {
+         expect_that(readice(c("2000-01-01", "2000-01-10")), is_a("RasterBrick"))
+})

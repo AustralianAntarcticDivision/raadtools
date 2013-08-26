@@ -73,6 +73,7 @@ icefiles <- function(time.resolution = c("daily", "monthly")) {
 ##' @param time.resolution time resoution data to read, daily or monthly
 ##' @param setNA mask zero and values greater than 100 as NA
 ##' @param rescale rescale values from integer range?
+##' @param debug ignore data request and simply report on what would be returned after processing arguments
 ##' @param ... reserved for future use, currently ignored
 ##' @export
 ##' @return \code{\link[raster]{raster}} object
@@ -81,8 +82,9 @@ icefiles <- function(time.resolution = c("daily", "monthly")) {
 readice <- function(date = as.Date("1978-11-01"),
                     time.resolution = c("daily", "monthly"),
                     setNA = TRUE, rescale = TRUE,
-                    reportonly = FALSE, ...) {
+                    debug = FALSE, ...) {
     datadir = getOption("default.datadir")
+    time.resolution <- match.arg(time.resolution)
     date <- timedateFrom(date)
     if (all(is.na(date))) stop("no input dates are valid")
     if (length(date) > 1L) {

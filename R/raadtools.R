@@ -87,40 +87,72 @@ readice <- function(date = as.Date("1978-11-01"),
     time.resolution <- match.arg(time.resolution)
     date <- timedateFrom(date)
     if (all(is.na(date))) stop("no input dates are valid")
-    if (length(date) > 1L) {
-      date <- date[!is.na(date)][1]
-      warning("date input is longer than 1, returning only first valid date")
+    if (any(is.na(date))) {
+      warning("not all input dates are valid")
+      date <- date[!is.na(date)]
     }
-    stersouth <-  "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
-    dims <- c(316, 332)
+    
+    
     icyf <- icefiles(time.resolution = time.resolution)
 
-    windex <- which.min(abs(date - icyf$date)) ##findInterval(date, icyf$date)
-
+    ## find indices into files that are requested
+    windex <- integer(length(date))
+    
+    for (i in seq_along(date)) {
+      windex[i] <- which.min(abs(date[i] - icyf$date)) ##findInterval(date, icyf$date)
+      
+    }
+    
+    ## prob need a warning here too
+    dupes <- !duplicated(windex)
+    windex <- windex[dupes]
+    
+    ## date is now overridden by this index
+    ##date <- icyf$date[windex]
+    ## now check which of these have a valid file within the resolution
+    
     dtime <- abs(difftime(date, icyf$date[windex], units = c("days")))
-    if (time.resolution == "daily") {
-        if (dtime > 1.5) stop(sprintf("no ice data file within 1.5 days of %s", format(date)))
+    
+    dtimetest <- switch(time.resolution,
+                        daily = 1.5, monthly = 15)
+    if (all(dtime > dtimetest)) stop(sprintf("no ice data file within %.1f days of %s", dtimetest))
+    if (any(dtime > dtimetest)) {
+      warning(sprintf("%i input dates have no corresponding ice data file within %f days of available files", sum(dtime > dtimetest), dtimetest))
+      windex <- windex[dtime <= dtimetest]
     }
-     if (time.resolution == "monthly") {
-        if (dtime > 15) stop(sprintf("no ice data file within 15 days of %s", format(date)))
+    
+
+    
+    ## NSIDC projection and grid size for the Southern Hemisphere
+    stersouth <-  "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
+    dims <- c(316L, 332L)
+    rtemplate <- raster(GridTopology(c(-3937500, -3937500), c(25000, 25000), dims))
+    if (length(windex) > 1L) {
+      r <- brick(nrows = nrow(rtemplate), ncols = ncol(rtemplate),
+                 xmn = xmin(rtemplate), xmx = xmax(rtemplate), ymn = ymin(rtemplate), ymx = ymax(rtemplate),
+                 nl = length(windex))
     }
-
-
-    con <- file(file.path(datadir, icyf$file[windex]), open = "rb")
-    trash <- readBin(con, "integer", size = 1, n = 300)
-    dat <- readBin(con, "integer", size = 1, n = prod(dims), endian = "little", signed = FALSE)
-    close(con)
-
-    r100 <- dat > 250
-    r0 <- dat < 1
-    if (rescale) {
+    ## loop over file indices
+    for (ifile in seq_along(windex)) {
+      con <- file(file.path(datadir, icyf$file[windex[ifile]]), open = "rb")
+      trash <- readBin(con, "integer", size = 1, n = 300)
+      dat <- readBin(con, "integer", size = 1, n = prod(dims), endian = "little", signed = FALSE)
+      close(con)
+      
+      r100 <- dat > 250
+      r0 <- dat < 1
+      if (rescale) {
         dat <- dat/2.5  ## rescale back to 100
-    }
-     if (setNA) {
+      }
+      if (setNA) {
         dat[r100] <- NA
         dat[r0] <- NA
+      }
+      ##rtemp <- raster(t(matrix(dat, dims[1])), template = rtemplate)
+      if (length(windex) > 1) r <- setValues(r, matrix(dat, dims[1]), layer = ifile) else r <- raster(t(matrix(dat, dims[1])), template = rtemplate)
     }
-    r <- raster(t(matrix(dat, dims[1])), template = raster(GridTopology(c(-3937500, -3937500), c(25000, 25000), dims)))
+    
+   
     projection(r) <- stersouth
     names(r) <- icyf$file[windex]
     r <- setZ(r, icyf$date[windex])

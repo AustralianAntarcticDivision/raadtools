@@ -91,28 +91,33 @@ readice <- function(date = as.Date("1978-11-01"),
       warning("not all input dates are valid")
       date <- date[!is.na(date)]
     }
+
+    ## sort?
+    ord <- order(date)
+    if (any(diff(ord) < 0)) {
+        warning("dates out of order and will be sorted")
+        date <- date[ord]
+    }
     
     
+
     icyf <- icefiles(time.resolution = time.resolution)
 
     ## find indices into files that are requested
     windex <- integer(length(date))
-    
     for (i in seq_along(date)) {
       windex[i] <- which.min(abs(date[i] - icyf$date)) ##findInterval(date, icyf$date)
-      
     }
-    
-    ## prob need a warning here too
+
+    ## check for duplicates
     dupes <- !duplicated(windex)
+    if (sum(dupes) < length(windex)) warning("duplicated dates will be dropped")
     windex <- windex[dupes]
-    
-    ## date is now overridden by this index
-    ##date <- icyf$date[windex]
+    date <- date[dupes]
     ## now check which of these have a valid file within the resolution
-    
+
     dtime <- abs(difftime(date, icyf$date[windex], units = c("days")))
-    
+
     dtimetest <- switch(time.resolution,
                         daily = 1.5, monthly = 15)
     if (all(dtime > dtimetest)) stop(sprintf("no ice data file within %.1f days of %s", dtimetest))
@@ -120,9 +125,9 @@ readice <- function(date = as.Date("1978-11-01"),
       warning(sprintf("%i input dates have no corresponding ice data file within %f days of available files", sum(dtime > dtimetest), dtimetest))
       windex <- windex[dtime <= dtimetest]
     }
-    
 
-    
+
+
     ## NSIDC projection and grid size for the Southern Hemisphere
     stersouth <-  "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
     dims <- c(316L, 332L)
@@ -138,7 +143,7 @@ readice <- function(date = as.Date("1978-11-01"),
       trash <- readBin(con, "integer", size = 1, n = 300)
       dat <- readBin(con, "integer", size = 1, n = prod(dims), endian = "little", signed = FALSE)
       close(con)
-      
+
       r100 <- dat > 250
       r0 <- dat < 1
       if (rescale) {
@@ -149,10 +154,14 @@ readice <- function(date = as.Date("1978-11-01"),
         dat[r0] <- NA
       }
       ##rtemp <- raster(t(matrix(dat, dims[1])), template = rtemplate)
-      if (length(windex) > 1) r <- setValues(r, matrix(dat, dims[1]), layer = ifile) else r <- raster(t(matrix(dat, dims[1])), template = rtemplate)
+      if (length(windex) > 1) {
+          r <- setValues(r, matrix(dat, dims[1]), layer = ifile)
+      } else {
+          r <- raster(t(matrix(dat, dims[1])), template = rtemplate)
+      }
     }
-    
-   
+
+
     projection(r) <- stersouth
     names(r) <- icyf$file[windex]
     r <- setZ(r, icyf$date[windex])

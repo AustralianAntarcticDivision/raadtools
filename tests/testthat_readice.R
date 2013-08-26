@@ -39,3 +39,26 @@ test_that("missing values are greater in number for setNA",
 test_that("valid multi dates is returned as a raster object", {
          expect_that(readice(c("2000-01-01", "2000-01-10")), is_a("RasterBrick"))
 })
+
+b1 <- readice("1997-04-06")
+b2 <- readice("2005-10-11")
+b <- readice(c("1997-04-06", "2005-10-11"))
+## does multi-read give the same result?
+test_that("multi read gives the same data as single", {
+    expect_that(quantile(b1), equals(quantile(b[[1]])))
+    expect_that(quantile(b2), equals(quantile(b[[2]])))
+
+})
+
+x <- c("1997-04-06", "2005-10-11", "1997-04-06")
+test_that("multi read on duplicated dates give only non-dupes", {
+    expect_that(nlayers(readice(x)), equals(length(x) - 1L))
+})
+
+x <- as.POSIXct(c("1997-04-06", "2005-10-11", "1997-04-09"))
+test_that("multi read on out of order dates sorts them", {
+    expect_that(format(getZ(readice(x))), equals(format(sort(x))))
+})
+
+
+

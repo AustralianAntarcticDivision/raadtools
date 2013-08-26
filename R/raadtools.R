@@ -64,16 +64,20 @@ icefiles <- function(time.resolution = c("daily", "monthly")) {
 
 ##' Read NSIDC sea ice data from daily or monthly files
 ##'
-##' Sea ice data is read from files managed by \code{\link{icefiles}}
-##'
-##' @param date date or date range of data to read, will find something within a short window
+##' Sea ice data is read from files managed by
+##' \code{\link{icefiles}}. Dates are matched to file names by finding
+##' the nearest match in time within a short duration. If \code{date}
+##' is greater than length 1 then the sorted set of unique matches is
+##' returned.
+##' @param date date or dates of data to read, see Details
 ##' @param time.resolution time resoution data to read, daily or monthly
 ##' @param setNA mask zero and values greater than 100 as NA
 ##' @param rescale rescale values from integer range?
 ##' @param ... reserved for future use, currently ignored
 ##' @export
-##' @return \code{\link{raster}} object
-##' @seealso \code{\link{icefiles}} for details on the repository of data files, \code{\link{raster}} for the return value
+##' @return \code{\link[raster]{raster}} object
+##' @seealso \code{\link{icefiles}} for details on the repository of
+##' data files, \code{\link[raster]{raster}} for the return value
 readice <- function(date = as.Date("1978-11-01"),
                     time.resolution = c("daily", "monthly"),
                     setNA = TRUE, rescale = TRUE,

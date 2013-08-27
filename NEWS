@@ -4,6 +4,8 @@ OVERVIEW
 
 NEW FEATURES
 
+  o readice now returns data for single or multiple dates that are not duplicates and are in temporal order
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES

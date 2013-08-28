@@ -11,7 +11,6 @@
 ##' @keywords package
 NULL
 
-
 .possiblepaths <- function() {
     list(default.datadir =  c("//aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data",
                        "/Volumes/files/data"))
@@ -84,12 +83,15 @@ sstfiles <- function(fromcache = TRUE) {
 ## @param setNA mask zero and values greater than 100 as NA
 ## @param rescale rescale values from integer range?
 ## @param debug ignore data request and simply report on what would be returned after processing arguments
+##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
 ##' @param ... reserved for future use, currently ignored
 ##' @export
 ##' @return \code{\link[raster]{raster}} object
 ##' @seealso \code{\link{icefiles}} for details on the repository of
 ##' data files, \code{\link[raster]{raster}} for the return value
-readsst <- function(date = as.Date("1981-09-01"), time.resolution = "daily", varname = c("sst", "anom", "err", "ice") , ...) {
+readsst <- function(date = as.Date("1981-09-01"), time.resolution = "daily", varname = c("sst", "anom", "err", "ice") ,
+                    lon180 = TRUE,
+                    ...) {
     time.resolution <- match.arg(time.resolution)
     varname <- match.arg(varname)
     date <- timedateFrom(date)
@@ -115,7 +117,8 @@ readsst <- function(date = as.Date("1981-09-01"), time.resolution = "daily", var
     if (sum(dupes) < length(windex)) warning("duplicated dates will be dropped")
     windex <- windex[dupes]
     date <- date[dupes]
-   rtemplate <- rotate(raster(files$file[windex[1]], varname = varname))
+   rtemplate <- raster(files$file[windex[1]], varname = varname)
+    if (lon180) rtemplate <- rotate(rtemplate)
     if (length(windex) > 1L) {
       r <- brick(nrows = nrow(rtemplate), ncols = ncol(rtemplate),
                  xmn = xmin(rtemplate), xmx = xmax(rtemplate), ymn = ymin(rtemplate), ymx = ymax(rtemplate),
@@ -124,7 +127,8 @@ readsst <- function(date = as.Date("1981-09-01"), time.resolution = "daily", var
     }
 
     for (i in seq_along(windex)) {
-        r0 <- rotate(raster(files$file[windex[i]], varname = varname))
+        r0 <- raster(files$file[windex[i]], varname = varname)
+        if (lon180) r0 <- rotate(r0)
         r0[r0 < -2] <- NA
         if (length(windex) > 1) {
           r <- setValues(r, values(r0), layer = i)
@@ -169,9 +173,15 @@ currentsfiles <- function() {
 ##' @param magonly return just the magnitude from the U and V
 ##' components
 ##' @param dironly return just the direction from the U and V
+##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
 ##' components, in degrees (0 north, 90 east, 180 south, 270 west)
 ##' @param ... reserved for future use, currently ignored
 ##' @export
+##' @note These data are stored in a Mercator projection on Pacific
+##' view \[0, 360\], the default behaviour is to reset this to Atlantic
+##' view \[-180, 180\] with \code{lon180}. The Mercator projection is
+##' preserved, see \code{\link[raster]{projectRaster}} and
+##' \code{\link[raster]{resample}} for transformation methods.
 ##' @return \code{\link[raster]{raster}} object
 ##' @seealso \code{\link{icefiles}} for details on the repository of
 ##' data files, \code{\link[raster]{raster}} for the return value
@@ -184,6 +194,7 @@ readcurr <- function(date = as.Date("1999-11-24"),
                      ##rescale = TRUE,
                      magonly = FALSE,
                      dironly = FALSE,
+                     lon180 = TRUE,
                      ...) {
 
      ## function to read just one
@@ -262,6 +273,7 @@ readcurr <- function(date = as.Date("1999-11-24"),
 
     }
      r <- setZ(r, date)
+    if (lon180) r <- suppressWarnings(rotate(r))
     return(r)
 
 }

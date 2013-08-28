@@ -40,26 +40,92 @@ NULL
     }
 }
 
-##' Load \code{data.frame} of file path and dates of NSIDC sea ice concentration data.
-##'
-##' This function loads the latest cache of stored NSIDC files for
-##' either daily or monthly data for the Southern Hemisphere,
-##' processing by the SMMR/SSMI NASA Team.
-##' @param time.resolution daily or monthly files?
 ##' @export
-##' @examples
-##' \dontrun{
-##' icf <- icefiles(time.resolution = "monthly")
-##' icf[which.min((as.Date("1995-01-01") + runif(1, -4000, 4000)) - as.Date(icf$date), ]
-##' }
-##' @return data.frame of \code{file} and \code{date}
-icefiles <- function(time.resolution = c("daily", "monthly")) {
-    time.resolution <- match.arg(time.resolution)
-    files <- NULL
-    load(file.path(getOption("default.datadir"), "cache", sprintf("%s_icefiles.Rdata", time.resolution)))
-    files
+.currentsfiles <- function(data.dir = getOption("default.datadir"), data.source = file.path(data.dir, "current", "aviso", "upd", "7d")) {
+     cfiles <- list.files(data.source, pattern = ".nc$", full.names = TRUE)
+     datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
+     currentdates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
+     data.frame(file = cfiles, date = currentdates, stringsAsFactors = FALSE)
+
 }
 
+
+##' @importFrom raster t flip # imports should not be necessary here
+##' @export
+readcurr <- function(date = as.Date("1999-11-24"),
+                     time.resolution = "weekly",
+                     setNA = TRUE, rescale = TRUE,
+                     ...) {
+
+    data.dir = getOption("default.datadir")
+    time.resolution <- match.arg(time.resolution)
+    date <- timedateFrom(date)
+    if (all(is.na(date))) stop("no input dates are valid")
+    if (any(is.na(date))) {
+      warning("not all input dates are valid")
+      date <- date[!is.na(date)]
+    }
+
+    ## sort?
+    ord <- order(date)
+    if (any(diff(ord) < 0)) {
+        warning("dates out of order and will be sorted")
+        date <- date[ord]
+    }
+
+    files <- .currentsfiles(data.dir = data.dir)
+
+     ## find indices into files that are requested
+    windex <- integer(length(date))
+    for (i in seq_along(date)) {
+      windex[i] <- which.min(abs(date[i] - files$date))
+    }
+    ## check for duplicates
+    dupes <- !duplicated(windex)
+    if (sum(dupes) < length(windex)) warning("duplicated dates will be dropped")
+    windex <- windex[dupes]
+    date <- date[dupes]
+
+
+    ## prevent reading more than one
+    if (length(windex) > 1) {
+        windex <- windex[1]
+        date <- date[1]
+        warning("only one time step can be read at once")
+    }
+
+    ## now check which of these have a valid file within the resolution
+
+    dtime <- abs(difftime(date, files$date[windex], units = c("days")))
+
+    dtimetest <- switch(time.resolution,
+                        weekly = 4)
+    if (all(dtime > dtimetest)) stop(sprintf("no data file within %.1f days of %s", dtimetest))
+    if (any(dtime > dtimetest)) {
+      warning(sprintf("%i input dates have no corresponding data file within %f days of available files", sum(dtime > dtimetest), dtimetest))
+      windex <- windex[dtime <= dtimetest]
+    }
+
+
+
+    ## WGS84 Mercator X-distance of 1 hemisphere
+    xtreme <- 20037508.34
+    ytreme <- 16925421.91  ## Y-distance [-82,0]
+    ## see http://soki.aad.gov.au/display/Data/Ocean+current+data+in+Mercator
+    ## (if you compare the NbLongitudes/NbLatitudes from the files, they are out by half a pixel since the corner/centre is not explicit)
+
+
+    r1 <- raster(files$file[windex], varname = "Grid_0001")
+    r1 <- flip(flip(t(r1), direction = "y"), direction = "x")
+    extent(r1) <- extent(0, xtreme * 2, -ytreme, ytreme)
+    r2 <- raster(files$file[windex], varname = "Grid_0002")
+    r2 <- flip(flip(t(r2), direction = "y"), direction = "x")
+    extent(r2) <- extent(0, xtreme * 2, -ytreme, ytreme)
+    r <- brick(r1, r2)
+    names(r) <- c("U", "V")
+    projection(r) <- "+proj=merc +ellps=WGS84 +over"
+    r
+}
 
 
 ##' Read NSIDC sea ice data from daily or monthly files
@@ -98,8 +164,8 @@ readice <- function(date = as.Date("1978-11-01"),
         warning("dates out of order and will be sorted")
         date <- date[ord]
     }
-    
-    
+
+
 
     icyf <- icefiles(time.resolution = time.resolution)
 
@@ -166,6 +232,27 @@ readice <- function(date = as.Date("1978-11-01"),
     names(r) <- icyf$file[windex]
     r <- setZ(r, icyf$date[windex])
     r
+}
+
+
+##' Load \code{data.frame} of file path and dates of NSIDC sea ice concentration data.
+##'
+##' This function loads the latest cache of stored NSIDC files for
+##' either daily or monthly data for the Southern Hemisphere,
+##' processing by the SMMR/SSMI NASA Team.
+##' @param time.resolution daily or monthly files?
+##' @export
+##' @examples
+##' \dontrun{
+##' icf <- icefiles(time.resolution = "monthly")
+##' icf[which.min((as.Date("1995-01-01") + runif(1, -4000, 4000)) - as.Date(icf$date), ]
+##' }
+##' @return data.frame of \code{file} and \code{date}
+icefiles <- function(time.resolution = c("daily", "monthly")) {
+    time.resolution <- match.arg(time.resolution)
+    files <- NULL
+    load(file.path(getOption("default.datadir"), "cache", sprintf("%s_icefiles.Rdata", time.resolution)))
+    files
 }
 
 ##' Stable conversion to POSIXct from character and Date

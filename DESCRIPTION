@@ -2,7 +2,7 @@ Package: raadtools
 Type: Package
 Title: R tools for spatial data at the Australian Antarctic Division (AAD)
 Depends: raster  (>= 2.1-37), R (>= 2.15)
-Suggests: testthat
+Suggests: testthat, ncdf
 Version: 0.0-2
 Authors@R: person("Michael D.","Sumner", role = c("aut", "cre"), email = "Michael.Sumner@aad.gov.au")
 Description: Tools for reading, plotting and manipulating spatial data used at the Australian Antarctic Division (AAD).

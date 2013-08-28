@@ -1,7 +1,7 @@
 ##' R tools for spatial data at the AAD
 ##'
-##' Tools in R for reading, plotting and manipulating spatial data
-##' commonly used at the Australian Antarctic Division (AAD).
+##' Tools in R for reading, plotting and manipulating spatial data at
+##' the Australian Antarctic Division (AAD).
 ##' @author Michael D. Sumner \email{michael.sumner@@aad.gov.au}
 ##'
 ##' Maintainer: Michael D. Sumner \email{michael.sumner@@aad.gov.au}
@@ -40,23 +40,65 @@ NULL
     }
 }
 
-##' @export
-.currentsfiles <- function(data.dir = getOption("default.datadir"), data.source = file.path(data.dir, "current", "aviso", "upd", "7d")) {
-     cfiles <- list.files(data.source, pattern = ".nc$", full.names = TRUE)
-     datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
-     currentdates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
-     data.frame(file = cfiles, date = currentdates, stringsAsFactors = FALSE)
 
+
+##' Load file names and dates of AVISO current data
+##'
+##' A data.frame of file names and dates
+##' @title AVISO ocean currents files
+##' @seealso \code{\link{readcurr}}
+##' @return data.frame of file names and dates
+##' @export
+currentsfiles <- function() {
+    data.dir = getOption("default.datadir")
+    data.source = file.path(data.dir, "current", "aviso", "upd", "7d")
+    cfiles <- list.files(data.source, pattern = ".nc$", full.names = TRUE)
+    datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
+    currentdates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
+    data.frame(file = cfiles, date = currentdates, stringsAsFactors = FALSE)
 }
 
-
-##' @importFrom raster t flip # imports should not be necessary here
+##' Read AVISO ocean current data from weekly files
+##'
+##' Current data is read from files managed by
+##' \code{\link{currentsfiles}}. Dates are matched to file names by
+##' finding the nearest match in time within a short duration. By
+##' default only one time step is returned with both U and V
+##' components. Multiple dates can be returned for magnitude or
+##' direction only.
+##' @param date date or dates of data to read, see Details
+##' @param time.resolution time resolution to read
+## @param setNA mask zero and values greater than 100 as NA
+## @param rescale rescale values from integer range?
+##' @param magonly return just the magnitude from the U and V
+##' components
+##' @param dironly return just the direction from the U and V
+##' components, in degrees (0 north, 90 east, 180 south, 270 west)
+##' @param ... reserved for future use, currently ignored
+##' @export
+##' @return \code{\link[raster]{raster}} object
+##' @seealso \code{\link{icefiles}} for details on the repository of
+##' data files, \code{\link[raster]{raster}} for the return value
+# imports should not be necessary here
+##' @importFrom raster t flip atan2
 ##' @export
 readcurr <- function(date = as.Date("1999-11-24"),
                      time.resolution = "weekly",
-                     setNA = TRUE, rescale = TRUE,
+                     ##setNA = TRUE,
+                     ##rescale = TRUE,
+                     magonly = FALSE,
+                     dironly = FALSE,
                      ...) {
 
+     ## function to read just one
+    read0 <- function(x, varname) {
+        xtreme <- 20037508
+        ytreme <- 16925422
+        x <- flip(flip(t(raster(x, varname = varname)), direction = "y"), direction = "x")
+        extent(x) <- extent(0, xtreme * 2, -ytreme, ytreme)
+        projection(x) <- "+proj=merc +ellps=WGS84 +over"
+        x
+    }
     data.dir = getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
     date <- timedateFrom(date)
@@ -73,7 +115,7 @@ readcurr <- function(date = as.Date("1999-11-24"),
         date <- date[ord]
     }
 
-    files <- .currentsfiles(data.dir = data.dir)
+    files <- currentsfiles()
 
      ## find indices into files that are requested
     windex <- integer(length(date))
@@ -86,16 +128,8 @@ readcurr <- function(date = as.Date("1999-11-24"),
     windex <- windex[dupes]
     date <- date[dupes]
 
-
-    ## prevent reading more than one
-    if (length(windex) > 1) {
-        windex <- windex[1]
-        date <- date[1]
-        warning("only one time step can be read at once")
-    }
-
+    if (magonly & dironly) warning("only one of magonly and dironly may be used, returning magonly")
     ## now check which of these have a valid file within the resolution
-
     dtime <- abs(difftime(date, files$date[windex], units = c("days")))
 
     dtimetest <- switch(time.resolution,
@@ -105,26 +139,33 @@ readcurr <- function(date = as.Date("1999-11-24"),
       warning(sprintf("%i input dates have no corresponding data file within %f days of available files", sum(dtime > dtimetest), dtimetest))
       windex <- windex[dtime <= dtimetest]
     }
+    ## prevent reading more than one unless mag/dironly
+    if (length(windex) > 1L & !magonly & !dironly) {
+        windex <- windex[1L]
+        date <- date[1]
+        warning("only one time step can be read at once")
+    }
+    i <- 1
 
+         r1 <- read0(files$file[windex[i]], varname = "Grid_0001")
+         r2 <- read0(files$file[windex[i]], varname = "Grid_0002")
+    if (!(magonly | dironly)) {
+        r <- brick(r1, r2)
+         names(r) <- c("U", "V")
+         return(r)
+    }
+    if (magonly) rasterfun <- function(x1, x2) sqrt(x1 * x1 + x2 *x2)
+    if (dironly) rasterfun <- function(x1, x2) (90 - atan2(x2, x1) * 180/pi) %% 360
 
+    r <- brick(rasterfun(r1, r2), nl = length(windex))
 
-    ## WGS84 Mercator X-distance of 1 hemisphere
-    xtreme <- 20037508.34
-    ytreme <- 16925421.91  ## Y-distance [-82,0]
-    ## see http://soki.aad.gov.au/display/Data/Ocean+current+data+in+Mercator
-    ## (if you compare the NbLongitudes/NbLatitudes from the files, they are out by half a pixel since the corner/centre is not explicit)
+    for (i in seq_along(windex)[-1]) {
+        r1 <- read0(files$file[windex[i]], varname = "Grid_0001")
+        r2 <- read0(files$file[windex[i]], varname = "Grid_0002")
+        r <- setValues(r, values(rasterfun(r1, r2)), layer = i)
+    }
+    return(r)
 
-
-    r1 <- raster(files$file[windex], varname = "Grid_0001")
-    r1 <- flip(flip(t(r1), direction = "y"), direction = "x")
-    extent(r1) <- extent(0, xtreme * 2, -ytreme, ytreme)
-    r2 <- raster(files$file[windex], varname = "Grid_0002")
-    r2 <- flip(flip(t(r2), direction = "y"), direction = "x")
-    extent(r2) <- extent(0, xtreme * 2, -ytreme, ytreme)
-    r <- brick(r1, r2)
-    names(r) <- c("U", "V")
-    projection(r) <- "+proj=merc +ellps=WGS84 +over"
-    r
 }
 
 

@@ -163,6 +163,7 @@ readcurr <- function(date = as.Date("1999-11-24"),
         r1 <- read0(files$file[windex[i]], varname = "Grid_0001")
         r2 <- read0(files$file[windex[i]], varname = "Grid_0002")
         r <- setValues(r, values(rasterfun(r1, r2)), layer = i)
+        r <- setZ(r, date)
     }
     return(r)
 

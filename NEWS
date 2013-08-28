@@ -4,6 +4,8 @@ OVERVIEW
 
 NEW FEATURES
 
+  o functions to return file paths of topographic data
+
   o functions to read daily SST data
 
   o functions to read ocean current data

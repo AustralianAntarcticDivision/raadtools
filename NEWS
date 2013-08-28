@@ -4,7 +4,9 @@ OVERVIEW
 
 NEW FEATURES
 
-  o function readcurr to read ocean current data
+  o functions to read daily SST data
+
+  o functions to read ocean current data
 
   o readice now returns data for single or multiple dates that are not
   duplicates and are in temporal order

@@ -40,6 +40,101 @@ NULL
     }
 }
 
+##' Load file names and dates of OISST sea surface temperature data
+##'
+##' A data frame of file names and datres
+##' @title OISST sea surface temperature files
+##' @param fromcache load from cache?
+##' @param ... reserved for future use
+##' @return data.frame of file names and dates
+##' @export
+sstfiles <- function(fromcache = TRUE) {
+    data.dir <- getOption("default.datadir")
+    if (fromcache) {
+        load(file.path(data.dir, "cache", "sstfiles.Rdata"))
+        return(sstf)
+    }
+
+    dirpath <- file.path(data.dir, "sst", "OI-daily-v2", "daily")
+    fs <- list.files(dirpath, pattern = "\\.nc$", recursive = TRUE, full.names = TRUE)
+
+    ## flakey!!!!
+    fsstrings <- as.Date(substr(basename(fs), 15, 22), "%Y%m%d")
+
+    dates <- timedateFrom(as.Date(fsstrings, "%Y%m%d"))
+
+    sstf <- data.frame(files = fs, dates = dates, stringsAsFactors = FALSE)[order(dates), ]
+    save(sstf, file = file.path(getOption("cachepath"), "sstfiles.Rdata"))
+    sstf
+
+}
+
+
+##' Read OISST sea surface temperature data from daily files
+##'
+##' SST data read from files managed by
+##' \code{\link{sstfiles}}. Dates are matched to file names by finding
+##' the nearest match in time within a short duration. If \code{date}
+##' is greater than length 1 then the sorted set of unique matches is
+##' returned.
+##' @param date date or dates of data to read, see Details
+##' @param time.resolution time resoution data to read, daily only
+##' @param varname variable to return from the data files, default is
+##' "sst" or "anom", "err", "ice"
+## @param setNA mask zero and values greater than 100 as NA
+## @param rescale rescale values from integer range?
+## @param debug ignore data request and simply report on what would be returned after processing arguments
+##' @param ... reserved for future use, currently ignored
+##' @export
+##' @return \code{\link[raster]{raster}} object
+##' @seealso \code{\link{icefiles}} for details on the repository of
+##' data files, \code{\link[raster]{raster}} for the return value
+readsst <- function(date = as.Date("1981-09-01"), time.resolution = "daily", varname = c("sst", "anom", "err", "ice") , ...) {
+    time.resolution <- match.arg(time.resolution)
+    varname <- match.arg(varname)
+    date <- timedateFrom(date)
+    files <- sstfiles()
+    if (all(is.na(date))) stop("no input dates are valid")
+    if (any(is.na(date))) {
+      warning("not all input dates are valid")
+      date <- date[!is.na(date)]
+    }
+    ## sort?
+    ord <- order(date)
+    if (any(diff(ord) < 0)) {
+        warning("dates out of order and will be sorted")
+        date <- date[ord]
+    }
+     ## find indices into files that are requested
+    windex <- integer(length(date))
+    for (i in seq_along(date)) {
+      windex[i] <- which.min(abs(date[i] - files$date))
+    }
+    ## check for duplicates
+    dupes <- !duplicated(windex)
+    if (sum(dupes) < length(windex)) warning("duplicated dates will be dropped")
+    windex <- windex[dupes]
+    date <- date[dupes]
+   rtemplate <- rotate(raster(files$file[windex[1]], varname = varname))
+    if (length(windex) > 1L) {
+      r <- brick(nrows = nrow(rtemplate), ncols = ncol(rtemplate),
+                 xmn = xmin(rtemplate), xmx = xmax(rtemplate), ymn = ymin(rtemplate), ymx = ymax(rtemplate),
+                 crs = projection(rtemplate),
+                 nl = length(windex))
+    }
+
+    for (i in seq_along(windex)) {
+        r0 <- rotate(raster(files$file[windex[i]], varname = varname))
+        r0[r0 < -2] <- NA
+        if (length(windex) > 1) {
+          r <- setValues(r, values(r0), layer = i)
+      } else {
+          return(r0)
+      }
+    }
+    return(r)
+
+}
 
 
 ##' Load file names and dates of AVISO current data
@@ -163,8 +258,9 @@ readcurr <- function(date = as.Date("1999-11-24"),
         r1 <- read0(files$file[windex[i]], varname = "Grid_0001")
         r2 <- read0(files$file[windex[i]], varname = "Grid_0002")
         r <- setValues(r, values(rasterfun(r1, r2)), layer = i)
-        r <- setZ(r, date)
+
     }
+     r <- setZ(r, date)
     return(r)
 
 }

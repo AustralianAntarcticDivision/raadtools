@@ -129,10 +129,11 @@ readsst <- function(date = as.Date("1981-09-01"), time.resolution = "daily", var
         if (length(windex) > 1) {
           r <- setValues(r, values(r0), layer = i)
       } else {
-          return(r0)
+
+          return(setZ(r0, date))
       }
     }
-    return(r)
+    return(setZ(r, date))
 
 }
 

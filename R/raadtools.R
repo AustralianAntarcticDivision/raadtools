@@ -40,10 +40,14 @@ NULL
 }
 
 
-##' Load file name of topographic (bathymetry and/or topography) data files.
+##' Functions to provide topographic (bathymetry and/or topography) data.
 ##'
-##' A character string with the full file name of the chosen data set.
-##' @title topofile
+##' Use \code{readtopo} (or its alias \code{readbathy}) to read data
+##' from the chosen data set. The function \code{topofile} is used to
+##' find the full file name.
+##' @title Topography data
+##' @name topofile
+##' @aliases readtopo readbathy topofile
 ##' @param topo Data source, see Details.
 ##' @param lon180 Flag for returning data in Atlantic [-180, 180] rather than Pacific [0, 360] view.
 ##' @param polar Flag for returning the polar version of the IBCSO data.
@@ -59,7 +63,14 @@ NULL
 ##' \item{george_v_terre_adelie}{A bathymetric Digital Elevation Model (DEM) of the George V and Terre Adelie continental shelf and margin - 100, 250, and 500 metre resolution. \url{http://data.aad.gov.au/aadc/metadata/metadata_redirect.cfm?md=AMD/AU/GVdem_2008}}
 ##' \item{smith_sandwell}{Global seafloor topography from satellite altimetry and ship depth soundings. \url{http://topex.ucsd.edu/WWW_html/mar_topo.html}}
 ##' }
-##' @return character string
+##' @return
+##' \describe{
+##' \item{}{\code{topofile} returns a character string of the full path to a file name}
+##' \item{}{\code{readtopo} and \code{readbathy} return the requested data as a RasterLayer (these are aliases)}
+##' }
+##' @examples
+##' fname <- topofile("ibcso", polar = TRUE)
+##' ibcso <- raster(fname)
 topofile <- function(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen", "george_v_terre_adelie", "smith_sandwell"),
                      polar = FALSE,
                      lon180 = TRUE, ...) {
@@ -87,6 +98,18 @@ topofile <- function(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguele
                        )
     topopath
 }
+
+##' @rdname topofile
+##' @export
+readtopo <- function(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen", "george_v_terre_adelie", "smith_sandwell"),
+                     polar = FALSE,
+                     lon180 = TRUE, ...) {
+    topo <- match.arg(topo)
+    raster(topofile(topo = topo, polar = polar, lon180 = lon180, ...))
+}
+##' @rdname topofile
+##' @export
+readbathy <- readtopo
 
 ##' Load file names and dates of OISST sea surface temperature data
 ##'

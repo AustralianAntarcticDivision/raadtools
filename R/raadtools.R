@@ -40,6 +40,7 @@ NULL
 }
 
 
+
 ##' Functions to provide topographic (bathymetry and/or topography) data.
 ##'
 ##' Use \code{readtopo} (or its alias \code{readbathy}) to read data
@@ -71,6 +72,7 @@ NULL
 ##' @examples
 ##' fname <- topofile("ibcso", polar = TRUE)
 ##' ibcso <- raster(fname)
+##' @export
 topofile <- function(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen", "george_v_terre_adelie", "smith_sandwell"),
                      polar = FALSE,
                      lon180 = TRUE, ...) {
@@ -88,7 +90,7 @@ topofile <- function(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguele
     topopath <- file.path(data.dir, "bathymetry", topo,
                           switch(topo,
                        gebco_08 = "gebco_08.tif",
-                       ibcso = file.path(polarsubdir, "ibcso_v1_is.grd"),
+                       ibcso = file.path(polarsubdir, "ibcso_v1_is.tif"),
                        etopo1 = "ETOPO1_Ice_g_gdal.grd",
                        etopo2 = "ETOPO2v2c_f4.nc",
                        kerguelen = "kerg_dem_100m.grd",

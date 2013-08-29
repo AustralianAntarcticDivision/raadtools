@@ -87,6 +87,7 @@ topofile <- function(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguele
             warning("no polar version of ", topo, "consider projectRaster(x, crs = '+proj=stere +lat_0=-71')")
         }
     }
+    if (!lon180 & !(topo %in% c("smith_sandwell"))) warning("no Pacific view version available of ", topo)
     topopath <- file.path(data.dir, "bathymetry", topo,
                           switch(topo,
                        gebco_08 = "gebco_08.tif",

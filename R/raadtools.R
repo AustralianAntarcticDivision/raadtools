@@ -73,7 +73,10 @@ NULL
 ##' fname <- topofile("ibcso", polar = TRUE)
 ##' ibcso <- raster(fname)
 ##' @export
-topofile <- function(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen", "george_v_terre_adelie", "smith_sandwell"),
+topofile <- function(topo = c("gebco_08", "ibcso", 
+                              "etopo1", "etopo2", 
+                              "kerguelen", "george_v_terre_adelie", 
+                              "smith_sandwell"),
                      polar = FALSE,
                      lon180 = TRUE, ...) {
 
@@ -104,7 +107,10 @@ topofile <- function(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguele
 
 ##' @rdname topofile
 ##' @export
-readtopo <- function(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen", "george_v_terre_adelie", "smith_sandwell"),
+readtopo <- function(topo = c("gebco_08", "ibcso", 
+                              "etopo1", "etopo2", 
+                              "kerguelen", "george_v_terre_adelie", 
+                              "smith_sandwell"),
                      polar = FALSE,
                      lon180 = TRUE, ...) {
     topo <- match.arg(topo)

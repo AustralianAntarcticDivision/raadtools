@@ -2,6 +2,8 @@
 
 OVERVIEW
 
+ New functions for graticule plotting and extracting time series values. 
+
 NEW FEATURES
 
   o new vignette "raadtools" 

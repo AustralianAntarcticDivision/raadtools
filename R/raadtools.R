@@ -76,10 +76,12 @@ extractxyt <- function(datasource, Query, ...) {
     uindex <- unique(windex)
     extracteddata <- numeric(nrow(Query))
 
+
+
     for (ij in seq_along(uindex)) {
         thisindex <- windex == uindex[ij]
         d0 <- datafun(files$date[uindex[ij]], ...)
-        extracteddata[thisindex] <- extract(d0, Query[thisindex,])
+        extracteddata[thisindex] <- suppressWarnings(extract(d0, Query[thisindex,]))
     }
 
     extracteddata

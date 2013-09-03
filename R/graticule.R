@@ -1,13 +1,12 @@
-## Create a graticule from an object
-##
-## Using an object as input, this function builds a graticule in the coordinate system provided.
-## @title graticule
-## @rdname raadtools-internal
-## @param x object to dervived context from, Spatial* or Raster*
-## @param labels ignored
-## @param nsegs number of vertices to include on each line segment
-## @return SpatialLinesDataFrame
-## @importFrom raster raster
+##' Create a graticule from an object
+##'
+##' Using an object as input, this function builds a graticule in the coordinate system provided.
+##' @title graticule
+##' @param x object to dervived context from, Spatial* or Raster*
+##' @param labels ignored
+##' @param nsegs number of vertices to include on each line segment
+##' @return SpatialLinesDataFrame
+##' @export
 graticule <- function(x,
                       labels = FALSE,
                       nsegs = 50) {

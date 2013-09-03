@@ -1,0 +1,137 @@
+%% LyX 2.0.6 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass{article}
+\usepackage[sc]{mathpazo}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+\usepackage{url}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=2,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false]
+ {hyperref}
+\hypersetup{
+ pdfstartview={XYZ null null 1}}
+\usepackage{breakurl}
+
+%% required here, and in DESCRIPTION for VignetteBuilder and Suggests
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{An Introduction to Using the raadtools R Package}
+
+\begin{document}
+
+<<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
+# set global chunk options
+opts_chunk$set(fig.path='figure/minimal-', fig.align='center', fig.show='hold')
+options(replace.assign=TRUE,width=90)
+@
+
+
+\title{An Introduction to Using the raadtools R Package}
+
+\author{Michael D. Sumner}
+
+\maketitle
+This document introduces the \textbf{raadtools} package. Some
+familiarity with \textbf{R} and the \textbf{raster} package is
+assumed.
+
+There are some requirements for tasks that require reading data from a
+local file sytem, these are explained in Section~\ref{sec:setup}.
+<<get-start>>=
+library(raadtools)
+@
+
+\section{Simple data read}
+\label{sec:simpleread}
+There are numerous read functions to read data based on a date-time.
+
+<<read-ice, fig.width=4, fig.height=4, out.width='.4\\linewidth'>>=
+ice <- readice("1999-12-31")
+plot(ice)
+g <- graticule(ice)
+plot(g, add = TRUE)
+@
+
+
+
+\section{Setup}
+\label{sec:setup}
+To install the \textbf{raadtools} package from within the AAD you
+should be able to run the following code from within R. A relatively
+recent version of R will be assumed, and definitely no earler than
+\textbf{R 2.15.0} can be expected to work.
+
+This is the basic full install and configuration, see below for each step in greater
+detail.
+
+<<install-full,eval=FALSE>>=
+setInternet2(TRUE)
+install.packages(c("raster", "testthat", "ncdf", "rgdal", "rgeos", "knitr"),
+                 dependencies = TRUE)
+install.packages("raadtools", repos ="file://aad.gov.au/files/Transfer/toolbox/RAAD")
+@
+
+Now to load the package, use the usual package loading code here. If
+there is a problem with determining the path to the data repository
+this will provide a message about that.
+
+<<onload-path,eval=FALSE>>=
+library(raster)
+@
+
+If a message reports that your data repository cannot be found, follow
+the instructions to set it and send this package author your details.
+
+\subsection{Setup details}
+\label{sec:setupdetails}
+The remaining text in this section repeats the above steps
+individually, this might be required for customized installations or
+development.
+
+If the following step fails you may not have your network settings
+setup appropriately, so first fun run \Sexpr{setInternet2(TRUE)} then
+try to install \textbf{raster} again.
+
+<<install-dep0,eval=FALSE>>=
+install.packages("raster")
+@
+
+The following packages are not essential to run \textbf{raadtools} but
+otherwise some features will not be available. To get the full
+functionality please do run the following installations as well.
+
+
+<<install-dep1,eval=FALSE>>=
+install.packages("ncdf", "rgdal", "rgeos")
+@
+
+Finally, install the latest version of \textbf{raadtools} from the
+local AAD repository.
+
+<<install-raad,eval=FALSE>>=
+install.packages("raadtools", repos ="file://aad.gov.au/files/Transfer/toolbox/RAAD")
+@
+
+\section{Acknowledgements}
+\label{sec:ackk} The \textbf{raadtools} package was built with R
+\url{http://www.r-project.org}, Rtools
+\url{http://cran.r-project.org/bin/windows/Rtools/}, RStudio
+\url{http://www.r-studio.com}, and Git \url{http://git-scm.com}. This
+\TeX{} document was built with Sweave using knitr
+\url{http://yihui.name/knitr/}.
+
+\nocite{ncdf}
+\nocite{R}
+\nocite{raster}
+\nocite{rgdal}
+\nocite{rgeos}
+\nocite{Rnews:Pebesma+Bivand:2005}
+\bibliographystyle{apalike}
+\bibliography{raadtools}
+
+
+\end{document}

@@ -44,7 +44,7 @@ NULL
 ##' This function reads data values from a datasource, one of "oisst",
 ##' "aviso" and "nsidc". The \code{Query} must be a data.frame with
 ##' 3-columns of longitude, latitude and date/date-time.
-##' @title
+##' @title extractxyt
 ##' @param datasource name of the data source to extract from
 ##' @param Query data.frame of 3-columns, longitude,latitude,date-time
 ##' @param ... arguments passed to the read functions

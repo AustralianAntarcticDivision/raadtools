@@ -4,7 +4,11 @@ OVERVIEW
 
 NEW FEATURES
 
-  o 
+  o new vignette "raadtools" 
+
+  o new function extractxyt to extract values by longitude,latitude,time
+
+  o new function graticule to return graticule lines from Spatial/raster objects
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

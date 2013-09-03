@@ -39,7 +39,51 @@ NULL
     }
 }
 
+##' @export
+extractxyt <- function(datasource, Query, ...) {
+    ## Query MUST be a 3 column data.frame of long/lat points
+    xy <- as.matrix(Query[,1:2])
+    date <- timedateFrom(Query[,3])
+    if (all(is.na(date))) stop("no datetimes are non-missing")
+    Query <- SpatialPointsDataFrame(SpatialPoints(xy, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0")), data.frame(time = date))
 
+    ## readcurr won't work except for magonly
+    ## otherwise we need to get the template and check first
+    datafun <- switch(datasource,
+                      oisst = readsst,
+                      nsidc = readice,
+                      aviso = readcurr)
+    if (is.null(datafun)) stop(sprintf("%s not available", datasource))
+    files <- datafun(returnfiles = TRUE)
+
+     ## find indices into files that are requested
+    windex <- integer(length(date))
+    for (i in seq_along(date)) {
+      windex[i] <- which.min(abs(date[i] - files$date))
+    }
+    dtime <- abs(difftime(date, files$date[windex], units = c("days")))
+
+    ## THIS IS BROKEN, HOW TO DO IT?
+    dtimetest <- 4
+##    if (all(dtime > dtimetest)) stop(sprintf("no data file within %.1f days of %s", dtimetest))
+    if (any(dtime > dtimetest)) {
+      warning(sprintf("%i input dates have no corresponding data file within %f days of available files", sum(dtime > dtimetest), dtimetest))
+  ##    windex <- windex[dtime <= dtimetest]
+    }
+
+      ## work through all the unique indexes
+
+    uindex <- unique(windex)
+    extracteddata <- numeric(nrow(Query))
+
+    for (ij in seq_along(uindex)) {
+        thisindex <- windex == uindex[ij]
+        d0 <- datafun(files$date[uindex[ij]], ...)
+        extracteddata[thisindex] <- extract(d0, Query[thisindex,])
+    }
+
+    extracteddata
+}
 
 ##' Functions to provide topographic (bathymetry and/or topography) data.
 ##'
@@ -73,9 +117,9 @@ NULL
 ##' fname <- topofile("ibcso", polar = TRUE)
 ##' ibcso <- raster(fname)
 ##' @export
-topofile <- function(topo = c("gebco_08", "ibcso", 
-                              "etopo1", "etopo2", 
-                              "kerguelen", "george_v_terre_adelie", 
+topofile <- function(topo = c("gebco_08", "ibcso",
+                              "etopo1", "etopo2",
+                              "kerguelen", "george_v_terre_adelie",
                               "smith_sandwell"),
                      polar = FALSE,
                      lon180 = TRUE, ...) {
@@ -107,9 +151,9 @@ topofile <- function(topo = c("gebco_08", "ibcso",
 
 ##' @rdname topofile
 ##' @export
-readtopo <- function(topo = c("gebco_08", "ibcso", 
-                              "etopo1", "etopo2", 
-                              "kerguelen", "george_v_terre_adelie", 
+readtopo <- function(topo = c("gebco_08", "ibcso",
+                              "etopo1", "etopo2",
+                              "kerguelen", "george_v_terre_adelie",
                               "smith_sandwell"),
                      polar = FALSE,
                      lon180 = TRUE, ...) {
@@ -143,8 +187,9 @@ sstfiles <- function(fromcache = TRUE) {
 
     dates <- timedateFrom(as.Date(fsstrings, "%Y%m%d"))
 
-    sstf <- data.frame(files = fs, dates = dates, stringsAsFactors = FALSE)[order(dates), ]
+    sstf <- data.frame(files = fs, date = dates, stringsAsFactors = FALSE)[order(dates), ]
     save(sstf, file = file.path(getOption("cachepath"), "sstfiles.Rdata"))
+
     sstf
 
 }
@@ -165,6 +210,7 @@ sstfiles <- function(fromcache = TRUE) {
 ## @param rescale rescale values from integer range?
 ## @param debug ignore data request and simply report on what would be returned after processing arguments
 ##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
+##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... reserved for future use, currently ignored
 ##' @export
 ##' @return \code{\link[raster]{raster}} object
@@ -172,11 +218,13 @@ sstfiles <- function(fromcache = TRUE) {
 ##' data files, \code{\link[raster]{raster}} for the return value
 readsst <- function(date = as.Date("1981-09-01"), time.resolution = "daily", varname = c("sst", "anom", "err", "ice") ,
                     lon180 = TRUE,
+                    returnfiles = FALSE,
                     ...) {
     time.resolution <- match.arg(time.resolution)
     varname <- match.arg(varname)
     date <- timedateFrom(date)
     files <- sstfiles()
+    if (returnfiles) return(files)
     if (all(is.na(date))) stop("no input dates are valid")
     if (any(is.na(date))) {
       warning("not all input dates are valid")
@@ -256,6 +304,7 @@ currentsfiles <- function() {
 ##' @param dironly return just the direction from the U and V
 ##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
 ##' components, in degrees (0 north, 90 east, 180 south, 270 west)
+##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... reserved for future use, currently ignored
 ##' @export
 ##' @note These data are stored in a Mercator projection on Pacific
@@ -276,6 +325,7 @@ readcurr <- function(date = as.Date("1999-11-24"),
                      magonly = FALSE,
                      dironly = FALSE,
                      lon180 = TRUE,
+                     returnfiles = FALSE,
                      ...) {
 
      ## function to read just one
@@ -304,7 +354,7 @@ readcurr <- function(date = as.Date("1999-11-24"),
     }
 
     files <- currentsfiles()
-
+    if (returnfiles) return(files)
      ## find indices into files that are requested
     windex <- integer(length(date))
     for (i in seq_along(date)) {
@@ -372,6 +422,7 @@ readcurr <- function(date = as.Date("1999-11-24"),
 ##' @param setNA mask zero and values greater than 100 as NA
 ##' @param rescale rescale values from integer range?
 ##' @param debug ignore data request and simply report on what would be returned after processing arguments
+##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... reserved for future use, currently ignored
 ##' @export
 ##' @return \code{\link[raster]{raster}} object
@@ -380,7 +431,8 @@ readcurr <- function(date = as.Date("1999-11-24"),
 readice <- function(date = as.Date("1978-11-01"),
                     time.resolution = c("daily", "monthly"),
                     setNA = TRUE, rescale = TRUE,
-                    debug = FALSE, ...) {
+                    debug = FALSE,
+                    returnfiles = FALSE, ...) {
     datadir = getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
     date <- timedateFrom(date)
@@ -400,7 +452,7 @@ readice <- function(date = as.Date("1978-11-01"),
 
 
     icyf <- icefiles(time.resolution = time.resolution)
-
+    if (returnfiles) return(icyf)
     ## find indices into files that are requested
     windex <- integer(length(date))
     for (i in seq_along(date)) {

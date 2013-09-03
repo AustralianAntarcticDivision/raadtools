@@ -81,7 +81,14 @@ extractxyt <- function(datasource, Query, ...) {
     for (ij in seq_along(uindex)) {
         thisindex <- windex == uindex[ij]
         d0 <- datafun(files$date[uindex[ij]], ...)
-        extracteddata[thisindex] <- suppressWarnings(extract(d0, Query[thisindex,]))
+         ## get the cellnumbers just once
+        if (ij == 1L) {
+            extraction <- suppressWarnings(extract(d0, Query, cellnumbers = TRUE))
+            cn <- extraction[,1]
+            extracteddata[thisindex] <- extraction[thisindex,2]
+        } else {
+            extracteddata[thisindex] <- extract(d0, cn[thisindex])
+        }
     }
 
     extracteddata

@@ -81,5 +81,5 @@ graticule <- function(x,
                     stop(msg)
                 }
             }
-            invisible(NULL)
+            invisible(TRUE)
         }

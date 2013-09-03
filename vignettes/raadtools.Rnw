@@ -10,7 +10,7 @@
 \usepackage{url}
 \usepackage[unicode=true,pdfusetitle,
  bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=2,
- breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false]
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true,urlcolor=blue]
  {hyperref}
 \hypersetup{
  pdfstartview={XYZ null null 1}}
@@ -30,11 +30,16 @@ options(replace.assign=TRUE,width=90)
 @
 
 
-\title{An Introduction to Using the raadtools R Package}
+\title{An Introduction to Using the {\tt raadtools} R Package}
 
-\author{Michael D. Sumner}
+\author{Michael D. Sumner\footnote{Australian Antarctic Division, 203
+    Channel Highway, Kingston, Tasmania 7050, Australia. {\tt michael.sumner@aad.gov.au}}}
 
 \maketitle
+\tableofcontents
+
+\section{Introduction}
+\label{sec:introduction}
 This document introduces the \textbf{raadtools} package. Some
 familiarity with \textbf{R} and the \textbf{raster} package is
 assumed.
@@ -68,7 +73,7 @@ recent version of R will be assumed, and definitely no earler than
 This is the basic full install and configuration, see below for each step in greater
 detail.
 
-<<install-full,eval=FALSE>>=
+<<install-full,eval=FALSE,tidy=FALSE>>=
 setInternet2(TRUE)
 install.packages(c("raster", "testthat", "ncdf", "rgdal", "rgeos", "knitr"),
                  dependencies = TRUE)
@@ -80,7 +85,7 @@ there is a problem with determining the path to the data repository
 this will provide a message about that.
 
 <<onload-path,eval=FALSE>>=
-library(raster)
+library(raadtools)
 @
 
 If a message reports that your data repository cannot be found, follow

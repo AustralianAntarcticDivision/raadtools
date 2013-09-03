@@ -98,10 +98,11 @@ individually, this might be required for customized installations or
 development.
 
 If the following step fails you may not have your network settings
-setup appropriately, so first fun run \Sexpr{setInternet2(TRUE)} then
+setup appropriately, so first run \texttt{setInternet2} and then
 try to install \textbf{raster} again.
 
 <<install-dep0,eval=FALSE>>=
+setInternet2(TRUE)
 install.packages("raster")
 @
 
@@ -135,6 +136,7 @@ install.packages("raadtools", repos ="file://aad.gov.au/files/Transfer/toolbox/R
 \nocite{rgdal}
 \nocite{rgeos}
 \nocite{Rnews:Pebesma+Bivand:2005}
+\nocite{xie2013knitr}
 \bibliographystyle{apalike}
 \bibliography{raadtools}
 

@@ -1,3 +1,12 @@
+  CHANGES IN raadtools VERSION 0.0-4
+
+OVERVIEW
+
+ Tidy up for file/date handling code, faster collation of multi-layer
+ ice objects.
+
+NEW FEATURES
+
   CHANGES IN raadtools VERSION 0.0-3
 
 OVERVIEW

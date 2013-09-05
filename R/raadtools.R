@@ -565,14 +565,9 @@ readice <- function(date = as.Date("1978-11-01"),
         dat[r100] <- NA
         dat[r0] <- NA
       }
-
-
-          r[[ifile]] <- raster(t(matrix(dat, dims[1])), template = rtemplate)
-
+      r[[ifile]] <- raster(t(matrix(dat, dims[1])), template = rtemplate)
   }
-
     if (length(findex) > 1) r <- brick(stack(r)) else r <- r[[1L]]
-
     projection(r) <- stersouth
     names(r) <- files$file[findex]
     r <- setZ(r, files$date[findex])

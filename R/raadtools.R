@@ -546,11 +546,9 @@ readice <- function(date = as.Date("1978-11-01"),
     stersouth <-  "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
     dims <- c(316L, 332L)
     rtemplate <- raster(GridTopology(c(-3937500, -3937500), c(25000, 25000), dims))
-    if (length(findex) > 1L) {
-      r <- brick(nrows = nrow(rtemplate), ncols = ncol(rtemplate),
-                 xmn = xmin(rtemplate), xmx = xmax(rtemplate), ymn = ymin(rtemplate), ymx = ymax(rtemplate),
-                 nl = length(findex))
-    }
+
+    r <- vector("list", length(findex))
+
     ## loop over file indices
     for (ifile in seq_along(findex)) {
       con <- file(files$fullname[findex[ifile]], open = "rb")
@@ -567,14 +565,13 @@ readice <- function(date = as.Date("1978-11-01"),
         dat[r100] <- NA
         dat[r0] <- NA
       }
-      ##rtemp <- raster(t(matrix(dat, dims[1])), template = rtemplate)
-      if (length(findex) > 1) {
-          r <- setValues(r, matrix(dat, dims[1]), layer = ifile)
-      } else {
-          r <- raster(t(matrix(dat, dims[1])), template = rtemplate)
-      }
-    }
 
+
+          r[[ifile]] <- raster(t(matrix(dat, dims[1])), template = rtemplate)
+
+  }
+
+    if (length(findex) > 1) r <- brick(stack(r)) else r <- r[[1L]]
 
     projection(r) <- stersouth
     names(r) <- files$file[findex]

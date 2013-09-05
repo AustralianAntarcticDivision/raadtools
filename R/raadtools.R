@@ -346,54 +346,24 @@ readcurr <- function(date = as.Date("1999-11-24"),
     }
     data.dir = getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
-    date <- timedateFrom(date)
-    if (all(is.na(date))) stop("no input dates are valid")
-    if (any(is.na(date))) {
-      warning("not all input dates are valid")
-      date <- date[!is.na(date)]
-    }
-
-    ## sort?
-    ord <- order(date)
-    if (any(diff(ord) < 0)) {
-        warning("dates out of order and will be sorted")
-        date <- date[ord]
-    }
+    if (magonly & dironly) warning("only one of magonly and dironly may be used, returning magonly")
 
     files <- currentsfiles()
     if (returnfiles) return(files)
-     ## find indices into files that are requested
-    windex <- integer(length(date))
-    for (i in seq_along(date)) {
-      windex[i] <- which.min(abs(date[i] - files$date))
-    }
-    ## check for duplicates
-    dupes <- !duplicated(windex)
-    if (sum(dupes) < length(windex)) warning("duplicated dates will be dropped")
-    windex <- windex[dupes]
-    date <- date[dupes]
 
-    if (magonly & dironly) warning("only one of magonly and dironly may be used, returning magonly")
-    ## now check which of these have a valid file within the resolution
-    dtime <- abs(difftime(date, files$date[windex], units = c("days")))
+    findex <- .processDates(date, files$date, time.resolution)
 
-    dtimetest <- switch(time.resolution,
-                        weekly = 4)
-    if (all(dtime > dtimetest)) stop(sprintf("no data file within %.1f days of %s", dtimetest))
-    if (any(dtime > dtimetest)) {
-      warning(sprintf("%i input dates have no corresponding data file within %f days of available files", sum(dtime > dtimetest), dtimetest))
-      windex <- windex[dtime <= dtimetest]
-    }
+
     ## prevent reading more than one unless mag/dironly
-    if (length(windex) > 1L & !magonly & !dironly) {
-        windex <- windex[1L]
-        date <- date[1]
+    if (length(findex) > 1L & !magonly & !dironly) {
+        findex <- findex[1L]
+        date <- files$date[findex[1L]]
         warning("only one time step can be read at once")
     }
     i <- 1
 
-         r1 <- read0(files$file[windex[i]], varname = "Grid_0001")
-         r2 <- read0(files$file[windex[i]], varname = "Grid_0002")
+         r1 <- read0(files$file[findex[i]], varname = "Grid_0001")
+         r2 <- read0(files$file[findex[i]], varname = "Grid_0002")
     if (!(magonly | dironly)) {
         r <- brick(r1, r2)
          names(r) <- c("U", "V")
@@ -402,11 +372,11 @@ readcurr <- function(date = as.Date("1999-11-24"),
     if (magonly) rasterfun <- function(x1, x2) sqrt(x1 * x1 + x2 *x2)
     if (dironly) rasterfun <- function(x1, x2) (90 - atan2(x2, x1) * 180/pi) %% 360
 
-    r <- brick(rasterfun(r1, r2), nl = length(windex))
+    r <- brick(rasterfun(r1, r2), nl = length(findex))
 
-    for (i in seq_along(windex)[-1]) {
-        r1 <- read0(files$file[windex[i]], varname = "Grid_0001")
-        r2 <- read0(files$file[windex[i]], varname = "Grid_0002")
+    for (i in seq_along(findex)[-1]) {
+        r1 <- read0(files$file[findex[i]], varname = "Grid_0001")
+        r2 <- read0(files$file[findex[i]], varname = "Grid_0002")
         r <- setValues(r, values(rasterfun(r1, r2)), layer = i)
 
     }

@@ -17,7 +17,7 @@ test_that("ice data is returned as a raster object", {
       })
 
 test_that("dates not available within 1.5 days give error", {
-    expect_that(readice("1978-10-18"), throws_error("no ice data file within"))
+    expect_that(readice("1978-10-18"), throws_error("no data file within"))
 })
 
 test_that("dates  within 1.5 months succeed", {

@@ -459,6 +459,39 @@ readcurr <- function(date = as.Date("1999-11-24"),
         x
     }
 
+
+
+    .indexDates <- function(xdate, filedate) {
+        windex <- integer(length(xdate))
+        for (i in seq_along(xdate)) {
+            windex[i] <- which.min(abs(xdate[i] - filedate))
+        }
+
+
+        windex
+    }
+
+  .dedupe <- function(index, date, removeDupes = TRUE) {
+        nondupes <- !duplicated(index)
+        if (sum(nondupes) < length(index)) {
+            if (removeDupes) warning("duplicated dates will be dropped") else stop("duplicated dates not allowed")
+            index <- index[nondupes]
+            date <- date[nondupes]
+        }
+        list(index = index, date = date)
+    }
+
+    .matchFiles <- function(querydate, refdate, index, daytest = 7) {
+        ##
+        deltatime <- abs(difftime(querydate, refdate, units = "days"))
+        deltatest <- deltatime > daytest
+        if (all(deltatest)) stop(sprintf("no data file within %.1f days of %s", daytest))
+        if (any(deltatest)) {
+            warning(sprintf("%i input dates have no corresponding data file within %f days of available files", sum(deltatest), daytest))
+            index <- index[deltatest]
+        }
+        index
+    }
 ##' Read NSIDC sea ice data from daily or monthly files
 ##'
 ##' Sea ice data is read from files managed by
@@ -484,52 +517,43 @@ readice <- function(date = as.Date("1978-11-01"),
                     returnfiles = FALSE, ...) {
     datadir = getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
+
+    ## get file names and dates and full path
     files <- .loadfiles("nsidc", time.resolution = time.resolution)
     files$fullname <- file.path(datadir, files$file)
+    if (returnfiles) return(files)
 
     ## checks on dates, we drop any that are NA
     date <- .valiDates(date, allOK = FALSE)
+
     ## sort dates if need be
     date <- .sortDates(date, resortOK = TRUE)
 
-    if (returnfiles) return(files)
-    ## find indices into files that are requested
-    windex <- integer(length(date))
-    for (i in seq_along(date)) {
-      windex[i] <- which.min(abs(date[i] - files$date)) ##findInterval(date, icyf$date)
-    }
+    ## mapping of files/dates, so we can process time series
+    findex <- .indexDates(date, files$date)
 
     ## check for duplicates
-    dupes <- !duplicated(windex)
-    if (sum(dupes) < length(windex)) warning("duplicated dates will be dropped")
-    windex <- windex[dupes]
-    date <- date[dupes]
-    ## now check which of these have a valid file within the resolution
+    dedupedates <- .dedupe(findex, date, removeDupes = TRUE)
+    findex <- dedupedates$index
+    date <- dedupedates$date
 
-    dtime <- abs(difftime(date, files$date[windex], units = c("days")))
 
-    dtimetest <- switch(time.resolution,
-                        daily = 1.5, monthly = 15)
-    if (all(dtime > dtimetest)) stop(sprintf("no ice data file within %.1f days of %s", dtimetest))
-    if (any(dtime > dtimetest)) {
-      warning(sprintf("%i input dates have no corresponding ice data file within %f days of available files", sum(dtime > dtimetest), dtimetest))
-      windex <- windex[dtime <= dtimetest]
-    }
-
+    ## from this point one, we don't care about the input "date" - this is our index into all files and that's what we use
+    findex <- .matchFiles(date, files$date[findex], findex, daytest = switch(time.resolution,daily = 1.5, monthly = 15))
 
 
     ## NSIDC projection and grid size for the Southern Hemisphere
     stersouth <-  "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
     dims <- c(316L, 332L)
     rtemplate <- raster(GridTopology(c(-3937500, -3937500), c(25000, 25000), dims))
-    if (length(windex) > 1L) {
+    if (length(findex) > 1L) {
       r <- brick(nrows = nrow(rtemplate), ncols = ncol(rtemplate),
                  xmn = xmin(rtemplate), xmx = xmax(rtemplate), ymn = ymin(rtemplate), ymx = ymax(rtemplate),
-                 nl = length(windex))
+                 nl = length(findex))
     }
     ## loop over file indices
-    for (ifile in seq_along(windex)) {
-      con <- file(files$fullname[windex[ifile]], open = "rb")
+    for (ifile in seq_along(findex)) {
+      con <- file(files$fullname[findex[ifile]], open = "rb")
       trash <- readBin(con, "integer", size = 1, n = 300)
       dat <- readBin(con, "integer", size = 1, n = prod(dims), endian = "little", signed = FALSE)
       close(con)
@@ -544,7 +568,7 @@ readice <- function(date = as.Date("1978-11-01"),
         dat[r0] <- NA
       }
       ##rtemp <- raster(t(matrix(dat, dims[1])), template = rtemplate)
-      if (length(windex) > 1) {
+      if (length(findex) > 1) {
           r <- setValues(r, matrix(dat, dims[1]), layer = ifile)
       } else {
           r <- raster(t(matrix(dat, dims[1])), template = rtemplate)
@@ -553,8 +577,8 @@ readice <- function(date = as.Date("1978-11-01"),
 
 
     projection(r) <- stersouth
-    names(r) <- files$file[windex]
-    r <- setZ(r, files$date[windex])
+    names(r) <- files$file[findex]
+    r <- setZ(r, files$date[findex])
     r
 }
 

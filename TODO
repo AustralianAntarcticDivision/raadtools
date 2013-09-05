@@ -1,3 +1,4 @@
+- rewrite sstfiles to return relative filename, needs cache fixing
 - allow filename for resulting brick
 - implement up-front crop for read, especially for multi-layers
 - coastmap/adminmap

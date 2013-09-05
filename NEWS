@@ -2,10 +2,14 @@
 
 OVERVIEW
 
- Tidy up for file/date handling code, faster collation of multi-layer
- ice objects.
+ Tidy up for file/date handling code, better organization of these
+ tasks for read functions.
 
 NEW FEATURES
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+ o readice has been improved for faster reading, 300 to 400 layers is feasible. 
 
   CHANGES IN raadtools VERSION 0.0-3
 

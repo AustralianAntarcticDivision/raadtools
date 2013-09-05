@@ -1,0 +1,32 @@
+
+library(raster)
+library(RNetCDF)
+f <- "D:\\Toolbox\\data\\sst\\sst.wkmean.1990-present.nc"
+nc <- open.nc(f)
+windex <- 1:500
+
+l <- vector("list", length(windex))
+
+for (i in windex) {
+    l[[i]] <- rotate(raster(f, i))
+}
+
+r <- stack(l)
+
+ ice <- readice()
+ p <- projectRaster(r, ice, filename = "cfile.grd")
+
+ ##@data@nlayers <- as.integer(nl)
+
+
+    for (i in seq_along(windex)) {
+        r0 <- raster(files$file[windex[i]], varname = varname)
+        if (lon180) r0 <- rotate(r0)
+        r0[r0 < -2] <- NA
+        if (length(windex) > 1) {
+          r <- setValues(r, values(r0), layer = i)
+      } else {
+
+          return(setZ(r0, date))
+      }
+    }

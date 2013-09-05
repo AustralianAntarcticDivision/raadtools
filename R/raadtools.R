@@ -430,6 +430,34 @@ readcurr <- function(date = as.Date("1999-11-24"),
 
 }
 
+.loadfiles <- function(name, time.resolution, ...) {
+    switch(name,
+           nsidc = icefiles(time.resolution = time.resolution)
+
+           )
+}
+
+   .valiDates <- function(x, allOK = TRUE) {
+        xs <- timedateFrom(x)
+        bad <- is.na(xs)
+        if (all(bad)) stop("no input dates are valid")
+        if (any(bad)) {
+            notOK <- "not all input dates are valid"
+            if (allOK) stop(notOK) else warning(notOK)
+        }
+        xs[!bad]
+    }
+
+
+    .sortDates <- function(x, resortOK = FALSE) {
+        ord <- order(x)
+        if (any(diff(ord) < 0)) {
+            sortOK <- "dates out of order and will be sorted"
+            if (resortOK) warning(sortOK) else stop(sortOK)
+            x <- x[ord]
+        }
+        x
+    }
 
 ##' Read NSIDC sea ice data from daily or monthly files
 ##'
@@ -456,28 +484,19 @@ readice <- function(date = as.Date("1978-11-01"),
                     returnfiles = FALSE, ...) {
     datadir = getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
-    date <- timedateFrom(date)
-    if (all(is.na(date))) stop("no input dates are valid")
-    if (any(is.na(date))) {
-      warning("not all input dates are valid")
-      date <- date[!is.na(date)]
-    }
+    files <- .loadfiles("nsidc", time.resolution = time.resolution)
+    files$fullname <- file.path(datadir, files$file)
 
-    ## sort?
-    ord <- order(date)
-    if (any(diff(ord) < 0)) {
-        warning("dates out of order and will be sorted")
-        date <- date[ord]
-    }
+    ## checks on dates, we drop any that are NA
+    date <- .valiDates(date, allOK = FALSE)
+    ## sort dates if need be
+    date <- .sortDates(date, resortOK = TRUE)
 
-
-
-    icyf <- icefiles(time.resolution = time.resolution)
-    if (returnfiles) return(icyf)
+    if (returnfiles) return(files)
     ## find indices into files that are requested
     windex <- integer(length(date))
     for (i in seq_along(date)) {
-      windex[i] <- which.min(abs(date[i] - icyf$date)) ##findInterval(date, icyf$date)
+      windex[i] <- which.min(abs(date[i] - files$date)) ##findInterval(date, icyf$date)
     }
 
     ## check for duplicates
@@ -487,7 +506,7 @@ readice <- function(date = as.Date("1978-11-01"),
     date <- date[dupes]
     ## now check which of these have a valid file within the resolution
 
-    dtime <- abs(difftime(date, icyf$date[windex], units = c("days")))
+    dtime <- abs(difftime(date, files$date[windex], units = c("days")))
 
     dtimetest <- switch(time.resolution,
                         daily = 1.5, monthly = 15)
@@ -510,7 +529,7 @@ readice <- function(date = as.Date("1978-11-01"),
     }
     ## loop over file indices
     for (ifile in seq_along(windex)) {
-      con <- file(file.path(datadir, icyf$file[windex[ifile]]), open = "rb")
+      con <- file(files$fullname[windex[ifile]], open = "rb")
       trash <- readBin(con, "integer", size = 1, n = 300)
       dat <- readBin(con, "integer", size = 1, n = prod(dims), endian = "little", signed = FALSE)
       close(con)
@@ -534,8 +553,8 @@ readice <- function(date = as.Date("1978-11-01"),
 
 
     projection(r) <- stersouth
-    names(r) <- icyf$file[windex]
-    r <- setZ(r, icyf$date[windex])
+    names(r) <- files$file[windex]
+    r <- setZ(r, files$date[windex])
     r
 }
 

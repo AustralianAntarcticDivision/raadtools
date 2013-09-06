@@ -380,6 +380,7 @@ readcurr <- function(date = as.Date("1999-11-24"),
         r <- setValues(r, values(rasterfun(r1, r2)), layer = i)
 
     }
+
      r <- setZ(r, date)
     if (lon180) r <- suppressWarnings(rotate(r))
     return(r)
@@ -464,7 +465,7 @@ readcurr <- function(date = as.Date("1999-11-24"),
         findex <- dedupedates$index
         date <- dedupedates$date
 
-        .matchFiles(date, fdate[findex], findex, daytest = switch(timeres,daily = 1.5, monthly = 15))
+        .matchFiles(date, fdate[findex], findex, daytest = switch(timeres,daily = 1.5, weekly = 4, monthly = 15))
     }
 
 ##' Read NSIDC sea ice data from daily or monthly files
@@ -517,6 +518,8 @@ readice <- function(date = as.Date("1978-11-01"),
       close(con)
       r100 <- dat > 250
       r0 <- dat < 1
+
+
       if (rescale) {
         dat <- dat/2.5  ## rescale back to 100
       }
@@ -532,6 +535,8 @@ readice <- function(date = as.Date("1978-11-01"),
     r <- setZ(r, files$date[findex])
     r
 }
+mikeiscool <- function() TRUE
+
 
 
 ##' Load \code{data.frame} of file path and dates of NSIDC sea ice concentration data.

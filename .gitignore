@@ -25,3 +25,5 @@ auto/
 *.dvi
 *.pdf
 .Rproj.user
+vignettes/cache*
+vignenettes/figure*

@@ -5,6 +5,7 @@ dts <- c("2001-01-02", NA, "2009-10-01", "2000-01-01")
 
 test_that("processed dates as expected", {
     expect_that(raadtools:::.processDates(dts, sort(dts[!is.na(dts)]), "awful"), throws_error())
+    expect_that(TRUE, is_true())
 
 })
 test_that("date validation is correct", {

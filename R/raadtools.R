@@ -39,6 +39,7 @@ NULL
     }
 }
 
+
 ##' Extract cell values from a given data source by point coordinates and times.
 ##'
 ##' This function reads data values from a datasource, one of "oisst",
@@ -509,7 +510,6 @@ readice <- function(date = as.Date("1978-11-01"),
 
     r <- vector("list", length(findex))
 
-
     ## loop over file indices
     for (ifile in seq_along(findex)) {
       con <- file(files$fullname[findex[ifile]], open = "rb")
@@ -535,7 +535,7 @@ readice <- function(date = as.Date("1978-11-01"),
     r <- setZ(r, files$date[findex])
     r
 }
-mikeiscool <- function() TRUE
+
 
 
 

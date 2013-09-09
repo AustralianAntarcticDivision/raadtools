@@ -51,8 +51,6 @@ There are numerous read functions to read data based on a date-time.
 <<read-ice, fig.width=4, fig.height=4, out.width='.4\\linewidth'>>=
 ice <- readice("1999-12-31")
 plot(ice)
-g <- graticule(ice)
-plot(g, add = TRUE)
 @
 
 

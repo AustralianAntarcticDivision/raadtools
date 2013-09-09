@@ -18,5 +18,4 @@ Description: Tools for reading, plotting and manipulating spatial data used at
     the Australian Antarctic Division (AAD).
 License: GPL-3
 Collate:
-    'graticule.R'
     'raadtools.R'

@@ -1,6 +1,0 @@
-library(testthat)
-library(raadtools)
-test_that("sensible objects are returned", {
-    expect_that(graticule(), is_a("SpatialLinesDataFrame"))
-    ##expect_that(graticule(labels = TRUE), is_a("SpatialPointsDataFrame"))
-})

@@ -287,7 +287,7 @@ readsst <- function(date = as.Date("1981-09-01"), time.resolution = "daily", var
     if (!is.null(xylim)) {
         cropit <- TRUE
         cropext <- extent(xylim)
-        rtemplate <- crop(rtemplate, cropext)
+        ##rtemplate <- crop(rtemplate, cropext)
     }
 
     nfiles <- length(findex)
@@ -580,7 +580,7 @@ readice <- function(date = as.Date("1978-11-01"),
     if (!is.null(xylim)) {
         cropit <- TRUE
         cropext <- extent(xylim)
-        rtemplate <- crop(rtemplate, cropext)
+        ##rtemplate <- crop(rtemplate, cropext)
     }
 
     nfiles <- length(findex)

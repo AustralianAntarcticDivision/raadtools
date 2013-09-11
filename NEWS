@@ -3,13 +3,21 @@
 OVERVIEW
 
  Tidy up for file/date handling code, better organization of these
- tasks for read functions.
+ tasks for read functions.  
 
 NEW FEATURES
 
+ o read functions are faster and can accept an 'xylim' object to crop
+ to a spatial region
+
+ o a draft vignette has been added
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
- o readice has been improved for faster reading, 300 to 400 layers is feasible. 
+ o readice, readcurr, readsst have been improved for faster reading,
+  100s of layers is now feasible but still memory-bound.
+
+ o experimental graticule was removed
 
   CHANGES IN raadtools VERSION 0.0-3
 

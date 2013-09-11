@@ -7,6 +7,8 @@ OVERVIEW
 
 NEW FEATURES
 
+ o new function extractxyt to extract values from spatio-temporal grids
+
  o read functions are faster and can accept an 'xylim' object to crop
  to a spatial region
 

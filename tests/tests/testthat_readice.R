@@ -12,6 +12,13 @@ test_that("reqeusted files only are returned as a data.frame", {
     expect_that(sum(is.na(ffs$date)), equals(0))
 
 })
+
+test_that("spatial crop works as expected", {
+    ext <- extent(-3086361, -1192990, 357501, 1882251)
+    ice <- readice(c("2000-01-01", "2000-01-10"), xylim = ext)
+    expect_that(dim(ice), equals(c(61, 75, 2)))
+})
+
 test_that("ice data is returned as a raster object", {
           expect_that(readice("2000-01-01"), is_a("RasterLayer"))
       })

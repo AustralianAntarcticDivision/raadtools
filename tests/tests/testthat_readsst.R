@@ -31,7 +31,7 @@ test_that("input crop extent works for a time series", {
   dts <- seq(as.Date("2001-01-03"), by = "1 week", length = 10)
   sst <- readsst(dts, xylim = ext)
   expect_that(sst, is_a("RasterBrick"))
-  expect_that(dim(sst), equals(c(180, 200)))
+  expect_that(dim(sst), equals(c(180, 200, 10)))
 
 })
 

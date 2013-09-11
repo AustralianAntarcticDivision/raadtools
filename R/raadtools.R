@@ -539,6 +539,7 @@ readcurr <- function(date = as.Date("1999-11-24"),
 ##' returned.
 ##' @param date date or dates of data to read, see Details
 ##' @param time.resolution time resoution data to read, daily or monthly
+##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
 ##' @param setNA mask zero and values greater than 100 as NA
 ##' @param rescale rescale values from integer range?
 ##' @param debug ignore data request and simply report on what would be returned after processing arguments
@@ -551,6 +552,7 @@ readcurr <- function(date = as.Date("1999-11-24"),
 ##' data files, \code{\link[raster]{raster}} for the return value
 readice <- function(date = as.Date("1978-11-01"),
                     time.resolution = c("daily", "monthly"),
+                    xylim = NULL,
                     setNA = TRUE, rescale = TRUE,
 
                     debug = FALSE,
@@ -572,6 +574,14 @@ readice <- function(date = as.Date("1978-11-01"),
     dims <- c(316L, 332L)
     rtemplate <- raster(GridTopology(c(-3937500, -3937500), c(25000, 25000), dims))
 
+
+    ## process xylim
+    cropit <- FALSE
+    if (!is.null(xylim)) {
+        cropit <- TRUE
+        cropext <- extent(xylim)
+        rtemplate <- crop(rtemplate, cropext)
+    }
 
     nfiles <- length(findex)
 
@@ -595,7 +605,9 @@ readice <- function(date = as.Date("1978-11-01"),
         dat[r100] <- NA
         dat[r0] <- NA
       }
-      r[[ifile]] <- raster(t(matrix(dat, dims[1])), template = rtemplate)
+      r0 <- raster(t(matrix(dat, dims[1])), template = rtemplate)
+      if (cropit) r0 <- crop(r0, cropext)
+      r[[ifile]] <- r0
       if (verbose & ifile %% 10L == 0L) .progressreport(ifile, nfiles)
   }
     if (length(findex) > 1) r <- brick(stack(r)) else r <- r[[1L]]

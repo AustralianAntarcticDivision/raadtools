@@ -131,9 +131,9 @@ coastmap <- function(map = c(
 ##' @importMethodsFrom raster extent
  .world <-
 function(world1 = TRUE) {
-    require(maptools)
+##    require(maptools)
 
-    data(wrld_simpl)
+   data(wrld_simpl)
     if (world1) return(as(wrld_simpl, "SpatialPolygons"))
     ##require(raster)
    ## require(rgeos)

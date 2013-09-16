@@ -11,7 +11,7 @@ Suggests:
     rgeos,
     knitr
 VignetteBuilder: knitr
-Version: 0.0-4
+Version: 0.0-5
 Authors@R: person("Michael D.","Sumner", role = c("aut", "cre"), email =
     "Michael.Sumner@aad.gov.au")
 Description: Tools for reading, plotting and manipulating spatial data used at

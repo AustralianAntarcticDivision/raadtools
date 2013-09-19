@@ -5,7 +5,8 @@ Depends:
     maptools,
     raster  (>= 2.1-37),
     R (>= 2.15)
-Imports: rgeos
+Imports:
+    rgeos
 Suggests:
     testthat,
     ncdf,

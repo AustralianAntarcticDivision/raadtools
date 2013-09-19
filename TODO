@@ -5,4 +5,5 @@
 - coastmap/adminmap
 - fronts
 - GEM
+- return a RasterLayer rather than a brick when possible
 

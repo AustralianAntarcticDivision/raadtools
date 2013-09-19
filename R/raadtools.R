@@ -41,7 +41,31 @@ NULL
 
 
 
-##' Chlorophyll-a for the Southern Ocean
+##' Read Chlorophyll-a for the Southern Ocean
+##'
+##' Ocean colour Chlorophyll-a data read from files managed by
+##' \code{\link{chlafiles}}. Dates are matched to file names by
+##' finding the nearest match in time within a short duration. If
+##' \code{date} is greater than length 1 then the sorted set of unique
+##' matches is returned.
+##' \code{xylim} is expected to be consistent with the source
+##' data itself (which is not necessarily in longitude/latitude) if in doubt first read a single time slice,
+##' plot it and draw an \code{\link[raster]{extent}} object with \code{\link[raster]{drawExtent}}
+##' @param date date or dates of data to read, see Details
+##' @param time.resolution time resoution data to read, daily only
+##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
+##' @param returnfiles ignore options and just return the file names and dates
+##' @param verbose print messages on progress etc.
+##' @param ... reserved for future use, currently ignored
+##' @details
+##' Examples
+##' @export
+##' @return \code{\link[raster]{raster}} object
+##' @seealso \code{\link{chlafiles}} for details on the repository of
+##' data files, \code{\link[raster]{raster}} for the return value
+##' @examples
+##' d <- readchla(c("2003-01-01", c("2003-06-01")), xylim = extent(100, 150, -70, -30))
+##'
 ##' @export
 readchla <- function(date = as.Date("1997-08-291"), time.resolution = c("monthly", "weekly"),
                     xylim = NULL,

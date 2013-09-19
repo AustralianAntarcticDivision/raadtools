@@ -41,27 +41,27 @@ NULL
 
 
 
-##' Chlorophyll-a for the Southern Ocean 
+##' Chlorophyll-a for the Southern Ocean
 ##' @export
-readchla <- function(date = as.Date("1997-08-291"), time.resolution = c("monthly", "weekly"),                 
+readchla <- function(date = as.Date("1997-08-291"), time.resolution = c("monthly", "weekly"),
                     xylim = NULL,
                     ##lon180 = TRUE,
                     returnfiles = FALSE,
                     verbose = TRUE,
                     ...) {
-  
+
   time.resolution <- match.arg(time.resolution)
- 
+
   files <- chlafiles()
   if (returnfiles) return(files)
-  
+
   ## from this point one, we don't care about the input "date" - this is our index into all files and that's what we use
   findex <- .processDates(date, files$date, time.resolution)
   date <- files$date[findex]
-  
+
   rtemplate <- raster(files$fullname[findex[1]])
   ##if (lon180) rtemplate <- rotate(rtemplate)
-  
+
   ## process xylim
   cropit <- FALSE
   if (!is.null(xylim)) {
@@ -69,10 +69,10 @@ readchla <- function(date = as.Date("1997-08-291"), time.resolution = c("monthly
     cropext <- extent(xylim)
     ##rtemplate <- crop(rtemplate, cropext)
   }
-  
+
   nfiles <- length(findex)
   r <- vector("list", nfiles)
-  
+
   for (ifile in seq_len(nfiles)) {
     r0 <- raster(files$fullname[findex[ifile]])
     ##if (lon180) r0 <- rotate(r0)
@@ -81,8 +81,8 @@ readchla <- function(date = as.Date("1997-08-291"), time.resolution = c("monthly
     r[[ifile]] <- r0
     ##if (verbose & ifile %% 10L == 0L) .progressreport(ifile, nfiles)
   }
-  
-  if (nfiles > 1) 
+
+  if (nfiles > 1)
     r <- brick(stack(r))
   else r <- r[[1L]]
   names(r) <- basename(files$file[findex])
@@ -90,9 +90,9 @@ readchla <- function(date = as.Date("1997-08-291"), time.resolution = c("monthly
   return(r)
 }
 
-##' Chlorophyll-a for the Southern Ocean 
-##' 
-##' This function generates a list of available chlorophyll-a files, including SeaWiFS and MODIS. 
+##' Chlorophyll-a for the Southern Ocean
+##'
+##' This function generates a list of available chlorophyll-a files, including SeaWiFS and MODIS.
 ##' @title Chlorophyll-a
 ##' @param time.resolution monthly or weekly (8day)
 ##' @return data.frame
@@ -106,23 +106,23 @@ chlafiles <- function(time.resolution = c("monthly", "weekly")) {
     chlf$fullname <- file.path(data.dir,  chlf$file)
     return(chlf)
   }
-  
+
   dirpath <- file.path("chl", "johnson")
-  
+
   tr <- c(monthly = "Monthly", weekly = "8day")[time.resolution]
-  fs <- c(file.path(dirpath, sprintf("MODISA_%s", tr), list.files(file.path(data.dir, dirpath, sprintf("MODISA_%s", tr)))), 
+  fs <- c(file.path(dirpath, sprintf("MODISA_%s", tr), list.files(file.path(data.dir, dirpath, sprintf("MODISA_%s", tr)))),
           file.path(dirpath, sprintf("SeaWiFS_%s", tr), list.files(file.path(data.dir, dirpath, sprintf("SeaWiFS_%s", tr)))))
-     
+
   dates <- timedateFrom(strptime(substr(basename(fs), 2, 8), "%Y%j"))
-  chlf <- data.frame(file = fs, date = dates, 
+  chlf <- data.frame(file = fs, date = dates,
                      stringsAsFactors = FALSE)[order(dates), ]
-                                                                          
+
   save(chlf, file = file.path(data.dir, "cache", sprintf("%s_chlafiles.Rdata", time.resolution)))
   chlf
-  
-  
+
+
 }
-  
+
 
 ##' Coastline data set as SpatialPolygons*
 ##'
@@ -910,4 +910,15 @@ commonprojections <- list(longlat = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no
 
 
 
-
+##' Colours and breaks for a chlorophyll-a palette.
+##'
+##' Palette built by reverse-engineering MODIS-A images.
+##' @name chla_pal
+##' @docType data
+##' @title Chlorophyll-a ocean colour display palette
+##' @format A list with vectors \code{col} and \code{breaks}.
+##' @examples
+##' d <- readchla()
+##' plot(d, col = chla_pal$col, breaks = chla_pal$breaks)
+##' @keywords data
+NULL

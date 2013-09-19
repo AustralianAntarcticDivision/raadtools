@@ -12,6 +12,7 @@ Suggests:
     ncdf,
     rgdal,
     knitr
+LazyData: yes
 VignetteBuilder: knitr
 Version: 0.0-5
 Authors@R: person("Michael D.","Sumner", role = c("aut", "cre"), email =

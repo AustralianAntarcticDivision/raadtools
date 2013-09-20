@@ -933,16 +933,3 @@ commonprojections <- list(longlat = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no
 
 
 
-
-##' Colours and breaks for a chlorophyll-a palette.
-##'
-##' Palette built by reverse-engineering MODIS-A images.
-##' @name chla_pal
-##' @docType data
-##' @title Chlorophyll-a ocean colour display palette
-##' @format A list with vectors \code{col} and \code{breaks}.
-##' @examples
-##' d <- readchla()
-##' plot(d, col = chla_pal$col, breaks = chla_pal$breaks)
-##' @keywords data
-NULL

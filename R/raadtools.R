@@ -67,7 +67,7 @@ NULL
 ##' d <- readchla(c("2003-01-01", c("2003-06-01")), xylim = extent(100, 150, -70, -30))
 ##'
 ##' @export
-readchla <- function(date = as.Date("1997-08-291"), time.resolution = c("monthly", "weekly"),
+readchla <- function(date = as.Date("1997-08-29"), time.resolution = c("monthly", "weekly"),
                     xylim = NULL,
                     ##lon180 = TRUE,
                     returnfiles = FALSE,
@@ -76,7 +76,7 @@ readchla <- function(date = as.Date("1997-08-291"), time.resolution = c("monthly
 
   time.resolution <- match.arg(time.resolution)
 
-  files <- chlafiles()
+  files <- chlafiles(time.resolution = time.resolution)
   if (returnfiles) return(files)
 
   ## from this point one, we don't care about the input "date" - this is our index into all files and that's what we use

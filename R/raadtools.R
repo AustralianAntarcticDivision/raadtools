@@ -149,6 +149,28 @@ chlafiles <- function(time.resolution = c("monthly", "weekly")) {
 }
 
 
+
+
+##' Load spatial map of fronts data.
+##'
+##' Currently ORSI is the only supported layer.
+##'
+##' "orsi" - the ORSI fronts derived from the files
+##' @title Fronts map data for the Southern Ocean
+##' @param map
+##' @return SpatialLinesDataFrame
+##' @export
+frontsmap <- function(map = c("orsi")) {
+    .orsi()
+}
+
+.orsi <- function(layer = "orsi_ORSIFronts") {
+    datapath <- getOption("default.datadir")
+    cachepath <- file.path(datapath, "cache")
+    f <- file.path(cachepath, grep(layer, list.files(cachepath), value = TRUE))
+    load(f)
+    return(get(layer))
+}
 ##' Coastline data set as SpatialPolygons*
 ##'
 ##' This function reads and returns a coastline polygon data set, either from the

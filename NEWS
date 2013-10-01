@@ -7,6 +7,8 @@ NEW FEATURES
 
  o new function coastmap to load common vector map layers
 
+ o new function frontsmap to load vector fronts
+
   CHANGES IN raadtools VERSION 0.0-4
 
 OVERVIEW

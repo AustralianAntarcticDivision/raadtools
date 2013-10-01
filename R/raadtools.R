@@ -265,7 +265,8 @@ coastmap <- function(map = c(
 function(world1 = TRUE) {
 ##    require(maptools)
 
-   data(wrld_simpl)
+    wrld_simpl <- NULL
+   data("wrld_simpl", package = "maptools", envir = environment())
     if (world1) return(as(wrld_simpl, "SpatialPolygons"))
     ##require(raster)
    ## require(rgeos)

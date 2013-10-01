@@ -131,11 +131,12 @@ chlafiles <- function(time.resolution = c("monthly", "weekly")) {
     return(chlf)
   }
 
-  dirpath <- file.path("chl", "johnson")
 
-  tr <- c(monthly = "Monthly", weekly = "8day")[time.resolution]
-  fs <- c(file.path(dirpath, sprintf("MODISA_%s", tr), list.files(file.path(data.dir, dirpath, sprintf("MODISA_%s", tr)))),
-          file.path(dirpath, sprintf("SeaWiFS_%s", tr), list.files(file.path(data.dir, dirpath, sprintf("SeaWiFS_%s", tr)))))
+  tr <- c(monthly = "monthly", weekly = "8d")
+  dirpath <- file.path("chl", "johnson", c("modis", "seawifs"), tr[time.resolution])
+
+  fs <- gsub(data.dir, "", list.files(file.path(data.dir, dirpath), full.names = TRUE))
+  fs <- gsub("^/", "", fs)
 
   dates <- timedateFrom(strptime(substr(basename(fs), 2, 8), "%Y%j"))
   chlf <- data.frame(file = fs, date = dates,

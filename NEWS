@@ -2,6 +2,9 @@
 
 NEW FEATURES
 
+ o functions chl.pal and sst.pal to provide the MODIS-generation
+ colour palettes
+
  o new function readchla and chlafiles to manage and read Johnson
  Southern Ocean chlorophyll-a
 

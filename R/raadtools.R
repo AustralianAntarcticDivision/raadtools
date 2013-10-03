@@ -46,6 +46,7 @@ NULL
 ##' @title SST colours
 ##' @param x a vector of data values or a single number
 ##' @param palette logical, if \code{TRUE} return a list with matching colours and values
+##' @references Derived from \url{"http://oceancolor.gsfc.nasa.gov/DOCS/palette_sst.txt}.
 ##' @return colours, palette, or function, see Details
 ##' @export
 sst.pal <- function(x, palette = FALSE) {
@@ -124,6 +125,7 @@ sst.pal <- function(x, palette = FALSE) {
 ##' @title Ocean colour colours for chlorophyll-a.
 ##' @param x a vector of data values or a single number
 ##' @param palette logical, if \code{TRUE} return a list with matching colours and values
+##' @references Derived from \url{http://oceancolor.gsfc.nasa.gov/DOCS/palette_chl_etc.txt}.
 ##' @return colours, palette, or function, see Details
 ##' @export
 ##' @examples
@@ -330,7 +332,7 @@ frontsmap <- function(map = c("orsi")) {
     .orsi()
 }
 
-.orsi <- function(layer = "orsi_ORSIFronts") {
+.orsi <- function(layer = "orsi") {
     datapath <- getOption("default.datadir")
     cachepath <- file.path(datapath, "cache")
     f <- file.path(cachepath, grep(layer, list.files(cachepath), value = TRUE))

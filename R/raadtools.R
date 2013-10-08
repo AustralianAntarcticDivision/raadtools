@@ -509,7 +509,7 @@ extractxyt <- function(datasource, Query, ...) {
     xy <- as.matrix(Query[,1:2])
     date <- timedateFrom(Query[,3])
     if (all(is.na(date))) stop("no datetimes are non-missing")
-    Query <- SpatialPointsDataFrame(SpatialPoints(xy, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0")), data.frame(time = date))
+    Query <- SpatialPointsDataFrame(SpatialPoints(xy, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0")), data.frame(time = date), match.ID = FALSE)
 
     ## readcurr won't work except for magonly
     ## otherwise we need to get the template and check first

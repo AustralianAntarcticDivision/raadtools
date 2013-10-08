@@ -1,9 +1,13 @@
-- implement progress counter
+- unimplement progress counter
 - rewrite sstfiles to return relative filename, needs cache fixing
 - allow filename for resulting brick
-- implement up-front crop for read, especially for multi-layers
+
 - coastmap/adminmap
-- fronts
+- fronts, more sources, temporal
 - GEM
 - return a RasterLayer rather than a brick when possible
 
+
+
+
+DONE- implement up-front crop for read, especially for multi-layers

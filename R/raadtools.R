@@ -237,23 +237,21 @@ chl.pal <- function(x, palette = FALSE) {
 
 ##' Read Chlorophyll-a for the Southern Ocean
 ##'
-##' Ocean colour Chlorophyll-a data read from files managed by
-##' \code{\link{chlafiles}}. Dates are matched to file names by
-##' finding the nearest match in time within a short duration. If
-##' \code{date} is greater than length 1 then the sorted set of unique
-##' matches is returned.
-##' \code{xylim} is expected to be consistent with the source
-##' data itself (which is not necessarily in longitude/latitude) if in doubt first read a single time slice,
-##' plot it and draw an \code{\link[raster]{extent}} object with \code{\link[raster]{drawExtent}}
+##' Ocean colour Chlorophyll-a data read from the Johnson Improved
+##' chlorophyll-a estimates using Southern Ocean-specific calibration
+##' algorithms.
+##'
+##' Dates are matched to file names by finding the nearest match in
+##' time within a short duration. If \code{date} is greater than
+##' length 1 then the sorted set of unique matches is returned.
+##'
 ##' @param date date or dates of data to read, see Details
 ##' @param time.resolution time resoution data to read, daily only
-##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
+##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param verbose print messages on progress etc.
 ##' @param ... reserved for future use, currently ignored
-##' @references These data are the Johnson Improved chlorophyll-a
-##' estimates using Southern Ocean-specific calibration
-##' algorithms. Johnson, R, PG Strutton, SW Wright, A McMinn, and KM
+##' @references  Johnson, R, PG Strutton, SW Wright, A McMinn, and KM
 ##' Meiners (2013) Three improved satellite chlorophyll algorithms for
 ##' the Southern Ocean, J. Geophys. Res. Oceans, 118,
 ##' doi:10.1002/jgrc.20270
@@ -264,7 +262,8 @@ chl.pal <- function(x, palette = FALSE) {
 ##' @seealso \code{\link{chlafiles}} for details on the repository of
 ##' data files, \code{\link[raster]{raster}} for the return value
 ##' @examples
-##' d <- readchla(c("2003-01-01", c("2003-06-01")), xylim = extent(100, 150, -70, -30))
+##' d <- readchla(c("2003-01-01", c("2003-06-01")),
+##'          xylim = extent(100, 150, -70, -30))
 ##'
 ##' @export
 readchla <- function(date = as.Date("1997-08-29"), time.resolution = c("monthly", "weekly"),
@@ -725,11 +724,6 @@ sstfiles <- function(fromcache = TRUE) {
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param verbose print messages on progress etc.
 ##' @param ... reserved for future use, currently ignored
-##' @details \code{xylim} is expected to be consistent with the source
-##' data itself (which is not necessarily in longitude/latitude) and
-##' with \code{lon180}, if in doubt first read a single time slice,
-##' plot it and draw an \code{\link[raster]{extent}} object, see
-##' Examples
 ##' @export
 ##' @return \code{\link[raster]{raster}} object
 ##' @seealso \code{\link{icefiles}} for details on the repository of

@@ -234,6 +234,7 @@ chl.pal <- function(x, palette = FALSE) {
 }
 
 
+
 ##' Read Chlorophyll-a for the Southern Ocean
 ##'
 ##' Ocean colour Chlorophyll-a data read from files managed by
@@ -250,8 +251,14 @@ chl.pal <- function(x, palette = FALSE) {
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param verbose print messages on progress etc.
 ##' @param ... reserved for future use, currently ignored
-##' @details
-##' Examples
+##' @references These data are the Johnson Improved chlorophyll-a
+##' estimates using Southern Ocean-specific calibration
+##' algorithms. Johnson, R, PG Strutton, SW Wright, A McMinn, and KM
+##' Meiners (2013) Three improved satellite chlorophyll algorithms for
+##' the Southern Ocean, J. Geophys. Res. Oceans, 118,
+##' doi:10.1002/jgrc.20270
+##' \url{http://onlinelibrary.wiley.com/doi/10.1002/jgrc.20270/full}
+##'
 ##' @export
 ##' @return \code{\link[raster]{raster}} object
 ##' @seealso \code{\link{chlafiles}} for details on the repository of

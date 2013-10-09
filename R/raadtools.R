@@ -40,6 +40,33 @@ NULL
 }
 
 
+.updateicefiles <- function(datadir = getOption("default.datadir")) {
+
+
+    for (time.resolution in c("daily", "monthly")) {
+        subpath <- file.path("seaice", "smmr_ssmi_nasateam", time.resolution)
+        fs <- list.files(file.path(datadir, subpath) , recursive = TRUE, pattern = "s.bin$", full.names = FALSE)
+
+        datepart <- sapply(strsplit(basename(fs), "_"), "[", 2)
+        if(time.resolution == "monthly") datepart <- paste0(datepart, "01")
+
+        icdates <- as.POSIXct(strptime(datepart, "%Y%m%d"), tz = "GMT")
+
+        files <- data.frame(file = file.path(subpath, fs), date = icdates, stringsAsFactors = FALSE)
+
+        ## take the "last" duplicated   (should be lexicographically f0n > f0m)
+        bad <- rev(duplicated(rev(icdates)))
+
+        files <- files[!bad, ]
+        files <- files[order(files$date), ]
+
+        fpath <- file.path(getOption("default.datadir"), sprintf("%s_icefiles.Rdata", time.resolution))
+        save(files, file = fpath)
+        print(sprintf("saved %s", fpath))
+    }
+
+}
+
 
 ##' SST colours
 ##'
@@ -663,7 +690,7 @@ sstfiles <- function(fromcache = TRUE) {
     dates <- timedateFrom(as.Date(fsstrings, "%Y%m%d"))
 
     sstf <- data.frame(files = fs, date = dates, stringsAsFactors = FALSE)[order(dates), ]
-    save(sstf, file = file.path(getOption("cachepath"), "sstfiles.Rdata"))
+    save(sstf, file = file.path(data.dir, "cache", "sstfiles.Rdata"))
 
     sstf
 

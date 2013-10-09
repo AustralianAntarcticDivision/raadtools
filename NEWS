@@ -1,7 +1,11 @@
   CHANGES IN raadtools VERSION 0.0-6
 
 
+ o added hidden function to update file cache
+
 BUG FIXES
+
+ o fixes to file caching
 
  o extractxyt was requiring matching IDs unpleasantly
 

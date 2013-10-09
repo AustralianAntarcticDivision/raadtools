@@ -528,12 +528,12 @@ extractxyt <- function(datasource, Query, ...) {
     dtime <- abs(difftime(date, files$date[windex], units = c("days")))
 
     ## THIS IS BROKEN, HOW TO DO IT?
-    dtimetest <- 4
+    ##dtimetest <- 4
 ##    if (all(dtime > dtimetest)) stop(sprintf("no data file within %.1f days of %s", dtimetest))
-    if (any(dtime > dtimetest)) {
-      warning(sprintf("%i input dates have no corresponding data file within %f days of available files", sum(dtime > dtimetest), dtimetest))
+    ##if (any(dtime > dtimetest)) {
+    ##  warning(sprintf("%i input dates have no corresponding data file within %f days of available files", sum(dtime > dtimetest), dtimetest))
   ##    windex <- windex[dtime <= dtimetest]
-    }
+    ##}
 
       ## work through all the unique indexes
 

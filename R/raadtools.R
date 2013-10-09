@@ -46,6 +46,7 @@ NULL
 ##' @title SST colours
 ##' @param x a vector of data values or a single number
 ##' @param palette logical, if \code{TRUE} return a list with matching colours and values
+##' @references Derived from \url{"http://oceancolor.gsfc.nasa.gov/DOCS/palette_sst.txt}.
 ##' @return colours, palette, or function, see Details
 ##' @export
 sst.pal <- function(x, palette = FALSE) {
@@ -124,6 +125,7 @@ sst.pal <- function(x, palette = FALSE) {
 ##' @title Ocean colour colours for chlorophyll-a.
 ##' @param x a vector of data values or a single number
 ##' @param palette logical, if \code{TRUE} return a list with matching colours and values
+##' @references Derived from \url{http://oceancolor.gsfc.nasa.gov/DOCS/palette_chl_etc.txt}.
 ##' @return colours, palette, or function, see Details
 ##' @export
 ##' @examples
@@ -330,7 +332,7 @@ frontsmap <- function(map = c("orsi")) {
     .orsi()
 }
 
-.orsi <- function(layer = "orsi_ORSIFronts") {
+.orsi <- function(layer = "orsi") {
     datapath <- getOption("default.datadir")
     cachepath <- file.path(datapath, "cache")
     f <- file.path(cachepath, grep(layer, list.files(cachepath), value = TRUE))
@@ -507,7 +509,7 @@ extractxyt <- function(datasource, Query, ...) {
     xy <- as.matrix(Query[,1:2])
     date <- timedateFrom(Query[,3])
     if (all(is.na(date))) stop("no datetimes are non-missing")
-    Query <- SpatialPointsDataFrame(SpatialPoints(xy, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0")), data.frame(time = date))
+    Query <- SpatialPointsDataFrame(SpatialPoints(xy, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0")), data.frame(time = date), match.ID = FALSE)
 
     ## readcurr won't work except for magonly
     ## otherwise we need to get the template and check first
@@ -526,12 +528,12 @@ extractxyt <- function(datasource, Query, ...) {
     dtime <- abs(difftime(date, files$date[windex], units = c("days")))
 
     ## THIS IS BROKEN, HOW TO DO IT?
-    dtimetest <- 4
+    ##dtimetest <- 4
 ##    if (all(dtime > dtimetest)) stop(sprintf("no data file within %.1f days of %s", dtimetest))
-    if (any(dtime > dtimetest)) {
-      warning(sprintf("%i input dates have no corresponding data file within %f days of available files", sum(dtime > dtimetest), dtimetest))
+    ##if (any(dtime > dtimetest)) {
+    ##  warning(sprintf("%i input dates have no corresponding data file within %f days of available files", sum(dtime > dtimetest), dtimetest))
   ##    windex <- windex[dtime <= dtimetest]
-    }
+    ##}
 
       ## work through all the unique indexes
 

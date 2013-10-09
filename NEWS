@@ -1,6 +1,16 @@
+  CHANGES IN raadtools VERSION 0.0-6
+
+
+BUG FIXES
+
+ o extractxyt was requiring matching IDs unpleasantly
+
   CHANGES IN raadtools VERSION 0.0-5
 
 NEW FEATURES
+
+ o functions chl.pal and sst.pal to provide the MODIS-generation
+ colour palettes
 
  o new function readchla and chlafiles to manage and read Johnson
  Southern Ocean chlorophyll-a

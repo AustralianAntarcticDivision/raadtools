@@ -67,6 +67,66 @@ NULL
 
 }
 
+windfiles <-
+function(data.source = "", time.resolution = c("daily")) {
+      data.dir <- getOption("default.datadir")
+      time.resolution <- match.arg(time.resolution)
+      fromCache <- TRUE
+      if (fromCache) {
+          load(file.path(data.dir, "cache", sprintf("%s_windfiles.Rdata", time.resolution)))
+          wf$ufullname <- file.path(data.dir,  wf$ufile)
+          wf$vfullname <- file.path(data.dir,  wf$vfile)
+          return(wf)
+      }
+
+
+     cfiles <- list.files(file.path(data.dir, "wind", "ncep2", time.resolution), pattern = ".nc$", full.names = TRUE)
+     cfiles <- file.path("wind", "ncep2", time.resolution, basename(cfiles))
+     ufiles <- grep("uwnd", cfiles, value = TRUE)
+     vfiles <- grep("vwnd", cfiles, value = TRUE)
+
+     ##datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
+     dates <- as.POSIXlt(as.Date(basename(ufiles), "uwnd.10m.gauss.%Y"))
+     dates$mday <- 1
+     dates$mon <- 0
+     dates <- as.POSIXct(dates)
+     wf <- data.frame(ufile = ufiles, vfile = vfiles, date = dates, stringsAsFactors = FALSE)
+     save(wf, file = file.path(data.dir, "cache", sprintf("%s_windfiles.Rdata", time.resolution)))
+     wf
+
+}
+
+
+readwind <- function(date = as.Date("1990-01-01"), time.resolution = c("daily"),
+                     magonly = FALSE, returnfiles = FALSE) {
+
+     time.resolution <- match.arg(time.resolution)
+
+
+    files <- windfiles()
+    if (returnfiles) return(files)
+
+     ## this won't work for multi-time-slice files
+
+        ##raadtools:::.processDates(date, files$date, time.resolution)
+    findex <- findInterval(timedateFrom(date), files$date)
+
+    date <- files$date[findex]
+
+
+     doy <- as.POSIXlt(date)$yday + 1
+
+    u <- raster(files$ufullname[findex], band = doy)
+    v <- raster(files$vfullname[findex], band = doy)
+
+    if (magonly) {
+        r <- sqrt(u*u + v*v)
+    } else {
+        r <- brick(u, v)
+        names(r) <- c("U", "V")
+    }
+    rotate(r)
+}
 
 ##' SST colours
 ##'

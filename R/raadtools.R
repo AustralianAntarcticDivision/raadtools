@@ -67,14 +67,13 @@ NULL
 
 }
 
-##' empty title
+##' NCEP2 wind files
 ##'
-##' empty details
-##' @title stuff
-##' @param data.source
-##' @param time.resolution
-##' @return party
-
+##' Files containing NCEP2 wind vector data
+##' @title Files containing NCEP2 wind vector data
+##' @param data.source ignored, reserved for future use
+##' @param time.resolution  time resolution data to read, daily only for now
+##' @return \code{data.frame} of file names and dates
 windfiles <-
 function(data.source = "", time.resolution = c("daily")) {
       data.dir <- getOption("default.datadir")
@@ -340,7 +339,7 @@ chl.pal <- function(x, palette = FALSE) {
 ##' length 1 then the sorted set of unique matches is returned.
 ##'
 ##' @param date date or dates of data to read, see Details
-##' @param time.resolution time resoution data to read, daily only
+##' @param time.resolution time resolution data to read, daily only
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param verbose print messages on progress etc.

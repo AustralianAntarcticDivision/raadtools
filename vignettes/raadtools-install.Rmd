@@ -1,17 +1,23 @@
-# Installing the raadtools package
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{raadtools-install}
+
+# Installing the raadtools package, Michael Sumner
+
+This document is currently relevant to working on Windows, much of the
+same stuff will work on Linux but no care has been taken to point out
+the differences here.
 
 ## Setup
 
-To install the _raadtools_ package from within the AAD you
+To install the __raadtools__ package from within the AAD you
 should be able to run the following code from within R. A relatively
 recent version of R will be assumed, and definitely no earler than
-_R 2.15.0_ can be expected to work.
+__R 2.15.0__ can be expected to work.
 
 This is the basic full install and configuration, see below for each step in greater
 detail.
 
 ```{r eval=FALSE,tidy=FALSE}
-setInternet2(TRUE)
 install.packages(c("maptools", "raster", "testthat", "ncdf", "rgdal", "rgeos", "knitr"),
                  dependencies = TRUE)
 install.packages("raadtools", repos ="file://aad.gov.au/files/Transfer/toolbox/RAAD")
@@ -28,26 +34,39 @@ library(raadtools)
 If a message reports that your data repository cannot be found, follow
 the instructions to set it and send this package author your details.
 
+The instructions go like this, by setting an option called
+__default.datadir__, note that this only sets this for the current R
+session and you will have to repeat it each time until a better
+solution is developed.
+
+```{r eval=FALSE}
+options(default.datadir = "/path/to/repository/of/data")
+```
+
+(The tip of the path there "data" should include files such as "chl",
+"wind", "sst", etc. i.e. it looks like data/chl, data/wind, data/sst
+which hold the individual families of the main data types).
+
 ## Setup details
 
-The remaining text in this section repeats the above steps
-individually, this might be required for customized installations or
-development.
+The remaining text in this section repeats the installation steps
+above individually, this might be required for customized
+installations or development.
 
 If the following step fails you may not have your network settings
-setup appropriately, so first run _setInternet2_ and then try to
-install _raster_ again. (This option can be set for an R installation
+setup appropriately, so first run __setInternet2__ and then try to
+install __raster__ again. (This option can be set for an R installation
 by choosing "Internet2" when R is installed, and this is what you
 should do. Otherwise, R is launced with "Rgui.exe" and this can be
-invoked with the option to setInternet2 by using "Rgui.exe
---internet2" which can be set on a Windows shortcut under Properties).
+invoked with the option to setInternet2 by using __Rgui.exe --internet2__ 
+which can be set on a Windows shortcut under Properties).
 
 ```{r eval=FALSE}
 setInternet2(TRUE)
 install.packages(c("raster", "maptools"))
 ```
 
-The following packages are not essential to run \textbf{raadtools} but
+The following packages are not essential to run __raadtools__ but
 otherwise some features will not be available. To get the full
 functionality please do run the following installations as well.
 
@@ -56,7 +75,7 @@ functionality please do run the following installations as well.
 install.packages("ncdf", "rgdal", "rgeos")
 ```
 
-Finally, install the latest version of \textbf{raadtools} from the
+Finally, install the latest version of __raadtools__ from the
 local AAD repository.
 
 ```{r eval=FALSE}
@@ -64,5 +83,132 @@ install.packages("raadtools", repos ="file://aad.gov.au/files/Transfer/toolbox/R
 ```
 
 ## Development of raadtools
+In order to contribute to the development of raadtools, the following options are available. 
+
+- Complain, report, plead, compel the package author/s. Polite emails
+  are recommended and hardware store vouchers welcome, but do what you must to get the message through.
+- Get hold of the source, make your changes and send patches to the author/s. See previous option. 
+- Check out the source with Git, and push your changes through to the source repository. 
+
+The following section expands on the Git option. 
+
+## Process of committing changes to the Git source of raadtools
+
+The raadtools package source is hosted on a Stash site at the AAD. This is located here, but for now we won't mention Stash again. 
+
+[Stash at the AAD](http://stash.aad.gov.au/projects/MDS/repos/raadtools/browse)
+
+### Install prerequisites for building raadtools
+
+1. Install the most recent version of R, and set its location in your PATH. 
+2. Install [RTools](http://cran.r-project.org/bin/windows/Rtools/) relevant to the latest version of R, and elect that it sets its location in your PATH (the installer can do this). 
+3. Install [MikTeX](http://miktex.org/download) and ensure it is in your PATH (later versions do this on install). 
+4. Install the full list of package dependencies listed above. 
+
+### Clone the raadtools repository
+
+You can get the raadtools source by cloning it with Git: 
+
+```
+git clone http://michae_sum@stash.aad.gov.au/scm/mds/raadtools.git
+```
+
+### Building the raadtools package from the Git source
+
+The __raadtools__ package must be pre-processed with
+[roxygen2](http://cran.r-project.org/web/packages/roxygen2/index.html)
+before it can be built. This also requires extra packages that are not
+necessary for using the package. These and their dependencies can be
+installed like this
+
+```{r eval=FALSE}
+install.packages(c("testthat", "knitr", "roxygen2"))
+```
+
+To process the source package that has been checked out from Git,
+start R and run the following code.  This code processes the source
+__.R__ files in R/ and generates the man/*.Rd files required for the
+sources (multiple R code objects may be documented as a single .Rd
+file).
+
+```{r eval=FALSE}
+library(roxygen2)
+roxygenize("raadtools")
+```
+
+Then, run the usual set of R commands to build source, install and
+build a binary, and check the package. Note that this example code necessarily
+denotes a specific version of the package and so the relevant text
+will be different for the actual process when you try it.
+
+```{shell eval=FALSE}
+R CMD build raadtools
+R CMD INSTALL raadtools_0.0-27.tar.gz --build
+R CMD check raadtools_0.0-27.tar.gz
+```
+
+Because I work with the Git Bash shell for this, I have the following
+workflow set up that simplifies a lot of this. This relies on the fact
+that I have all of the the dependencies listed above. (There can be
+complications with Cygwin and other unix-like tools installed on
+Windows, but if ls/zip/latex/git/R all work for you at the command
+line you should be good to go).
+
+1. Open the command shell, which I have set to "Start In" the parent directory of "raadtools".  (I happen use the Git Bash shell, which I already have open for working with Git, but note that this doesn't have all of the Windows functionality avaialable to it)
+2. run shell script "roxy raadtools" (see below)
+3. Run R CMD build/INSTALL/check as above
+4. Wash, rinse, repeat
+
+There are tests that will run via the __testthat__ package, but note
+the following options that can be used to force a quick informal
+build/INSTALL/check:
+
+```
+R CMD build raadtools --no-build-vignettes
+R CMD INSTALL raadtools_0.0-28.tar.gz --build
+R CMD check raadtools_0.0-28.tar.gz --no-tests
+```
+
+See the help page for each individual command. 
+
+Definition of the "roxy" shell script. 
+```bash 
+#!/bin/bash
+STR="library(roxygen2);roxygenize('$1')"
+echo $STR
+RScript -e $STR
+```
+
+### Deploy raadtools package to the local CRAN-like repository
+
+I have the following batch file to build/install/check and finally
+write the package source/binaries to a file repository (yes it's
+awkwardly hardcoded, but it works and lots of bleeding was involved):
+
+```
+cd C:\Users\michae_sum\Documents\GIT
+
+rem build for current and ship
+rem R CMD build raadtools
+rem R CMD INSTALL raadtools --build
 
 
+RScript -e "p = 'Z:/Transfer/toolbox/RAAD';file.copy('raadtools_0.0-5.tar.gz', contrib.url(p, 'source'), overwrite = TRUE);tools::write_PACKAGES(contrib.url(p, 'source'), type = 'source')"
+
+rem cp raadtools_0.0-5.tar.gz \\aad.gov.au\files\Transfer\toolbox\RAAD\src\contrib
+RScript -e "p = 'Z:/Transfer/toolbox/RAAD';file.copy('raadtools_0.0-5.zip', contrib.url(p, getOption('pkgType')), overwrite = TRUE);tools::write_PACKAGES(contrib.url(p, getOption('pkgType')))"
+
+rem build for 2.15 and ship
+cd build
+C:\inst\R\2.15\R\bin\x64\R CMD INSTALL ../raadtools_0.0-5.tar.gz --build -l .
+C:\inst\R\2.15\R\bin\x64\RScript -e "p = 'Z:/Transfer/toolbox/RAAD';file.copy('raadtools_0.0-5.zip', contrib.url(p, getOption('pkgType')), overwrite = TRUE);tools::write_PACKAGES(contrib.url(p, getOption('pkgType')))"
+
+cd ..
+
+```
+
+TODO
+
+tidy up deployment hardcoded values
+find a mechanism to build MacOSX packages
+host repository on a webserver, not the file share

@@ -1,6 +1,10 @@
   CHANGES IN raadtools VERSION 0.0-6
 
 
+ o new Rmd vignette on installing and building the package
+
+ o added readwind function
+
  o added hidden function to update file cache
 
 BUG FIXES

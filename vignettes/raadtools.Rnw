@@ -51,14 +51,98 @@ library(raadtools)
 
 \section{Simple data read}
 \label{sec:simpleread}
-There are read functions to read data based on a sequence of date-time
+There are functions to read data based on a sequence of date-time
 values.
 
 <<read-ice, fig.width=4, fig.height=4, out.width='.4\\linewidth'>>=
-ice <- readice("1999-12-31")
+ice <- readice()
 plot(ice)
 @
 
+At the very simplest level, these functions may be run without setting
+any arguments and will return the first available time step for the
+default data source. This is handy for familiarizing oneself with the
+kinds of data before getting really specific. Plotting the resulting
+\textbf{ice} object provides a familiar polar view. These data are a
+single time slice from the daily NSIDC sea ice concentration time
+series, here the very first one that is available (from
+\Sexpr{getZ(ice)}).
+
+Other read functions include \textbf{reachla}, \textbf{readcurr},
+\textbf{readsst}, \textbf{readwind} and \textbf{readtopo}. Each of
+these will read a default data set in a similar way to the ice
+example, see their respective help pages and explore the index page of
+\textbf{raadtools} to see an overview of functionality.
+
+Load up the package help index for an overview of all the help topics
+and functions.
+
+<<read-help,eval=FALSE>>=
+library(help = raadtools)
+@
+
+Read a simple example from each of the data types mentioned above and plot.
+<<read-other>>=
+chla <- readchla("2009-10-01")
+curr <- readcurr("2012-01-09", magonly = TRUE)
+sst <- readsst()
+wind <- readwind()
+topo <- readtopo("george_v_terre_adelie")
+
+op <- par(mfcol = c(3, 2))
+plot(chla, col = chl.pal(256), main = "Johnson chl-a")
+plot(curr, main = "ocean surface current magnitude")
+plot(sst, main = "sst")
+plot(topo, main = "George V Terre Adelie topography")
+plot(wind)
+par(op)
+
+@
+The object itself is a \Sexpr{class(ice)} from the \textbf{raster}
+package.
+<<explore-ice>>=
+ice
+@
+
+This object is a \textbf{RasterLayer} which consists of just a single
+grid layer for the day listed at the beginning of the NSIDC data
+set. The dimensions of the grid in the order Y then X are listed,
+\Sexpr{dim(ice)[1:2]} and these refer to the number of pixels seen
+vertically on the page (\Sexpr{nrow(ice)}) and those seen horizontally (
+
+\subsection{Short digression on R data support used by raadtools}
+\label{sec:rasterdetour}
+The \textbf{raster} package provides excellent facilities for working
+with raster data, including images, surfaces, DEMs and time series
+satellite data. From the \textbf{raster} package DESCRIPTION:
+
+\quote{Reading, writing, manipulating, analyzing and modeling of
+  gridded spatial data. The package implements basic and high-level
+  functions and processing of very large files is supported.}
+
+This package should be consulted for documentation on the use of
+Raster objects, and in particular the vignette \textbf{Raster} is a
+good place to start. Use the \textbf{library} function's \textbf{help}
+argument to get an overview of the available functions.
+
+<<raster-vig,eval=FALSE>>=
+library(raster)
+## opens an index page to all of the package's functions
+library(help = raster)
+## opens a PDF document with extended help and examples
+vignette("Raster")
+@
+
+See the Section~\ref{sec:assumedsupport} for more detail on the design
+choices made with \textbf{raster} and the other package dependenices
+used by \textbf{raadtools}
+
+
+
+
+
+\section{Data sets and the native projection}
+\label{sec:nativeproj}
 
 \section{Acknowledgements}
 \label{sec:ackk} The \textbf{raadtools} package was built with R

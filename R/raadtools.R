@@ -74,6 +74,7 @@ NULL
 ##' @param data.source ignored, reserved for future use
 ##' @param time.resolution  time resolution data to read, daily only for now
 ##' @return \code{data.frame} of file names and dates
+##' @export
 windfiles <-
 function(data.source = "", time.resolution = c("daily")) {
       data.dir <- getOption("default.datadir")
@@ -129,6 +130,7 @@ function(data.source = "", time.resolution = c("daily")) {
 ##'
 ##'
 ##' }
+##' @export
 readwind <- function(date = as.Date("1990-01-01"), time.resolution = c("daily"),
                      magonly = FALSE, returnfiles = FALSE) {
 

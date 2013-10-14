@@ -67,6 +67,14 @@ NULL
 
 }
 
+##' empty title
+##'
+##' empty details
+##' @title stuff
+##' @param data.source
+##' @param time.resolution
+##' @return party
+
 windfiles <-
 function(data.source = "", time.resolution = c("daily")) {
       data.dir <- getOption("default.datadir")
@@ -96,7 +104,32 @@ function(data.source = "", time.resolution = c("daily")) {
 
 }
 
-
+##' Read wind
+##'
+##' Read wind data
+##' @title title1
+##' @param date
+##' @param time.resolution
+##' @param magonly
+##' @param returnfiles
+##' @return loot
+##' @examples
+##' \dontrun{
+##'  dts <- seq(as.Date("2000-01-01"), by = "1 days", length = 350)
+##'  library(animation)
+##'  ani.start(ani.width = 800, ani.height = 800)
+##'  for (i in seq_along(dts)) {
+##'     x <- readwind(dts[i]);
+##'     if (i == 1L) crds <- coordinates(x[[1]])
+##'     plot(sqrt(x[[1]]^2 + x[[2]]^2), xlim = c(40, 180), ylim = c(-90, -20));
+##'     arrows(crds[,1], crds[,2], crds[,1] + values(x[[1]])/4, crds[,2] + values(x[[2]])/4, length = 0.06);
+##'     plot(m, add = TRUE)
+##' }
+##' ani.stop()
+##'
+##'
+##'
+##' }
 readwind <- function(date = as.Date("1990-01-01"), time.resolution = c("daily"),
                      magonly = FALSE, returnfiles = FALSE) {
 
@@ -111,7 +144,8 @@ readwind <- function(date = as.Date("1990-01-01"), time.resolution = c("daily"),
         ##raadtools:::.processDates(date, files$date, time.resolution)
     findex <- findInterval(timedateFrom(date), files$date)
 
-    date <- files$date[findex]
+     ## doh!
+    ## date <- files$date[findex]
 
 
      doy <- as.POSIXlt(date)$yday + 1
@@ -877,18 +911,16 @@ currentsfiles <- function() {
 ##' default only one time step is returned with both U and V
 ##' components. Multiple dates can be returned for magnitude or
 ##' direction only.
-##' \code{xylim} is expected to be consistent with the source
-##' data itself (which is not necessarily in longitude/latitude) and
-##' with \code{lon180}, if in doubt first read a single time slice,
-##' plot it and draw an \code{\link[raster]{extent}} object, see
-##' Examples
+##'
+##' This is the "SSALTO/DUACS - DT Geostrophic Velocities - Up-to-date Global Processing". See References.
+##'
 ##' @param date date or dates of data to read, see Details
 ##' @param time.resolution time resolution to read
 ## @param setNA mask zero and values greater than 100 as NA
 ## @param rescale rescale values from integer range?
 ##' @param magonly return just the magnitude from the U and V
 ##' components
-##' @param dironly return just the direction from the U and V
+##' @param dironly return just the direction from the U and V, in degrees N=0, E=90, S=180, W=270
 ##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
 ##' components, in degrees (0 north, 90 east, 180 south, 270 west)
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
@@ -901,12 +933,34 @@ currentsfiles <- function() {
 ##' view \[-180, 180\] with \code{lon180}. The Mercator projection is
 ##' preserved, see \code{\link[raster]{projectRaster}} and
 ##' \code{\link[raster]{resample}} for transformation methods.
-##' @return \code{\link[raster]{raster}} object
+##'
+##' \code{xylim} is expected to be consistent with the source
+##' data itself (which is not necessarily in longitude/latitude) and
+##' with \code{lon180}, if in doubt first read a single time slice,
+##' plot it and draw an \code{\link[raster]{extent}}.
+##' @return \code{\link[raster]{raster}} object with the "U"
+##' (horizontal/X) and "V" (vertical/Y) components of velocity in
+##' cm/s. Setting either of the (mutually exclusive) \code{magonly}
+##' and \code{dironly} arguments returns the magnitude (in cm) or
+##' direction (in degrees relative to North) of the velocity vectors.
 ##' @seealso \code{\link{icefiles}} for details on the repository of
 ##' data files, \code{\link[raster]{raster}} for the return value
 # imports should not be necessary here
 ##' @importFrom raster t flip atan2
 ##' @export
+##' @references \url{http://www.aviso.oceanobs.com/en/data/products/sea-surface-height-products/global/index.html}
+##' @examples
+##' \dontrun{
+##' ## read a single time slice, and plot the directions [0,360) as an image with arrows
+##' x <- readcurr(dironly = TRUE)
+##' ## get a local extent for a zoom plot
+##' e <- extent(projectExtent(raster(extent(130, 150, -50, -30), crs = "+proj=longlat"), projection(x)))
+##' x1 <- crop(readcurr(), e)
+##' crds <- coordinates(x1)
+##' scale <- 2000
+##' plot(crop(x, e))
+##' arrows(crds[,1], crds[,2], crds[,1] + values(x1[["U"]]) * scale, crds[,2] + values(x1[["V"]]) * scale, length = 0.03)
+##' }
 readcurr <- function(date = as.Date("1999-11-24"),
                      time.resolution = "weekly",
                      xylim = NULL,

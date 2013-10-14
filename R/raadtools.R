@@ -750,16 +750,20 @@ topofile <- function(topo = c("gebco_08", "ibcso",
     topopath
 }
 
-##' @rdname topofile
+##' @rdname readtopo
 ##' @export
 readtopo <- function(topo = c("gebco_08", "ibcso",
                               "etopo1", "etopo2",
                               "kerguelen", "george_v_terre_adelie",
                               "smith_sandwell"),
                      polar = FALSE,
-                     lon180 = TRUE, ...) {
+                     lon180 = TRUE,
+                     xylim = NULL,
+                     ...) {
     topo <- match.arg(topo)
-    raster(topofile(topo = topo, polar = polar, lon180 = lon180, ...))
+    res <- raster(topofile(topo = topo, polar = polar, lon180 = lon180, ...))
+    if (!is.null(xylim)) res <- crop(res, xylim)
+    res
 }
 ##' @rdname topofile
 ##' @export

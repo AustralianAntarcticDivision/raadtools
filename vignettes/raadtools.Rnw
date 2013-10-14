@@ -54,66 +54,6 @@ plot(ice)
 @
 
 
-
-\section{Setup}
-\label{sec:setup}
-To install the \textbf{raadtools} package from within the AAD you
-should be able to run the following code from within R. A relatively
-recent version of R will be assumed, and definitely no earler than
-\textbf{R 2.15.0} can be expected to work.
-
-This is the basic full install and configuration, see below for each step in greater
-detail.
-
-<<install-full,eval=FALSE,tidy=FALSE>>=
-setInternet2(TRUE)
-install.packages(c("raster", "testthat", "ncdf", "rgdal", "rgeos", "knitr"),
-                 dependencies = TRUE)
-install.packages("raadtools", repos ="file://aad.gov.au/files/Transfer/toolbox/RAAD")
-@
-
-Now to load the package, use the usual package loading code here. If
-there is a problem with determining the path to the data repository
-this will provide a message about that.
-
-<<onload-path,eval=FALSE>>=
-library(raadtools)
-@
-
-If a message reports that your data repository cannot be found, follow
-the instructions to set it and send this package author your details.
-
-\subsection{Setup details}
-\label{sec:setupdetails}
-The remaining text in this section repeats the above steps
-individually, this might be required for customized installations or
-development.
-
-If the following step fails you may not have your network settings
-setup appropriately, so first run \texttt{setInternet2} and then
-try to install \textbf{raster} again.
-
-<<install-dep0,eval=FALSE>>=
-setInternet2(TRUE)
-install.packages("raster")
-@
-
-The following packages are not essential to run \textbf{raadtools} but
-otherwise some features will not be available. To get the full
-functionality please do run the following installations as well.
-
-
-<<install-dep1,eval=FALSE>>=
-install.packages("ncdf", "rgdal", "rgeos")
-@
-
-Finally, install the latest version of \textbf{raadtools} from the
-local AAD repository.
-
-<<install-raad,eval=FALSE>>=
-install.packages("raadtools", repos ="file://aad.gov.au/files/Transfer/toolbox/RAAD")
-@
-
 \section{Acknowledgements}
 \label{sec:ackk} The \textbf{raadtools} package was built with R
 \url{http://www.r-project.org}, Rtools

@@ -1,0 +1,68 @@
+# Installing the raadtools package
+
+## Setup
+
+To install the _raadtools_ package from within the AAD you
+should be able to run the following code from within R. A relatively
+recent version of R will be assumed, and definitely no earler than
+_R 2.15.0_ can be expected to work.
+
+This is the basic full install and configuration, see below for each step in greater
+detail.
+
+```{r eval=FALSE,tidy=FALSE}
+setInternet2(TRUE)
+install.packages(c("maptools", "raster", "testthat", "ncdf", "rgdal", "rgeos", "knitr"),
+                 dependencies = TRUE)
+install.packages("raadtools", repos ="file://aad.gov.au/files/Transfer/toolbox/RAAD")
+```
+
+Now to load the package, use the usual package loading code here. If
+there is a problem with determining the path to the data repository
+this will provide a message about that.
+
+```{r eval=FALSE}
+library(raadtools)
+```
+
+If a message reports that your data repository cannot be found, follow
+the instructions to set it and send this package author your details.
+
+## Setup details
+
+The remaining text in this section repeats the above steps
+individually, this might be required for customized installations or
+development.
+
+If the following step fails you may not have your network settings
+setup appropriately, so first run _setInternet2_ and then try to
+install _raster_ again. (This option can be set for an R installation
+by choosing "Internet2" when R is installed, and this is what you
+should do. Otherwise, R is launced with "Rgui.exe" and this can be
+invoked with the option to setInternet2 by using "Rgui.exe
+--internet2" which can be set on a Windows shortcut under Properties).
+
+```{r eval=FALSE}
+setInternet2(TRUE)
+install.packages(c("raster", "maptools"))
+```
+
+The following packages are not essential to run \textbf{raadtools} but
+otherwise some features will not be available. To get the full
+functionality please do run the following installations as well.
+
+
+```{r eval=FALSE}
+install.packages("ncdf", "rgdal", "rgeos")
+```
+
+Finally, install the latest version of \textbf{raadtools} from the
+local AAD repository.
+
+```{r eval=FALSE}
+install.packages("raadtools", repos ="file://aad.gov.au/files/Transfer/toolbox/RAAD")
+```
+
+## Development of raadtools
+
+

@@ -39,14 +39,20 @@ familiarity with \textbf{R} and the \textbf{raster} package is
 assumed.
 
 There are some requirements for tasks that require reading data from a
-local file sytem, these are explained in Section~\ref{sec:setup}.
+local file system, so please contact the author/s if you need
+assistance.
+
+The very first step is to load the package, and if the required data
+repository is not found it will provide a message on what must be
+done.
 <<get-start>>=
 library(raadtools)
 @
 
 \section{Simple data read}
 \label{sec:simpleread}
-There are numerous read functions to read data based on a date-time.
+There are read functions to read data based on a sequence of date-time
+values.
 
 <<read-ice, fig.width=4, fig.height=4, out.width='.4\\linewidth'>>=
 ice <- readice("1999-12-31")

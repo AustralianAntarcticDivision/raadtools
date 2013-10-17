@@ -1,6 +1,11 @@
   CHANGES IN raadtools VERSION 0.0-6
 
 
+ o added support for SSMI 12.5km southern ocean sea ice concentration
+ from IFREMER
+
+ o expanded vignette on general use
+
  o new Rmd vignette on installing and building the package
 
  o added readwind function

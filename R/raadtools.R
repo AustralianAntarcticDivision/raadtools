@@ -676,8 +676,8 @@ extractxyt <- function(datasource, Query, ...) {
 ##' \item{smith_sandwell}{Global seafloor topography from satellite altimetry and ship depth soundings. \url{http://topex.ucsd.edu/WWW_html/mar_topo.html}}
 ##' }
 ##' @title Topography data
-##' @name topofile
-##' @aliases readtopo readbathy topofile
+##' @name readtopo
+##' @aliases topofile readbathy
 ##' @param topo Data source, see Details.
 ##' @param lon180 Flag for returning data in Atlantic [-180, 180] rather than Pacific [0, 360] view.
 ##' @param polar Flag for returning the polar version of the IBCSO data.
@@ -738,7 +738,7 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
     if (!is.null(xylim)) res <- crop(res, xylim)
     res
 }
-##' @rdname topofile
+##' @rdname readtopo
 ##' @export
 readbathy <- readtopo
 
@@ -1023,7 +1023,7 @@ readcurr <- function(date = as.Date("1999-11-24"),
 .loadfiles <- function(name, time.resolution, ...) {
     switch(name,
            nsidc = icefiles(time.resolution = time.resolution),
-           ssmi = icefiles(dataproduct = "ssmi")
+           ssmi = icefiles(product = "ssmi")
 
            )
 }
@@ -1102,16 +1102,25 @@ readcurr <- function(date = as.Date("1999-11-24"),
         .matchFiles(date, fdate[findex], findex, daytest = switch(timeres,daily = 1.5, weekly = 4, monthly = 15))
     }
 
-##' Read NSIDC sea ice data from daily or monthly files
+##' Read data from sea ice data products.
 ##'
-##' Sea ice data is read from files managed by
-##' \code{\link{icefiles}}. Dates are matched to file names by finding
-
-##' ##' the nearest match in time within a short duration. If \code{date}
-##' is greater than length 1 then the sorted set of unique matches is
-##' returned.
+##'
+##' Sea ice data is read from files managed by \code{\link{icefiles}}.
+##'
+##' Currently available products are
+##' \describe{
+##' \item{daily or monthly NSIDC concentration data for the Southern
+##' Hemisphere, processed by the SMMR/SSMI NASA Team}
+##' \item{daily SSMI concentration data for the Southern Hemisphere}
+##'}
+##'
+##' Dates are matched to file names by finding the nearest match in
+##' time within a short duration. If \code{date} is greater than
+##' length 1 then the sorted set of unique matches is returned.
+##'
 ##' @param date date or dates of data to read, see Details
 ##' @param time.resolution time resoution data to read, daily or monthly
+##' @param product choice of sea ice product, see Details
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
 ##' @param setNA mask zero and values greater than 100 as NA
 ##' @param rescale rescale values from integer range?
@@ -1125,7 +1134,7 @@ readcurr <- function(date = as.Date("1999-11-24"),
 ##' data files, \code{\link[raster]{raster}} for the return value
 readice <- function(date = as.Date("1978-11-01"),
                     time.resolution = c("daily", "monthly"),
-                    dataproduct = c("nsidc", "ssmi"),
+                    product = c("nsidc", "ssmi"),
                     xylim = NULL,
                     setNA = TRUE, rescale = TRUE,
 
@@ -1135,9 +1144,9 @@ readice <- function(date = as.Date("1978-11-01"),
     datadir = getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
 
-    dataproduct <- match.arg(dataproduct)
+    product <- match.arg(product)
     ## get file names and dates and full path
-    files <- .loadfiles(dataproduct, time.resolution = time.resolution)
+    files <- .loadfiles(product, time.resolution = time.resolution)
     files$fullname <- file.path(datadir, files$file)
     if (returnfiles) return(files)
     ## from this point one, we don't care about the input "date" - this is our index into all files and that's what we use
@@ -1148,10 +1157,14 @@ readice <- function(date = as.Date("1978-11-01"),
     stersouth <-  "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
 
     ## modify based on dataproduct
-    dims <- switch(dataproduct,
+    dims <- switch(product,
                    nsidc = c(316L, 332L),
-                   ssmi = c(664L, 632L))
-    rtemplate <- raster(GridTopology(c(-3937500, -3937500), c(25000, 25000), dims))
+                   ssmi = c(632L, 664L))
+    res <-  switch(product,
+                   nsidc = c(25000, 25000),
+                   ssmi = c(12500, 12500))
+
+    rtemplate <- raster(GridTopology(c(-3937500, -3937500), res, dims))
 
 
     ## process xylim
@@ -1190,7 +1203,8 @@ readice <- function(date = as.Date("1978-11-01"),
     }
 
     .readSSMI <- function(fname) {
-        x <- raster(fname)
+        x <- raster(fname, varname = "concentration")
+        x <- flip(x, "y")
         extent(x) <- extent(rtemplate)
         x
 
@@ -1200,7 +1214,7 @@ readice <- function(date = as.Date("1978-11-01"),
     for (ifile in seq_along(findex)) {
 
 
-    r0 <- switch(dataproduct,
+    r0 <- switch(product,
                 nsidc = .readNSIDC(files$fullname[findex[ifile]]),
                 ssmi = .readSSMI(files$fullname[findex[ifile]]))
 
@@ -1215,15 +1229,18 @@ readice <- function(date = as.Date("1978-11-01"),
     r
 }
 
+#r <- readice("1995-01-01", dataproduct = "ssmi")
+#r1 <- readice("1995-01-01")
 
 
 
-##' Load \code{data.frame} of file path and dates of NSIDC sea ice concentration data.
+
+##' Load metadata and location of files of sea ice data products.
 ##'
-##' This function loads the latest cache of stored NSIDC files for
-##' either daily or monthly data for the Southern Hemisphere,
-##' processing by the SMMR/SSMI NASA Team.
+##' This function loads the latest cache of stored files for
+##' ice products.
 ##' @param time.resolution daily or monthly files?
+##' @param product choice of sea ice product, see \code{\link{readice}}
 ##' @export
 ##' @examples
 ##' \dontrun{
@@ -1231,11 +1248,11 @@ readice <- function(date = as.Date("1978-11-01"),
 ##' icf[which.min((as.Date("1995-01-01") + runif(1, -4000, 4000)) - as.Date(icf$date), ]
 ##' }
 ##' @return data.frame of \code{file} and \code{date}
-icefiles <- function(time.resolution = c("daily", "monthly"), dataproduct = c("nsidc", "ssmi")) {
+icefiles <- function(time.resolution = c("daily", "monthly"), product = c("nsidc", "ssmi")) {
     time.resolution <- match.arg(time.resolution)
-    dataproduct <- match.arg(dataproduct)
+    product <- match.arg(product)
     ## TODO, need a system of tokens . . .
-    if (dataproduct == "nsidc") id_token <- time.resolution else id_token <- dataproduct
+    if (product == "nsidc") id_token <- time.resolution else id_token <- product
     files <- NULL
     load(file.path(getOption("default.datadir"), "cache", sprintf("%s_icefiles.Rdata", id_token)))
     files

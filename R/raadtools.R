@@ -40,33 +40,6 @@ NULL
 }
 
 
-.updateicefiles <- function(datadir = getOption("default.datadir")) {
-
-
-    for (time.resolution in c("daily", "monthly")) {
-        subpath <- file.path("seaice", "smmr_ssmi_nasateam", time.resolution)
-        fs <- list.files(file.path(datadir, subpath) , recursive = TRUE, pattern = "s.bin$", full.names = FALSE)
-
-        datepart <- sapply(strsplit(basename(fs), "_"), "[", 2)
-        if(time.resolution == "monthly") datepart <- paste0(datepart, "01")
-
-        icdates <- as.POSIXct(strptime(datepart, "%Y%m%d"), tz = "GMT")
-
-        files <- data.frame(file = file.path(subpath, fs), date = icdates, stringsAsFactors = FALSE)
-
-        ## take the "last" duplicated   (should be lexicographically f0n > f0m)
-        bad <- rev(duplicated(rev(icdates)))
-
-        files <- files[!bad, ]
-        files <- files[order(files$date), ]
-
-        fpath <- file.path(getOption("default.datadir"), sprintf("%s_icefiles.Rdata", time.resolution))
-        save(files, file = fpath)
-        print(sprintf("saved %s", fpath))
-    }
-
-}
-
 ##' NCEP2 wind files
 ##'
 ##' Files containing NCEP2 wind vector data
@@ -1049,7 +1022,8 @@ readcurr <- function(date = as.Date("1999-11-24"),
 
 .loadfiles <- function(name, time.resolution, ...) {
     switch(name,
-           nsidc = icefiles(time.resolution = time.resolution)
+           nsidc = icefiles(time.resolution = time.resolution),
+           ssmi = icefiles(dataproduct = "ssmi")
 
            )
 }
@@ -1102,7 +1076,7 @@ readcurr <- function(date = as.Date("1999-11-24"),
         ##
         deltatime <- abs(difftime(querydate, refdate, units = "days"))
         deltatest <- deltatime > daytest
-        if (all(deltatest)) stop(sprintf("no data file within %.1f days of %s", daytest))
+        if (all(deltatest)) stop(sprintf("no data file within %.1f days of %s", daytest, format(querydate)))
         if (any(deltatest)) {
             warning(sprintf("%i input dates have no corresponding data file within %f days of available files", sum(deltatest), daytest))
             index <- index[deltatest]
@@ -1132,7 +1106,8 @@ readcurr <- function(date = as.Date("1999-11-24"),
 ##'
 ##' Sea ice data is read from files managed by
 ##' \code{\link{icefiles}}. Dates are matched to file names by finding
-##' the nearest match in time within a short duration. If \code{date}
+
+##' ##' the nearest match in time within a short duration. If \code{date}
 ##' is greater than length 1 then the sorted set of unique matches is
 ##' returned.
 ##' @param date date or dates of data to read, see Details
@@ -1150,6 +1125,7 @@ readcurr <- function(date = as.Date("1999-11-24"),
 ##' data files, \code{\link[raster]{raster}} for the return value
 readice <- function(date = as.Date("1978-11-01"),
                     time.resolution = c("daily", "monthly"),
+                    dataproduct = c("nsidc", "ssmi"),
                     xylim = NULL,
                     setNA = TRUE, rescale = TRUE,
 
@@ -1159,17 +1135,22 @@ readice <- function(date = as.Date("1978-11-01"),
     datadir = getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
 
-
+    dataproduct <- match.arg(dataproduct)
     ## get file names and dates and full path
-    files <- .loadfiles("nsidc", time.resolution = time.resolution)
+    files <- .loadfiles(dataproduct, time.resolution = time.resolution)
     files$fullname <- file.path(datadir, files$file)
     if (returnfiles) return(files)
     ## from this point one, we don't care about the input "date" - this is our index into all files and that's what we use
     findex <- .processDates(date, files$date, time.resolution)
 
+
     ## NSIDC projection and grid size for the Southern Hemisphere
     stersouth <-  "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
-    dims <- c(316L, 332L)
+
+    ## modify based on dataproduct
+    dims <- switch(dataproduct,
+                   nsidc = c(316L, 332L),
+                   ssmi = c(664L, 632L))
     rtemplate <- raster(GridTopology(c(-3937500, -3937500), c(25000, 25000), dims))
 
 
@@ -1185,10 +1166,11 @@ readice <- function(date = as.Date("1978-11-01"),
 
     r <- vector("list", length(findex))
 
+    ## note that this can be replaced by a direct raster(file) once the package
+    ## gets updated (post raster_2.1-49, October 2013)
+    .readNSIDC <- function(fname) {
 
-    ## loop over file indices
-    for (ifile in seq_along(findex)) {
-      con <- file(files$fullname[findex[ifile]], open = "rb")
+        con <- file(fname, open = "rb")
       trash <- readBin(con, "integer", size = 1, n = 300)
       dat <- readBin(con, "integer", size = 1, n = prod(dims), endian = "little", signed = FALSE)
       close(con)
@@ -1203,10 +1185,28 @@ readice <- function(date = as.Date("1978-11-01"),
         dat[r100] <- NA
         dat[r0] <- NA
       }
-      r0 <- raster(t(matrix(dat, dims[1])), template = rtemplate)
+      raster(t(matrix(dat, dims[1])), template = rtemplate)
+
+    }
+
+    .readSSMI <- function(fname) {
+        x <- raster(fname)
+        extent(x) <- extent(rtemplate)
+        x
+
+    }
+
+    ## loop over file indices
+    for (ifile in seq_along(findex)) {
+
+
+    r0 <- switch(dataproduct,
+                nsidc = .readNSIDC(files$fullname[findex[ifile]]),
+                ssmi = .readSSMI(files$fullname[findex[ifile]]))
+
       if (cropit) r0 <- crop(r0, cropext)
       r[[ifile]] <- r0
-      if (verbose & ifile %% 10L == 0L) .progressreport(ifile, nfiles)
+      ##if (verbose & ifile %% 10L == 0L) .progressreport(ifile, nfiles)
   }
     if (length(findex) > 1) r <- brick(stack(r)) else r <- r[[1L]]
     projection(r) <- stersouth
@@ -1231,12 +1231,56 @@ readice <- function(date = as.Date("1978-11-01"),
 ##' icf[which.min((as.Date("1995-01-01") + runif(1, -4000, 4000)) - as.Date(icf$date), ]
 ##' }
 ##' @return data.frame of \code{file} and \code{date}
-icefiles <- function(time.resolution = c("daily", "monthly")) {
+icefiles <- function(time.resolution = c("daily", "monthly"), dataproduct = c("nsidc", "ssmi")) {
     time.resolution <- match.arg(time.resolution)
+    dataproduct <- match.arg(dataproduct)
+    ## TODO, need a system of tokens . . .
+    if (dataproduct == "nsidc") id_token <- time.resolution else id_token <- dataproduct
     files <- NULL
-    load(file.path(getOption("default.datadir"), "cache", sprintf("%s_icefiles.Rdata", time.resolution)))
+    load(file.path(getOption("default.datadir"), "cache", sprintf("%s_icefiles.Rdata", id_token)))
     files
 }
+
+
+.updateicefiles <- function(datadir = getOption("default.datadir")) {
+
+
+    for (time.resolution in c("daily", "monthly")) {
+        subpath <- file.path("seaice", "smmr_ssmi_nasateam", time.resolution)
+        fs <- list.files(file.path(datadir, subpath) , recursive = TRUE, pattern = "s.bin$", full.names = FALSE)
+
+        datepart <- sapply(strsplit(basename(fs), "_"), "[", 2)
+        if(time.resolution == "monthly") datepart <- paste0(datepart, "01")
+
+        icdates <- as.POSIXct(strptime(datepart, "%Y%m%d"), tz = "GMT")
+
+        files <- data.frame(file = file.path(subpath, fs), date = icdates, stringsAsFactors = FALSE)
+
+        ## take the "last" duplicated   (should be lexicographically f0n > f0m)
+        bad <- rev(duplicated(rev(icdates)))
+
+        files <- files[!bad, ]
+        files <- files[order(files$date), ]
+
+        fpath <- file.path(getOption("default.datadir"),"cache", sprintf("%s_icefiles.Rdata", time.resolution))
+        save(files, file = fpath)
+        print(sprintf("saved %s", fpath))
+    }
+
+    ## ssmi
+    dataproduct <- "ssmi"
+    subpath <- file.path("seaice", "ssmi", "ifremer", "antarctic", "daily")
+    fs <- list.files(file.path(datadir, subpath), recursive = TRUE, pattern = ".nc$", full.names = FALSE)
+    datepart <- gsub(".nc$", "", basename(fs))
+    icdates <- as.POSIXct(strptime(datepart, "%Y%m%d"), tz = "GMT")
+    files <- data.frame(file = file.path(subpath, fs), date = icdates, stringsAsFactors = FALSE)
+    files <- files[order(icdates), ]
+    fpath <- file.path(datadir, "cache", sprintf("%s_icefiles.Rdata", dataproduct))
+    save(files, file = fpath)
+    print(sprintf("saved %s", fpath))
+}
+
+
 
 ##' Stable conversion to POSIXct from character and Date
 ##'

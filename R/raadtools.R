@@ -40,6 +40,95 @@ NULL
 }
 
 
+
+##' Load file names and dates of AVISO SSH/SSHA data
+##'
+##' A data.frame of file names and dates
+##' @title AVISO sea surface height / anomaly files
+##' @seealso \code{\link{readssh}}
+##' @return data.frame of file names and dates
+##' @export
+sshfiles <- function(ssha = FALSE) {
+    data.dir = getOption("default.datadir")
+    product <- if(ssha) "ssha" else "ssh"
+    data.source = file.path(data.dir, product, "aviso", "upd", "7d")
+    cfiles <- list.files(data.source, pattern = ".nc$", full.names = TRUE)
+    datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
+    currentdates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
+    data.frame(file = cfiles, date = currentdates, stringsAsFactors = FALSE)
+}
+
+
+##' Sea surface height/anomaly
+##'
+##' Details
+##' @title read SSH/A
+##' @param date date or dates of data to read, see Details
+##' @param time.resolution time resolution to read
+##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
+##' @param dironly return just the direction from the U and V, in degrees N=0, E=90, S=180, W=270
+##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
+##' components, in degrees (0 north, 90 east, 180 south, 270 west)
+##' @param ssha logical, to optionally return anomaly or height
+##' @param returnfiles ignore options and just return the file names and dates
+##' @param verbose print messages on progress etc.
+##' @param ... reserved for future use, currently ignored
+##' @export
+##' @return data.frame
+readssh <- function (date = as.Date("1999-11-24"), time.resolution = "weekly",
+    xylim = NULL, lon180 = TRUE, ssha = FALSE,
+    returnfiles = FALSE, verbose = TRUE, ...)
+{
+    read0 <- function(x, varname) {
+        xtreme <- 20037508
+        ytreme <- 16925422
+        x <- flip(flip(t(raster(x, varname = varname)), direction = "y"),
+            direction = "x")
+        x[x > 9999] <- NA
+        extent(x) <- extent(0, xtreme * 2, -ytreme, ytreme)
+        projection(x) <- "+proj=merc +ellps=WGS84 +over"
+        x
+    }
+    data.dir = getOption("default.datadir")
+    time.resolution <- match.arg(time.resolution)
+
+    files <- sshfiles(ssha = ssha)
+    if (returnfiles)
+        return(files)
+    findex <- .processDates(date, files$date, time.resolution)
+##    if (length(findex) > 1L & !magonly & !dironly) {
+##        findex <- findex[1L]
+##        date <- files$date[findex[1L]]
+##        warning("only one time step can be read at once")
+##    }
+
+    cropit <- FALSE
+    if (!is.null(xylim)) {
+        cropit <- TRUE
+        cropext <- extent(xylim)
+    }
+    nfiles <- length(findex)
+    r <- vector("list", nfiles)
+    for (ifile in seq_len(nfiles)) {
+        r0 <- read0(files$file[findex[ifile]], varname = "Grid_0001")
+
+        if (lon180)
+            r0 <- suppressWarnings(rotate(r0))
+        if (cropit)
+            r0 <- crop(r0, cropext)
+        r[[ifile]] <- r0
+        if (verbose & ifile%%10L == 0L)
+            .progressreport(ifile, nfiles)
+    }
+    r <- brick(stack(r))
+
+        r <- setZ(r, date)
+
+    return(r)
+}
+
+
+
 ##' NCEP2 wind files
 ##'
 ##' Files containing NCEP2 wind vector data
@@ -1108,16 +1197,15 @@ readcurr <- function(date = as.Date("1999-11-24"),
 ##' Sea ice data is read from files managed by \code{\link{icefiles}}.
 ##'
 ##' Currently available products are
+##'
 ##' \describe{
-##' \item{daily or monthly NSIDC concentration data for the Southern
-##' Hemisphere, processed by the SMMR/SSMI NASA Team}
-##' \item{daily SSMI concentration data for the Southern Hemisphere}
-##'}
+##' \item{'nsidc'}{daily or monthly NSIDC concentration data for the Southern Hemisphere, processed by the SMMR/SSMI NASA Team}
+##' \item{'ssmi'}{daily SSMI concentration data for the Southern Hemisphere}
+##' }
 ##'
 ##' Dates are matched to file names by finding the nearest match in
 ##' time within a short duration. If \code{date} is greater than
 ##' length 1 then the sorted set of unique matches is returned.
-##'
 ##' @param date date or dates of data to read, see Details
 ##' @param time.resolution time resoution data to read, daily or monthly
 ##' @param product choice of sea ice product, see Details

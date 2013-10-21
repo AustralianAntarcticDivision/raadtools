@@ -40,7 +40,6 @@ NULL
 }
 
 
-
 ##' Load file names and dates of AVISO SSH/SSHA data
 ##'
 ##' A data.frame of file names and dates

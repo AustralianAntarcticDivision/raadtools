@@ -6,7 +6,8 @@ Depends:
     raster  (>= 2.1-37),
     R (>= 2.15)
 Imports:
-    rgeos
+    rgeos,
+    methods
 Suggests:
     testthat,
     ncdf,
@@ -14,7 +15,7 @@ Suggests:
     knitr
 LazyData: yes
 VignetteBuilder: knitr
-Version: 0.0-6
+Version: 0.0-7
 Authors@R: person("Michael D.","Sumner", role = c("aut", "cre"), email =
     "Michael.Sumner@aad.gov.au")
 Description: Tools for reading, plotting and manipulating spatial data used at
@@ -22,3 +23,4 @@ Description: Tools for reading, plotting and manipulating spatial data used at
 License: GPL-3
 Collate:
     'raadtools.R'
+    'extract.R'

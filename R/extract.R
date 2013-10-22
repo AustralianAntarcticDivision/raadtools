@@ -1,12 +1,14 @@
 
 ## method takes a function that reads multiple time slices
+
+##' @import methods
 setMethod("extract", signature(x = 'function', y = 'POSIXt'),
           function(x, y, ...) {
                   x(y)
           }
       )
 
-
+##' @import methods
 setMethod("extract", signature(x = 'function', y = 'data.frame'),
           function(x, y, ...) {
               ## y better be x,y,t and in the right projection

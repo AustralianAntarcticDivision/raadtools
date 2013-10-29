@@ -1,6 +1,9 @@
   CHANGES IN raadtools VERSION 0.0-6
 
 
+ o removed hardcoded default date from all read* functions, the
+ first/default date is now derived from the file set
+
  o added new functions readssh and sshfiles for AVISO absolute and
  relative sea surface height
 

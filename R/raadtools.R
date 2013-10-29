@@ -74,7 +74,7 @@ sshfiles <- function(ssha = FALSE) {
 ##' @param ... reserved for future use, currently ignored
 ##' @export
 ##' @return data.frame
-readssh <- function (date = as.Date("1999-11-24"), time.resolution = "weekly",
+readssh <- function (date, time.resolution = "weekly",
     xylim = NULL, lon180 = TRUE, ssha = FALSE,
     returnfiles = FALSE, verbose = TRUE, ...)
 {
@@ -94,6 +94,7 @@ readssh <- function (date = as.Date("1999-11-24"), time.resolution = "weekly",
     files <- sshfiles(ssha = ssha)
     if (returnfiles)
         return(files)
+    if (missing(date)) date <- min(files$date)
     findex <- .processDates(date, files$date, time.resolution)
 ##    if (length(findex) > 1L & !magonly & !dironly) {
 ##        findex <- findex[1L]
@@ -195,7 +196,7 @@ function(data.source = "", time.resolution = c("daily")) {
 ##'
 ##' }
 ##' @export
-readwind <- function(date = as.Date("1990-01-01"), time.resolution = c("daily"),
+readwind <- function(date, time.resolution = c("daily"),
                      magonly = FALSE, returnfiles = FALSE) {
 
      time.resolution <- match.arg(time.resolution)
@@ -204,6 +205,7 @@ readwind <- function(date = as.Date("1990-01-01"), time.resolution = c("daily"),
     files <- windfiles()
     if (returnfiles) return(files)
 
+     if (missing(date)) date <- min(files$date)
      ## this won't work for multi-time-slice files
 
         ##raadtools:::.processDates(date, files$date, time.resolution)
@@ -425,7 +427,7 @@ chl.pal <- function(x, palette = FALSE) {
 ##'          xylim = extent(100, 150, -70, -30))
 ##'
 ##' @export
-readchla <- function(date = as.Date("1997-08-29"), time.resolution = c("monthly", "weekly"),
+readchla <- function(date, time.resolution = c("monthly", "weekly"),
                     xylim = NULL,
                     ##lon180 = TRUE,
                     returnfiles = FALSE,
@@ -437,6 +439,7 @@ readchla <- function(date = as.Date("1997-08-29"), time.resolution = c("monthly"
   files <- chlafiles(time.resolution = time.resolution)
   if (returnfiles) return(files)
 
+  if (missing(date)) date <- min(files$date)
   ## from this point one, we don't care about the input "date" - this is our index into all files and that's what we use
   findex <- .processDates(date, files$date, time.resolution)
   date <- files$date[findex]
@@ -907,7 +910,7 @@ sstfiles <- function(fromcache = TRUE) {
 ##' dts <- seq(as.Date("2001-01-03"), by = "1 week", length = 100)
 ##' sst <- readsst(dts, xylim = ext)
 ##' }
-readsst <- function(date = as.Date("1981-09-01"), time.resolution = "daily", varname = c("sst", "anom", "err", "ice"),
+readsst <- function(date, time.resolution = "daily", varname = c("sst", "anom", "err", "ice"),
                     xylim = NULL,
                     lon180 = TRUE,
                     returnfiles = FALSE,
@@ -920,6 +923,7 @@ readsst <- function(date = as.Date("1981-09-01"), time.resolution = "daily", var
     files <- sstfiles()
     if (returnfiles) return(files)
 
+    if (missing(date)) date <- min(files$date)
      ## from this point one, we don't care about the input "date" - this is our index into all files and that's what we use
     findex <- .processDates(date, files$date, time.resolution)
     date <- files$date[findex]
@@ -1033,7 +1037,7 @@ currentsfiles <- function() {
 ##' plot(crop(x, e))
 ##' arrows(crds[,1], crds[,2], crds[,1] + values(x1[["U"]]) * scale, crds[,2] + values(x1[["V"]]) * scale, length = 0.03)
 ##' }
-readcurr <- function(date = as.Date("1999-11-24"),
+readcurr <- function(date,
                      time.resolution = "weekly",
                      xylim = NULL,
                      ##setNA = TRUE,
@@ -1061,6 +1065,7 @@ readcurr <- function(date = as.Date("1999-11-24"),
     files <- currentsfiles()
     if (returnfiles) return(files)
 
+    if (missing(date)) date <- min(files$date)
     findex <- .processDates(date, files$date, time.resolution)
 
 
@@ -1225,7 +1230,7 @@ readcurr <- function(date = as.Date("1999-11-24"),
 ##' @return \code{\link[raster]{raster}} object
 ##' @seealso \code{\link{icefiles}} for details on the repository of
 ##' data files, \code{\link[raster]{raster}} for the return value
-readice <- function(date = as.Date("1978-11-01"),
+readice <- function(date,
                     time.resolution = c("daily", "monthly"),
                     product = c("nsidc", "ssmi"),
                     xylim = NULL,
@@ -1242,6 +1247,8 @@ readice <- function(date = as.Date("1978-11-01"),
     files <- .loadfiles(product, time.resolution = time.resolution)
     files$fullname <- file.path(datadir, files$file)
     if (returnfiles) return(files)
+
+    if (missing(date)) date <- min(files$date)
     ## from this point one, we don't care about the input "date" - this is our index into all files and that's what we use
     findex <- .processDates(date, files$date, time.resolution)
 

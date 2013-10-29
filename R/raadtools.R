@@ -1065,7 +1065,7 @@ readcurr <- function(date,
     if (length(findex) > 1L & !magonly & !dironly) {
         findex <- findex[1L]
         date <- files$date[findex[1L]]
-        warning("only one time step can be read at once")
+        warning("only one time step can be read at once unless magonly or dironly is TRUE")
     }
     ##i <- 1
 

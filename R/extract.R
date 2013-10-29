@@ -1,12 +1,18 @@
 
-## method takes a function that reads multiple time slices
-
-##' @import methods
-setMethod("extract", signature(x = 'function', y = 'POSIXt'),
-          function(x, y, ...) {
-                  x(y)
+.read.generic  <- function(x, y, ...) {
+              ## read function "x", takes "y" as Date, POSIXct, character
+                  x(y, ...)
           }
-      )
+
+
+## method takes a function that reads multiple time slices
+##' @import methods
+setMethod("extract", signature(x = 'function', y = 'POSIXt'), .read.generic)
+setMethod("extract", signature(x = 'function', y = 'Date'), .read.generic)
+setMethod("extract", signature(x = 'function', y = 'character'), .read.generic)
+
+
+
 
 ##' @import methods
 setMethod("extract", signature(x = 'function', y = 'data.frame'),

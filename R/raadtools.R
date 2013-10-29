@@ -174,7 +174,7 @@ function(data.source = "", time.resolution = c("daily")) {
 ##' @param time.resolution time resolution to read
 ##' @param magonly return just the magnitude from the U and V
 ##' components
-## @param dironly return just the direction from the U and V, in degrees N=0, E=90, S=180, W=270
+##' @param dironly return just the direction from the U and V, in degrees N=0, E=90, S=180, W=270
 ##' @param returnfiles ignore options and just return the file names and dates
 ##'
 ##' @return raster object
@@ -201,7 +201,6 @@ readwind <- function(date, time.resolution = c("daily"),
 
      time.resolution <- match.arg(time.resolution)
 
-
     files <- windfiles()
     if (returnfiles) return(files)
 
@@ -217,11 +216,16 @@ readwind <- function(date, time.resolution = c("daily"),
 
      doy <- as.POSIXlt(date)$yday + 1
 
+     if (!(magonly | dironly) & length(findex) > 1L) {
+         warning("only one time index can be read at once unless magonly or dironly is TRUE")
+         findex <- findex[1L]
+     }
     u <- raster(files$ufullname[findex], band = doy)
     v <- raster(files$vfullname[findex], band = doy)
 
-    if (magonly) {
-        r <- sqrt(u*u + v*v)
+    if (magonly | dironly) {
+        if (magonly) r <- sqrt(u*u + v*v)
+        if (dironly) r <- (90 - atan2(v, u) * 180/pi) %% 360
     } else {
         r <- brick(u, v)
         names(r) <- c("U", "V")

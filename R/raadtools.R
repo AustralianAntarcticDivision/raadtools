@@ -626,32 +626,20 @@ coastmap <- function(map = c(
 ##' @importMethodsFrom raster extent
  .world <-
 function(world1 = TRUE) {
-##    require(maptools)
-
-##    wrld_simpl <- NULL
-    load(system.file("data", "wrld_simpl.rda", package = "maptools"))
-
-##   data("wrld_simpl", package = "maptools", envir = environment())
-    if (world1) return(as(wrld_simpl, "SpatialPolygons"))
-    ##require(raster)
-   ## require(rgeos)
-    bb <- bbox(wrld_simpl)
-
+    ## This is nasty. Passes check.
+    attach(system.file("data", "wrld_simpl.rda", package = "maptools"))
+    pos <- rev(grep("wrld_simpl.rda", search()))[1L]
+    wrld <- get("wrld_simpl", pos = pos)
+    detach(pos = pos)
+    if (world1) return(as(wrld, "SpatialPolygons"))
+    bb <- bbox(wrld)
     opt <- options(warn = -1)
     on.exit(options(opt))
-    w1 <- gIntersection(wrld_simpl, as(extent(-180, 0, bb[2,1], bb[2,2]), "SpatialPolygons"), byid = TRUE)
-    w2 <- gIntersection(wrld_simpl, as(extent(0,180, bb[2,1], bb[2,2]), "SpatialPolygons"), byid = TRUE)
-
-    ##world1 <- gUnion(w1, w2, byid = TRUE)
-    world2 <- gUnion(elide(w1, shift = c(360, 0)), w2, byid = TRUE)
-##                     id = unique(c(sapply(w1@polygons, function(x) x@ID), sapply(w2@polygons, function(x) x@ID))))
-
- ##   world2 <- gUnaryUnion(world2, id = unique(c(sapply(w1@polygons, function(x) x@ID), sapply(w2@polygons, function(x) x@ID))))
-
-    ##proj4string(world1) <- CRS(" +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0")
-    proj4string(world2) <- CRS(" +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0 +over")
-
-    return(world2)
+    w1 <- gIntersection(wrld, as(extent(-180, 0, bb[2,1], bb[2,2]), "SpatialPolygons"), byid = TRUE)
+    w2 <- gIntersection(wrld, as(extent(0,180, bb[2,1], bb[2,2]), "SpatialPolygons"), byid = TRUE)
+    wrld <- gUnion(elide(w1, shift = c(360, 0)), w2, byid = TRUE)
+    proj4string(wrld) <- CRS(" +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0 +over")
+    return(wrld)
 }
 
 .aadcoast <-

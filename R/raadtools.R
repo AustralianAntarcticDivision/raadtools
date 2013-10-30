@@ -852,7 +852,7 @@ sstfiles <- function(fromcache = TRUE) {
 
     dates <- timedateFrom(as.Date(fsstrings, "%Y%m%d"))
 
-    sstf <- data.frame(files = gsub("/", "", gsub(dirpath, "", fs)), date = dates, stringsAsFactors = FALSE)[order(dates), ]
+    sstf <- data.frame(files = gsub("^/", "", gsub(dirpath, "", fs)), date = dates, stringsAsFactors = FALSE)[order(dates), ]
     save(sstf, file = file.path(data.dir, "cache", "sstfiles.Rdata"))
 
     sstf

@@ -26,13 +26,25 @@
 #' @param y One of various means of querying from the raadtools read
 #' functions, such as a vector of character, Date, or POSIXt values,
 #' data.frame, trip, etc.
-#'
+#' @param method "simple" or "bilinear"
 #' @param ... Additional arguments passed to the read function.
 #'
 #' @return data values extracted by the read functions
 #'
 #' @seealso \code{\link{readsst}} and \code{\link{extract}}
+#' @examples
+#' x <- extract(readsst)
+#' a <- structure(list(x = c(174, 168, 156, 111, 99, 64, 52, 46, -4,
+#' -15, -30, -38, -47, -62, -87, -127, -145, -160, -161), y = c(-72,
+#' -39, -50, -58, -35, -38, -48, -60, -48, -35, -37, -51, -68, -72,
+#' -69, -54, -40, -49, -54)), .Names = c("x", "y"), row.names = c(NA,
+#' -19L), class = "data.frame")
 #'
+#' a$time <- structure(c(5479, 5479, 5479, 5479, 5479, 5479, 5479, 5479, 5479,
+#' 5479, 5479, 5489, 5529, 5529, 5529, 5579, 5579, 5579, 5579), class = "Date")
+#' extract(readsst, a)
+#'
+#' extract(readsst, a, method = "bilinear")
 #' @export
 #' @docType methods
 #' @rdname raadtools-extract
@@ -50,7 +62,11 @@ setMethod("extract", signature(x = 'function', y = 'Date'), .read.generic)
 setMethod("extract", signature(x = 'function', y = 'character'), .read.generic)
 ##' @exportMethod extract
 setMethod("extract", signature(x = 'function', y = 'data.frame'),
+
           function(x, y, ...) {
+           .local <- function (x, y,  ...)
+          ##buffer = NULL, small = FALSE, cellnumbers = FALSE, fun = NULL, na.rm = TRUE,  layer, nl, df = FALSE, factors = FALSE, ...)
+    {
               ## dataframes have no metadata so let's do our best
               res <- rep(as.numeric(NA), nrow(y))
               times <- try(timedateFrom(y[,3]))
@@ -61,18 +77,20 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
               files <- x(returnfiles = TRUE)
               time.resolution <- .determine.time.resolution(files$date)
 
-              findex <- .processDates(times, files$date, timeres = "daily")
+              findex <- suppressWarnings(.processDates(times, files$date, timeres = "daily"))
               date <- files$date[findex]
 
               for (i in seq_along(date)) {
                   thisx <- x(date[i], verbose = FALSE)
                   asub <- findInterval(times, date) == i
 
-                  res[asub] <- extract(thisx, subset(y[,1:2], asub))
+                  res[asub] <- extract(thisx, subset(y[,1:2], asub), ...)
 
               }
               res
           }
+          .local(x, y, ...)
+       }
  )
 
 ## useful scenarios for y

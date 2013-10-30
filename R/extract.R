@@ -65,12 +65,13 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
               date <- files$date[findex]
 
               for (i in seq_along(date)) {
-                  thisx <- x(date[i])
+                  thisx <- x(date[i], verbose = FALSE)
                   asub <- findInterval(times, date) == i
 
                   res[asub] <- extract(thisx, subset(y[,1:2], asub))
 
               }
+              res
           }
  )
 

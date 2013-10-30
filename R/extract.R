@@ -4,7 +4,9 @@
                   x(y, ...)
           }
 
-
+.standard.assumeXYT.TimeError <- function() {
+    stop("invalid times in data, ensure that y is a data.frame with values of longitude, latitude, and date-times")
+}
 
 ##############################################################
 #' Extract methods for raadtools read functions
@@ -43,10 +45,48 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
           function(x, y, ...) {
               ## dataframes have no metadata so let's do our best
               res <- rep(as.numeric(NA), nrow(y))
-              r <- x(y[,3])
-              for (i in seq_len(nrow(y))) res[i] <- extract(subset(r, i), y[i,1:2])
-              res
+              times <- try(timedateFrom(y[,3]))
+              if (inherits(times, "try-error") | any(is.na(times))) {
+                  .standard.assumeXYT.Timeerror()
+              }
+              ## let's ignore time.resolution
+              files <- x(returnfiles = TRUE)
+              findex <- .processDates(times, files$date, timeres = "daily")
+              date <- files$date[findex]
+
+              for (i in seq_along(date)) {
+                  thisx <- x(date[i])
+                  asub <- findInterval(times, date) == i
+
+                  res[asub] <- extract(thisx, subset(y[,1:2], asub))
+
+              }
+          )
+
+## useful scenarios for y
+## data.frame of xyt (assume longlat with subtle test)
+## SPointsDF with time
+## SLinesDF
+## SPolyDF
+## trip
+##
+
+
+## super simple nn cases
+setMethod("extract", signature(x = "function", y = "SpatialPoints"),
+          function(x, y, ...) {
+
+
           }
           )
 
-## possible scenarios
+
+
+## all points-based scenarios can be either nn or bilinear
+## all line/poly-based scenarios need somehow to provide a time span??
+
+## possible other scenarios for y
+##  matrix of xy
+##  matrix of xyt
+##  dataframe or list of xy
+## list of xyt

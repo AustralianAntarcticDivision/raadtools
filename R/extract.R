@@ -27,6 +27,11 @@
 #' @docType methods
 #' @rdname raadtools-extract
 #' @import methods
+#' @aliases extract,function,Date-method
+#' extract,function,POSIXt-method extract,function,character-method
+#' extract,function,data.frame-method extract,function,missing-method
+#' @exportMethod extract
+setMethod("extract", signature(x = 'function', y = 'missing'), function(x, ...) x(...))
 #' @exportMethod extract
 setMethod("extract", signature(x = 'function', y = 'POSIXt'), .read.generic)
 ##' @exportMethod extract
@@ -36,10 +41,12 @@ setMethod("extract", signature(x = 'function', y = 'character'), .read.generic)
 ##' @exportMethod extract
 setMethod("extract", signature(x = 'function', y = 'data.frame'),
           function(x, y, ...) {
-              ## y better be x,y,t and in the right projection
+              ## dataframes have no metadata so let's do our best
               res <- rep(as.numeric(NA), nrow(y))
               r <- x(y[,3])
               for (i in seq_len(nrow(y))) res[i] <- extract(subset(r, i), y[i,1:2])
               res
           }
           )
+
+## possible scenarios

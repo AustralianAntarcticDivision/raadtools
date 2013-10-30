@@ -920,7 +920,7 @@ readsst <- function(date, time.resolution = "daily", varname = c("sst", "anom", 
     findex <- .processDates(date, files$date, time.resolution)
     date <- files$date[findex]
 
-    rtemplate <- raster(files$file[findex[1]], varname = varname)
+    rtemplate <- raster(files$fullname[findex[1]], varname = varname)
     if (lon180) rtemplate <- rotate(rtemplate)
 
     ## process xylim
@@ -935,7 +935,7 @@ readsst <- function(date, time.resolution = "daily", varname = c("sst", "anom", 
     r <- vector("list", nfiles)
 
     for (ifile in seq_len(nfiles)) {
-        r0 <- raster(files$file[findex[ifile]], varname = varname)
+        r0 <- raster(files$fullname[findex[ifile]], varname = varname)
         if (lon180) r0 <- rotate(r0)
         if(cropit) r0 <- crop(r0, cropext)
         r0[r0 < -2] <- NA

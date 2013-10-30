@@ -11,7 +11,10 @@
 ## x is dates from files
 .determine.time.resolution <- function(x, ...) {
     rng <- range(difftime(x[-length(x)], x[1L], units = "days"))
-    round(min(rng))
+    a <- round(min(rng))
+    if (a == 1) "daily"
+    if (a %in% c(7, 8)) "weekly"
+    "monthly"
 }
 ##############################################################
 #' Extract methods for raadtools read functions
@@ -68,7 +71,8 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
                   res[asub] <- extract(thisx, subset(y[,1:2], asub))
 
               }
-          )
+          }
+ )
 
 ## useful scenarios for y
 ## data.frame of xyt (assume longlat with subtle test)

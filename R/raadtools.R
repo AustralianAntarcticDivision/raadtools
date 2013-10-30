@@ -197,7 +197,7 @@ function(data.source = "", time.resolution = c("daily")) {
 ##' }
 ##' @export
 readwind <- function(date, time.resolution = c("daily"),
-                     magonly = FALSE, returnfiles = FALSE) {
+                     magonly = FALSE, dironly = FALSE, returnfiles = FALSE) {
 
      time.resolution <- match.arg(time.resolution)
 

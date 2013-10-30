@@ -8,6 +8,11 @@
     stop("invalid times in data, ensure that y is a data.frame with values of longitude, latitude, and date-times")
 }
 
+## x is dates from files
+.determine.time.resolution <- function(x, ...) {
+    rng <- range(difftime(x[-length(x)], x[1L], units = "days"))
+    round(min(rng))
+}
 ##############################################################
 #' Extract methods for raadtools read functions
 #'
@@ -51,6 +56,8 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
               }
               ## let's ignore time.resolution
               files <- x(returnfiles = TRUE)
+              time.resolution <- .determine.time.resolution(files$date)
+
               findex <- .processDates(times, files$date, timeres = "daily")
               date <- files$date[findex]
 

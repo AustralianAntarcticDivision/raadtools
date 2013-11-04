@@ -82,7 +82,7 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
               y <- SpatialPoints(as.matrix(y[,1:2]), CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"))
 
               if (inherits(times, "try-error") | any(is.na(times))) {
-                  .standard.assumeXYT.Timeerror()
+                  .standard.assumeXYT.TimeError()
               }
               ## let's ignore time.resolution
               files <- x(returnfiles = TRUE)

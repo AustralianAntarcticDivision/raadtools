@@ -79,6 +79,9 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
               ## dataframes have no metadata so let's do our best
               res <- rep(as.numeric(NA), nrow(y))
               times <- try(timedateFrom(y[,3]))
+              ## we assume y is lon,lat,time
+              y <- SpatialPoints(as.matrix(y[,1:2]), CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"))
+
               if (inherits(times, "try-error") | any(is.na(times))) {
                   .standard.assumeXYT.Timeerror()
               }
@@ -89,11 +92,12 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
               findex <- suppressWarnings(.processDates(times, files$date, timeres = "daily"))
               date <- files$date[findex]
 
+
               for (i in seq_along(date)) {
                   thisx <- x(date[i], verbose = FALSE)
                   asub <- findInterval(times, date) == i
 
-                  res[asub] <- extract(thisx, subset(y[,1:2], asub), ...)
+                  res[asub] <- extract(thisx, subset(y, asub), ...)
 
               }
               res

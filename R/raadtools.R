@@ -1458,7 +1458,7 @@ commonprojections <- list(longlat = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no
 ##' \code{DATE_TIME_UTC} \tab Date-time values (POSIXct) \cr
 ##' }
 ##' @references
-##' \url{http://gcmd.gsfc.nasa.gov/KeywordSearch/Metadata.do?Portal=amd&KeywordPath=%5BSource_Name%3A+Short_Name%3D'SHIPS'%5D&EntryId=%5BAADC%5D201213030&MetadataView=Full&MetadataType=0}
+##' \url{http://gcmd.nasa.gov/KeywordSearch/Metadata.do?Portal=amd_au&MetadataView=Full&MetadataType=0&KeywordPath=&OrigMetadataNode=AADC&EntryId=201213030}
 ##' @examples
 ##' \dontrun{
 ##' ## These data were obtained like this
@@ -1469,11 +1469,11 @@ commonprojections <- list(longlat = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no
 ##' b4 <-   "bDdpj0iM1K%2BA%3D%3D"
 ##' aurora2013 <- read.csv(paste(base, b1, b2, b3, b4, collapse = ""), stringsAsFactors = FALSE)
 ##' aurora2013$DATE_TIME_UTC <- as.POSIXct(aurora2013$DATE_TIME_UTC, tz = "GMT")
-##' get a daily sample
-##' aurora <- aurora2013[!duplicated(format( aurora2013$DATE_TIME_UTC, "%Y-%j")), c("LONGITUDE_DEGEAST", "LATITUDE_DEGNORTH", "DATE_TIME_UTC")]
+##' ## get a daily sample
+##' aurora <- aurora2013[,c("LONGITUDE_DEGEAST", "LATITUDE_DEGNORTH", "DATE_TIME_UTC")]
+##' aurora <- aurora[!duplicated(format( aurora$DATE_TIME_UTC, "%Y-%j")), ]
 ##' aurora <- aurora[order(aurora$DATE_TIME_UTC), ]
 ##' save(aurora, file = "aurora.rda")
-##'
 ##' }
 ##' @keywords data
 NULL

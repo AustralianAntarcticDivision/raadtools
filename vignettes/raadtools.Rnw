@@ -164,7 +164,7 @@ used by \textbf{raadtools}
 
 \section{Extract spatio-temporal data from read functions}
 \label{sec:extractfun}
-<<>>=
+<<spatio-temporal>>=
 
 library(raadtools)
 
@@ -182,10 +182,12 @@ extract(readssh, a, ssha = TRUE)
 extract(readcurr, a, magonly = TRUE)
 extract(readice, a)
 
+extract(readchla, time.resolution = "weekly")
+extract(readchla, a, time.resolution = "weekly")
 
 
 
-extract(readwind, a, time.resolution = "weekly")
+extract(readwind, a)
 extract(readwind)
 readwind(dironly = TRUE)
 
@@ -203,9 +205,31 @@ x
 
 
 extract(readsst, a)
-extract(readchla, time.resolution = "weekly")
-extract(readchla, a, time.resolution = "weekly")
 
+
+@
+
+<<example-aurora>>=
+data(aurora)
+
+aurora$sst <- extract(readsst, aurora[,1:3])
+aurora$chla <- extract(readchla, aurora[,1:3])
+
+## nothing for 2013 yet
+##aurora$windmag <- extract(readwind, aurora[,1:3], magonly = TRUE)
+##aurora$winddir <- extract(readwind, aurora[,1:3], dironly = TRUE)
+
+aurora$currmag <- extract(readcurr, aurora[,1:3], magonly = TRUE)
+aurora$currdir<- extract(readcurr, aurora[,1:3], dironly = TRUE)
+
+aurora$ssh <- extract(readssh, aurora[,1:3])
+aurora$ssha <- extract(readssh, aurora[,1:3], ssha = TRUE)
+
+aurora$ice <- extract(readice, aurora[,1:3])
+
+
+## note this is slightly different, since there's no point in generalizing out time
+aurora$bathy <- extract(readbathy(), aurora[,1:2])
 
 @
 

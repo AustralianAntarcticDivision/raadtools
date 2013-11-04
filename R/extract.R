@@ -13,8 +13,7 @@
     rng <- range(difftime(x[-1L], x[-length(x)], units = "days"))
     a <- round(min(rng))
     if (a == 1) "daily"
-    if (a %in% c(7, 8)) "weekly"
-    "monthly"
+    if (a %in% c(7, 8)) "weekly" else     "monthly"
 }
 ##############################################################
 #' Extract methods for raadtools read functions

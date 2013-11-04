@@ -10,7 +10,7 @@
 
 ## x is dates from files
 .determine.time.resolution <- function(x, ...) {
-    rng <- range(difftime(x[-length(x)], x[1L], units = "days"))
+    rng <- range(difftime(x[-1L], x[-length(x)], units = "days"))
     a <- round(min(rng))
     if (a == 1) "daily"
     if (a %in% c(7, 8)) "weekly"
@@ -97,7 +97,7 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
                   thisx <- x(date[i], verbose = FALSE)
                   asub <- findInterval(times, date) == i
 
-                  res[asub] <- extract(thisx, subset(y, asub), ...)
+                  res[asub] <- extract(thisx, y[asub, ], ...)
 
               }
               res

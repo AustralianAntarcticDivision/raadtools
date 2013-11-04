@@ -55,7 +55,18 @@ sshfiles <- function(ssha = FALSE) {
     cfiles <- list.files(data.source, pattern = ".nc$", full.names = TRUE)
     datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
     currentdates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
-    data.frame(file = cfiles, date = currentdates, stringsAsFactors = FALSE)
+   sfs <- data.frame(file = cfiles, date = currentdates, stringsAsFactors = FALSE)
+       ## look at these bad boys
+
+    ##696 //aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data/ssh/aviso/upd/7d/nrt_global_merged_madt_h_20130320_20130320_20130326.nc 2013-03-20 11:00:00
+    ##697 //aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data/ssh/aviso/upd/7d/nrt_global_merged_madt_h_20130327_20130327_20130402.nc 2013-03-27 11:00:00
+    ##698 //aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data/ssh/aviso/upd/7d/nrt_global_merged_madt_h_20130403_20130403_20130406.nc 2013-04-03 11:00:00
+    ##699 //aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data/ssh/aviso/upd/7d/nrt_global_merged_madt_h_20130403_20130403_20130409.nc 2013-04-03 11:00:00
+    ##700 //aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data/ssh/aviso/upd/7d/nrt_global_merged_madt_h_20130410_20130410_20130416.nc 2013-04-10 10:00:00
+
+    cfs <- data.frame(file = cfiles, date = currentdates, stringsAsFactors = FALSE)
+        cfs[diff(cfs$date) > 0, ]
+
 }
 
 
@@ -970,6 +981,7 @@ currentsfiles <- function() {
     cfiles <- list.files(data.source, pattern = ".nc$", full.names = TRUE)
     datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
     currentdates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
+
     cfs <- data.frame(file = cfiles, date = currentdates, stringsAsFactors = FALSE)
     cfs[diff(cfs$date) > 0, ]
 }

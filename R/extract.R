@@ -45,6 +45,15 @@
 #' extract(readsst, a)
 #'
 #' extract(readsst, a, method = "bilinear")
+#'
+#' extract(readsst, time.resolution = "daily")
+#' a$time <-  sort(as.Date("2005-01-01") + sample(c(0, 0, 0, 8, 20, 50), nrow(a), replace = TRUE))
+#' extract(readsst, a)
+#' extract(readchla, time.resolution = "weekly")
+#' extract(readchla, a, time.resolution = "weekly")
+#' ##extract(readwind, a, time.resolution = "weekly")
+#' extract(readwind)
+#' ##readwind(dironly = TRUE)
 #' @export
 #' @docType methods
 #' @rdname raadtools-extract

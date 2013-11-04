@@ -970,7 +970,8 @@ currentsfiles <- function() {
     cfiles <- list.files(data.source, pattern = ".nc$", full.names = TRUE)
     datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
     currentdates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
-    data.frame(file = cfiles, date = currentdates, stringsAsFactors = FALSE)
+    cfs <- data.frame(file = cfiles, date = currentdates, stringsAsFactors = FALSE)
+    cfs[diff(cfs$date) > 0, ]
 }
 
 ##' Read AVISO ocean current data from weekly files

@@ -162,6 +162,53 @@ choices made with \textbf{raster} and the other package dependenices
 used by \textbf{raadtools}
 
 
+\section{Extract spatio-temporal data from read functions}
+\label{sec:extractfun}
+<<>>=
+
+library(raadtools)
+
+
+     a <- structure(list(x = c(174, 168, 156, 111, 99, 64, 52, 46, -4,
+     -15, -30, -38, -47, -62, -87, -127, -145, -160, -161), y = c(-72,
+     -39, -50, -58, -35, -38, -48, -60, -48, -35, -37, -51, -68, -72,
+     -69, -54, -40, -49, -54)), .Names = c("x", "y"), row.names = c(NA,
+     -19L), class = "data.frame")
+
+a$time <-  sort(as.Date("2005-01-01") + sample(c(0, 0, 0, 8, 20, 50), nrow(a), replace = TRUE))
+
+extract(readssh, a)
+extract(readssh, a, ssha = TRUE)
+extract(readcurr, a, magonly = TRUE)
+extract(readice, a)
+
+
+
+
+extract(readwind, a, time.resolution = "weekly")
+extract(readwind)
+readwind(dironly = TRUE)
+
+
+
+a$time <- sort(as.Date("1985-01-01") + sample(c(0, 0, 0, 10, 100, 50), nrow(a), replace = TRUE))
+
+
+x <- extract(readsst)
+extract(readsst, a)
+
+x
+ extract(readsst)
+ extract(readsst, time.resolution = "daily")
+
+
+extract(readsst, a)
+extract(readchla, time.resolution = "weekly")
+extract(readchla, a, time.resolution = "weekly")
+
+
+@
+
 
 
 

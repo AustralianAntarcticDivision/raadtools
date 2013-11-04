@@ -93,9 +93,9 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
 
 
               for (i in seq_along(date)) {
-                  thisx <- x(date[i], verbose = FALSE)
+                  thisx <- x(date[i], verbose = FALSE, ...)
                   asub <- findInterval(times, date) == i
-                  if (any(asub)) {res[asub] <- extract(thisx, y[asub, ], ...)}
+                  if (any(asub)) {res[asub] <- suppressWarnings(extract(thisx, y[asub, ], ...))}
 
               }
               res

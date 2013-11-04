@@ -114,12 +114,12 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
 
 
 ## super simple nn cases
-setMethod("extract", signature(x = "function", y = "SpatialPoints"),
-          function(x, y, ...) {
+##setMethod("extract", signature(x = "function", y = "SpatialPoints"),
+##          function(x, y, ...) {
 
 
-          }
-          )
+  ##        }
+  ##        )
 
 
 

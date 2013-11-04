@@ -442,9 +442,10 @@ chl.pal <- function(x, palette = FALSE) {
 ##' @seealso \code{\link{chlafiles}} for details on the repository of
 ##' data files, \code{\link[raster]{raster}} for the return value
 ##' @examples
+##' \dontrun{
 ##' d <- readchla(c("2003-01-01", c("2003-06-01")),
 ##'          xylim = extent(100, 150, -70, -30))
-##'
+##' }
 ##' @export
 readchla <- function(date, time.resolution = c("monthly", "weekly"),
                     xylim = NULL,

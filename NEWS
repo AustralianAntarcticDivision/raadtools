@@ -25,6 +25,8 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
  o new Rmd vignette on installing and building the package
  
+ o extractxyt has been deprecated and will be removed in a future
+ version, please use extract instead
 
 BUG FIXES
 

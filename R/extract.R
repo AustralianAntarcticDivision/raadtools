@@ -88,7 +88,7 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
               files <- x(returnfiles = TRUE)
               time.resolution <- .determine.time.resolution(files$date)
 
-              findex <- suppressWarnings(.processDates(times, files$date, timeres = "daily"))
+              findex <- suppressWarnings(.processDates(times, files$date, timeres = time.resolution))
               date <- files$date[findex]
 
 

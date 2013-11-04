@@ -2,6 +2,8 @@
 
  o various bug fixes
 
+NEW FEATURES
+
  o added extract method for functions and xyt matrix or data.frame
 
  o removed hardcoded default date from all read* functions, the
@@ -13,13 +15,16 @@
  o added support for SSMI 12.5km southern ocean sea ice concentration
  from IFREMER
 
- o expanded vignette on general use
-
- o new Rmd vignette on installing and building the package
-
  o added readwind function
 
  o added hidden function to update file cache
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+ o expanded vignette on general use
+
+ o new Rmd vignette on installing and building the package
+ 
 
 BUG FIXES
 

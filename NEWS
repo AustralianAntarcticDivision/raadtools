@@ -1,5 +1,8 @@
-  CHANGES IN raadtools VERSION 0.0-6
+  CHANGES IN raadtools VERSION 0.0-7
 
+ o various bug fixes
+
+ o added extract method for functions and xyt matrix or data.frame
 
  o removed hardcoded default date from all read* functions, the
  first/default date is now derived from the file set

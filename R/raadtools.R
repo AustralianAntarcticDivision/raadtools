@@ -238,11 +238,13 @@ readwind <- function(date, time.resolution = c("daily"),
     if (magonly | dironly) {
         if (magonly) r <- sqrt(u*u + v*v)
         if (dironly) r <- (90 - atan2(v, u) * 180/pi) %% 360
+         r <- setZ(r, files$date[findex])
     } else {
         r <- brick(u, v)
         names(r) <- c("U", "V")
+        r <- setZ(r, rep(files$date[findex], 2L))
     }
-     r <- setZ(r, files$date[findex])
+
     rotate(r)
 }
 

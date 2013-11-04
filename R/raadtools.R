@@ -176,7 +176,7 @@ function(data.source = "", time.resolution = c("daily")) {
 ##' components
 ##' @param dironly return just the direction from the U and V, in degrees N=0, E=90, S=180, W=270
 ##' @param returnfiles ignore options and just return the file names and dates
-##'
+##' @param verbose  print messages on progress etc.
 ##' @return raster object
 ##' @examples
 ##' \dontrun{
@@ -197,7 +197,8 @@ function(data.source = "", time.resolution = c("daily")) {
 ##' }
 ##' @export
 readwind <- function(date, time.resolution = c("daily"),
-                     magonly = FALSE, dironly = FALSE, returnfiles = FALSE) {
+                     magonly = FALSE, dironly = FALSE, returnfiles = FALSE,
+                     verbose = TRUE) {
 
      time.resolution <- match.arg(time.resolution)
 
@@ -230,6 +231,7 @@ readwind <- function(date, time.resolution = c("daily"),
         r <- brick(u, v)
         names(r) <- c("U", "V")
     }
+     r <- setZ(r, files$date[findex])
     rotate(r)
 }
 

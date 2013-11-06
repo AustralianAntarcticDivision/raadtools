@@ -841,7 +841,15 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
                      xylim = NULL,
                      ...) {
     topo <- match.arg(topo)
-    res <- raster(topofile(topo = topo, polar = polar, lon180 = lon180, ...))
+
+    if (lon180 & topo %in% c("geboc_08", "ibcso", "etopo1", "etopo2")) {
+        tfile <- topofile(topo = topo, polar = FALSE, ...)
+        if (is.null(xylim)) res <- rotate(raster(tfile))
+    } else {
+        tfile <- topofile(topo = topo, polar = polar, lon180 = lon180, ...)
+        res <- raster(tfile)
+    }
+
     if (!is.null(xylim)) res <- crop(res, xylim)
     res
 }

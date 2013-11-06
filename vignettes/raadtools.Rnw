@@ -49,6 +49,9 @@ done.
 library(raadtools)
 @
 
+(If there's no message about trouble setting the repository then you
+are good to go.)
+
 \section{Simple data read}
 \label{sec:simpleread}
 There are functions to read data based on a sequence of date-time
@@ -102,22 +105,12 @@ par(op)
 plot(wind, nr = 2)
 @
 
-The read calls above apply slightly different option in each case,
-without any arguments at all, with a vector of date strings (or vector
-of POSIXct or Date objects) to return a single or multiple layer
-raster object. The function \textbf{readtopo} will return one of
-several available data sets
-(\Sexpr{as.character(formals(readtopo)[["topo"]])[-1]}). Some data
-sets are inherently multi-layered for a single time step, such as wind
-and current vectors and so these both have optional arguments
-\textbf{dironly} and \textbf{magonly} to convert the internal
-\textbf{U} and \textbf{V} vector components to directions or
-magnitudes only. The read operation may be combined with a spatial
-crop by using the argument \textbf{xylim} and there are other options
-specific for some data sets such as \textbf{lon180} to control the
-default orientation (these topics will be discussed in more detail in
-later sections, otherwise see the documentation for each function
-argument).
+The read calls above apply slightly different options in each case,
+with no arguments at all, with a vector of date-times, \textbf{xylim}
+to restrict the spatial extent and \textbf{lon180} to control the
+Atlantic vs. Pacific view for global data extending across the
+dateline.
+
 
 
 The \textbf{ice} object  is a \Sexpr{class(ice)} from the \textbf{raster}
@@ -160,6 +153,57 @@ vignette("Raster")
 See the Section~\ref{sec:assumedsupport} for more detail on the design
 choices made with \textbf{raster} and the other package dependenices
 used by \textbf{raadtools}
+
+
+\section{Read functions in raadtools}
+\label{sec:readrationale}
+
+This section discusses the details of individual read functions and
+some of the rationale behind each one. Different data sets are stored
+with different native coordinate systems, different pixel and temporal
+resolutions, different data units, and cover different spatial and temporal ranges. As well
+as all these options, the way data are stored varies tremendously
+depending on the provider and the data type. These read functions all
+return either a \textbf{Raster} object as defined by the
+\textbf{raster} package with as complete and standard metadata as
+possible.
+
+
+Some data sets are inherently multi-layered for a single time step,
+such as wind and current vectors and so these both have optional
+arguments \textbf{dironly} and \textbf{magonly} to convert the
+internal \textbf{U} and \textbf{V} vector components to directions or
+magnitudes only. The read operation may be combined with a spatial
+crop by using the argument \textbf{xylim} and there are other options
+specific for some data sets such as \textbf{lon180} to control the
+default orientation (these topics will be discussed in more detail in
+later sections, otherwise see the documentation for each function
+argument).
+
+\subsection{Read topographic or bathymetric data}
+\label{sec:readtopo}
+
+The \textbf{readtopo} (\textbf{readbathy} is a synonym) will return
+one of several available data sets
+(\Sexpr{as.character(formals(readtopo)[["topo"]])[-1]}). See the help
+page for the details and source of each one. As these data are not
+dynamic on short time scales they do not provide a \textbf{date}
+argument. The \textbf{ibcso} data set is optionally available on a
+polar or longitude/latitude grid, controlled by the \textbf{polar}
+argument. The Smith and Sandwell data set is returned in Pacific view
+on the Mercator projection by default. Use \textbf{lon180 = FALSE} to
+return Atlantic view.
+
+<<>>=
+geb <- readtopo("gebco_08", xylim = extent(150, 220, -75, -60))
+
+@
+
+
+
+
+
+
 
 
 \section{Extract spatio-temporal data from read functions}
@@ -232,7 +276,6 @@ aurora$ice <- extract(readice, aurora[,1:3])
 aurora$bathy <- extract(readbathy(), aurora[,1:2])
 
 @
-
 
 
 

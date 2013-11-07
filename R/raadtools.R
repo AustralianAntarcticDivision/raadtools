@@ -426,7 +426,7 @@ chl.pal <- function(x, palette = FALSE) {
 ##' length 1 then the sorted set of unique matches is returned.
 ##'
 ##' @param date date or dates of data to read, see Details
-##' @param time.resolution time resolution data to read, daily only
+##' @param time.resolution time resolution data to read, weekly or monthly
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param verbose print messages on progress etc.
@@ -447,7 +447,7 @@ chl.pal <- function(x, palette = FALSE) {
 ##'          xylim = extent(100, 150, -70, -30))
 ##' }
 ##' @export
-readchla <- function(date, time.resolution = c("monthly", "weekly"),
+readchla <- function(date, time.resolution = c("weekly", "monthly"),
                     xylim = NULL,
                     ##lon180 = TRUE,
                     returnfiles = FALSE,
@@ -499,10 +499,10 @@ readchla <- function(date, time.resolution = c("monthly", "weekly"),
 ##'
 ##' This function generates a list of available chlorophyll-a files, including SeaWiFS and MODIS.
 ##' @title Chlorophyll-a
-##' @param time.resolution monthly or weekly (8day)
+##' @param time.resolution weekly (8day) or monthly
 ##' @return data.frame
 ##' @export
-chlafiles <- function(time.resolution = c("monthly", "weekly")) {
+chlafiles <- function(time.resolution = c("weekly", "monthly")) {
   data.dir <- getOption("default.datadir")
   time.resolution <- match.arg(time.resolution)
   fromCache <- TRUE

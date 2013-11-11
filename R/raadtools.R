@@ -49,9 +49,9 @@ NULL
 ##' @return data.frame of file names and dates
 ##' @export
 sshfiles <- function(ssha = FALSE) {
-    data.dir = getOption("default.datadir")
+    datadir = getOption("default.datadir")
     product <- if(ssha) "ssha" else "ssh"
-    data.source = file.path(data.dir, product, "aviso", "upd", "7d")
+    data.source = file.path(datadir, product, "aviso", "upd", "7d")
     cfiles <- list.files(data.source, pattern = ".nc$", full.names = TRUE)
     datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
     currentdates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
@@ -99,7 +99,7 @@ readssh <- function (date, time.resolution = "weekly",
         projection(x) <- "+proj=merc +ellps=WGS84 +over"
         x
     }
-    data.dir = getOption("default.datadir")
+    datadir = getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
 
     files <- sshfiles(ssha = ssha)
@@ -150,18 +150,18 @@ readssh <- function (date, time.resolution = "weekly",
 ##' @export
 windfiles <-
 function(data.source = "", time.resolution = c("daily")) {
-      data.dir <- getOption("default.datadir")
+      datadir <- getOption("default.datadir")
       time.resolution <- match.arg(time.resolution)
       fromCache <- TRUE
       if (fromCache) {
-          load(file.path(data.dir, "cache", sprintf("%s_windfiles.Rdata", time.resolution)))
-          wf$ufullname <- file.path(data.dir,  wf$ufile)
-          wf$vfullname <- file.path(data.dir,  wf$vfile)
+          load(file.path(datadir, "cache", sprintf("%s_windfiles.Rdata", time.resolution)))
+          wf$ufullname <- file.path(datadir,  wf$ufile)
+          wf$vfullname <- file.path(datadir,  wf$vfile)
           return(wf)
       }
 
 
-     cfiles <- list.files(file.path(data.dir, "wind", "ncep2", time.resolution), pattern = ".nc$", full.names = TRUE)
+     cfiles <- list.files(file.path(datadir, "wind", "ncep2", time.resolution), pattern = ".nc$", full.names = TRUE)
      cfiles <- file.path("wind", "ncep2", time.resolution, basename(cfiles))
      ufiles <- grep("uwnd", cfiles, value = TRUE)
      vfiles <- grep("vwnd", cfiles, value = TRUE)
@@ -172,7 +172,7 @@ function(data.source = "", time.resolution = c("daily")) {
      dates$mon <- 0
      dates <- as.POSIXct(dates)
      wf <- data.frame(ufile = ufiles, vfile = vfiles, date = dates, stringsAsFactors = FALSE)
-     save(wf, file = file.path(data.dir, "cache", sprintf("%s_windfiles.Rdata", time.resolution)))
+     save(wf, file = file.path(datadir, "cache", sprintf("%s_windfiles.Rdata", time.resolution)))
      wf
 
 }
@@ -502,30 +502,49 @@ readchla <- function(date, time.resolution = c("weekly", "monthly"),
 ##' @param time.resolution weekly (8day) or monthly
 ##' @return data.frame
 ##' @export
-chlafiles <- function(time.resolution = c("weekly", "monthly")) {
-  data.dir <- getOption("default.datadir")
+chlafiles <- function(time.resolution = c("weekly", "monthly"),
+                      product = c("johnson", "oceancolor")) {
+  datadir <- getOption("default.datadir")
+  product <- match.arg(product)
   time.resolution <- match.arg(time.resolution)
   fromCache <- TRUE
   if (fromCache) {
-    load(file.path(data.dir, "cache", sprintf("%s_chlafiles.Rdata", time.resolution)))
-    chlf$fullname <- file.path(data.dir,  chlf$file)
+      print(file.path(datadir, "cache", sprintf("%s_%s_chlafiles.Rdata", product, time.resolution)))
+    load(file.path(datadir, "cache", sprintf("%s_%s_chlafiles.Rdata", product, time.resolution)))
+    chlf$fullname <- file.path(datadir,  chlf$file)
     return(chlf)
   }
 
+}
 
+.updatechlafiles <- function(datadir = getOption("default.datadir")) {
   tr <- c(monthly = "monthly", weekly = "8d")
-  dirpath <- file.path("chl", "johnson", c("modis", "seawifs"), tr[time.resolution])
 
-  fs <- gsub(data.dir, "", list.files(file.path(data.dir, dirpath), full.names = TRUE))
-  fs <- gsub("^/", "", fs)
+  ## first johnson
+  for (i in seq_along(tr)) {
+      dirpath <- file.path("chl", "johnson", c("modis", "seawifs"), tr[i])
 
-  dates <- timedateFrom(strptime(substr(basename(fs), 2, 8), "%Y%j"))
-  chlf <- data.frame(file = fs, date = dates,
-                     stringsAsFactors = FALSE)[order(dates), ]
+      fs <- gsub(datadir, "", list.files(file.path(datadir, dirpath), full.names = TRUE))
+      fs <- gsub("^/", "", fs)
 
-  save(chlf, file = file.path(data.dir, "cache", sprintf("%s_chlafiles.Rdata", time.resolution)))
-  chlf
+      dates <- timedateFrom(strptime(substr(basename(fs), 2, 8), "%Y%j"))
+      chlf <- data.frame(file = fs, date = dates,  stringsAsFactors = FALSE)[order(dates), ]
 
+      save(chlf, file = file.path(datadir, "cache", sprintf("johnson_%s_chlafiles.Rdata", names(tr[i]))))
+  }
+  ## now oceancolor
+
+ for (i in seq_along(tr)) {
+      dirpath <- file.path("chl", "oceancolor", c("modis", "seawifs"), tr[i])
+
+      fs <- gsub(datadir, "", list.files(file.path(datadir, dirpath), full.names = TRUE))
+      fs <- gsub("^/", "", fs)
+
+      dates <- timedateFrom(strptime(substr(basename(fs), 2, 8), "%Y%j"))
+      chlf <- data.frame(file = fs, date = dates,  stringsAsFactors = FALSE)[order(dates), ]
+
+      save(chlf, file = file.path(datadir, "cache", sprintf("oceancolor_%s_chlafiles.Rdata", names(tr[i]))))
+  }
 
 }
 
@@ -773,7 +792,7 @@ topofile <- function(topo = c("gebco_08", "ibcso",
                      polar = FALSE,
                      lon180 = TRUE, ...) {
 
-    data.dir = getOption("default.datadir")
+    datadir = getOption("default.datadir")
     topo <- match.arg(topo)
     polarsubdir <- "latlon"
     if (polar) {
@@ -784,7 +803,7 @@ topofile <- function(topo = c("gebco_08", "ibcso",
         }
     }
     if (!lon180 & !(topo %in% c("smith_sandwell"))) warning("no Pacific view version available of ", topo)
-    topopath <- file.path(data.dir, "bathymetry", topo,
+    topopath <- file.path(datadir, "bathymetry", topo,
                           switch(topo,
                        gebco_08 = "gebco_08.tif",
                        ibcso = file.path(polarsubdir, "ibcso_v1_is.tif"),
@@ -850,6 +869,7 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
         res <- raster(tfile)
     }
 
+    if (topo == "etopo2") projection(res) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
     if (!is.null(xylim)) res <- crop(res, xylim)
     res
 }
@@ -866,15 +886,15 @@ readbathy <- readtopo
 ##' @return data.frame of file names and dates
 ##' @export
 sstfiles <- function(fromcache = TRUE) {
-    data.dir <- getOption("default.datadir")
+    datadir <- getOption("default.datadir")
     if (fromcache) {
-        load(file.path(data.dir, "cache", "sstfiles.Rdata"))
-        sstf$fullname <- file.path(data.dir, sstf$file)
+        load(file.path(datadir, "cache", "sstfiles.Rdata"))
+        sstf$fullname <- file.path(datadir, sstf$file)
 
         return(sstf)
     }
 
-    dirpath <- file.path(data.dir, "sst", "OI-daily-v2", "daily")
+    dirpath <- file.path(datadir, "sst", "OI-daily-v2", "daily")
     fs <- list.files(dirpath, pattern = "\\.nc$", recursive = TRUE, full.names = TRUE)
 
     ## flakey!!!!
@@ -882,8 +902,8 @@ sstfiles <- function(fromcache = TRUE) {
 
     dates <- timedateFrom(as.Date(fsstrings, "%Y%m%d"))
 
-    sstf <- data.frame(files = gsub("^/", "", gsub(data.dir, "", fs)), date = dates, stringsAsFactors = FALSE)[order(dates), ]
-    save(sstf, file = file.path(data.dir, "cache", "sstfiles.Rdata"))
+    sstf <- data.frame(files = gsub("^/", "", gsub(datadir, "", fs)), date = dates, stringsAsFactors = FALSE)[order(dates), ]
+    save(sstf, file = file.path(datadir, "cache", "sstfiles.Rdata"))
 
     sstf
 
@@ -989,8 +1009,8 @@ if (verbose & ifile %% 10L == 0L) .progressreport(ifile, nfiles)
 ##' @return data.frame of file names and dates
 ##' @export
 currentsfiles <- function() {
-    data.dir = getOption("default.datadir")
-    data.source = file.path(data.dir, "current", "aviso", "upd", "7d")
+    datadir = getOption("default.datadir")
+    data.source = file.path(datadir, "current", "aviso", "upd", "7d")
     cfiles <- list.files(data.source, pattern = ".nc$", full.names = TRUE)
     datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
     currentdates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
@@ -1078,7 +1098,7 @@ readcurr <- function(date,
         projection(x) <- "+proj=merc +ellps=WGS84 +over"
         x
     }
-    data.dir = getOption("default.datadir")
+    datadir = getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
     if (magonly & dironly) warning("only one of magonly and dironly may be used, returning magonly")
 
@@ -1142,7 +1162,9 @@ readcurr <- function(date,
 .loadfiles <- function(name, time.resolution, ...) {
     switch(name,
            nsidc = icefiles(time.resolution = time.resolution),
-           ssmi = icefiles(product = "ssmi")
+           ssmi = icefiles(product = "ssmi"),
+           johnson = chlafiles(time.resolution = time.resolution, product = "johnson"),
+           oceancolor = chlafiles(time.resolution = time.resolution, product = "oceancolor")
 
            )
 }

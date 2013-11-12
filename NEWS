@@ -4,6 +4,10 @@
 
 NEW FEATURES
 
+ o added readprod function for Arrigo production estimates
+
+ o added monthly time resolution for readsst
+
  o added extract method for functions and xyt matrix or data.frame
 
  o removed hardcoded default date from all read* functions, the

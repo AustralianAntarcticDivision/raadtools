@@ -40,6 +40,93 @@ NULL
 }
 
 
+
+##' Load file names and dates of Arrigo production data.
+##'
+##' These are 8 day estimates from MODIS and SeaWiFS satellite data,
+##' original NASA algorithm.
+##' @title Arrigo production files
+##' @return  data.frame of file names and dates
+##' @export
+prodfiles <- function() {
+    datadir <- getOption("default.datadir")
+    dirpath <- file.path(datadir, "prod", "Arrigo", "8d")
+    fromCache <- TRUE
+    if (fromCache) {
+        load(file.path(datadir, "cache", "prodfiles.Rdata"))
+        pfiles$fullname <- file.path(datadir, pfiles$file)
+        return(pfiles)
+    }
+    fs <- list.files(pattern = "prod\\.bin$", dirpath, full.names = TRUE)
+    dates <- timedateFrom(as.Date(basename(fs), "%Y%j"))
+
+
+    pfiles <- data.frame(file = gsub("^/", "", gsub(datadir, "", fs)), date = dates, stringsAsFactors = FALSE)
+    save(pfiles, file = file.path(datadir, "cache", "prodfiles.Rdata"))
+    pfiles
+}
+
+##' Read Arrigo production data.
+##'
+##' Arrigo production on Stereographic grid.
+##' @title Arrigo production data
+##' @param date date or dates of data to read
+##' @param data.dir location of data repository
+##' @return RasterLayer or RasterBrick
+##' @export
+readprod <- function(date, data.dir = getOption("default.datadir")) {
+    ##if (!length(file) == 1) stop("only one file can be read at once")
+    ##stopifnot(file.exists(file[1]))
+    ##type <- as.character(type[1])
+    ##type <- match.arg(type)
+
+
+
+    pf <- prodfiles()
+    if (missing(date)) date <- min(pf$date)
+    date <- timedateFrom(date)
+    windex <- which.min(abs(date - pf$date))
+    dtime <- abs(difftime(date, pf$date[windex], units = c("days")))
+    if (dtime > 3.5) stop(sprintf("no data file within 3.5 days of %s", format(date)))
+
+
+
+    file <- pf$fullname[windex]
+    proddata <- readBin(file, numeric(), (1280^2), size = 4, endian = "little")
+    proddata[proddata < 0] <- NA
+    ##if (type %in% c("raster", "sp", "image")) {
+    ##    require(raster)
+        ## grid orientation determined by MDSumner@gmail.com
+        proj <- "+proj=stere +lat_0=-90 +lon_0=180 +ellps=sphere"
+        ## projection is centred on 0,0 at 180W, 90S and this number
+        ## is the rectangular extent on either side at 40S
+        offset <- 5946335
+        ## build the x/y coordinates as cell centres (raster() sorts out the half-cell offset to get corners)
+        x <- list(x = seq(-offset, offset, length = 1280), y =  seq(-offset, offset, length = 1280), z = matrix(proddata, 1280)[1280:1,])
+        a <- raster(x, crs = proj)
+
+        names(a) <- sprintf("prod")
+    a <- setZ(a, date)
+    ##    if (type == "sp") return(as(a, "SpatialGridDataFrame"))
+     ##   if (type == "image") return(as.image.SpatialGridDataFrame(as(a, "SpatialGridDataFrame")))
+     ##   return(a)
+    ##}
+    ##if (type == "native") {
+    ##    coords <- readprodcoords()
+    ##    coords$production <- proddata
+    ##    return(coords)
+   ## }
+    ##if (type == "raw") {
+    ##    return(proddata)
+    ##}
+    ##stop("should never arrive here")
+    ##invisible(NULL)
+   a
+
+}
+
+
+
 ##' Load file names and dates of AVISO SSH/SSHA data
 ##'
 ##' A data.frame of file names and dates
@@ -509,7 +596,7 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
   time.resolution <- match.arg(time.resolution)
   fromCache <- TRUE
   if (fromCache) {
-      print(file.path(datadir, "cache", sprintf("%s_%s_chlafiles.Rdata", product, time.resolution)))
+     ## print(file.path(datadir, "cache", sprintf("%s_%s_chlafiles.Rdata", product, time.resolution)))
     load(file.path(datadir, "cache", sprintf("%s_%s_chlafiles.Rdata", product, time.resolution)))
     chlf$fullname <- file.path(datadir,  chlf$file)
     return(chlf)
@@ -885,25 +972,34 @@ readbathy <- readtopo
 ##' @param ... reserved for future use
 ##' @return data.frame of file names and dates
 ##' @export
-sstfiles <- function(fromcache = TRUE) {
+sstfiles <- function(fromcache = TRUE, time.resolution = c("daily", "monthly")) {
     datadir <- getOption("default.datadir")
+    time.resolution <- match.arg(time.resolution)
     if (fromcache) {
-        load(file.path(datadir, "cache", "sstfiles.Rdata"))
+        load(file.path(datadir, "cache", sprintf("sstfiles_%s.Rdata", time.resolution)))
         sstf$fullname <- file.path(datadir, sstf$file)
 
         return(sstf)
     }
 
-    dirpath <- file.path(datadir, "sst", "OI-daily-v2", "daily")
-    fs <- list.files(dirpath, pattern = "\\.nc$", recursive = TRUE, full.names = TRUE)
+    if (time.resolution == "daily") {
+        dirpath <- file.path(datadir, "sst", "OI-daily-v2", "daily")
+        fs <- list.files(dirpath, pattern = "\\.nc$", recursive = TRUE, full.names = TRUE)
 
-    ## flakey!!!!
-    fsstrings <- as.Date(substr(basename(fs), 15, 22), "%Y%m%d")
+        ## flakey!!!!
+        fsstrings <- as.Date(substr(basename(fs), 15, 22), "%Y%m%d")
 
-    dates <- timedateFrom(as.Date(fsstrings, "%Y%m%d"))
+        dates <- timedateFrom(as.Date(fsstrings, "%Y%m%d"))
 
+    }
+    if (time.resolution == "monthly") {
+        dirpath <- file.path(datadir, "sst", "oimonth_v2", "monthly")
+        fs <- list.files(dirpath, full.names = TRUE)
+        bname <- gsub(".gz", "", basename(fs))
+        dates <- timedateFrom(as.POSIXct(strptime(paste0(bname, "01"), "oiv2mon.%Y%m%d"), tz = "GMT"))
+    }
     sstf <- data.frame(files = gsub("^/", "", gsub(datadir, "", fs)), date = dates, stringsAsFactors = FALSE)[order(dates), ]
-    save(sstf, file = file.path(datadir, "cache", "sstfiles.Rdata"))
+    save(sstf, file = file.path(datadir, "cache", sprintf("sstfiles_%s.Rdata", time.resolution)))
 
     sstf
 
@@ -923,7 +1019,7 @@ sstfiles <- function(fromcache = TRUE) {
 ##' is greater than length 1 then the sorted set of unique matches is
 ##' returned.
 ##' @param date date or dates of data to read, see Details
-##' @param time.resolution time resoution data to read, daily only
+##' @param time.resolution time resoution data to read, daily or monthly
 ##' @param varname variable to return from the data files, default is
 ##' "sst" or "anom", "err", "ice"
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
@@ -948,26 +1044,25 @@ sstfiles <- function(fromcache = TRUE) {
 ##' dts <- seq(as.Date("2001-01-03"), by = "1 week", length = 100)
 ##' sst <- readsst(dts, xylim = ext)
 ##' }
-readsst <- function(date, time.resolution = "daily", varname = c("sst", "anom", "err", "ice"),
+readsst <- function(date, time.resolution = c("daily", "monthly"), varname = c("sst", "anom", "err", "ice"),
                     xylim = NULL,
                     lon180 = TRUE,
                     returnfiles = FALSE,
                     verbose = TRUE,
                     ...) {
 
+    datadir <- getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
     varname <- match.arg(varname)
 
-    files <- sstfiles()
+    if (! varname == "sst" & time.resolution == "monthly") stop("only sst available for monthly data")
+    files <- sstfiles(time.resolution = time.resolution)
     if (returnfiles) return(files)
 
     if (missing(date)) date <- min(files$date)
      ## from this point one, we don't care about the input "date" - this is our index into all files and that's what we use
     findex <- .processDates(date, files$date, time.resolution)
     date <- files$date[findex]
-
-    rtemplate <- raster(files$fullname[findex[1]], varname = varname)
-    if (lon180) rtemplate <- rotate(rtemplate)
 
     ## process xylim
     cropit <- FALSE
@@ -978,7 +1073,16 @@ readsst <- function(date, time.resolution = "daily", varname = c("sst", "anom", 
     }
 
     nfiles <- length(findex)
+
     r <- vector("list", nfiles)
+
+if (time.resolution == "daily") {
+    rtemplate <- raster(files$fullname[findex[1]], varname = varname)
+    if (lon180) rtemplate <- rotate(rtemplate)
+
+
+
+
 
     for (ifile in seq_len(nfiles)) {
         r0 <- raster(files$fullname[findex[ifile]], varname = varname)
@@ -986,10 +1090,7 @@ readsst <- function(date, time.resolution = "daily", varname = c("sst", "anom", 
         if(cropit) r0 <- crop(r0, cropext)
         r0[r0 < -2] <- NA
         r[[ifile]] <- r0
-if (verbose & ifile %% 10L == 0L) .progressreport(ifile, nfiles)
     }
-
-    cat("\n\nFinalizing...\n")
     if (nfiles > 1) r <- brick(stack(r)) else r <- r[[1L]]
 
 
@@ -998,6 +1099,39 @@ if (verbose & ifile %% 10L == 0L) .progressreport(ifile, nfiles)
 
     return(r)
 
+
+    ## monthly
+        } else {
+        landmask <- readBin(file.path(datadir, "sst", "oimonth_v2", "lstags.onedeg.dat"), "numeric", size = 4, n = 360 * 180, endian = "big")
+
+        for (ifile in seq_len(nfiles)) {
+             fname <- files$fullname[ifile]
+             con <- gzfile(fname, open = "rb")
+             version <- readBin(con, "integer", size = 4, n = 1, endian = "big")
+             date <-  readBin(con, "integer", size = 4, n = 7, endian = "big")
+             d <- readBin(con, "numeric", size = 4, n = 360 * 180, endian = "big")
+             close(con)
+              d[d > 500] <- NA
+             d[landmask < 1] <- NA
+
+             sst <- flip(raster(t(matrix(d,   360, 180)),
+                                xmn = 0, xmx = 360, ymn = -90, ymx = 90,
+                                crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"), "y")
+
+             if (lon180) sst <- rotate(sst)
+             if (cropit) sst <- crop(sst,cropext)
+
+             r[[ifile]] <- sst
+              if (nfiles > 1) r <- brick(stack(r)) else r <- r[[1L]]
+
+             names(r) <- files$file[findex]
+             r <- setZ(r, files$date[findex])
+
+             return(r)
+
+        }
+
+    }
 }
 
 

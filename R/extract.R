@@ -84,8 +84,19 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
               if (inherits(times, "try-error") | any(is.na(times))) {
                   .standard.assumeXYT.TimeError()
               }
-              ## let's ignore time.resolution
-              files <- x(returnfiles = TRUE)
+
+
+              ## hmm, will have to figure out how to do this
+
+              ## process args
+              args <- list(...)
+              if ("time.resolution" %in% names(args)) {
+                  files <- x(returnfiles = TRUE, time.resolution = args$time.resolution)
+              } else {
+                  files <- x(returnfiles = TRUE)
+
+              }
+
               time.resolution <- .determine.time.resolution(files$date)
 
               findex <- suppressWarnings(.processDates(times, files$date, timeres = time.resolution))

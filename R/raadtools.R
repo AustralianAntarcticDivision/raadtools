@@ -1091,14 +1091,6 @@ if (time.resolution == "daily") {
         r0[r0 < -2] <- NA
         r[[ifile]] <- r0
     }
-    if (nfiles > 1) r <- brick(stack(r)) else r <- r[[1L]]
-
-
-    names(r) <- files$file[findex]
-    r <- setZ(r, files$date[findex])
-
-    return(r)
-
 
     ## monthly
         } else {
@@ -1122,14 +1114,16 @@ if (time.resolution == "daily") {
              if (cropit) sst <- crop(sst,cropext)
 
              r[[ifile]] <- sst
-              if (nfiles > 1) r <- brick(stack(r)) else r <- r[[1L]]
 
-             names(r) <- files$file[findex]
+
+
+        }
+  if (nfiles > 1) r <- brick(stack(r)) else r <- r[[1L]]
+          names(r) <- paste("sst", time.resolution, format(files$date[findex], "%Y%m%d"), sep = "_")
              r <- setZ(r, files$date[findex])
 
              return(r)
 
-        }
 
     }
 }

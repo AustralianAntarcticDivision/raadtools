@@ -21,15 +21,12 @@
 #' Extract data from read functions in various ways.
 #'
 #' @param x A raadtools read function.
-#'
-#' @param y One of various means of querying from the raadtools read
+#'#' @param y One of various means of querying from the raadtools read
 #' functions, such as a vector of character, Date, or POSIXt values,
 #' data.frame, trip, etc.
 #' @param method "simple" or "bilinear"
 #' @param ... Additional arguments passed to the read function.
-#'
 #' @return data values extracted by the read functions
-#'
 #' @seealso \code{\link{readsst}} and \code{\link{extract}}
 #' @examples
 #' x <- extract(readsst)
@@ -39,19 +36,19 @@
 #' -69, -54, -40, -49, -54)), .Names = c("x", "y"), row.names = c(NA,
 #' -19L), class = "data.frame")
 #'
-#' a$time <- structure(c(5479, 5479, 5479, 5479, 5479, 5479, 5479, 5479, 5479,
-#' 5479, 5479, 5489, 5529, 5529, 5529, 5579, 5579, 5579, 5579), class = "Date")
-#' extract(readsst, a)
+#' #a$time <- structure(c(5479, 5479, 5479, 5479, 5479, 5479, 5479, 5479, 5479,
+#' #5479, 5479, 5489, 5529, 5529, 5529, 5579, 5579, 5579, 5579), class = "Date")
+#' #extract(readsst, a)
 #'
-#' extract(readsst, a, method = "bilinear")
+#' #extract(readsst, a, method = "bilinear")
 #'
-#' extract(readsst, time.resolution = "daily")
+#' #extract(readsst, time.resolution = "daily")
 #' a$time <-  sort(as.Date("2005-01-01") + sample(c(0, 0, 0, 8, 20, 50), nrow(a), replace = TRUE))
-#' extract(readsst, a)
-#' extract(readchla, time.resolution = "weekly")
-#' extract(readchla, a, time.resolution = "weekly")
+#' #extract(readsst, a)
+#' #extract(readchla, time.resolution = "weekly")
+#' #extract(readchla, a, time.resolution = "weekly")
 #' ##extract(readwind, a, time.resolution = "weekly")
-#' extract(readwind)
+#' #extract(readwind)
 #' ##readwind(dironly = TRUE)
 #' @export
 #' @docType methods

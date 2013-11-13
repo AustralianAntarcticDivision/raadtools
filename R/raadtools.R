@@ -1041,6 +1041,7 @@ readbathy <- readtopo
 ##' A data frame of file names and datres
 ##' @title OISST sea surface temperature files
 ##' @param fromcache load from cache?
+##' @param time.resolution time resolution read
 ##' @param ... reserved for future use
 ##' @return data.frame of file names and dates
 ##' @export

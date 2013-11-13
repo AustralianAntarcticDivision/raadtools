@@ -231,7 +231,7 @@ extract(readchla, a, time.resolution = "weekly")
 
 
 
-extract(readwind, a)
+##extract(readwind, a)
 extract(readwind)
 readwind(dironly = TRUE)
 
@@ -240,15 +240,15 @@ readwind(dironly = TRUE)
 a$time <- sort(as.Date("1985-01-01") + sample(c(0, 0, 0, 10, 100, 50), nrow(a), replace = TRUE))
 
 
-x <- extract(readsst)
-extract(readsst, a)
-
-x
- extract(readsst)
- extract(readsst, time.resolution = "daily")
+##x <- extract(readsst)
+##extract(readsst, a)
 
 
-extract(readsst, a)
+ ##extract(readsst)
+ ##extract(readsst, time.resolution = "daily")
+
+
+##extract(readsst, a)
 
 
 @
@@ -263,17 +263,17 @@ aurora$chla <- extract(readchla, aurora[,1:3])
 ##aurora$windmag <- extract(readwind, aurora[,1:3], magonly = TRUE)
 ##aurora$winddir <- extract(readwind, aurora[,1:3], dironly = TRUE)
 
-aurora$currmag <- extract(readcurr, aurora[,1:3], magonly = TRUE)
-aurora$currdir<- extract(readcurr, aurora[,1:3], dironly = TRUE)
+##aurora$currmag <- extract(readcurr, aurora[,1:3], magonly = TRUE)
+##aurora$currdir<- extract(readcurr, aurora[,1:3], dironly = TRUE)
 
-aurora$ssh <- extract(readssh, aurora[,1:3])
-aurora$ssha <- extract(readssh, aurora[,1:3], ssha = TRUE)
+##aurora$ssh <- extract(readssh, aurora[,1:3])
+##aurora$ssha <- extract(readssh, aurora[,1:3], ssha = TRUE)
 
-aurora$ice <- extract(readice, aurora[,1:3])
+##aurora$ice <- extract(readice, aurora[,1:3])
 
 
 ## note this is slightly different, since there's no point in generalizing out time
-aurora$bathy <- extract(readbathy(), aurora[,1:2])
+##aurora$bathy <- extract(readbathy(), aurora[,1:2])
 
 @
 

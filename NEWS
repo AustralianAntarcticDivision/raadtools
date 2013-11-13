@@ -4,6 +4,8 @@
 
 NEW FEATURES
 
+ o added adminmap function to load management region polygons
+
  o added readprod function for Arrigo production estimates
 
  o added monthly time resolution for readsst

@@ -1146,31 +1146,22 @@ readsst <- function(date, time.resolution = c("daily", "monthly"), varname = c("
     }
 
     nfiles <- length(findex)
-
     r <- vector("list", nfiles)
-
-if (time.resolution == "daily") {
-    rtemplate <- raster(files$fullname[findex[1]], varname = varname)
-    if (lon180) rtemplate <- rotate(rtemplate)
-
-
-
-
-
-    for (ifile in seq_len(nfiles)) {
-        r0 <- raster(files$fullname[findex[ifile]], varname = varname)
-        if (lon180) r0 <- rotate(r0)
-        if(cropit) r0 <- crop(r0, cropext)
-        r0[r0 < -2] <- NA
-        r[[ifile]] <- r0
-    }
-
-    ## monthly
-        } else {
-        landmask <- readBin(file.path(datadir, "sst", "oimonth_v2", "lstags.onedeg.dat"), "numeric", size = 4, n = 360 * 180, endian = "big")
-
+    if (time.resolution == "daily") {
+        rtemplate <- raster(files$fullname[findex[1]], varname = varname)
+        if (lon180) rtemplate <- rotate(rtemplate)
         for (ifile in seq_len(nfiles)) {
-             fname <- files$fullname[ifile]
+            r0 <- raster(files$fullname[findex[ifile]], varname = varname)
+            if (lon180) r0 <- rotate(r0)
+            if(cropit) r0 <- crop(r0, cropext)
+            r0[r0 < -2] <- NA
+            r[[ifile]] <- r0
+        }
+    ## monthly
+    } else {
+        landmask <- readBin(file.path(datadir, "sst", "oimonth_v2", "lstags.onedeg.dat"), "numeric", size = 4, n = 360 * 180, endian = "big")
+        for (ifile in seq_len(nfiles)) {
+             fname <- files$fullname[findex[ifile]]
              con <- gzfile(fname, open = "rb")
              version <- readBin(con, "integer", size = 4, n = 1, endian = "big")
              date <-  readBin(con, "integer", size = 4, n = 7, endian = "big")
@@ -1178,27 +1169,25 @@ if (time.resolution == "daily") {
              close(con)
               d[d > 500] <- NA
              d[landmask < 1] <- NA
-
              sst <- flip(raster(t(matrix(d,   360, 180)),
                                 xmn = 0, xmx = 360, ymn = -90, ymx = 90,
                                 crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"), "y")
-
              if (lon180) sst <- rotate(sst)
              if (cropit) sst <- crop(sst,cropext)
-
              r[[ifile]] <- sst
-
-
-
         }
-  if (nfiles > 1) r <- brick(stack(r)) else r <- r[[1L]]
+
+
+
+    }
+
+         if (nfiles > 1) r <- brick(stack(r)) else r <- r[[1L]]
           names(r) <- paste("sst", time.resolution, format(files$date[findex], "%Y%m%d"), sep = "_")
              r <- setZ(r, files$date[findex])
 
              return(r)
 
 
-    }
 }
 
 

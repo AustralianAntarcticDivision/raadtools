@@ -1200,13 +1200,24 @@ readsst <- function(date, time.resolution = c("daily", "monthly"), varname = c("
 ##' @export
 currentsfiles <- function() {
     datadir = getOption("default.datadir")
+    cachefile <- file.path(datadir, "cache", sprintf("currentsfiles_weekly.Rdata"))
+
+    fromCache <- TRUE
+    if (fromCache) {
+       load(cachefile)
+       cfs$fullname <- file.path(datadir, cfs$file)
+       return(cfs)
+    }
     data.source = file.path(datadir, "current", "aviso", "upd", "7d")
     cfiles <- list.files(data.source, pattern = ".nc$", full.names = TRUE)
     datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
     currentdates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
 
-    cfs <- data.frame(file = cfiles, date = currentdates, stringsAsFactors = FALSE)
-    cfs[diff(cfs$date) > 0, ]
+    cfs <- data.frame(file = gsub("^/", "", gsub(datadir, "", cfiles)), date = currentdates, stringsAsFactors = FALSE)
+    cfs <- cfs[diff(cfs$date) > 0, ]
+    save(cfs, file = cachefile)
+    cfs
+
 }
 
 ##' Read AVISO ocean current data from weekly files

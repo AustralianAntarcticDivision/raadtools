@@ -13,6 +13,7 @@ NULL
 
 .possiblepaths <- function() {
     list(default.datadir =  c("//aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data",
+                       "//147.66.8.89/gridded/data",
                        "/Volumes/files/data"))
 }
 .trysetpath <- function() {

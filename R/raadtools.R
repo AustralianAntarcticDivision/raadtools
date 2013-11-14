@@ -12,8 +12,8 @@
 NULL
 
 .possiblepaths <- function() {
-    list(default.datadir =  c("//aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data",
-                       "//147.66.8.89/gridded/data",
+    list(default.datadir =  c("//147.66.8.89/gridded/data",
+                       "//aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data",
                        "/Volumes/files/data"))
 }
 .trysetpath <- function() {
@@ -24,6 +24,7 @@ NULL
         if (!is.na(fi$isdir) & fi$isdir) {
             options(default.datadir = possibles[i])
             success <- TRUE
+            break;
         }
     }
     success

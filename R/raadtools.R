@@ -149,7 +149,7 @@ prodfiles <- function() {
 ##' @param xylim crop or not
 ##' @return RasterLayer or RasterBrick
 ##' @export
-readprod <- function(date, returnfiles = FALSE, time.resolution = "weekly", xylim = NULL) {
+readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfiles = FALSE) {
     ##if (!length(file) == 1) stop("only one file can be read at once")
     ##stopifnot(file.exists(file[1]))
     ##type <- as.character(type[1])
@@ -308,7 +308,7 @@ windfiles <-
 function(data.source = "", time.resolution = c("daily")) {
       datadir <- getOption("default.datadir")
       time.resolution <- match.arg(time.resolution)
-      fromCache <- TRUE
+      fromCache <-TRUE
       if (fromCache) {
           load(file.path(datadir, "cache", sprintf("%s_windfiles.Rdata", time.resolution)))
           wf$ufullname <- file.path(datadir,  wf$ufile)
@@ -328,6 +328,9 @@ function(data.source = "", time.resolution = c("daily")) {
      dates$mon <- 0
      dates <- as.POSIXct(dates)
      wf <- data.frame(ufile = ufiles, vfile = vfiles, date = dates, stringsAsFactors = FALSE)
+      wfU <- .expandFileDateList(file.path(datadir, wf$ufile))
+      wfV <- .expandFileDateList(file.path(datadir, wf$vfile))
+      wf <- data.frame(ufile = gsub("^/", "", gsub(datadir, "", wfU$file)), vfile = gsub("^/", "", gsub(datadir, "", wfV$file)), date = wfU$date, band = wfU$band, stringsAsFactors = FALSE)
      save(wf, file = file.path(datadir, "cache", sprintf("%s_windfiles.Rdata", time.resolution)))
      wf
 
@@ -343,7 +346,7 @@ function(data.source = "", time.resolution = c("daily")) {
 ##' components
 ##' @param dironly return just the direction from the U and V, in degrees N=0, E=90, S=180, W=270
 ##' @param returnfiles ignore options and just return the file names and dates
-##' @param verbose  print messages on progress etc.
+##' @param xylim crop
 ##' @return raster object
 ##' @examples
 ##' \dontrun{
@@ -363,45 +366,73 @@ function(data.source = "", time.resolution = c("daily")) {
 ##'
 ##' }
 ##' @export
-readwind <- function(date, time.resolution = c("daily"),
+readwind <- function(date, time.resolution = c("daily"), xylim = NULL,
                      magonly = FALSE, dironly = FALSE, returnfiles = FALSE,
                      verbose = TRUE) {
 
      time.resolution <- match.arg(time.resolution)
-
     files <- windfiles()
     if (returnfiles) return(files)
 
+
+
      if (missing(date)) date <- min(files$date)
-     ## this won't work for multi-time-slice files
 
-        ##raadtools:::.processDates(date, files$date, time.resolution)
-    findex <- findInterval(timedateFrom(date), files$date)
+    findex <- .processDates(date, files$date, time.resolution)
+##    findex <- findInterval(timedateFrom(date), files$date)
 
-     ## doh!
-    ## date <- files$date[findex]
-
-
-     doy <- as.POSIXlt(date)$yday + 1
+     band <- files$band[findex]
+##     doy <- as.POSIXlt(date)$yday + 1
 
      if (!(magonly | dironly) & length(findex) > 1L) {
          warning("only one time index can be read at once unless magonly or dironly is TRUE")
          findex <- findex[1L]
      }
-    u <- raster(files$ufullname[findex], band = doy)
-    v <- raster(files$vfullname[findex], band = doy)
 
-    if (magonly | dironly) {
-        if (magonly) r <- sqrt(u*u + v*v)
-        if (dironly) r <- (90 - atan2(v, u) * 180/pi) %% 360
-         r <- setZ(r, files$date[findex])
-    } else {
-        r <- brick(u, v)
-        names(r) <- c("U", "V")
-        r <- setZ(r, rep(files$date[findex], 2L))
+
+      if (!(magonly | dironly))
+        rasterfun <- function(x1, x2) {
+            x <- brick(x1, x2)
+            names(x) <- c("U", "V")
+            x
+        }
+    if (magonly)
+        rasterfun <- function(x1, x2) sqrt(x1 * x1 + x2 * x2)
+    if (dironly)
+        rasterfun <- function(x1, x2) (90 - atan2(x2, x1) * 180/pi)%%360
+    cropit <- FALSE
+    if (!is.null(xylim)) {
+        cropit <- TRUE
+        cropext <- extent(xylim)
     }
+    nfiles <- length(findex)
+    r <- vector("list", nfiles)
+    for (ifile in seq_len(nfiles)) {
+        r1 <- raster(files$ufullname[findex[ifile]], band = files$band[findex[ifile]])
+        r2 <- raster(files$vfullname[findex[ifile]], band = files$band[findex[ifile]])
+        r0 <- rasterfun(r1, r2)
+        if (lon180)     r0 <- suppressWarnings(rotate(r0))
+        if (cropit) r0 <- crop(r0, cropext)
+        r[[ifile]] <- r0
 
-    rotate(r)
+    }
+    r <- brick(stack(r))
+    if (magonly | dironly)  r <- setZ(r, date)
+    else r <- setZ(r, rep(date, 2L))
+     names(r) <- sprintf("wind_%s", format(date, "%Y%m%d"))
+
+     r
+
+}
+
+.expandFileDateList <- function(x) {
+    vl <- vector("list", length(x))
+    for (i in seq_along(x)) {
+        b <- brick(x[i])
+        dates <- getZ(b)
+        vl[[i]] <- data.frame(file = rep(x[i], length(dates)), date = dates, band = seq_along(dates))
+    }
+    do.call("rbind", vl)
 }
 
 ##' SST colours

@@ -147,9 +147,10 @@ prodfiles <- function() {
 ##' @param returnfiles if TRUE return just the files from \code{prodfiles}
 ##' @param time.resolution choice of temporal resolution, weekly only
 ##' @param xylim crop or not
+##' @param ... ignored
 ##' @return RasterLayer or RasterBrick
 ##' @export
-readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfiles = FALSE) {
+readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfiles = FALSE, ...) {
     ##if (!length(file) == 1) stop("only one file can be read at once")
     ##stopifnot(file.exists(file[1]))
     ##type <- as.character(type[1])
@@ -183,7 +184,7 @@ readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfile
     r <- vector("list", nfiles)
 
     for (ifile in seq_len(nfiles)) {
-        r0 <- read0(files$file[findex[ifile]])
+        r0 <- read0(files$fullname[findex[ifile]])
         if (cropit)
             r0 <- crop(r0, cropext)
         r[[ifile]] <- r0
@@ -358,6 +359,7 @@ function(data.source = "", time.resolution = c("daily")) {
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param xylim crop
 ##' @param lon180 Pacific or Atlantic
+##' @param ... ignored
 ##' @return raster object
 ##' @examples
 ##' \dontrun{
@@ -378,8 +380,7 @@ function(data.source = "", time.resolution = c("daily")) {
 ##' }
 ##' @export
 readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = TRUE,
-                     magonly = FALSE, dironly = FALSE, returnfiles = FALSE,
-                     verbose = TRUE) {
+                     magonly = FALSE, dironly = FALSE, returnfiles = FALSE, ...) {
 
      time.resolution <- match.arg(time.resolution)
     files <- windfiles()
@@ -430,11 +431,11 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
     r <- brick(stack(r))
     if (magonly | dironly)  {
         r <- setZ(r, date)
-        names(r) <- sprintf("wind_%s", format(date, "%Y%m%d"))
+        names(r) <- sprintf("wind_%s", format(files$date[findex], "%Y%m%d"))
     } else {
 
         r <- setZ(r, rep(date, 2L))
-        names(r) <- sprintf("%swind_%s", c("U", "V"), format(date, "%Y%m%d"))
+        names(r) <- sprintf("%swind_%s", c("U", "V"), format(files$date[findex], "%Y%m%d"))
     }
 
 

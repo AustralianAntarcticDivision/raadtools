@@ -11,7 +11,7 @@ test_that("all file options give existing files, with warnings where appropriate
 
 
           expect_that(file.exists(topofile("ibcso", polar = TRUE)), is_true())
-          expect_that(file.exists(topofile("ibcso", lon180 = FALSE)), is_true())
+          expect_that(file.exists(topofile("ibcso", lon180 = TRUE)), is_true())
           expect_that(file.exists(topofile("smith_sandwell", lon180 = TRUE)), is_true())
 
           expect_that(topofile("ibcso", lon180 = FALSE), gives_warning())

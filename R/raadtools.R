@@ -144,58 +144,54 @@ prodfiles <- function() {
 ##' Arrigo production on Stereographic grid.
 ##' @title Arrigo production data
 ##' @param date date or dates of data to read
-##' @param data.dir location of data repository
+##' @param returnfiles if TRUE return just the files from \code{prodfiles}
+##' @param time.resolution choice of temporal resolution, weekly only
+##' @param xylim crop or not
 ##' @return RasterLayer or RasterBrick
 ##' @export
-readprod <- function(date, data.dir = getOption("default.datadir")) {
+readprod <- function(date, returnfiles = FALSE, time.resolution = "weekly", xylim = NULL) {
     ##if (!length(file) == 1) stop("only one file can be read at once")
     ##stopifnot(file.exists(file[1]))
     ##type <- as.character(type[1])
     ##type <- match.arg(type)
 
-
-
-    pf <- prodfiles()
-    if (missing(date)) date <- min(pf$date)
-    date <- timedateFrom(date)
-    windex <- which.min(abs(date - pf$date))
-    dtime <- abs(difftime(date, pf$date[windex], units = c("days")))
-    if (dtime > 3.5) stop(sprintf("no data file within 3.5 days of %s", format(date)))
-
-
-
-    file <- pf$fullname[windex]
-    proddata <- readBin(file, numeric(), (1280^2), size = 4, endian = "little")
-    proddata[proddata < 0] <- NA
-    ##if (type %in% c("raster", "sp", "image")) {
-    ##    require(raster)
-        ## grid orientation determined by MDSumner@gmail.com
+    read0 <- function(x) {
         proj <- "+proj=stere +lat_0=-90 +lon_0=180 +ellps=sphere"
-        ## projection is centred on 0,0 at 180W, 90S and this number
-        ## is the rectangular extent on either side at 40S
         offset <- 5946335
-        ## build the x/y coordinates as cell centres (raster() sorts out the half-cell offset to get corners)
-        x <- list(x = seq(-offset, offset, length = 1280), y =  seq(-offset, offset, length = 1280), z = matrix(proddata, 1280)[1280:1,])
-        a <- raster(x, crs = proj)
+          proddata <- readBin(x, numeric(), (1280^2), size = 4, endian = "little")
+          proddata[proddata < 0] <- NA
+         x <- list(x = seq(-offset, offset, length = 1280), y =  seq(-offset, offset, length = 1280), z = matrix(proddata, 1280)[1280:1,])
+        raster(x, crs = proj)
 
-        names(a) <- sprintf("prod")
-    a <- setZ(a, date)
-    ##    if (type == "sp") return(as(a, "SpatialGridDataFrame"))
-     ##   if (type == "image") return(as.image.SpatialGridDataFrame(as(a, "SpatialGridDataFrame")))
-     ##   return(a)
-    ##}
-    ##if (type == "native") {
-    ##    coords <- readprodcoords()
-    ##    coords$production <- proddata
-    ##    return(coords)
-   ## }
-    ##if (type == "raw") {
-    ##    return(proddata)
-    ##}
-    ##stop("should never arrive here")
-    ##invisible(NULL)
-   a
+    }
+    datadir = getOption("default.datadir")
+    time.resolution <- match.arg(time.resolution)
 
+    files <- prodfiles()
+    if (returnfiles) return(files)
+
+
+    if (missing(date)) date <- min(files$date)
+    findex <- .processDates(date, files$date, time.resolution)
+    cropit <- FALSE
+    if (!is.null(xylim)) {
+        cropit <- TRUE
+        cropext <- extent(xylim)
+    }
+
+    nfiles <- length(findex)
+    r <- vector("list", nfiles)
+
+    for (ifile in seq_len(nfiles)) {
+        r0 <- read0(files$file[findex[ifile]])
+        if (cropit)
+            r0 <- crop(r0, cropext)
+        r[[ifile]] <- r0
+    }
+    r <- brick(stack(r))
+    names(r) <- sprintf("prod_%s", format(date, "%Y%m%d"))
+
+    setZ(r, date)
 }
 
 

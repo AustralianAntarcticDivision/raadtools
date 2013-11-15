@@ -1022,7 +1022,7 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
                      ...) {
     topo <- match.arg(topo)
 
-    if (lon180 & topo %in% c("geboc_08", "ibcso", "etopo1", "etopo2")) {
+    if (!lon180 & topo %in% c("geboc_08", "ibcso", "etopo1", "etopo2")) {
         tfile <- topofile(topo = topo, polar = FALSE, ...)
         if (is.null(xylim)) res <- rotate(raster(tfile))
     } else {

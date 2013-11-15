@@ -295,6 +295,15 @@ readssh <- function (date, time.resolution = "weekly",
 }
 
 
+.expandFileDateList <- function(x) {
+    vl <- vector("list", length(x))
+    for (i in seq_along(x)) {
+        b <- brick(x[i])
+        dates <- timedateFrom(getZ(b))
+        vl[[i]] <- data.frame(file = rep(x[i], length(dates)), date = dates, band = seq_along(dates))
+    }
+    do.call("rbind", vl)
+}
 
 ##' NCEP2 wind files
 ##'
@@ -308,7 +317,8 @@ windfiles <-
 function(data.source = "", time.resolution = c("daily")) {
       datadir <- getOption("default.datadir")
       time.resolution <- match.arg(time.resolution)
-      fromCache <-TRUE
+      fromCache <- TRUE
+##      fromCache <- FALSE
       if (fromCache) {
           load(file.path(datadir, "cache", sprintf("%s_windfiles.Rdata", time.resolution)))
           wf$ufullname <- file.path(datadir,  wf$ufile)
@@ -347,6 +357,7 @@ function(data.source = "", time.resolution = c("daily")) {
 ##' @param dironly return just the direction from the U and V, in degrees N=0, E=90, S=180, W=270
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param xylim crop
+##' @param lon180 Pacific or Atlantic
 ##' @return raster object
 ##' @examples
 ##' \dontrun{
@@ -366,7 +377,7 @@ function(data.source = "", time.resolution = c("daily")) {
 ##'
 ##' }
 ##' @export
-readwind <- function(date, time.resolution = c("daily"), xylim = NULL,
+readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = TRUE,
                      magonly = FALSE, dironly = FALSE, returnfiles = FALSE,
                      verbose = TRUE) {
 
@@ -417,23 +428,20 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL,
 
     }
     r <- brick(stack(r))
-    if (magonly | dironly)  r <- setZ(r, date)
-    else r <- setZ(r, rep(date, 2L))
-     names(r) <- sprintf("wind_%s", format(date, "%Y%m%d"))
+    if (magonly | dironly)  {
+        r <- setZ(r, date)
+        names(r) <- sprintf("wind_%s", format(date, "%Y%m%d"))
+    } else {
+
+        r <- setZ(r, rep(date, 2L))
+        names(r) <- sprintf("%swind_%s", c("U", "V"), format(date, "%Y%m%d"))
+    }
+
 
      r
 
 }
 
-.expandFileDateList <- function(x) {
-    vl <- vector("list", length(x))
-    for (i in seq_along(x)) {
-        b <- brick(x[i])
-        dates <- getZ(b)
-        vl[[i]] <- data.frame(file = rep(x[i], length(dates)), date = dates, band = seq_along(dates))
-    }
-    do.call("rbind", vl)
-}
 
 ##' SST colours
 ##'

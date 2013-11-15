@@ -190,7 +190,7 @@ readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfile
         r[[ifile]] <- r0
     }
     r <- brick(stack(r))
-    names(r) <- sprintf("prod_%s", format(date, "%Y%m%d"))
+    names(r) <- sprintf("prod_%s", format(files$date[findex], "%Y%m%d"))
 
     setZ(r, date)
 }

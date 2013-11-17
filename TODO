@@ -1,3 +1,7 @@
+- figure out how to mix extract(function, y, ...) with dots arguments for the time.resolution etc. of function, and the dots arguments of extract methods
+
+- something like [x]files to be able to take a datetime-range, and other arguments and it gives back all dates/files in the interval
+
 - unimplement progress counter
 - rewrite sstfiles to return relative filename, needs cache fixing
 - allow filename for resulting brick

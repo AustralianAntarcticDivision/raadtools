@@ -112,6 +112,28 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
        }
  )
 
+
+## ##' @exportMethod extract
+## setMethod("extract", signature(x = 'function', y = 'SpatialPolygons'),
+##           function(x, y, ...) {
+##            .local <- function (x, y, datetimelim, ...) {
+##                ## we need some kind of time limit
+##                if (missing(datetimelim)) {
+
+##                    res <- extract(x(), y, ...)
+##                } else {
+
+##                ## how to differentiate the dots arguments for the read function and extract?
+##                ## will need to process explicitly
+
+##                }
+
+##                res
+##            }
+##        }
+##           )
+
+
 ## useful scenarios for y
 ## data.frame of xyt (assume longlat with subtle test)
 ## SPointsDF with time

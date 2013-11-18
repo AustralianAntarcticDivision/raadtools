@@ -45,13 +45,15 @@ NULL
 }
 
 
-##' Load definitions of habitat assessment regions.
+
+##' Load definitions of administrative regions.
 ##'
 ##' The following maps are available, with modifier "LL" for
 ##' unprojected versions (modified for the dateline wrap).
 ##'
 ##' \describe{
 ##' \item{sectors}{The basic Southern Ocean sectors, each other layer derives from these}
+##' \item{ssrus}{The CCAMLR SSRU boundaries}
 ##' \item{habitatAssessFull}{The sectors plus physical regions}
 ##' \item{habitatAsses}{The sectors plus physical regions, with non-ocean removed}}
 ##' @title administrative polygons
@@ -59,14 +61,14 @@ NULL
 ##' @param ... ignored
 ##' @return \code{SpatialPolygonsDataFrame}
 ##' @export
-adminmap <- function(map = c("sectors",
+adminmap <- function(map = c("sectors", "ssrus",
                      "habitatAssess", "habitatAssessLL",
                      "habitatAssessFull", "habitatAssessFullLL"
                      ), ...) {
     map <- match.arg(map)
     res <- switch(map,
                   sectors = .admin("SectorAreas_PS"),
-
+                  ssrus = .admin("ssru"),
                   habitatAssess = .admin("BioregionCLIP"),
                   habitatAssessLL = .admin("BioregionCLIP_Longlat"),
                   habitatAssessFull = .admin("BioregionORIG"),
@@ -75,7 +77,7 @@ adminmap <- function(map = c("sectors",
     res
 }
 
-.admin <- function(layer = c("SectorAreas_PS", "BioregionORIG_Longlat", "BioregionCLIP", "BioregionCLIP_Longlat", "BioregionORIG"), fromCache = TRUE) {
+.admin <- function(layer = c("SectorAreas_PS", "ssru", "BioregionORIG_Longlat", "BioregionCLIP", "BioregionCLIP_Longlat", "BioregionORIG"), fromCache = TRUE) {
     datapath <- "\\\\aad.gov.au/files/ERM/Projects/HabitatAssessment/output_layers/Sectors"
 
     cachepath <- file.path(getOption("default.datadir"), "cache", "vector_cache")

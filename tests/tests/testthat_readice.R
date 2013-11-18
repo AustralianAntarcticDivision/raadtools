@@ -24,12 +24,12 @@ test_that("ice data is returned as a raster object", {
       })
 
 test_that("dates not available within 1.5 days give error", {
-    expect_that(readice("1978-10-18"), throws_error("no data file within"))
+    expect_that(readice("1975-10-18"), throws_error("no data file within"))
 })
 
-test_that("dates  within 1.5 months succeed", {
-    expect_that(readice("1978-10-18", time.resolution = "monthly"), is_a("RasterLayer"))
-})
+##test_that("dates  within 1.5 months succeed", {
+##    expect_that(readice("2002-10-18", time.resolution = "monthly"), is_a("RasterLayer"))
+##})
 
 test_that("input data can be Date",
           expect_that(readice(as.Date("2000-01-01")), is_a("RasterLayer"))

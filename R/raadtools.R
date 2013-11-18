@@ -321,8 +321,8 @@ windfiles <-
 function(data.source = "", time.resolution = c("daily")) {
       datadir <- getOption("default.datadir")
       time.resolution <- match.arg(time.resolution)
-      fromCache <- TRUE
-##      fromCache <- FALSE
+##      fromCache <- TRUE
+     fromCache <- FALSE
       if (fromCache) {
           load(file.path(datadir, "cache", sprintf("%s_windfiles.Rdata", time.resolution)))
           wf$ufullname <- file.path(datadir,  wf$ufile)

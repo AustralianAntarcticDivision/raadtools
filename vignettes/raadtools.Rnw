@@ -86,6 +86,7 @@ library(help = raadtools)
 
 Read a simple example from each of the data types mentioned above and plot.
 <<read-other,echo=TRUE,output=FALSE>>=
+
 chla <- readchla("2009-10-01")
 curr <- readcurr("2012-01-09", magonly = TRUE, lon180 = FALSE)
 sst <- readsst(c("2000-01-01", "2009-06-08"))
@@ -208,7 +209,7 @@ geb <- readtopo("gebco_08", xylim = extent(150, 220, -75, -60))
 
 \section{Extract spatio-temporal data from read functions}
 \label{sec:extractfun}
-<<spatio-temporal>>=
+<<spatio-temporal,eval=FALSE,echo=FALSE>>=
 
 library(raadtools)
 
@@ -253,11 +254,11 @@ a$time <- sort(as.Date("1985-01-01") + sample(c(0, 0, 0, 10, 100, 50), nrow(a), 
 
 @
 
-<<example-aurora>>=
+<<example-aurora, eval=FALSE,echo=FALSE>>=
 data(aurora)
 
-aurora$sst <- extract(readsst, aurora[,1:3])
-aurora$chla <- extract(readchla, aurora[,1:3])
+aurora$sst <- extract(readsst, aurora)
+aurora$chla <- extract(readchla, aurora)
 
 ## nothing for 2013 yet
 ##aurora$windmag <- extract(readwind, aurora[,1:3], magonly = TRUE)

@@ -35,7 +35,7 @@ NULL
 .onAttach <- function(libname, pkgname) {
     pathwasset <- .trysetpath()
     if (!pathwasset) {
-        packageStartupMessage("Warning: could not find data repository at any of",
+        packageStartupMessage("Warning: could not find data repository at any of\n\n",
             paste(normalizePath(.possiblepaths()[["default.datadir"]], mustWork = FALSE), collapse = "\n"), sep = "\n\n")
 
         packageStartupMessage("Consider setting the option for your system\n")

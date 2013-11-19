@@ -1,5 +1,7 @@
   CHANGES IN raadtools VERSION 0.0-8
 
+o added function readmld
+
 o sst.pal and chl.pal gain an alpha argument
 
 o added SSRUs CCAMLR polygons to adminmap suite

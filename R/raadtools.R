@@ -324,7 +324,7 @@ function(data.source = "", time.resolution = c("daily")) {
       datadir <- getOption("default.datadir")
       time.resolution <- match.arg(time.resolution)
 ##      fromCache <- TRUE
-     fromCache <- FALSE
+     fromCache <- TRUE
       if (fromCache) {
           load(file.path(datadir, "cache", sprintf("%s_windfiles.Rdata", time.resolution)))
           wf$ufullname <- file.path(datadir,  wf$ufile)
@@ -444,6 +444,10 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
     }
 
 
+     ## get alignment right (put this in raster?)
+     extent(r) <- extent(c(xmin(r) + res(r)[1]/2, xmax(r) + res(r)[1]/2,
+                           ymin(r), ymax(r)))
+
      r
 
 }
@@ -454,10 +458,11 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
 ##' @title SST colours
 ##' @param x a vector of data values or a single number
 ##' @param palette logical, if \code{TRUE} return a list with matching colours and values
+##' @alpha value in 0,255 to specify transparency
 ##' @references Derived from \url{"http://oceancolor.gsfc.nasa.gov/DOCS/palette_sst.txt}.
 ##' @return colours, palette, or function, see Details
 ##' @export
-sst.pal <- function(x, palette = FALSE) {
+sst.pal <- function(x, palette = FALSE, alpha = 0) {
 
     ##pal <- read.table("http://oceancolor.gsfc.nasa.gov/DOCS/palette_sst.txt", header = TRUE, colClasses = "integer", comment.char = "")
     ##cols <- rgb(pal[,2], pal[,3], pal[,4], maxColorValue = 255)
@@ -507,11 +512,16 @@ sst.pal <- function(x, palette = FALSE) {
 "#BEAEAE", "#BFB2B2", "#C1B6B6", "#C3B9B9", "#C5BDBD", "#C7C0C1",
 "#C8C5C5", "#CAC8C9", "#CCCCCC", "#000000")
 
+    hexalpha <- as.hexmode(alpha)
+    if (nchar(hexalpha) == 1L) hexalpha <- paste(rep(hexalpha, 2L), collapse = "")
+    cols <- paste0(cols, hexalpha)
+
      if (palette) return(list(breaks = breaks, cols = cols))
+
     if (missing(x)) return(colorRampPalette(cols))
 
     if (length(x) == 1L) {
-        return(colorRampPalette(cols)(x))
+        return(paste0(colorRampPalette(cols)(x), hexalpha))
     } else {
         return(cols[findInterval(x, breaks)])
     }

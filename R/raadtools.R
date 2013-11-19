@@ -458,7 +458,7 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
 ##' @title SST colours
 ##' @param x a vector of data values or a single number
 ##' @param palette logical, if \code{TRUE} return a list with matching colours and values
-##' @param alpha value in 0,255 to specify transparency
+##' @param alpha value in 0,255 to specify opacity
 ##' @references Derived from \url{"http://oceancolor.gsfc.nasa.gov/DOCS/palette_sst.txt}.
 ##' @return colours, palette, or function, see Details
 ##' @export
@@ -543,7 +543,7 @@ sst.pal <- function(x, palette = FALSE, alpha = 0) {
 ##' @title Ocean colour colours for chlorophyll-a.
 ##' @param x a vector of data values or a single number
 ##' @param palette logical, if \code{TRUE} return a list with matching colours and values
-##' @param alpha value in 0,255 to specify transparency
+##' @param alpha value in 0,255 to specify opacity
 ##' @references Derived from \url{http://oceancolor.gsfc.nasa.gov/DOCS/palette_chl_etc.txt}.
 ##' @return colours, palette, or function, see Details
 ##' @export

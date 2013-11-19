@@ -439,7 +439,7 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
         names(r) <- sprintf("wind_%s", format(files$date[findex], "%Y%m%d"))
     } else {
 
-        r <- setZ(r, rep(date, 2L))l
+        r <- setZ(r, rep(date, 2L))
         names(r) <- sprintf("%swind_%s", c("U", "V"), format(files$date[findex], "%Y%m%d"))
     }
 

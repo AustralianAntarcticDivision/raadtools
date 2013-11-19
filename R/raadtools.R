@@ -563,7 +563,7 @@ sst.pal <- function(x, palette = FALSE, alpha = 0) {
 ##' ## just n colours
 ##' plot(chl, col = chl.pal(18))
 ##' }
-chl.pal <- function(x, palette = FALSE) {
+chl.pal <- function(x, palette = FALSE, alpha = 0) {
 
     ##pal <- read.table("http://oceancolor.gsfc.nasa.gov/DOCS/palette_chl_etc.txt", header = TRUE, colClasses = "integer", comment.char = "")
     ##cols <- rgb(pal[,2], pal[,3], pal[,4], maxColorValue = 255)
@@ -613,11 +613,15 @@ chl.pal <- function(x, palette = FALSE) {
 "#910000", "#8C0000", "#870000", "#820000", "#7D0000", "#780000",
 "#730000", "#6E0000", "#690000", "#000000")
 
+        hexalpha <- as.hexmode(alpha)
+    if (nchar(hexalpha) == 1L) hexalpha <- paste(rep(hexalpha, 2L), collapse = "")
+    cols <- paste0(cols, hexalpha)
+
     if (palette) return(list(breaks = breaks, cols = cols))
     if (missing(x)) return(colorRampPalette(cols))
 
     if (length(x) == 1L) {
-        return(colorRampPalette(cols)(x))
+        return(paste0(colorRampPalette(cols)(x), hexalpha))
     } else {
         return(cols[findInterval(x, breaks)])
     }

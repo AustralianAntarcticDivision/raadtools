@@ -439,7 +439,7 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
         names(r) <- sprintf("wind_%s", format(files$date[findex], "%Y%m%d"))
     } else {
 
-        r <- setZ(r, rep(date, 2L))
+        r <- setZ(r, rep(date, 2L))l
         names(r) <- sprintf("%swind_%s", c("U", "V"), format(files$date[findex], "%Y%m%d"))
     }
 
@@ -462,7 +462,7 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
 ##' @references Derived from \url{"http://oceancolor.gsfc.nasa.gov/DOCS/palette_sst.txt}.
 ##' @return colours, palette, or function, see Details
 ##' @export
-sst.pal <- function(x, palette = FALSE, alpha = 0) {
+sst.pal <- function(x, palette = FALSE, alpha = 255) {
 
     ##pal <- read.table("http://oceancolor.gsfc.nasa.gov/DOCS/palette_sst.txt", header = TRUE, colClasses = "integer", comment.char = "")
     ##cols <- rgb(pal[,2], pal[,3], pal[,4], maxColorValue = 255)
@@ -564,7 +564,7 @@ sst.pal <- function(x, palette = FALSE, alpha = 0) {
 ##' ## just n colours
 ##' plot(chl, col = chl.pal(18))
 ##' }
-chl.pal <- function(x, palette = FALSE, alpha = 0) {
+chl.pal <- function(x, palette = FALSE, alpha = 255) {
 
     ##pal <- read.table("http://oceancolor.gsfc.nasa.gov/DOCS/palette_chl_etc.txt", header = TRUE, colClasses = "integer", comment.char = "")
     ##cols <- rgb(pal[,2], pal[,3], pal[,4], maxColorValue = 255)

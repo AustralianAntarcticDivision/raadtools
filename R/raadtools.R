@@ -16,12 +16,16 @@ NULL
                        "//aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data",
                        "/Volumes/files/data"))
 
-    if (Sys.info()["nodename"] == "ICT-42618") a$default.datadir <- c("E:/repo/data", a$default.datadir)
+    ##if (Sys.info()["nodename"] == "ICT-42618") a$default.datadir <- c("E:/repo/data", a$default.datadir)
     a
 }
 .trysetpath <- function() {
     possibles <- .possiblepaths()[["default.datadir"]]
     success <- FALSE
+    existing <- getOption("default.datadir")
+    if (!is.null(existing)) {
+        possibles <- c(existing, possibles)
+    }
     for (i in seq_along(possibles)) {
         fi <- file.info(possibles[i])
         if (!is.na(fi$isdir) & fi$isdir) {
@@ -489,11 +493,11 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
 ##' @title SST colours
 ##' @param x a vector of data values or a single number
 ##' @param palette logical, if \code{TRUE} return a list with matching colours and values
-##' @param alpha value in 0,255 to specify opacity
+##' @param alpha value in 0,1 to specify opacity
 ##' @references Derived from \url{"http://oceancolor.gsfc.nasa.gov/DOCS/palette_sst.txt}.
 ##' @return colours, palette, or function, see Details
 ##' @export
-sst.pal <- function(x, palette = FALSE, alpha = 255) {
+sst.pal <- function(x, palette = FALSE, alpha = 1) {
 
     ##pal <- read.table("http://oceancolor.gsfc.nasa.gov/DOCS/palette_sst.txt", header = TRUE, colClasses = "integer", comment.char = "")
     ##cols <- rgb(pal[,2], pal[,3], pal[,4], maxColorValue = 255)
@@ -543,7 +547,7 @@ sst.pal <- function(x, palette = FALSE, alpha = 255) {
 "#BEAEAE", "#BFB2B2", "#C1B6B6", "#C3B9B9", "#C5BDBD", "#C7C0C1",
 "#C8C5C5", "#CAC8C9", "#CCCCCC", "#000000")
 
-    hexalpha <- as.hexmode(alpha)
+    hexalpha <- as.hexmode(round(255 * alpha))
     if (nchar(hexalpha) == 1L) hexalpha <- paste(rep(hexalpha, 2L), collapse = "")
     cols <- paste0(cols, hexalpha)
 
@@ -574,7 +578,7 @@ sst.pal <- function(x, palette = FALSE, alpha = 255) {
 ##' @title Ocean colour colours for chlorophyll-a.
 ##' @param x a vector of data values or a single number
 ##' @param palette logical, if \code{TRUE} return a list with matching colours and values
-##' @param alpha value in 0,255 to specify opacity
+##' @param alpha value in 0,1 to specify opacity
 ##' @references Derived from \url{http://oceancolor.gsfc.nasa.gov/DOCS/palette_chl_etc.txt}.
 ##' @return colours, palette, or function, see Details
 ##' @export
@@ -595,7 +599,7 @@ sst.pal <- function(x, palette = FALSE, alpha = 255) {
 ##' ## just n colours
 ##' plot(chl, col = chl.pal(18))
 ##' }
-chl.pal <- function(x, palette = FALSE, alpha = 255) {
+chl.pal <- function(x, palette = FALSE, alpha = 1) {
 
     ##pal <- read.table("http://oceancolor.gsfc.nasa.gov/DOCS/palette_chl_etc.txt", header = TRUE, colClasses = "integer", comment.char = "")
     ##cols <- rgb(pal[,2], pal[,3], pal[,4], maxColorValue = 255)
@@ -645,7 +649,7 @@ chl.pal <- function(x, palette = FALSE, alpha = 255) {
 "#910000", "#8C0000", "#870000", "#820000", "#7D0000", "#780000",
 "#730000", "#6E0000", "#690000", "#000000")
 
-        hexalpha <- as.hexmode(alpha)
+        hexalpha <- as.hexmode(round(255 * alpha))
     if (nchar(hexalpha) == 1L) hexalpha <- paste(rep(hexalpha, 2L), collapse = "")
     cols <- paste0(cols, hexalpha)
 

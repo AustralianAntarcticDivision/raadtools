@@ -14,7 +14,8 @@ NULL
 .possiblepaths <- function() {
     a <- list(default.datadir =  c("//147.66.8.89/gridded/data",
                        "//aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data",
-                       "/Volumes/files/data"))
+                       "/Volumes/files/data",
+              "/mnt/raadtools"))
 
     ##if (Sys.info()["nodename"] == "ICT-42618") a$default.datadir <- c("E:/repo/data", a$default.datadir)
     a
@@ -56,8 +57,8 @@ NULL
 ##' @param xylim extent specification
 ##' @param ... ignored
 ##' @return RasterBrick
-##' @export
 ##' @importFrom raster subset
+##' @export
 readmld <- function(date, xylim = NULL, returnfiles = FALSE, ...) {
     if (missing(date)) date <- seq(as.Date("2013-01-01"), by = "1 month", length = 12L)
 

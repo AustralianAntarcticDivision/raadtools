@@ -96,6 +96,8 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
 
               time.resolution <- .determine.time.resolution(files$date)
 
+              ## manage climatology exceptions
+              ## . . .dunno yet
               findex <- suppressWarnings(.processDates(times, files$date, timeres = time.resolution))
               date <- files$date[findex]
 

@@ -669,9 +669,9 @@ chl.pal <- function(x, palette = FALSE, alpha = 1) {
 
 ##' Read Chlorophyll-a for the Southern Ocean
 ##'
-##' Ocean colour Chlorophyll-a data read from the Johnson Improved
+##' Ocean colour Chlorophyll-a data. Default is to read from the Johnson Improved
 ##' chlorophyll-a estimates using Southern Ocean-specific calibration
-##' algorithms.
+##' algorithms, but the original MODIS and SeaWIFs products are also available via the argument \code{product}.
 ##'
 ##' Dates are matched to file names by finding the nearest match in
 ##' time within a short duration. If \code{date} is greater than
@@ -679,6 +679,7 @@ chl.pal <- function(x, palette = FALSE, alpha = 1) {
 ##'
 ##' @param date date or dates of data to read, see Details
 ##' @param time.resolution time resolution data to read, weekly or monthly
+##' @param product choice of product, see Details
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param verbose print messages on progress etc.
@@ -700,15 +701,17 @@ chl.pal <- function(x, palette = FALSE, alpha = 1) {
 ##' }
 ##' @export
 readchla <- function(date, time.resolution = c("weekly", "monthly"),
-                    xylim = NULL,
+                     product = c("johnson", "oceancolor"),
+                     xylim = NULL,
+
                     ##lon180 = TRUE,
                     returnfiles = FALSE,
                     verbose = TRUE,
                     ...) {
 
   time.resolution <- match.arg(time.resolution)
-
-  files <- chlafiles(time.resolution = time.resolution)
+  product <- match.arg(product)
+  files <- chlafiles(time.resolution = time.resolution, product = product)
   if (returnfiles) return(files)
 
   if (missing(date)) date <- min(files$date)
@@ -716,7 +719,8 @@ readchla <- function(date, time.resolution = c("weekly", "monthly"),
   findex <- .processDates(date, files$date, time.resolution)
   date <- files$date[findex]
 
-  rtemplate <- raster(files$fullname[findex[1]])
+
+  rtemplate <- if (product == "oceancolor") raster(files$fullname[findex[1L]], band = files$band[findex[1L]]) else raster(files$fullname[findex[1L]])
   ##if (lon180) rtemplate <- rotate(rtemplate)
 
   ## process xylim
@@ -731,7 +735,7 @@ readchla <- function(date, time.resolution = c("weekly", "monthly"),
   r <- vector("list", nfiles)
 
   for (ifile in seq_len(nfiles)) {
-    r0 <- raster(files$fullname[findex[ifile]])
+    r0 <- if (product == "oceancolor") raster(files$fullname[findex[ifile]], band = files$band[findex[ifile]]) else raster(files$fullname[findex[ifile]])
     ##if (lon180) r0 <- rotate(r0)
     if(cropit) r0 <- crop(r0, cropext)
     ## r0[r0 < -2] <- NA
@@ -788,13 +792,15 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
   ## now oceancolor
 
  for (i in seq_along(tr)) {
-      dirpath <- file.path("chl", "oceancolor", c("modis", "seawifs"), tr[i])
+      dirpath <- file.path("chl", "oceancolor", c("modis", "seawifs"), tr[i], "netcdf")
 
-      fs <- gsub(datadir, "", list.files(file.path(datadir, dirpath), full.names = TRUE))
+      fs <- list.files(file.path(datadir, dirpath), full.names = TRUE)
+      xfs <- .expandFileDateList(x$fullname)
+      fs <- gsub(datadir, "", xfs$file)
       fs <- gsub("^/", "", fs)
 
-      dates <- timedateFrom(strptime(substr(basename(fs), 2, 8), "%Y%j"))
-      chlf <- data.frame(file = fs, date = dates,  stringsAsFactors = FALSE)[order(dates), ]
+      dates <- xfs$date  ##timedateFrom(strptime(substr(basename(fs), 2, 8), "%Y%j"))
+      chlf <- data.frame(file = fs, date = dates,  band = xfs$band, stringsAsFactors = FALSE)[order(dates), ]
 
       save(chlf, file = file.path(datadir, "cache", sprintf("oceancolor_%s_chlafiles.Rdata", names(tr[i]))))
   }

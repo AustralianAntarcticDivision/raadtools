@@ -1,5 +1,8 @@
   CHANGES IN raadtools VERSION 0.0-8
 
+o readchla gains a product argument, to add "oceancolor" for the
+original global MODIS and SeaWIFs algorithm
+
 o added function readmld
 
 o sst.pal and chl.pal gain an alpha argument

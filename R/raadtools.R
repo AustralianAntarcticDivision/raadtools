@@ -809,7 +809,6 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
 
 
 
-
 ##' Load spatial map of fronts data.
 ##'
 ##' Currently ORSI is the only supported layer.
@@ -1521,7 +1520,7 @@ readcurr <- function(date,
         if (all(deltatest)) stop(sprintf("no data file within %.1f days of %s", daytest, format(querydate)))
         if (any(deltatest)) {
             warning(sprintf("%i input dates have no corresponding data file within %f days of available files", sum(deltatest), daytest))
-            index <- index[deltatest]
+            index <- index[!deltatest]
         }
         index
     }
@@ -1671,6 +1670,44 @@ readice <- function(date,
     r <- setZ(r, files$date[findex])
     r
 }
+
+
+
+## readfronts <- function(date,
+##                     time.resolution = c("weekly"),
+##                     product = c("sokolov"),
+##                     xylim = NULL,
+##                        returnfiles = FALSE, ...) {
+##        datadir = getOption("default.datadir")
+##     time.resolution <- match.arg(time.resolution)
+
+##     product <- match.arg(product)
+##          file <- file.path(datadir, "fronts", "ACCfronts.nc")
+##       wks <- seq(timedateFrom("1992-10-14"), by = "7 days", length = 854)
+##     ## get file names and dates and full path
+##     files <- .loadfiles(product, time.resolution = time.resolution)
+
+
+##   sokolovdates <- seq(as.POSIXct("1992-10-14 12:00:00", tz = "GMT"), length = 854, by = "1 week")
+##   date <- timedateFrom(date)
+##   windex <- which.min(abs(date[1] - sokolovdates))
+
+##   dtime <- abs(difftime(date, sokolovdates[windex], units = c("days")))
+##   if (dtime > 3.5) stop("No valid data found within 3.5 days of", date)
+##   extreme.points <- as.matrix(expand.grid(c(-180, 180), c(-82, -30.24627)))
+##   merc.proj <- "+proj=merc +ellps=WGS84 +over"
+##   library(rgdal)
+##   require(raster)
+##   epoints.merc <- project(extreme.points, merc.proj)
+
+##   r <- rotate(raster(file, band = windex))
+##   projection(r) <- "+proj=merc +datum=WGS84"
+##   extent(r) <- extent(bbox(epoints.merc))
+##   r <- setZ(r, date)
+##   r
+## }
+
+
 
 #r <- readice("1995-01-01", dataproduct = "ssmi")
 #r1 <- readice("1995-01-01")

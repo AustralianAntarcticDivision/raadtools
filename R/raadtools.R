@@ -49,15 +49,17 @@ NULL
     }
 }
 
-##' Read the Sallée Mixed layer depth climatology.
+##' Read the \enc{Sallée}{Sallee} Mixed layer depth climatology.
 ##'
 ##' http://soki.aad.gov.au/display/Data/Mixed+layer+depth
 ##' @title Mixed Layer Depth
 ##' @param date date to extract, can only be a climatology month
 ##' @param xylim extent specification
+##' @param returnfiles return the file details only
 ##' @param ... ignored
 ##' @return RasterBrick
 ##' @importFrom raster subset
+##' @encoding ISO-8859-2
 ##' @export
 readmld <- function(date, xylim = NULL, returnfiles = FALSE, ...) {
     if (missing(date)) date <- seq(as.Date("2013-01-01"), by = "1 month", length = 12L)
@@ -76,6 +78,7 @@ readmld <- function(date, xylim = NULL, returnfiles = FALSE, ...) {
 .loadMLD <- function() {
     p <- file.path(getOption("default.datadir"), "cache", "sallee_mld2013.Rdata")
     if (!file.exists(p)) return(NULL)
+    mld <- NULL
     load(p)
     mld
 }
@@ -795,7 +798,7 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
       dirpath <- file.path("chl", "oceancolor", c("modis", "seawifs"), tr[i], "netcdf")
 
       fs <- list.files(file.path(datadir, dirpath), full.names = TRUE)
-      xfs <- .expandFileDateList(x$fullname)
+      xfs <- .expandFileDateList(fs)
       fs <- gsub(datadir, "", xfs$file)
       fs <- gsub("^/", "", fs)
 
@@ -1680,9 +1683,9 @@ readice <- function(date,
 ##' @param time.resolution time resoution data to read, daily or monthly
 ##' @param product choice of product, see Details
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
-##' @param if TRUE, data originally in Pacific view will be returned in Atlantic view (-180:180)
+##' @param lon180 if TRUE, data originally in Pacific view will be returned in Atlantic view (-180:180)
 ##' @param returnfiles ignore options and just return the file names and dates
-##' @param RAT if \code{TRUE} data is returned with region names as a raster attribute table on the gridded data, see \code[raster]{\link{ratify}}
+##' @param RAT if \code{TRUE} data is returned with region names as a raster attribute table on the gridded data, see \code{\link[raster]{ratify}}
 ##' @param ... reserved for future use, currently ignored
 ##' @export
 ##' @return \code{\link[raster]{raster}} object

@@ -1672,40 +1672,76 @@ readice <- function(date,
 }
 
 
+##' Read data from the Sokolov/Rintoul Southern Ocean fronts analysis.
+##'
+##'
+##' Sokolov Rintoul
+##' @param date date or dates of data to read, see Details
+##' @param time.resolution time resoution data to read, daily or monthly
+##' @param product choice of product, see Details
+##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
+##' @param if TRUE, data originally in Pacific view will be returned in Atlantic view (-180:180)
+##' @param returnfiles ignore options and just return the file names and dates
+##' @param RAT if \code{TRUE} data is returned with region names as a raster attribute table on the gridded data, see \code[raster]{\link{ratify}}
+##' @param ... reserved for future use, currently ignored
+##' @export
+##' @return \code{\link[raster]{raster}} object
+readfronts <- function(date,
+                    time.resolution = c("weekly"),
+                    product = c("sokolov"),
+                    xylim = NULL,
+                       lon180 = TRUE,
+                       returnfiles = FALSE, RAT = TRUE, ...) {
+       datadir = getOption("default.datadir")
+    time.resolution <- match.arg(time.resolution)
 
-## readfronts <- function(date,
-##                     time.resolution = c("weekly"),
-##                     product = c("sokolov"),
-##                     xylim = NULL,
-##                        returnfiles = FALSE, ...) {
-##        datadir = getOption("default.datadir")
-##     time.resolution <- match.arg(time.resolution)
-
-##     product <- match.arg(product)
-##          file <- file.path(datadir, "fronts", "ACCfronts.nc")
-##       wks <- seq(timedateFrom("1992-10-14"), by = "7 days", length = 854)
-##     ## get file names and dates and full path
-##     files <- .loadfiles(product, time.resolution = time.resolution)
+    product <- match.arg(product)
+       file <- file.path(datadir, "fronts", "ACCfronts.nc")
+      wks <- seq(timedateFrom("1992-10-14"), by = "7 days", length = 854)
+    ## get file names and dates and full path
+    files <- data.frame(file = file.path("fronts", "ACCfronts.nc"), fullname = file.path(datadir, "fronts", "ACCfronts.nc"),
+                        date = wks, band = seq_along(wks))
 
 
-##   sokolovdates <- seq(as.POSIXct("1992-10-14 12:00:00", tz = "GMT"), length = 854, by = "1 week")
-##   date <- timedateFrom(date)
-##   windex <- which.min(abs(date[1] - sokolovdates))
 
-##   dtime <- abs(difftime(date, sokolovdates[windex], units = c("days")))
-##   if (dtime > 3.5) stop("No valid data found within 3.5 days of", date)
-##   extreme.points <- as.matrix(expand.grid(c(-180, 180), c(-82, -30.24627)))
-##   merc.proj <- "+proj=merc +ellps=WGS84 +over"
-##   library(rgdal)
-##   require(raster)
-##   epoints.merc <- project(extreme.points, merc.proj)
 
-##   r <- rotate(raster(file, band = windex))
-##   projection(r) <- "+proj=merc +datum=WGS84"
-##   extent(r) <- extent(bbox(epoints.merc))
-##   r <- setZ(r, date)
-##   r
-## }
+
+       ##frontname <- c("sBdy", "SACCF_S", "SACCF_N", "PF_S", "PF_M", "PF_N", "SAF_S",
+       ##          "SAF_M", "SAF_N", "SAZ_S", "SAZ_M", "SAZ_N")
+
+       if (returnfiles) return(files)
+
+       if (missing(date)) date <- min(files$date)
+
+       findex <- .processDates(date, files$date, time.resolution)
+       date <- date[findex]
+       proj <- "+proj=merc +ellps=WGS84"
+       ##extreme.points <- as.matrix(expand.grid(c(-180, 180), c(-82, -30.24627)))
+       ##epoints.merc <- project(extreme.points, proj)
+       epoints.merc <- structure(c(-20037508, 20037508, -20037508, 20037508, -16925422,
+-16925422, -3513725, -3513725), .Dim = c(4L, 2L))
+
+
+       r <- if (length(findex) == 1L) raster(file, band = findex) else  brick(stack(file, bands = findex))
+       if (lon180)  r <- rotate(r)
+
+       projection(r) <- proj
+       extent(r) <- extent(bbox(epoints.merc))
+       ##r <- setZ(r, date)
+        ## lots of cells are wasted with nodata
+       e <- new("Extent", xmin = -20037508, xmax = 20037508, ymin = -11087823.8567493 , ymax = -3513725)
+       if (!is.null(xylim)) r <- crop(r, extent(xylim)) else r <- crop(r, e)
+
+             if (RAT) {
+           rat <- data.frame(ID = 0:12, name = c("south of sBdy", "between SACCF-S & sBdy", "SACCF-N & SACCF-S",
+"PF-S & SACCF-N", "PF-M & PF-S", "PF-N & PF-M", "SAF-S & PF-N",
+"SAF-M & SAF-S", "SAF-N & SAF-M", "SAZ-S & SAF-N", "SAZ-M & SAZ-S",
+"SAZ-N & SAZ-M", "north of SAZ-N"))
+           levels(r) <- rat
+
+       }
+       r
+}
 
 
 

@@ -1,5 +1,7 @@
   CHANGES IN raadtools VERSION 0.0-8
 
+o new function readfronts to return layer/s from the Sokolov/Rintoul fronts
+
 o readchla gains a product argument, to add "oceancolor" for the
 original global MODIS and SeaWIFs algorithm
 

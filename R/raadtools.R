@@ -1743,7 +1743,7 @@ readfronts <- function(date,
            levels(r) <- rat
 
        }
-       r
+       setZ(r, date)
 }
 
 

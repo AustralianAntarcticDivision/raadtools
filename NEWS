@@ -1,3 +1,7 @@
+  CHANGES IN raadtools VERSION 0.0-9
+
+o fixed bug in readfronts
+
   CHANGES IN raadtools VERSION 0.0-8
 
 o new function readfronts to return layer/s from the Sokolov/Rintoul fronts

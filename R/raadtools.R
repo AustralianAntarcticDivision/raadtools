@@ -1713,6 +1713,12 @@ readice <- function(date,
     .readSSMI <- function(fname) {
         x <- raster(fname, varname = "concentration")
         x <- flip(x, "y")
+        if (!setNA) {
+            x[is.na(x)] <- -127
+        } else {
+            x[x > 100 | x < 1] <- NA
+        }
+
         extent(x) <- extent(rtemplate)
         x
 

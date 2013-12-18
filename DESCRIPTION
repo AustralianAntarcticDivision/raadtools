@@ -15,12 +15,9 @@ Suggests:
     knitr
 LazyData: yes
 VignetteBuilder: knitr
-Version: 0.0-9
+Version: 0.0-10
 Authors@R: person("Michael D.","Sumner", role = c("aut", "cre"), email =
     "Michael.Sumner@aad.gov.au")
 Description: Tools for reading, plotting and manipulating spatial data used at
     the Australian Antarctic Division (AAD).
 License: GPL-3
-Collate:
-    'raadtools.R'
-    'extract.R'

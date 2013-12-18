@@ -290,16 +290,16 @@ readssh <- function (date, time.resolution = "weekly",
     xylim = NULL, lon180 = TRUE, ssha = FALSE,
     returnfiles = FALSE, verbose = TRUE, ...)
 {
-    read0 <- function(x, varname) {
-        xtreme <- 20037508
-        ytreme <- 16925422
-        x <- flip(flip(t(raster(x, varname = varname)), direction = "y"),
-            direction = "x")
-        x[x > 9999] <- NA
-        extent(x) <- extent(0, xtreme * 2, -ytreme, ytreme)
-        projection(x) <- "+proj=merc +ellps=WGS84 +over"
-        x
-    }
+    ## read0 <- function(x, varname) {
+    ##     xtreme <- 20037508
+    ##     ytreme <- 16925422
+    ##     x <- flip(flip(t(raster(x, varname = varname)), direction = "y"),
+    ##         direction = "x")
+    ##     x[x > 9999] <- NA
+    ##     extent(x) <- extent(0, xtreme * 2, -ytreme, ytreme)
+    ##     projection(x) <- "+proj=merc +ellps=WGS84 +over"
+    ##     x
+    ## }
     datadir = getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
 
@@ -322,8 +322,8 @@ readssh <- function (date, time.resolution = "weekly",
     nfiles <- length(findex)
     r <- vector("list", nfiles)
     for (ifile in seq_len(nfiles)) {
-        r0 <- read0(files$file[findex[ifile]], varname = "Grid_0001")
-
+        ##r0 <- read0(files$file[findex[ifile]], varname = "Grid_0001")
+        r0 <- .readAVISO(files$file[findex[ifile]], justone = TRUE)
         if (lon180)
             r0 <- suppressWarnings(rotate(r0))
         if (cropit)
@@ -1322,6 +1322,76 @@ currentsfiles <- function() {
 
 }
 
+
+.readNC <- function(x, varnames) {
+        ncf <- .ncops()
+        nccon <- ncf$open(x)
+        lv <- vector("list", length(varnames))
+        names(lv) <- varnames
+        for (i in seq_along(varnames)) {
+            lv[[i]] <- ncf$getvar(nccon, varnames[i])
+        }
+        ncf$close(nccon)
+        lv
+    }
+
+##. missingNC <- function(x, varname, att) {
+##     ncf <- .ncops()
+##     nccon <- ncf$open(x)
+##     val <- ncf$getatt(nccon, varname, att)$value
+##     ncf$close(nccon)
+##     val
+## }
+
+.readAVISO <- function(x, justone = TRUE) {
+        xtreme <- 20037508
+        ytreme <- 16925422
+        maxvalue <- 90000
+        if(justone) {
+            vs <- c("NbLongitudes", "NbLatitudes", "Grid_0001")
+            x <- .readNC(x, vs)
+
+            names(x) <- c("x", "y", "z")
+            x$x <- seq_along(x$x)
+            x$y <- seq_along(x$y)
+            x$z <- t(x$z)
+            x <- raster(x)
+        } else {
+            vs <- c("NbLongitudes", "NbLatitudes", "Grid_0001", "Grid_0002")
+            x <- .readNC(x, vs)
+
+            names(x) <- c("x", "y", "z", "z2")
+            x$x <- seq_along(x$x)
+            x$y <- seq_along(x$y)
+            x$z <- t(x$z)
+            x$z2 <- t(x$z2)
+            x <- brick(raster(x[1:3]), raster(list(x = x$x, y = x$y, z = x$z2)))
+        }
+
+        x[!x < maxvalue] <- NA
+##        x <- flip(flip(t(raster(x, varname = varname)), direction = "y"), direction = "x")
+        extent(x) <- extent(0, xtreme * 2, -ytreme, ytreme)
+        projection(x) <- "+proj=merc +ellps=WGS84 +over"
+        x
+    }
+
+## what NetCDF support do we have?
+.netcdfpackage <- function() {
+    warninglevel <- getOption("warn")
+    on.exit(options(warn = warninglevel))
+    options(warn = -1)
+    if (suppressPackageStartupMessages(require(ncdf4, quietly = TRUE))) return("ncdf4")
+    if (suppressPackageStartupMessages(require(ncdf, quietly = TRUE))) return("ncdf")
+    if (suppressPackageStartupMessages(require(RNetCDF, quietly = TRUE))) return("RNetCDF")
+    NA
+}
+
+.ncops <- function(package = .netcdfpackage()) {
+    switch(package,
+           ncdf4 = list(open = nc_open, getvar = ncvar_get, getatt = ncatt_get, close = nc_close),
+           ncdf = list(open = open.ncdf, getvar = get.var.ncdf, getatt = att.get.ncdf, close = close.ncdf),
+           RNetCDF = list(open = open.nc, getvar = var.get.nc, getatt = att.get.nc, close = close.nc))
+}
 ##' Read AVISO ocean current data from weekly files
 ##'
 ##' Current data is read from files managed by
@@ -1392,15 +1462,7 @@ readcurr <- function(date,
                      verbose = TRUE,
                      ...) {
 
-     ## function to read just one
-    read0 <- function(x, varname) {
-        xtreme <- 20037508
-        ytreme <- 16925422
-        x <- flip(flip(t(raster(x, varname = varname)), direction = "y"), direction = "x")
-        extent(x) <- extent(0, xtreme * 2, -ytreme, ytreme)
-        projection(x) <- "+proj=merc +ellps=WGS84 +over"
-        x
-    }
+
     datadir = getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
     if (magonly & dironly) warning("only one of magonly and dironly may be used, returning magonly")
@@ -1444,10 +1506,11 @@ readcurr <- function(date,
     nfiles <- length(findex)
     r <- vector("list", nfiles) ##brick(rasterfun(r1, r2), nl = length(findex))
     for (ifile in seq_len(nfiles)) {
-        r1 <- read0(files$fullname[findex[ifile]], varname = "Grid_0001")
-        r2 <- read0(files$fullname[findex[ifile]], varname = "Grid_0002")
+        #r1 <- read0(files$fullname[findex[ifile]], varname = "Grid_0001")
+        #r2 <- read0(files$fullname[findex[ifile]], varname = "Grid_0002")
+        r1 <- .readAVISO(files$fullname[findex[ifile]], justone = FALSE)
 ##        r <- setValues(r, values(rasterfun(r1, r2)), layer = i)
-        r0 <- rasterfun(r1, r2)
+        r0 <- rasterfun(r1[[1]], r1[[2]])
         if (lon180) r0 <- suppressWarnings(rotate(r0))
         if(cropit) r0 <- crop(r0, cropext)
         r[[ifile]] <- r0
@@ -1705,10 +1768,6 @@ readfronts <- function(date,
     files <- data.frame(file = file.path("fronts", "ACCfronts.nc"), fullname = file.path(datadir, "fronts", "ACCfronts.nc"),
                         date = wks, band = seq_along(wks))
 
-
-
-
-
        ##frontname <- c("sBdy", "SACCF_S", "SACCF_N", "PF_S", "PF_M", "PF_N", "SAF_S",
        ##          "SAF_M", "SAF_N", "SAZ_S", "SAZ_M", "SAZ_N")
 
@@ -1717,7 +1776,7 @@ readfronts <- function(date,
        if (missing(date)) date <- min(files$date)
 
        findex <- .processDates(date, files$date, time.resolution)
-       date <- date[findex]
+       date <- files$date[findex]
        proj <- "+proj=merc +ellps=WGS84"
        ##extreme.points <- as.matrix(expand.grid(c(-180, 180), c(-82, -30.24627)))
        ##epoints.merc <- project(extreme.points, proj)
@@ -1725,7 +1784,20 @@ readfronts <- function(date,
 -16925422, -3513725, -3513725), .Dim = c(4L, 2L))
 
 
-       r <- if (length(findex) == 1L) raster(file, band = findex) else  brick(stack(file, bands = findex))
+
+       ## nchelper
+
+       nch <- nchelper(file, varname = "front")
+       arr <- nch[,,findex]
+       ##arr <- subit(nch, , , findex)
+rtemplate <- template = raster(extent(bbox(epoints.merc)), crs = proj, nrows = nrow(arr), ncols = ncol(arr))
+       ##r <- if (length(findex) == 1L) raster(file, band = findex) else  brick(stack(file, bands = findex))
+       r <- if (length(findex == 1L)) {
+           raster(arr, template = rtemplate)
+ }else {
+     brick(arr, xmn = xmin(rtemplate), xmx = xmax(rtemplate), ymn = ymin(rtemplate), ymx = ymax(rtemplate), crs = projection(rtemplate))
+ }
+
        if (lon180)  r <- rotate(r)
 
        projection(r) <- proj
@@ -1745,6 +1817,8 @@ readfronts <- function(date,
        }
        setZ(r, date)
 }
+
+
 
 
 

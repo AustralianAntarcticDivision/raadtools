@@ -1772,7 +1772,7 @@ readfronts <- function(date,
       wks <- seq(timedateFrom("1992-10-14"), by = "7 days", length = 854)
     ## get file names and dates and full path
     files <- data.frame(file = file.path("fronts", "ACCfronts.nc"), fullname = file.path(datadir, "fronts", "ACCfronts.nc"),
-                        date = wks, band = seq_along(wks))
+                        date = wks, band = seq_along(wks), stringsAsFactors = FALSE)
 
        ##frontname <- c("sBdy", "SACCF_S", "SACCF_N", "PF_S", "PF_M", "PF_N", "SAF_S",
        ##          "SAF_M", "SAF_N", "SAZ_S", "SAZ_M", "SAZ_N")
@@ -1789,19 +1789,16 @@ readfronts <- function(date,
        epoints.merc <- structure(c(-20037508, 20037508, -20037508, 20037508, -16925422,
 -16925422, -3513725, -3513725), .Dim = c(4L, 2L))
 
+       ## FUCK A DUCK!
 
 
-       ## nchelper
-
-       nch <- nchelper(file, varname = "front")
-       arr <- nch[,,findex]
-       ##arr <- subit(nch, , , findex)
+       arr <- generalizedVARGETshit()bastard
 rtemplate <- template = raster(extent(bbox(epoints.merc)), crs = proj, nrows = nrow(arr), ncols = ncol(arr))
        ##r <- if (length(findex) == 1L) raster(file, band = findex) else  brick(stack(file, bands = findex))
-       r <- if (length(findex == 1L)) {
-           raster(arr, template = rtemplate)
+       if (length(findex == 1L)) {
+       r <-    raster(arr, template = rtemplate)
  }else {
-     brick(arr, xmn = xmin(rtemplate), xmx = xmax(rtemplate), ymn = ymin(rtemplate), ymx = ymax(rtemplate), crs = projection(rtemplate))
+     r <- brick(arr, xmn = xmin(rtemplate), xmx = xmax(rtemplate), ymn = ymin(rtemplate), ymx = ymax(rtemplate), crs = projection(rtemplate))
  }
 
        if (lon180)  r <- rotate(r)

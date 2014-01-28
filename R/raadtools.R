@@ -12,10 +12,11 @@
 NULL
 
 .possiblepaths <- function() {
-    a <- list(default.datadir =  c("//147.66.8.89/gridded/data",
+    a <- list(default.datadir =  c(
                        "//aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data",
                        "/Volumes/files/data",
-              "/mnt/raadtools"))
+              "/mnt/raadtools",
+              "//147.66.8.89/gridded/data"))
 
     ##if (Sys.info()["nodename"] == "ICT-42618") a$default.datadir <- c("E:/repo/data", a$default.datadir)
     a

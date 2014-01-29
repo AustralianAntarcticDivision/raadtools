@@ -160,18 +160,6 @@ resize <- FALSE
        }
  )
 
-##' @exportMethod extract
-setMethod("extract", signature(x = 'function', y = 'POSIXt'),
-           function(x, y, ...) {
-            .local <- function (x, y, ...) {
-                x(y, ...)
-            }
-            .local(x, y, ...)
-        })
-
-
-
-
 ## ##' @exportMethod extract
 ## setMethod("extract", signature(x = 'function', y = 'SpatialPolygons'),
 ##           function(x, y, ...) {

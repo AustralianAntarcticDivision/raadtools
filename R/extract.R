@@ -68,7 +68,7 @@ setMethod("extract", signature(x = 'function', y = 'character'), .read.generic)
 ##' @exportMethod extract
 setMethod("extract", signature(x = 'function', y = 'data.frame'),
           function(x, y, ...) {
-           .local <- function (x, y,  contintime = FALSE, ...)
+           .local <- function (x, y,  contintime = FALSE, fact = NULL, ...)
           ##buffer = NULL, small = FALSE, cellnumbers = FALSE, fun = NULL, na.rm = TRUE,  layer, nl, df = FALSE, factors = FALSE, ...)
     {
         .interp <- function(x1, x2, proportion) {
@@ -110,14 +110,17 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
               ## this won't always work, need to zap anything out of range . . .
         if (max(times) >= max(files$date[findex])) findex <- c(findex, max(findex) + 1)
               date <- files$date[findex]
-
+resize <- FALSE
+        if (!is.null(fact)) resize <- TRUE
               if (contintime) {
                   ## we need to store start and end values
                   resm <- cbind(res, res)
                   thisx1 <- x(date[1L], verbose = FALSE)
+                  if(resize) thisx1 <- aggregate(thisx1, fact = fact, fun = "mean")
                   mess1 <- ""
                   for (i in seq_along(date)[-1]) {
                       thisx2 <- x(date[i], verbose = FALSE)
+                      if(resize) thisx2 <- aggregate(thisx2, fact = fact, fun = "mean")
                       asub <- findInterval(times, date) == (i - 1)
                       ## interpolation in time, controlled by "method" for xy
                       if (any(asub)) {resm[asub, ] <- suppressWarnings(extract(stack(thisx1, thisx2), y[asub, ]))}
@@ -138,6 +141,7 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
               } else {
                   for (i in seq_along(date)) {
                       thisx <- x(date[i], verbose = FALSE, ...)
+                      if(resize) thisx <- aggregate(thisx, fact = fact, fun = "mean")
                       asub <- findInterval(times, date) == i
                       ## no interpolation in time, controlled by "method" for xy
                       if (any(asub)) {res[asub] <- suppressWarnings(extract(thisx, y[asub, ], ...))}

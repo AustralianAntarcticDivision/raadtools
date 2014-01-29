@@ -67,11 +67,18 @@ setMethod("extract", signature(x = 'function', y = 'Date'), .read.generic)
 setMethod("extract", signature(x = 'function', y = 'character'), .read.generic)
 ##' @exportMethod extract
 setMethod("extract", signature(x = 'function', y = 'data.frame'),
-
           function(x, y, ...) {
-           .local <- function (x, y,  ...)
+           .local <- function (x, y,  contintime = FALSE, ...)
           ##buffer = NULL, small = FALSE, cellnumbers = FALSE, fun = NULL, na.rm = TRUE,  layer, nl, df = FALSE, factors = FALSE, ...)
     {
+        .interp <- function(x1, x2, proportion) {
+            x1 * (1 - proportion) + x2 * proportion
+        }
+        .calcProportion <-
+            function(xmin, xmax, x) {
+                (unclass(x) - unclass(xmin) ) / (unclass(xmax) - unclass(xmin))
+            }
+
               ## dataframes have no metadata so let's do our best
               res <- rep(as.numeric(NA), nrow(y))
               times <- try(timedateFrom(y[,3]))
@@ -84,7 +91,6 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
 
 
               ## hmm, will have to figure out how to do this
-
               ## process args
               args <- list(...)
               if ("time.resolution" %in% names(args)) {
@@ -98,21 +104,58 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
 
               ## manage climatology exceptions
               ## . . .dunno yet
-              findex <- suppressWarnings(.processDates(times, files$date, timeres = time.resolution))
+##              findex <- suppressWarnings(raadtools:::.processDates(times, files$date, timeres = time.resolution))
+
+             findex <- suppressWarnings(.processDates(times, files$date, timeres = time.resolution))
+              ## this won't always work, need to zap anything out of range . . .
+        if (max(times) >= max(files$date[findex])) findex <- c(findex, max(findex) + 1)
               date <- files$date[findex]
 
+              if (contintime) {
+                  ## we need to store start and end values
+                  resm <- cbind(res, res)
+                  thisx1 <- x(date[1L], verbose = FALSE)
+                  mess1 <- ""
+                  for (i in seq_along(date)[-1]) {
+                      thisx2 <- x(date[i], verbose = FALSE)
+                      asub <- findInterval(times, date) == (i - 1)
+                      ## interpolation in time, controlled by "method" for xy
+                      if (any(asub)) {resm[asub, ] <- suppressWarnings(extract(stack(thisx1, thisx2), y[asub, ]))}
+                      ##if (any(asub)) {resm[asub, ] <- suppressWarnings(extract(stack(thisx1, thisx2), y[asub, ]), ...)}
+                      res[asub] <- .interp(resm[asub,1], resm[asub,2], .calcProportion(getZ(thisx1), getZ(thisx2), times[asub]))
+                      thisx1 <- thisx2
 
-              for (i in seq_along(date)) {
-                  thisx <- x(date[i], verbose = FALSE, ...)
-                  asub <- findInterval(times, date) == i
-                  if (any(asub)) {res[asub] <- suppressWarnings(extract(thisx, y[asub, ], ...))}
+                      cat(paste(rep("\b", nchar(mess1)), collapse = ""))
 
-              }
+                      mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
+
+                      cat(mess1)
+                      flush.console()
+                  }
+                  cat("\n")
+
+
+              } else {
+                  for (i in seq_along(date)) {
+                      thisx <- x(date[i], verbose = FALSE, ...)
+                      asub <- findInterval(times, date) == i
+                      ## no interpolation in time, controlled by "method" for xy
+                      if (any(asub)) {res[asub] <- suppressWarnings(extract(thisx, y[asub, ], ...))}
+                          cat(paste(rep("\b", nchar(mess1)), collapse = ""))
+
+                      mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
+
+                      cat(mess1)
+                      flush.console()
+                  }
+                  cat("\n")
+          }
               res
           }
           .local(x, y, ...)
        }
  )
+
 
 
 ## ##' @exportMethod extract

@@ -1,3 +1,14 @@
+  CHANGES IN raadtools VERSION 0.0-10
+
+NEW FEATURES 
+
+o changes to extract(readfunction,) methods to interpolate in time and
+space and aggregate spatially, especially for use in Shiny apps
+
+BUG FIXES
+
+o sensible management of dateline for readfronts
+
   CHANGES IN raadtools VERSION 0.0-9
 
 o fixed bug in readfronts

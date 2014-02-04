@@ -112,12 +112,13 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
               date <- files$date[findex]
 resize <- FALSE
         if (!is.null(fact)) resize <- TRUE
+        mess1 <- ""
               if (contintime) {
                   ## we need to store start and end values
                   resm <- cbind(res, res)
                   thisx1 <- x(date[1L], verbose = FALSE)
                   if(resize) thisx1 <- aggregate(thisx1, fact = fact, fun = "mean")
-                  mess1 <- ""
+
                   for (i in seq_along(date)[-1]) {
                       thisx2 <- x(date[i], verbose = FALSE)
                       if(resize) thisx2 <- aggregate(thisx2, fact = fact, fun = "mean")

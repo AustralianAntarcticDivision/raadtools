@@ -119,6 +119,7 @@ resize <- FALSE
                   thisx1 <- x(date[1L], verbose = FALSE)
                   if(resize) thisx1 <- aggregate(thisx1, fact = fact, fun = "mean")
 
+                  ## bug in here ....
                   for (i in seq_along(date)[-1]) {
                       thisx2 <- x(date[i], verbose = FALSE)
                       if(resize) thisx2 <- aggregate(thisx2, fact = fact, fun = "mean")

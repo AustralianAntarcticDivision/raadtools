@@ -1759,6 +1759,9 @@ readice <- function(date,
 ##' @param ... reserved for future use, currently ignored
 ##' @export
 ##' @return \code{\link[raster]{raster}} object
+##' @examples
+##' b <- readfronts(c("1993-01-01", "2005-01-02"), lon180 = FALSE)
+##' extract(readfronts, data.frame(aurora[,1:2], aurora[,3] - 10 * 365.25 * 24 * 3600)
 readfronts <- function(date,
                     time.resolution = c("weekly"),
                     product = c("sokolov"),
@@ -1787,42 +1790,35 @@ readfronts <- function(date,
        proj <- "+proj=merc +ellps=WGS84"
        ##extreme.points <- as.matrix(expand.grid(c(-180, 180), c(-82, -30.24627)))
        ##epoints.merc <- project(extreme.points, proj)
-       epoints.merc <- structure(c(-20037508, 20037508, -20037508, 20037508, -16925422,
--16925422, -3513725, -3513725), .Dim = c(4L, 2L))
+       epoints.merc <- structure(c(-20037508, 20037508, -20037508,
+                                   20037508, -16925422, -16925422, -3513725, -3513725), .Dim = c(4L, 2L))
 
+l <- vector("list", length(findex))
+       for (i in seq_along(l)) {
+           r0 <- raster(file, band = findex[i], stopIfNotEqualSpaced=FALSE)
+           extent(r0) <- extent(bbox(epoints.merc))
+           projection(r0) <- proj
 
-
-       ## nchelper
-
-       nch <- nchelper(file, varname = "front")
-       arr <- nch[,,findex]
-       ##arr <- subit(nch, , , findex)
-rtemplate <- template = raster(extent(bbox(epoints.merc)), crs = proj, nrows = nrow(arr), ncols = ncol(arr))
-       ##r <- if (length(findex) == 1L) raster(file, band = findex) else  brick(stack(file, bands = findex))
-       r <- if (length(findex == 1L)) {
-           raster(arr, template = rtemplate)
- }else {
-     brick(arr, xmn = xmin(rtemplate), xmx = xmax(rtemplate), ymn = ymin(rtemplate), ymx = ymax(rtemplate), crs = projection(rtemplate))
- }
-
-       if (lon180)  r <- rotate(r)
-
-       projection(r) <- proj
-       extent(r) <- extent(bbox(epoints.merc))
-       ##r <- setZ(r, date)
-        ## lots of cells are wasted with nodata
-       e <- new("Extent", xmin = -20037508, xmax = 20037508, ymin = -11087823.8567493 , ymax = -3513725)
-       if (!is.null(xylim)) r <- crop(r, extent(xylim)) else r <- crop(r, e)
+           if (lon180)  r0 <- suppressWarnings(rotate(r0))
+            e <- new("Extent", xmin = -20037508, xmax = 20037508, ymin = -11087823.8567493 , ymax = -3513725)
+           if (!is.null(xylim)) r0<- crop(r0, extent(xylim)) else r0 <- crop(r0, e)
 
              if (RAT) {
            rat <- data.frame(ID = 0:12, name = c("south of sBdy", "between SACCF-S & sBdy", "SACCF-N & SACCF-S",
 "PF-S & SACCF-N", "PF-M & PF-S", "PF-N & PF-M", "SAF-S & PF-N",
 "SAF-M & SAF-S", "SAF-N & SAF-M", "SAZ-S & SAF-N", "SAZ-M & SAZ-S",
 "SAZ-N & SAZ-M", "north of SAZ-N"))
-           levels(r) <- rat
-
+           levels(r0) <- rat
        }
-       setZ(r, date)
+           l[[i]] <- r0
+       }
+
+
+
+       r <- setZ(brick(stack(l)), date)
+        ## lots of cells are wasted with nodata
+
+       r
 }
 
 

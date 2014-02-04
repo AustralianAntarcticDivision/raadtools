@@ -1788,6 +1788,7 @@ readfronts <- function(date,
        findex <- .processDates(date, files$date, time.resolution)
        date <- files$date[findex]
        proj <- "+proj=merc +ellps=WGS84"
+       if (!lon180) proj <- paste(proj, "+over")
        ##extreme.points <- as.matrix(expand.grid(c(-180, 180), c(-82, -30.24627)))
        ##epoints.merc <- project(extreme.points, proj)
        epoints.merc <- structure(c(-20037508, 20037508, -20037508,

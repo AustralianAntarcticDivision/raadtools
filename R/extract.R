@@ -79,7 +79,8 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
                 (unclass(x) - unclass(xmin) ) / (unclass(xmax) - unclass(xmin))
             }
 
-              ## dataframes have no metadata so let's do our best
+d
+        ## dataframes have no metadata so let's do our best
               res <- rep(as.numeric(NA), nrow(y))
               times <- try(timedateFrom(y[,3]))
               ## we assume y is lon,lat,time

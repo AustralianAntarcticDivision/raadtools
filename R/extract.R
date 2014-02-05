@@ -119,7 +119,7 @@ resize <- FALSE
                   resm <- cbind(res, res)
                   thisx1 <- x(date[1L], verbose = FALSE)
                   if(resize) thisx1 <- aggregate(thisx1, fact = fact, fun = "mean")
-
+browser()
                   ## bug in here ....
                   for (i in seq_along(date)[-1]) {
                       thisx2 <- x(date[i], verbose = FALSE)
@@ -130,7 +130,7 @@ resize <- FALSE
                       ##if (any(asub)) {resm[asub, ] <- suppressWarnings(extract(stack(thisx1, thisx2), y[asub, ]), ...)}
                       res[asub] <- .interp(resm[asub,1], resm[asub,2], .calcProportion(getZ(thisx1), getZ(thisx2), times[asub]))
                       thisx1 <- thisx2
-
+browser()
                       cat(paste(rep("\b", nchar(mess1)), collapse = ""))
 
                       mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))

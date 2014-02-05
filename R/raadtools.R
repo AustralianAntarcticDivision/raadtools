@@ -778,8 +778,9 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
 
 }
 
-.updatechlafiles <- function(datadir = getOption("default.datadir")) {
+.updatechlafiles <- function(datadir = getOption("default.datadir"), preferModis = TRUE) {
   tr <- c(monthly = "monthly", weekly = "8d")
+
 
   ## first johnson
   for (i in seq_along(tr)) {
@@ -789,8 +790,12 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
       fs <- gsub("^/", "", fs)
 
       dates <- timedateFrom(strptime(substr(basename(fs), 2, 8), "%Y%j"))
-      chlf <- data.frame(file = fs, date = dates,  stringsAsFactors = FALSE)[order(dates), ]
 
+
+      chlf <- data.frame(file = fs, date = dates,  stringsAsFactors = FALSE)[order(dates), ]
+      ## implementing preferModis
+      dupes <- which(duplicated(chlf$date)) - !preferModis
+      if (length(dupes) > 0) chlf <- chlf[-dupes, ]
       save(chlf, file = file.path(datadir, "cache", sprintf("johnson_%s_chlafiles.Rdata", names(tr[i]))))
   }
   ## now oceancolor
@@ -805,7 +810,9 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
 
       dates <- xfs$date  ##timedateFrom(strptime(substr(basename(fs), 2, 8), "%Y%j"))
       chlf <- data.frame(file = fs, date = dates,  band = xfs$band, stringsAsFactors = FALSE)[order(dates), ]
-
+      ## implementing preferModis
+      dupes <- which(duplicated(chlf$date)) - !preferModis
+      if (length(dupes) > 0) chlf <- chlf[-dupes, ]
       save(chlf, file = file.path(datadir, "cache", sprintf("oceancolor_%s_chlafiles.Rdata", names(tr[i]))))
   }
 

@@ -118,19 +118,25 @@ resize <- FALSE
                   ## we need to store start and end values
                   resm <- cbind(res, res)
                   thisx1 <- x(date[1L], verbose = FALSE)
+
                   if(resize) thisx1 <- aggregate(thisx1, fact = fact, fun = "mean")
-browser()
+##browser()
                   ## bug in here ....
                   for (i in seq_along(date)[-1]) {
                       thisx2 <- x(date[i], verbose = FALSE)
+                      ## we have to store the time-value BEFORE aggregating
+                      ##t2 <- getZ(thisx2)
                       if(resize) thisx2 <- aggregate(thisx2, fact = fact, fun = "mean")
                       asub <- findInterval(times, date) == (i - 1)
                       ## interpolation in time, controlled by "method" for xy
-                      if (any(asub)) {resm[asub, ] <- suppressWarnings(extract(stack(thisx1, thisx2), y[asub, ]))}
+##                      if (any(asub)) {resm[asub, ] <- suppressWarnings(extract(stack(thisx1, thisx2), y[asub, ]))}
+                      if (any(asub)) {resm[asub, ] <- suppressWarnings(extract(stack(thisx1, thisx2), y[asub, ], ...))}
                       ##if (any(asub)) {resm[asub, ] <- suppressWarnings(extract(stack(thisx1, thisx2), y[asub, ]), ...)}
-                      res[asub] <- .interp(resm[asub,1], resm[asub,2], .calcProportion(getZ(thisx1), getZ(thisx2), times[asub]))
+                      ##res[asub] <- .interp(resm[asub,1], resm[asub,2], .calcProportion(getZ(thisx1), getZ(thisx2), times[asub]))
+                      ## use date since agggregate smashes the Z
+                      res[asub] <- .interp(resm[asub,1], resm[asub,2], .calcProportion(date[i-1L], date[i], times[asub]))
                       thisx1 <- thisx2
-browser()
+##browser()
                       cat(paste(rep("\b", nchar(mess1)), collapse = ""))
 
                       mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))

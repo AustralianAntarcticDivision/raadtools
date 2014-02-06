@@ -1519,11 +1519,11 @@ readcurr <- function(date,
     nfiles <- length(findex)
     r <- vector("list", nfiles) ##brick(rasterfun(r1, r2), nl = length(findex))
     for (ifile in seq_len(nfiles)) {
-        #r1 <- read0(files$fullname[findex[ifile]], varname = "Grid_0001")
-        #r2 <- read0(files$fullname[findex[ifile]], varname = "Grid_0002")
-        r1 <- .readAVISO(files$fullname[findex[ifile]], justone = FALSE)
-##        r <- setValues(r, values(rasterfun(r1, r2)), layer = i)
-        r0 <- rasterfun(r1[[1]], r1[[2]])
+       r1 <- read0(files$fullname[findex[ifile]], varname = "Grid_0001")
+        r2 <- read0(files$fullname[findex[ifile]], varname = "Grid_0002")
+        ##r1 <- .readAVISO(files$fullname[findex[ifile]], justone = FALSE)
+        r <- setValues(r, values(rasterfun(r1, r2)), layer = i)
+##        r0 <- rasterfun(r1[[1]], r1[[2]])
         if (lon180) r0 <- suppressWarnings(rotate(r0))
         if(cropit) r0 <- crop(r0, cropext)
         r[[ifile]] <- r0

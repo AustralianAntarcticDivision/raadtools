@@ -1331,17 +1331,17 @@ currentsfiles <- function() {
 }
 
 
-.readNC <- function(x, varnames) {
-        ncf <- .ncops()
-        nccon <- ncf$open(x)
-        lv <- vector("list", length(varnames))
-        names(lv) <- varnames
-        for (i in seq_along(varnames)) {
-            lv[[i]] <- ncf$getvar(nccon, varnames[i])
-        }
-        ncf$close(nccon)
-        lv
-    }
+## .readNC <- function(x, varnames) {
+##         ncf <- .ncops()
+##         nccon <- ncf$open(x)
+##         lv <- vector("list", length(varnames))
+##         names(lv) <- varnames
+##         for (i in seq_along(varnames)) {
+##             lv[[i]] <- ncf$getvar(nccon, varnames[i])
+##         }
+##         ncf$close(nccon)
+##         lv
+##     }
 
 ##. missingNC <- function(x, varname, att) {
 ##     ncf <- .ncops()
@@ -1383,23 +1383,28 @@ currentsfiles <- function() {
         x
     }
 
-## what NetCDF support do we have?
-.netcdfpackage <- function() {
-    warninglevel <- getOption("warn")
-    on.exit(options(warn = warninglevel))
-    options(warn = -1)
-    if (suppressPackageStartupMessages(require(ncdf4, quietly = TRUE))) return("ncdf4")
-    if (suppressPackageStartupMessages(require(ncdf, quietly = TRUE))) return("ncdf")
-    if (suppressPackageStartupMessages(require(RNetCDF, quietly = TRUE))) return("RNetCDF")
-    NA
-}
+## ## what NetCDF support do we have?
+## .netcdfpackage <- function() {
+##     warninglevel <- getOption("warn")
+##     on.exit(options(warn = warninglevel))
+##     options(warn = -1)
+##     if (suppressPackageStartupMessages(require(ncdf4, quietly = TRUE))) return("ncdf4")
+##     if (suppressPackageStartupMessages(require(ncdf, quietly = TRUE))) return("ncdf")
+##     if (suppressPackageStartupMessages(require(RNetCDF, quietly = TRUE))) return("RNetCDF")
+##     NA
+## }
 
-.ncops <- function(package = .netcdfpackage()) {
-    switch(package,
-           ncdf4 = list(open = nc_open, getvar = ncvar_get, getatt = ncatt_get, close = nc_close),
-           ncdf = list(open = open.ncdf, getvar = get.var.ncdf, getatt = att.get.ncdf, close = close.ncdf),
-           RNetCDF = list(open = open.nc, getvar = var.get.nc, getatt = att.get.nc, close = close.nc))
-}
+## .ncops <- function(package = .netcdfpackage()) {
+##     switch(package,
+##            ncdf4 = list(open = nc_open, getvar = ncvar_get, getatt = ncatt_get, close = nc_close),
+##            ncdf = list(open = open.ncdf, getvar = get.var.ncdf, getatt = att.get.ncdf, close = close.ncdf),
+##            RNetCDF = list(open = open.nc, getvar = var.get.nc, getatt = att.get.nc, close = close.nc))
+## }
+
+
+
+
+
 ##' Read AVISO ocean current data from weekly files
 ##'
 ##' Current data is read from files managed by

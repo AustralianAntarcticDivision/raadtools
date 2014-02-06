@@ -1351,37 +1351,37 @@ currentsfiles <- function() {
 ##     val
 ## }
 
-.readAVISO <- function(x, justone = TRUE) {
-        xtreme <- 20037508
-        ytreme <- 16925422
-        maxvalue <- 90000
-        if(justone) {
-            vs <- c("NbLongitudes", "NbLatitudes", "Grid_0001")
-            x <- .readNC(x, vs)
+## .readAVISO <- function(x, justone = TRUE) {
+##         xtreme <- 20037508
+##         ytreme <- 16925422
+##         maxvalue <- 90000
+##         if(justone) {
+##             vs <- c("NbLongitudes", "NbLatitudes", "Grid_0001")
+##             x <- .readNC(x, vs)
 
-            names(x) <- c("x", "y", "z")
-            x$x <- seq_along(x$x)
-            x$y <- seq_along(x$y)
-            x$z <- t(x$z)
-            x <- raster(x)
-        } else {
-            vs <- c("NbLongitudes", "NbLatitudes", "Grid_0001", "Grid_0002")
-            x <- .readNC(x, vs)
+##             names(x) <- c("x", "y", "z")
+##             x$x <- seq_along(x$x)
+##             x$y <- seq_along(x$y)
+##             x$z <- t(x$z)
+##             x <- raster(x)
+##         } else {
+##             vs <- c("NbLongitudes", "NbLatitudes", "Grid_0001", "Grid_0002")
+##             x <- .readNC(x, vs)
 
-            names(x) <- c("x", "y", "z", "z2")
-            x$x <- seq_along(x$x)
-            x$y <- seq_along(x$y)
-            x$z <- t(x$z)
-            x$z2 <- t(x$z2)
-            x <- brick(raster(x[1:3]), raster(list(x = x$x, y = x$y, z = x$z2)))
-        }
+##             names(x) <- c("x", "y", "z", "z2")
+##             x$x <- seq_along(x$x)
+##             x$y <- seq_along(x$y)
+##             x$z <- t(x$z)
+##             x$z2 <- t(x$z2)
+##             x <- brick(raster(x[1:3]), raster(list(x = x$x, y = x$y, z = x$z2)))
+##         }
 
-        x[!x < maxvalue] <- NA
-##        x <- flip(flip(t(raster(x, varname = varname)), direction = "y"), direction = "x")
-        extent(x) <- extent(0, xtreme * 2, -ytreme, ytreme)
-        projection(x) <- "+proj=merc +ellps=WGS84 +over"
-        x
-    }
+##         x[!x < maxvalue] <- NA
+## ##        x <- flip(flip(t(raster(x, varname = varname)), direction = "y"), direction = "x")
+##         extent(x) <- extent(0, xtreme * 2, -ytreme, ytreme)
+##         projection(x) <- "+proj=merc +ellps=WGS84 +over"
+##         x
+##     }
 
 ## ## what NetCDF support do we have?
 ## .netcdfpackage <- function() {
@@ -1475,6 +1475,15 @@ readcurr <- function(date,
                      verbose = TRUE,
                      ...) {
 
+read0 <- function(x, varname) {
+        xtreme <- 20037508
+        ytreme <- 16925422
+        x <- flip(flip(t(raster(x, varname = varname)), direction = "y"),
+            direction = "x")
+        extent(x) <- extent(0, xtreme * 2, -ytreme, ytreme)
+        projection(x) <- "+proj=merc +ellps=WGS84 +over"
+        x
+    }
 
     datadir = getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)

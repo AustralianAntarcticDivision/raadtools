@@ -291,16 +291,16 @@ readssh <- function (date, time.resolution = "weekly",
     xylim = NULL, lon180 = TRUE, ssha = FALSE,
     returnfiles = FALSE, verbose = TRUE, ...)
 {
-    ## read0 <- function(x, varname) {
-    ##     xtreme <- 20037508
-    ##     ytreme <- 16925422
-    ##     x <- flip(flip(t(raster(x, varname = varname)), direction = "y"),
-    ##         direction = "x")
-    ##     x[x > 9999] <- NA
-    ##     extent(x) <- extent(0, xtreme * 2, -ytreme, ytreme)
-    ##     projection(x) <- "+proj=merc +ellps=WGS84 +over"
-    ##     x
-    ## }
+     read0 <- function(x, varname) {
+         xtreme <- 20037508
+         ytreme <- 16925422
+         x <- flip(flip(t(raster(x, varname = varname)), direction = "y"),
+             direction = "x")
+         x[x > 9999] <- NA
+         extent(x) <- extent(0, xtreme * 2, -ytreme, ytreme)
+         projection(x) <- "+proj=merc +ellps=WGS84 +over"
+         x
+     }
     datadir = getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
 
@@ -323,8 +323,8 @@ readssh <- function (date, time.resolution = "weekly",
     nfiles <- length(findex)
     r <- vector("list", nfiles)
     for (ifile in seq_len(nfiles)) {
-        ##r0 <- read0(files$file[findex[ifile]], varname = "Grid_0001")
-        r0 <- .readAVISO(files$file[findex[ifile]], justone = TRUE)
+        r0 <- read0(files$file[findex[ifile]], varname = "Grid_0001")
+    ##    r0 <- .readAVISO(files$file[findex[ifile]], justone = TRUE)
         if (lon180)
             r0 <- suppressWarnings(rotate(r0))
         if (cropit)

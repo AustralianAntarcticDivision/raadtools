@@ -793,6 +793,10 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
       fs <- gsub(datadir, "", list.files(file.path(datadir, dirpath), full.names = TRUE))
       fs <- gsub("^/", "", fs)
 
+      if (!length(fs) > 0) {
+          warning(sprintf("no files fould for %s at %s", tr[i], dirpath))
+          next;
+      }
       dates <- timedateFrom(strptime(substr(basename(fs), 2, 8), "%Y%j"))
 
 
@@ -808,6 +812,11 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
       dirpath <- file.path("chl", "oceancolor", c("modis", "seawifs"), tr[i], "netcdf")
 
       fs <- list.files(file.path(datadir, dirpath), full.names = TRUE)
+
+        if (!length(fs) > 0) {
+          warning(sprintf("no files fould for %s at %s", tr[i], dirpath))
+          next;
+      }
       xfs <- .expandFileDateList(fs)
       fs <- gsub(datadir, "", xfs$file)
       fs <- gsub("^/", "", fs)

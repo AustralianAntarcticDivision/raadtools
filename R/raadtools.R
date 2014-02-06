@@ -294,7 +294,7 @@ readssh <- function (date, time.resolution = "weekly",
      read0 <- function(x, varname) {
          xtreme <- 20037508
          ytreme <- 16925422
-         x <- flip(flip(t(raster(x, varname = varname)), direction = "y"),
+         x <- flip(flip(t(raster(x, varname = varname, stopIfNotEqualSpaced=FALSE)), direction = "y"),
              direction = "x")
          x[x > 9999] <- NA
          extent(x) <- extent(0, xtreme * 2, -ytreme, ytreme)

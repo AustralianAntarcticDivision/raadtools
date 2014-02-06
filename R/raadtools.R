@@ -1902,8 +1902,13 @@ icefiles <- function(time.resolution = c("daily", "monthly"), product = c("nsidc
 
     for (time.resolution in c("daily", "monthly")) {
         subpath <- file.path("seaice", "smmr_ssmi_nasateam", time.resolution)
-        fs <- list.files(file.path(datadir, subpath) , recursive = TRUE, pattern = "s.bin$", full.names = FALSE)
+        fpath <- file.path(datadir, subpath)
+        fs <- list.files(fpath , recursive = TRUE, pattern = "s.bin$", full.names = FALSE)
 
+        if (!length(fs) > 0) {
+            warning(sprintf("no files found for %s at %s", time.resolution, fpath))
+            next;
+        }
         datepart <- sapply(strsplit(basename(fs), "_"), "[", 2)
         if(time.resolution == "monthly") datepart <- paste0(datepart, "01")
 

@@ -28,7 +28,7 @@
 #' Extract data from read functions in various ways.
 #'
 #' @param x A raadtools read function.
-#'#' @param y One of various means of querying from the raadtools read
+#' @param y Object to use for querying from the raadtools read
 #' functions, such as a vector of character, Date, or POSIXt values,
 #' data.frame, trip, etc.
 #' @param method "simple" or "bilinear"
@@ -65,7 +65,7 @@
 #' extract,function,POSIXt-method extract,function,character-method
 #' extract,function,data.frame-method extract,function,missing-method
 #' @exportMethod extract
-setMethod("extract", signature(x = 'function', y = 'missing'), function(x, ...) x(...))
+setMethod("extract", signature(x = 'function', y = 'missing'), function(x, y, ...) x(...))
 #' @exportMethod extract
 setMethod("extract", signature(x = 'function', y = 'POSIXt'), .read.generic)
 ##' @exportMethod extract

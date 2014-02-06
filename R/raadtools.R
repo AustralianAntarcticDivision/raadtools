@@ -415,7 +415,11 @@ function(data.source = "", time.resolution = c("daily")) {
 ##'     x <- readwind(dts[i]);
 ##'     if (i == 1L) crds <- coordinates(x[[1]])
 ##'     plot(sqrt(x[[1]]^2 + x[[2]]^2), xlim = c(40, 180), ylim = c(-90, -20));
-##'     arrows(crds[,1], crds[,2], crds[,1] + values(x[[1]])/4, crds[,2] + values(x[[2]])/4, length = 0.06);
+##' x1 <- crds[,1]
+##' y1 <- crds[,2]
+##' x2 <- crds[,1] + values(x[[1]])/4
+##' y2 <- crds[,2] + values(x[[2]])/4
+##'     arrows(x1, y1, x2, y2, length = 0.06);
 ##'     plot(m, add = TRUE)
 ##' }
 ##' ani.stop()
@@ -1461,7 +1465,11 @@ currentsfiles <- function() {
 ##' crds <- coordinates(x1)
 ##' scale <- 2000
 ##' plot(crop(x, e))
-##' arrows(crds[,1], crds[,2], crds[,1] + values(x1[["U"]]) * scale, crds[,2] + values(x1[["V"]]) * scale, length = 0.03)
+##' x1 <- crds[,1]
+##' y1 <- crds[,2]
+##' x2 <- crds[,1] + values(x1[["U"]]) * scale
+##' y2 <- crds[,2] + values(x1[["V"]]) * scale
+##' arrows(x1, y1, x2, y2, length = 0.03)
 ##' }
 readcurr <- function(date,
                      time.resolution = "weekly",

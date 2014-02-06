@@ -3,7 +3,7 @@ Type: Package
 Title: R tools for spatial data at the Australian Antarctic Division (AAD)
 Depends:
     maptools,
-    raster  (>= 2.1-37),
+    raster  (>= 2.2-25),
     R (>= 2.15)
 Imports:
     rgeos,

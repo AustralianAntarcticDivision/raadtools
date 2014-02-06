@@ -5,6 +5,10 @@ NEW FEATURES
 o changes to extract(readfunction,) methods to interpolate in time and
 space and aggregate spatially, especially for use in Shiny apps
 
+SIGNIFICANT USER-VISIBLE CHANGES
+
+o raadtools now depends on raster 2.2-5 or later
+
 BUG FIXES
 
 o sensible management of dateline for readfronts

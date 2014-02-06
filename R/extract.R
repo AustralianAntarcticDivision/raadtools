@@ -13,7 +13,7 @@
     rng <- range(difftime(x[-1L], x[-length(x)], units = "days"))
     a <- round(min(rng))
     if (a == 1) {
-        val = "daily"
+        return("daily")
     }
     if (a %in% c(7, 8)) {
         val = "weekly"

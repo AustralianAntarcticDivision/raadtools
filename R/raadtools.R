@@ -863,10 +863,14 @@ frontsmap <- function(map = c("orsi")) {
 ##' @return  SpatialPolygonsDataFrame or SpatialPolygons (world1/2)
 ##' @examples
 ##' ## load the maptools::wrld_simpl data set in [0,360]
+##' \dontrun{
 ##' w360 <- coastmap("world360")
+##' }
 ##'
 ##' ## load the AAD coast layer in "1 mill" resolution
+##' \dontrun{
 ##' cst01 <- coastmap("ant_coast10")
+##' }
 ##' @export
 coastmap <- function(map = c(
                      "world", "world2",
@@ -939,6 +943,8 @@ coastmap <- function(map = c(
  .world <-
 function(world1 = TRUE) {
     ## This is nasty. Passes check.
+    ## not anymore . .
+    on.exit(detach(wrld_simpl))
     attach(system.file("data", "wrld_simpl.rda", package = "maptools"))
     pos <- rev(grep("wrld_simpl.rda", search()))[1L]
     wrld <- get("wrld_simpl", pos = pos)
@@ -1789,8 +1795,10 @@ readice <- function(date,
 ##' @export
 ##' @return \code{\link[raster]{raster}} object
 ##' @examples
+##' \dontrun{
 ##' b <- readfronts(c("1993-01-01", "2005-01-02"), lon180 = FALSE)
 ##' extract(readfronts, data.frame(aurora[,1:2], aurora[,3] - 10 * 365.25 * 24 * 3600)
+##' }
 readfronts <- function(date,
                     time.resolution = c("weekly"),
                     product = c("sokolov"),

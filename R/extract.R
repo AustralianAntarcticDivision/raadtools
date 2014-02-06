@@ -31,7 +31,7 @@
 #' @param y Object to use for querying from the raadtools read
 #' functions, such as a vector of character, Date, or POSIXt values,
 #' data.frame, trip, etc.
-#' @param method "simple" or "bilinear"
+#' ##@param method "simple" or "bilinear"
 #' @param ... Additional arguments passed to the read function.
 #' @return data values extracted by the read functions
 #' @seealso \code{\link{readsst}} and \code{\link{extract}}

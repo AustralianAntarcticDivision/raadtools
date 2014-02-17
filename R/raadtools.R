@@ -84,7 +84,7 @@ function(date = as.Date("2000-03-01"), mask = TRUE) {
     if (dtime > 30) stop(sprintf("no data file within 30 days of %s", format(date)))
 
     dims <- c(4300, 425)
-    d <- readBin(fif$file[windex], "integer", size = 1, n = prod(dims), endian = "little")
+    d <- readBin(fif$fullname[windex], "integer", size = 1, n = prod(dims), endian = "little")
 ##    d <- t(matrix(d, dims[1])[,dims[2]:1])
     d <- t(matrix(d, dims[1]))
     if (mask) {

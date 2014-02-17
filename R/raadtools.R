@@ -58,7 +58,7 @@ NULL
 ##' @return data frame
 ##' @export
 fasticefiles <- function(datadir = getOption("default.datadir")) {
-    pref <- "binary_fast_ice")
+    pref <- file.path("fastice", "fraser_fastice", "binary_fast_ice")
     fs <- list.files(file.path(datadir, pref), pattern = "img$")
     dates <- as.POSIXct(strptime(fs, "binary_%Y_%j"), tz = "GMT")
     data.frame(file = file.path(pref, fs), date = dates, fullname = file.path(datadir, pref, fs), stringsAsFactors = FALSE)

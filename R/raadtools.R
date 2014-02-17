@@ -50,6 +50,64 @@ NULL
     }
 }
 
+##' Data frame all of all available fast ice files.
+##'
+##' A data frame with file, date, fullname
+##' @title fast ice files
+##' @param datadir data repository path
+##' @return data frame
+##' @export
+fasticefiles <- function(datadir = getOption("default.datadir")) {
+    pref <- "binary_fast_ice")
+    fs <- list.files(file.path(datadir, pref), pattern = "img$")
+    dates <- as.POSIXct(strptime(fs, "binary_%Y_%j"), tz = "GMT")
+    data.frame(file = file.path(pref, fs), date = dates, fullname = file.path(datadir, pref, fs), stringsAsFactors = FALSE)
+}
+
+##' Read fast ice data, optionally with a mask
+##'
+##' Fast ice data on Equal Area Cylindrical grid
+##' @title Fast ice data
+##' @param date date or dates to read (can be character, POSIXt, or Date)
+##' @param mask include mask as NA values?
+##' @return
+##' @author
+readfastice <-
+function(date = as.Date("2000-03-01"), mask = TRUE) {
+
+
+    date <- timedateFrom(date)
+    fif <- fasticefiles()
+
+    windex <- which.min(abs(date - fif$date))
+    dtime <- abs(difftime(date, fif$date[windex], units = c("days")))
+    if (dtime > 30) stop(sprintf("no data file within 30 days of %s", format(date)))
+
+    dims <- c(4300, 425)
+    d <- readBin(fif$file[windex], "integer", size = 1, n = prod(dims), endian = "little")
+##    d <- t(matrix(d, dims[1])[,dims[2]:1])
+    d <- t(matrix(d, dims[1]))
+    if (mask) {
+        mask <- t(matrix(readBin("D:\\Toolbox\\data_candidates\\fastice/geoloc/coastmask.img", "integer", size = 2, n = prod(dims), endian = "little"), dims[1]))
+        ##mask <- mask[,dims[2]:1]
+
+        d[mask == 1] <- NA
+
+    }
+    projstring <- "+proj=cea +lon_0=91 +lat_0=-90 +lat_ts=-65 +datum=WGS84"
+
+    ## bbox in cea
+    bb <- structure(c(-4751610.61938822, 3822717.4673464, -13464081.4706772,
+-14314422.8015431), .Dim = c(2L, 2L))
+
+    topleft <- bb[1,]
+    botright <- bb[2,]
+
+    r <- raster(d, crs = projstring, xmn = topleft[1], xmx = botright[1], ymn = botright[2], ymx = topleft[2])
+    r
+}
+
+
 ##' Read the \enc{Sallée}{Sallee} Mixed layer depth climatology.
 ##'
 ##' http://soki.aad.gov.au/display/Data/Mixed+layer+depth

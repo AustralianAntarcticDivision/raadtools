@@ -352,7 +352,7 @@ readssh <- function (date, time.resolution = "weekly",
      read0 <- function(x, varname) {
          xtreme <- 20037508
          ytreme <- 16925422
-         x <- flip(flip(t(raster(x, varname = varname)), direction = "y"),
+         x <- flip(flip(t(raster(x, varname = varname, stopIfNotEqualSpaced=FALSE)), direction = "y"),
              direction = "x")
          x[x > 9999] <- NA
          extent(x) <- extent(0, xtreme * 2, -ytreme, ytreme)
@@ -851,6 +851,10 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
       fs <- gsub(datadir, "", list.files(file.path(datadir, dirpath), full.names = TRUE))
       fs <- gsub("^/", "", fs)
 
+      if (!length(fs) > 0) {
+          warning(sprintf("no files fould for %s at %s", tr[i], dirpath))
+          next;
+      }
       dates <- timedateFrom(strptime(substr(basename(fs), 2, 8), "%Y%j"))
 
 
@@ -866,6 +870,11 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
       dirpath <- file.path("chl", "oceancolor", c("modis", "seawifs"), tr[i], "netcdf")
 
       fs <- list.files(file.path(datadir, dirpath), full.names = TRUE)
+
+        if (!length(fs) > 0) {
+          warning(sprintf("no files fould for %s at %s", tr[i], dirpath))
+          next;
+      }
       xfs <- .expandFileDateList(fs)
       fs <- gsub(datadir, "", xfs$file)
       fs <- gsub("^/", "", fs)
@@ -1960,8 +1969,13 @@ icefiles <- function(time.resolution = c("daily", "monthly"), product = c("nsidc
 
     for (time.resolution in c("daily", "monthly")) {
         subpath <- file.path("seaice", "smmr_ssmi_nasateam", time.resolution)
-        fs <- list.files(file.path(datadir, subpath) , recursive = TRUE, pattern = "s.bin$", full.names = FALSE)
+        fpath <- file.path(datadir, subpath)
+        fs <- list.files(fpath , recursive = TRUE, pattern = "s.bin$", full.names = FALSE)
 
+        if (!length(fs) > 0) {
+            warning(sprintf("no files found for %s at %s", time.resolution, fpath))
+            next;
+        }
         datepart <- sapply(strsplit(basename(fs), "_"), "[", 2)
         if(time.resolution == "monthly") datepart <- paste0(datepart, "01")
 

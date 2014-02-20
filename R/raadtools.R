@@ -1035,13 +1035,12 @@ coastmap <- function(map = c(
 ##' @importMethodsFrom raster extent
  .world <-
 function(world1 = TRUE) {
-    ## This is nasty. Passes check.
-    ## not anymore . .
-    on.exit(detach(wrld_simpl))
+
+    on.exit(detach(pos = pos))
     attach(system.file("data", "wrld_simpl.rda", package = "maptools"))
     pos <- rev(grep("wrld_simpl.rda", search()))[1L]
     wrld <- get("wrld_simpl", pos = pos)
-    detach(pos = pos)
+    ##detach(pos = pos)
     if (world1) return(as(wrld, "SpatialPolygons"))
     bb <- bbox(wrld)
     opt <- options(warn = -1)

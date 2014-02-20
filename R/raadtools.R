@@ -74,6 +74,7 @@ fasticefiles <- function(datadir = getOption("default.datadir")) {
 ##' @param mask include mask as NA values?
 ##' @param ... other arguments, ignored
 ##' @return RasterBrick with 1 for fast ice pixels, 0 for other, NA for land mask
+##' @references \url{http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=modis_20day_fast_ice}
 ##' @export
 ##' @examples r <- readfastice(c("2002-02-10", "2002-03-03"))
 ##'

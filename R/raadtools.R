@@ -66,19 +66,25 @@ fasticefiles <- function(datadir = getOption("default.datadir")) {
 
 ##' Read fast ice data, optionally with a mask
 ##'
-##' Fast ice data on Equal Area Cylindrical grid
+##' Fast ice data on original Equal Area Cylindrical grid
 ##' @title Fast ice data
 ##' @param date date or dates to read (can be character, POSIXt, or Date)
 ##' @param xylim extent in native space of the grid
 ##' @param returnfiles return the file details only
 ##' @param mask include mask as NA values?
 ##' @param ... other arguments, ignored
-##' @return RasterBrick with 1 for fast ice pixels, 0 for other
+##' @return RasterBrick with 1 for fast ice pixels, 0 for other, NA for land mask
 ##' @export
+##' @examples r <- readfastice(c("2002-02-10", "2002-03-03"))
+##'
 readfastice <-
 function(date = as.Date("2000-03-01"), time.resolution = "weekly3",
-         xylim = NULL, returnfiles = FALSE, mask = TRUE, ...) {
+         xylim = NULL, returnfiles = FALSE, ...) {
 
+    dims <- c(4300, 425)
+    datadir = getOption("default.datadir")
+
+    gridmask <- t(matrix(readBin(file.path(datadir, "fastice", "fraser_fastice", "geoloc", "coastmask.img"), "integer", size = 2, n = prod(dims), endian = "little"), dims[1]))
      read0 <- function(x) {
         projstring <- "+proj=cea +lon_0=91 +lat_0=-90 +lat_ts=-65 +datum=WGS84"
         ## bbox in cea
@@ -87,13 +93,14 @@ function(date = as.Date("2000-03-01"), time.resolution = "weekly3",
         topleft <- bb[1,]
         botright <- bb[2,]
 
-        dims <- c(4300, 425)
-        d <- readBin(, "integer", size = 1, n = prod(dims), endian = "little")
+
+        d <- readBin(x, "integer", size = 1, n = prod(dims), endian = "little")
         d <- t(matrix(d, dims[1]))
+        d[gridmask == 1] <- NA
         raster(d, crs = projstring, xmn = topleft[1], xmx = botright[1], ymn = botright[2], ymx = topleft[2])
     }
 
-    datadir = getOption("default.datadir")
+
     date <- timedateFrom(date)
     files <- fasticefiles()
     if (returnfiles) return(files)
@@ -111,13 +118,6 @@ function(date = as.Date("2000-03-01"), time.resolution = "weekly3",
     nfiles <- length(findex)
     r <- vector("list", nfiles)
 
-
-     if (mask) {
-        gridmask <- t(matrix(readBin(file.path(datadir, "fastice", "fraser_fastice", "geoloc", "coastmask.img"), "integer", size = 2, n = prod(dims), endian = "little"), dims[1]))
-        return(gridmask)
-        ##mask <- mask[,dims[2]:1]
-    }
-
     for (ifile in seq_len(nfiles)) {
         r0 <- read0(files$fullname[findex[ifile]])
         if (cropit) {
@@ -126,7 +126,7 @@ function(date = as.Date("2000-03-01"), time.resolution = "weekly3",
         r[[ifile]] <- r0
     }
     r <- brick(stack(r))
-    names(r) <- sprintf("prod_%s", format(files$date[findex], "%Y%m%d"))
+    names(r) <- sprintf("fastice_%s", format(files$date[findex], "%Y%m%d"))
 
     setZ(r, files$date[findex])
 

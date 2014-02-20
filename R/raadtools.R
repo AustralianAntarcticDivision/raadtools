@@ -74,8 +74,9 @@ fasticefiles <- function(datadir = getOption("default.datadir")) {
 ##' @param mask include mask as NA values?
 ##' @param ... other arguments, ignored
 ##' @return RasterBrick with 1 for fast ice pixels, 0 for other
+##' @export
 readfastice <-
-function(date = as.Date("2000-03-01"), time.resolution = "3 weekly",
+function(date = as.Date("2000-03-01"), time.resolution = "weekly3",
          xylim = NULL, returnfiles = FALSE, mask = TRUE, ...) {
 
      read0 <- function(x) {
@@ -94,11 +95,11 @@ function(date = as.Date("2000-03-01"), time.resolution = "3 weekly",
 
     datadir = getOption("default.datadir")
     date <- timedateFrom(date)
-    fif <- fasticefiles()
-    if (returnfiles) return(fif)
+    files <- fasticefiles()
+    if (returnfiles) return(files)
 
-    if (missing(date)) date <- min(fif$date)
-    findex <- .processDates(date, files$date, time.reolution)
+    if (missing(date)) date <- min(files$date)
+    findex <- .processDates(date, files$date, time.resolution)
 
 
     cropit <- FALSE
@@ -113,11 +114,12 @@ function(date = as.Date("2000-03-01"), time.resolution = "3 weekly",
 
      if (mask) {
         gridmask <- t(matrix(readBin(file.path(datadir, "fastice", "fraser_fastice", "geoloc", "coastmask.img"), "integer", size = 2, n = prod(dims), endian = "little"), dims[1]))
+        return(gridmask)
         ##mask <- mask[,dims[2]:1]
     }
 
     for (ifile in seq_len(nfiles)) {
-        r0 <- read0(fif$fullname[findex[ifile]])
+        r0 <- read0(files$fullname[findex[ifile]])
         if (cropit) {
             r0 <- crop(r0, cropext)
         }
@@ -1732,7 +1734,7 @@ read0 <- function(x, varname) {
         findex <- dedupedates$index
         date <- dedupedates$date
 
-        .matchFiles(date, fdate[findex], findex, daytest = switch(timeres,daily = 1.5, weekly = 4, monthly = 15))
+        .matchFiles(date, fdate[findex], findex, daytest = switch(timeres,daily = 1.5, weekly = 4, monthly = 15, weekly3 = 26))
     }
 
 ##' Read data from sea ice data products.

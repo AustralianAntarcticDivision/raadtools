@@ -1525,6 +1525,8 @@ currentsfiles <- function() {
 ##' @param magonly return just the magnitude from the U and V
 ##' components
 ##' @param dironly return just the direction from the U and V, in degrees N=0, E=90, S=180, W=270
+##' @param uonly return just the U component of velocity
+##' @param vonly return just the V component of velocity
 ##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
 ##' components, in degrees (0 north, 90 east, 180 south, 270 west)
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
@@ -1576,6 +1578,10 @@ readcurr <- function(date,
                      ##rescale = TRUE,
                      magonly = FALSE,
                      dironly = FALSE,
+
+                     uonly = FALSE,
+                     vonly = FALSE,
+
                      lon180 = TRUE,
                      returnfiles = FALSE,
                      verbose = TRUE,
@@ -1593,7 +1599,7 @@ read0 <- function(x, varname) {
 
     datadir = getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
-    if (magonly & dironly) warning("only one of magonly and dironly may be used, returning magonly")
+    if ((magonly + dironly + uonly + vonly) > 1) stop("only one of magonly, dironly, uonly or vonly may be used, exiting")
 
     files <- currentsfiles()
     if (returnfiles) return(files)
@@ -1603,10 +1609,10 @@ read0 <- function(x, varname) {
 
 
     ## prevent reading more than one unless mag/dironly
-    if (length(findex) > 1L & !magonly & !dironly) {
+    if (length(findex) > 1L & !magonly & !dironly & !uonly & !vonly) {
         findex <- findex[1L]
         date <- files$date[findex[1L]]
-        warning("only one time step can be read at once unless magonly or dironly is TRUE")
+        warning("only one time step can be read at once unless magonly, dironly uonly or vonly is TRUE")
     }
     ##i <- 1
 
@@ -1621,6 +1627,10 @@ read0 <- function(x, varname) {
     if (magonly) rasterfun <- function(x1, x2) sqrt(x1 * x1 + x2 *x2)
     if (dironly) rasterfun <- function(x1, x2) (90 - atan2(x2, x1) * 180/pi) %% 360
 
+    if (!(magonly | dironly)) {
+        if (uonly) rasterfun <- function(x1, x2) x1
+        if (vonly) rasterfun <- function(x1, x2) x2
+    }
 
        ## process xylim
     cropit <- FALSE
@@ -1647,7 +1657,7 @@ read0 <- function(x, varname) {
     }
 
     r <- brick(stack(r))
-     if (magonly | dironly) r <- setZ(r, date) else r <- setZ(r, rep(date, 2L))
+     if (magonly | dironly | uonly | vonly) r <- setZ(r, date) else r <- setZ(r, rep(date, 2L))
 ##    if (lon180) r <- suppressWarnings(rotate(r))
     return(r)
 

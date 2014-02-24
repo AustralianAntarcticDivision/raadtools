@@ -4,6 +4,9 @@ NEW FEATURES
 
 o added function readfastice to read the fast ice model data
 
+o readcurr gains the arguments uonly and vonly, for single components
+of the original vectors so that these can be returned as time series
+
   CHANGES IN raadtools VERSION 0.0-10
 
 NEW FEATURES 

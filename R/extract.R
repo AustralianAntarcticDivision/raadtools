@@ -150,6 +150,7 @@ resize <- FALSE
 
                       cat(mess1)
                       flush.console()
+
                   }
                   cat("\n")
 
@@ -167,6 +168,12 @@ resize <- FALSE
 
                       cat(mess1)
                       flush.console()
+                      print(thisx)
+                      cat("asub:\n")
+                      print(asub)
+                      cat("res:\n")
+                      print(res)
+
                   }
                   cat("\n")
           }

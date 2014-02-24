@@ -1514,7 +1514,7 @@ currentsfiles <- function() {
 ##' finding the nearest match in time within a short duration. By
 ##' default only one time step is returned with both U and V
 ##' components. Multiple dates can be returned for magnitude or
-##' direction only.
+##' direction, U or V only.
 ##'
 ##' This is the "SSALTO/DUACS - DT Geostrophic Velocities - Up-to-date Global Processing". See References.
 ##'
@@ -1648,7 +1648,7 @@ read0 <- function(x, varname) {
         r2 <- read0(files$fullname[findex[ifile]], varname = "Grid_0002")
         ##r1 <- .readAVISO(files$fullname[findex[ifile]], justone = FALSE)
         ##r <- setValues(r, values(rasterfun(r1, r2)), layer = i)
-        r0 <- rasterfun(r1[[1]], r1[[2]])
+        r0 <- rasterfun(r1, r2)
         if (lon180) r0 <- suppressWarnings(rotate(r0))
         if(cropit) r0 <- crop(r0, cropext)
         r[[ifile]] <- r0

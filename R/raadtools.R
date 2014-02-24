@@ -302,6 +302,7 @@ readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfile
 
 
     if (missing(date)) date <- min(files$date)
+    date <- timedateFrom(date)
     findex <- .processDates(date, files$date, time.resolution)
     cropit <- FALSE
     if (!is.null(xylim)) {
@@ -392,6 +393,7 @@ readssh <- function (date, time.resolution = "weekly",
     if (returnfiles)
         return(files)
     if (missing(date)) date <- min(files$date)
+     date <- timedateFrom(date)
     findex <- .processDates(date, files$date, time.resolution)
 ##    if (length(findex) > 1L & !magonly & !dironly) {
 ##        findex <- findex[1L]
@@ -522,7 +524,7 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
 
 
      if (missing(date)) date <- min(files$date)
-
+     date <- timedatefrom(date)
     findex <- .processDates(date, files$date, time.resolution)
 ##    findex <- findInterval(timedateFrom(date), files$date)
 
@@ -807,6 +809,7 @@ readchla <- function(date, time.resolution = c("weekly", "monthly"),
   if (returnfiles) return(files)
 
   if (missing(date)) date <- min(files$date)
+  date <- timedateFrom(date)
   ## from this point one, we don't care about the input "date" - this is our index into all files and that's what we use
   findex <- .processDates(date, files$date, time.resolution)
   date <- files$date[findex]
@@ -1345,6 +1348,7 @@ readsst <- function(date, time.resolution = c("daily", "monthly"), varname = c("
     if (returnfiles) return(files)
 
     if (missing(date)) date <- min(files$date)
+    date <- timedateFrom(date)
      ## from this point one, we don't care about the input "date" - this is our index into all files and that's what we use
     findex <- .processDates(date, files$date, time.resolution)
     date <- files$date[findex]
@@ -1604,7 +1608,10 @@ read0 <- function(x, varname) {
     files <- currentsfiles()
     if (returnfiles) return(files)
 
+
     if (missing(date)) date <- min(files$date)
+
+date <- timedateFrom(date)
     findex <- .processDates(date, files$date, time.resolution)
 
 
@@ -1795,6 +1802,7 @@ readice <- function(date,
     if (returnfiles) return(files)
 
     if (missing(date)) date <- min(files$date)
+    date <- timedateFrom(date)
     ## from this point one, we don't care about the input "date" - this is our index into all files and that's what we use
     findex <- .processDates(date, files$date, time.resolution)
 

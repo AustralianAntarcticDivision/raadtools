@@ -15,7 +15,8 @@ test_that("multiple dates are supported only with magonly/dironly, and if given 
 test_that("multi layers returned with magonly or dironly", {
     expect_that(nlayers(readcurr(c("2000-01-01", "2003-01-10"), magonly = TRUE)), equals(2))
     expect_that(nlayers(readcurr(c("2000-01-01", "2003-01-10"), dironly = TRUE)), equals(2))
-    expect_that(readcurr(c("2000-01-01"), magonly = TRUE, dironly = TRUE), gives_warning())
+    expect_that(readcurr(c("2000-01-01"), magonly = TRUE, dironly = TRUE), throws_error())
+    expect_that(readcurr(c("2000-01-01"), vonly = TRUE, dironly = TRUE), throws_error())
 })
 
 

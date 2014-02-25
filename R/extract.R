@@ -15,13 +15,26 @@
     if (a == 1) {
         return("daily")
     }
-    if (a %in% c(7, 8)) {
+    if (a %in% 5:9) {
         val = "weekly"
 } else {
     val = "monthly"
 }
     val
 }
+
+
+## functions for basic linear interpolation between two  time steps
+ .interp <- function(x1, x2, proportion) {
+     x1 * (1 - proportion) + x2 * proportion
+ }
+
+.calcProportion <- function(xmin, xmax, x) {
+    (unclass(x) - unclass(xmin) ) / (unclass(xmax) - unclass(xmin))
+}
+
+
+
 ##############################################################
 #' Extract methods for raadtools read functions
 #'
@@ -31,7 +44,7 @@
 #' @param y Object to use for querying from the raadtools read
 #' functions, such as a vector of character, Date, or POSIXt values,
 #' data.frame, trip, etc.
-#' ##@param method "simple" or "bilinear"
+#' @param ctstime specify whether to find the nearest value in time (\code{FALSE}), or interpolate between slices (\code{TRUE})
 #' @param ... Additional arguments passed to the read function.
 #' @return data values extracted by the read functions
 #' @seealso \code{\link{readsst}} and \code{\link{extract}}
@@ -75,126 +88,101 @@ setMethod("extract", signature(x = 'function', y = 'character'), .read.generic)
 ##' @exportMethod extract
 setMethod("extract", signature(x = 'function', y = 'data.frame'),
           function(x, y, ...) {
-           .local <- function (x, y,  contintime = FALSE, fact = NULL, ...)
-          ##buffer = NULL, small = FALSE, cellnumbers = FALSE, fun = NULL, na.rm = TRUE,  layer, nl, df = FALSE, factors = FALSE, ...)
-    {
-        .interp <- function(x1, x2, proportion) {
-            x1 * (1 - proportion) + x2 * proportion
-        }
-        .calcProportion <-
-            function(xmin, xmax, x) {
-                (unclass(x) - unclass(xmin) ) / (unclass(xmax) - unclass(xmin))
-            }
-
-
-        ## dataframes have no metadata so let's do our best
-              res <- rep(as.numeric(NA), nrow(y))
-              times <- try(timedateFrom(y[,3]))
-              ## we assume y is lon,lat,time
-              y <- SpatialPoints(as.matrix(y[,1:2]), CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"))
-
-              if (inherits(times, "try-error") | any(is.na(times))) {
-                  .standard.assumeXYT.TimeError()
-              }
-
-
-              ## hmm, will have to figure out how to do this
-              ## process args
-              args <- list(...)
-              if ("time.resolution" %in% names(args)) {
-                  files <- x(returnfiles = TRUE, time.resolution = args$time.resolution)
-              } else {
-                  files <- x(returnfiles = TRUE)
-
-              }
-
-              time.resolution <- .determine.time.resolution(files$date)
-
-              ## manage climatology exceptions
-              ## . . .dunno yet
-##              findex <- suppressWarnings(raadtools:::.processDates(times, files$date, timeres = time.resolution))
-
-             findex <- suppressWarnings(.processDates(times, files$date, timeres = time.resolution))
-              ## this won't always work, need to zap anything out of range . . .
-        if (max(times) >= max(files$date[findex])) findex <- c(findex, max(findex) + 1)
-              date <- files$date[findex]
-resize <- FALSE
-        if (!is.null(fact)) resize <- TRUE
-        mess1 <- ""
-              if (contintime) {
-                  ## we need to store start and end values
-                  resm <- cbind(res, res)
-                  thisx1 <- x(date[1L], verbose = FALSE)
-
-                  if(resize) thisx1 <- aggregate(thisx1, fact = fact, fun = "mean")
-##browser()
-                  ## bug in here ....
-                  for (i in seq_along(date)[-1]) {
-                      thisx2 <- x(date[i], verbose = FALSE)
-                      ## we have to store the time-value BEFORE aggregating
-                      ##t2 <- getZ(thisx2)
-                      if(resize) thisx2 <- aggregate(thisx2, fact = fact, fun = "mean")
-                      asub <- findInterval(times, date) == (i - 1)
-                      ## interpolation in time, controlled by "method" for xy
-##                      if (any(asub)) {resm[asub, ] <- suppressWarnings(extract(stack(thisx1, thisx2), y[asub, ]))}
-                      if (any(asub)) {resm[asub, ] <- suppressWarnings(extract(stack(thisx1, thisx2), y[asub, ], ...))}
-                      ##if (any(asub)) {resm[asub, ] <- suppressWarnings(extract(stack(thisx1, thisx2), y[asub, ]), ...)}
-                      ##res[asub] <- .interp(resm[asub,1], resm[asub,2], .calcProportion(getZ(thisx1), getZ(thisx2), times[asub]))
-                      ## use date since agggregate smashes the Z
-                      res[asub] <- .interp(resm[asub,1], resm[asub,2], .calcProportion(date[i-1L], date[i], times[asub]))
-                      thisx1 <- thisx2
-##browser()
-                      cat(paste(rep("\b", nchar(mess1)), collapse = ""))
-
-                      mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
-
-                      cat(mess1)
-                      flush.console()
-
+              .local <- function (x, y,  ctstime = FALSE, fact = NULL, ...) {
+                  result <- rep(as.numeric(NA), nrow(y))
+                  times <- try(timedateFrom(y[,3]))
+                  ## data.frame input has  assumed structure
+                  ## we assume y is lon,lat,time
+                  y <- SpatialPoints(as.matrix(y[,1:2]), CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"))
+                  ## chuck a spacker
+                  if (inherits(times, "try-error") | any(is.na(times))) {
+                      .standard.assumeXYT.TimeError()
                   }
-                  cat("\n")
+                  ## TODO, will have to figure out how to do this
+                  args <- list(...)
+                  if ("time.resolution" %in% names(args)) {
+                      files <- x(returnfiles = TRUE, time.resolution = args$time.resolution)
+                  } else {
+                      files <- x(returnfiles = TRUE)
+                  }
+                  ## TODO, this is awful need a fix
+                  time.resolution <- .determine.time.resolution(files$date)
+                  ## TODO somehow manage climatology exceptions
+                  ## unique indexes
+                  findex <- suppressWarnings(.processDates(times, files$date, timeres = time.resolution))
+                  ## all indexes (need to integrate in general processing setup with above)
+                  windex <- integer(length(times))
+                  for (i in seq_along(times)) {
+                      windex[i] <- which.min(abs(times[i] - files$date))
+                  }
+                  ## this won't always work, need to zap anything out of range . . .
+                  if (max(times) >= max(files$date[findex])) findex <- c(findex, max(findex) + 1)
+                  date <- files$date[findex]
+                  resize <- FALSE
+                  ## TODO careful checks that resizing makes a difference
+                  if (!is.null(fact)) resize <- TRUE
+                  mess1 <- ""
+                  ## interpolate in time?
+                  if (ctstime) {
+                      ## we need to store start and end values
+                      resm <- cbind(result, result)
+                      thisx1 <- x(date[1L], verbose = FALSE)
+                      if(resize) thisx1 <- aggregate(thisx1, fact = fact, fun = "mean")
+                      for (i in seq_along(date)[-1]) {
+                          thisx2 <- x(date[i], verbose = FALSE)
+                          ## TODO check do we have to store the time-value BEFORE aggregating
+                          ##t2 <- getZ(thisx2)
+                          if(resize) thisx2 <- aggregate(thisx2, fact = fact, fun = "mean")
+                          ## findInterval is too hard to use reliably (for this black duck)
+                          ## asub <- findInterval(times, date) == (i - 1)
+                          asub <- windex == findex[i]
 
-
-              } else {
-                  for (i in seq_along(date)) {
-                      thisx <- x(date[i], verbose = FALSE, ...)
-                      if(resize) thisx <- aggregate(thisx, fact = fact, fun = "mean")
-                      asub <- findInterval(times, date) == i
-                      ## no interpolation in time, controlled by "method" for xy
-                      if (any(asub)) {res[asub] <- suppressWarnings(extract(thisx, y[asub, ], ...))}
+                          ## interpolation in time, controlled in space by "method" for xy
+                          if (any(asub)) {resm[asub, ] <- suppressWarnings(extract(stack(thisx1, thisx2), y[asub, ], ...))}
+                          ## use date since agggregate smashes the Z
+                          result[asub] <- .interp(resm[asub,1], resm[asub,2], .calcProportion(date[i-1L], date[i], times[asub]))
+                          ## setup to do the next loop
+                          thisx1 <- thisx2
+                          ## report happy times
                           cat(paste(rep("\b", nchar(mess1)), collapse = ""))
-
-                      mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
-
-                      cat(mess1)
-                      flush.console()
-                      print(thisx)
-                      cat("asub:\n")
-                      print(asub)
-                      cat("res:\n")
-                      print(res)
-
+                          mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
+                          cat(mess1)
+                          flush.console()
+                      }
+                      cat("\n")
+                  } else {
+                      ## TODO, fix up the if/else here with an exception for the first/last for ctstime
+                      for (i in seq_along(date)) {
+                          thisx <- x(date[i], verbose = FALSE, ...)
+                          if(resize) thisx <- aggregate(thisx, fact = fact, fun = "mean")
+                          asub <- windex == findex[i]
+                          ## no interpolation in time, controlled by "method" for xy
+                          if (any(asub)) {result[asub] <- suppressWarnings(extract(thisx, y[asub, ], ...))}
+                          cat(paste(rep("\b", nchar(mess1)), collapse = ""))
+                          mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
+                          cat(mess1)
+                          flush.console()
+                      }
+                      cat("\n")
                   }
-                  cat("\n")
+                  result
+              }
+              .local(x, y, ...)
           }
-              res
-         }
-          .local(x, y, ...)
-       }
- )
+          )
 
 ## multi-function extract method
 ##' @exportMethod extract
 setMethod("extract", signature(x = 'list', y = 'data.frame'),
           function(x, y, ...) {
-           .local <- function (x, y,  contintime = FALSE, fact = NULL, ...) {
+           .local <- function (x, y,  ctstime = FALSE, fact = NULL, ...) {
 
                vals <- vector("list", length(x))
                ## the idea is to loop over a list of read functions ...
             for (i in seq_along(x)) {
 
 
-                vals[[i]] <- extract(x[[i]], y, contintime = contintime, fact = fact, ...)
+                vals[[i]] <- extract(x[[i]], y, ctstime = ctstime, fact = fact, ...)
             }
 
                names(vals) <- sapply(x, function(x1) as.character(substitute(x1)))
@@ -202,6 +190,7 @@ setMethod("extract", signature(x = 'list', y = 'data.frame'),
            }
            .local(x, y, ...)
        }
+
 
 
           )

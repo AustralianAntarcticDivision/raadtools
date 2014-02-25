@@ -1148,18 +1148,19 @@ extractxyt <- function(datasource, Query, ...) {
             extraction <- suppressWarnings(extract(d0, Query, cellnumbers = TRUE))
             cn <- extraction[,1]
             extracteddata[thisindex] <- extraction[thisindex,2]
-            cat("cn:\n")
-            print(cn)
+            ##cat("cn:\n")
+            ##print(cn)
         } else {
             extracteddata[thisindex] <- extract(d0, cn[thisindex])
         }
-        print(d0)
-        cat("ij:\n")
-        print(ij)
-        cat("thisindex:\n")
-        print(thisindex)
-        cat("extracteddata:\n")
-        print(extracteddata)
+        ## this part is fine
+        ##print(getZ(d0))
+        ##cat("ij:\n")
+        ##print(ij)
+        ##cat("thisindex:\n")
+        ##print(thisindex)
+        ##cat("extracteddata:\n")
+        ##print(extracteddata)
     }
 
     extracteddata

@@ -45,6 +45,7 @@
 #' functions, such as a vector of character, Date, or POSIXt values,
 #' data.frame, trip, etc.
 #' @param ctstime specify whether to find the nearest value in time (\code{FALSE}), or interpolate between slices (\code{TRUE})
+#' @param fact integer. Aggregation factor expressed as number of cells in each direction (horizontally and vertically). Or two integers (horizontal and vertical aggregation factor). See Details in \code{\link[raster]{aggregate}}
 #' @param ... Additional arguments passed to the read function.
 #' @return data values extracted by the read functions
 #' @seealso \code{\link{readsst}} and \code{\link{extract}}
@@ -78,7 +79,7 @@
 #' extract,function,POSIXt-method extract,function,character-method
 #' extract,function,data.frame-method extract,function,missing-method
 #' @exportMethod extract
-setMethod("extract", signature(x = 'function', y = 'missing'), function(x, y, ...) x(...))
+setMethod("extract", signature(x = 'function', y = 'missing'), function(x, y, ctstime = FALSE, fact = NULL, ...) x(...))
 #' @exportMethod extract
 setMethod("extract", signature(x = 'function', y = 'POSIXt'), .read.generic)
 ##' @exportMethod extract

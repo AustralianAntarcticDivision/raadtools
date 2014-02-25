@@ -69,9 +69,9 @@ fasticefiles <- function(datadir = getOption("default.datadir")) {
 ##' Fast ice data on original Equal Area Cylindrical grid
 ##' @title Fast ice data
 ##' @param date date or dates to read (can be character, POSIXt, or Date)
+##' @param time.resolution fixed at roughly "3 weekly"
 ##' @param xylim extent in native space of the grid
 ##' @param returnfiles return the file details only
-##' @param mask include mask as NA values?
 ##' @param ... other arguments, ignored
 ##' @return RasterBrick with 1 for fast ice pixels, 0 for other, NA for land mask
 ##' @references \url{http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=modis_20day_fast_ice}

@@ -171,29 +171,29 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
           }
           )
 
-## multi-function extract method
-##' @exportMethod extract
-setMethod("extract", signature(x = 'list', y = 'data.frame'),
-          function(x, y, ...) {
-           .local <- function (x, y,  ctstime = FALSE, fact = NULL, ...) {
+## ## multi-function extract method
+## ##' @exportMethod extract
+## setMethod("extract", signature(x = 'list', y = 'data.frame'),
+##           function(x, y, ...) {
+##            .local <- function (x, y,  ctstime = FALSE, fact = NULL, ...) {
 
-               vals <- vector("list", length(x))
-               ## the idea is to loop over a list of read functions ...
-            for (i in seq_along(x)) {
-
-
-                vals[[i]] <- extract(x[[i]], y, ctstime = ctstime, fact = fact, ...)
-            }
-
-               names(vals) <- sapply(x, function(x1) as.character(substitute(x1)))
-            as.data.frame(vals)
-           }
-           .local(x, y, ...)
-       }
+##                vals <- vector("list", length(x))
+##                ## the idea is to loop over a list of read functions ...
+##             for (i in seq_along(x)) {
 
 
+##                 vals[[i]] <- extract(x[[i]], y, ctstime = ctstime, fact = fact, ...)
+##             }
 
-          )
+##                names(vals) <- sapply(x, function(x1) as.character(substitute(x1)))
+##             as.data.frame(vals)
+##            }
+##            .local(x, y, ...)
+##        }
+
+
+
+##           )
 
 ## ##' @exportMethod extract
 ## setMethod("extract", signature(x = 'function', y = 'SpatialPolygons'),

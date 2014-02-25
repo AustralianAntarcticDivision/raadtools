@@ -524,7 +524,7 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
 
 
      if (missing(date)) date <- min(files$date)
-     date <- timedatefrom(date)
+     date <- timedateFrom(date)
     findex <- .processDates(date, files$date, time.resolution)
 ##    findex <- findInterval(timedateFrom(date), files$date)
 

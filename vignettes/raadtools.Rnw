@@ -318,7 +318,7 @@ aurora$chla <- extract(readchla, aurora)
 \subsection{Extract spatio-temporal data with spatial, temporal
   interpolation, and spatial aggregation}
 \label{sec:extractwithinterp}
-<<example-extract-withinterp>>=
+<<example-extract-withinterp,message=FALSE>>=
 d1 <- data.frame(lon = c(130, 125, 120, -52.27, 123.21, -25.42, 36.96, -36.28),
                  lat = c(-50, -52, -55,-66.31, -74.55, -69.66, -71.85, -68.56),
                  gmt = as.POSIXct("2006-02-08 00:00:00") + 24 *3600 * c(0, 1, 2, 3, 106, 118, 118, 190))

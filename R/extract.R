@@ -80,7 +80,7 @@
 #' extract,function,POSIXt-method extract,function,character-method
 #' extract,function,data.frame-method extract,function,missing-method
 #' @exportMethod extract
-setMethod("extract", signature(x = 'function', y = 'missing'), function(x, y, ctstime = FALSE, fact = NULL, ...) x(...))
+setMethod("extract", signature(x = 'function', y = 'missing'), function(x, y, ctstime = FALSE, fact = NULL, verbose = TRUE, ...) x(...))
 #' @exportMethod extract
 setMethod("extract", signature(x = 'function', y = 'POSIXt'), .read.generic)
 ##' @exportMethod extract
@@ -146,12 +146,14 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
                           ## setup to do the next loop
                           thisx1 <- thisx2
                           ## report happy times
-                          cat(paste(rep("\b", nchar(mess1)), collapse = ""))
-                          mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
-                          cat(mess1)
-                          flush.console()
+                          if (interactive() & verbose) {
+                              message(paste(rep("\b", nchar(mess1)), collapse = ""), appendLF = FALSE)
+                              mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
+                              message(mess1, appendLF = FALSE)
+                              flush.console()
+                          }
                       }
-                      cat("\n")
+                      message("", appendLF = TRUE)
                   } else {
                       ## TODO, fix up the if/else here with an exception for the first/last for ctstime
                       for (i in seq_along(date)) {
@@ -160,12 +162,16 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
                           asub <- windex == findex[i]
                           ## no interpolation in time, controlled by "method" for xy
                           if (any(asub)) {result[asub] <- suppressWarnings(extract(thisx, y[asub, ], ...))}
-                          cat(paste(rep("\b", nchar(mess1)), collapse = ""))
-                          mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
-                          cat(mess1)
-                          flush.console()
+
+                            if (interactive() & verbose) {
+                              message(paste(rep("\b", nchar(mess1)), collapse = ""), appendLF = FALSE)
+                              mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
+                              message(mess1, appendLF = FALSE)
+                              flush.console()
+                          }
                       }
-                      cat("\n")
+                      message("", appendLF = TRUE)
+
                   }
                   result
               }

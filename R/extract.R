@@ -46,6 +46,7 @@
 #' data.frame, trip, etc.
 #' @param ctstime specify whether to find the nearest value in time (\code{FALSE}), or interpolate between slices (\code{TRUE})
 #' @param fact integer. Aggregation factor expressed as number of cells in each direction (horizontally and vertically). Or two integers (horizontal and vertical aggregation factor). See Details in \code{\link[raster]{aggregate}}
+#' @param verbose report on progress or keep quiet
 #' @param ... Additional arguments passed to the read function.
 #' @return data values extracted by the read functions
 #' @seealso \code{\link{readsst}} and \code{\link{extract}}
@@ -89,7 +90,7 @@ setMethod("extract", signature(x = 'function', y = 'character'), .read.generic)
 ##' @exportMethod extract
 setMethod("extract", signature(x = 'function', y = 'data.frame'),
           function(x, y, ...) {
-              .local <- function (x, y,  ctstime = FALSE, fact = NULL, ...) {
+              .local <- function (x, y,  ctstime = FALSE, fact = NULL, verbose = TRUE, ...) {
                   result <- rep(as.numeric(NA), nrow(y))
                   times <- try(timedateFrom(y[,3]))
                   ## data.frame input has  assumed structure

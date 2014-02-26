@@ -207,15 +207,15 @@ geb <- readtopo("gebco_08", xylim = extent(150, 220, -75, -60))
 \label{sec:vectorplots}
 
 <<wind-plot>>=
-## set up data in advance
+## set up data in advance, to feed the plotting function
 tst <- readcurr()
 xylim <- extent(projectExtent(raster(extent(130, 150, -50, -30), crs = "+proj=longlat"), projection(tst)))
 
-plotcurrents <- function(date = as.Date("1999-11-24"), ext = NULL, scale = 2000) {
+plotcurrents <- function(date = as.Date("1999-11-24"), ext = NULL, scale = 2000, ...) {
      x <- readcurr(date)
      x <- crop(x, ext)
      crds <- coordinates(x)
-     plot(sqrt(x[["U"]]^2 + x[["V"]]^2), col = sst.pal(25, alpha = 0.7))
+     plot(sqrt(x[["U"]]^2 + x[["V"]]^2), ...)
      x1 <- crds[,1]
      y1 <- crds[,2]
      x2 <- crds[,1] + values(x[["U"]]) * scale
@@ -231,10 +231,15 @@ plotcurrents(date = as.Date("2000-01-05"), ext = xylim, scale = 2100)
 
 Animate a series of current plots as above.
 <<animate-currents,eval=FALSE>>=
-dts <- seq(as.Date("1995-10-01"), length = 30, by = "1 week")
+dts <- seq(as.Date("2005-10-01"), length = 104, by = "1 week")
+pal <- sst.pal(palette = TRUE)
+cols <- pal$cols[seq(1, length(pal$cols), length = 16)]
+cols <- gsub("ff$", "99", cols)
+brks <- pal$breaks[seq(1, length(pal$breaks), length = 16)]
+
 library(animation)
 ani.start()
-for (i in seq_along(dts)) plotcurrents(dts[i], ext = xylim, scale = 2500)
+for (i in seq_along(dts)) plotcurrents(dts[i], ext = xylim, scale = 2500, col = cols, breaks = brks)
 ani.stop()
 
 

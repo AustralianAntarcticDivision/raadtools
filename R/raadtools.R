@@ -16,6 +16,7 @@ NULL
                        "//aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data",
                        "/Volumes/files/data",
               "/mnt/raadtools",
+              "H:/environmental_data/new/data",
               "//147.66.8.89/gridded/data"))
 
     ##if (Sys.info()["nodename"] == "ICT-42618") a$default.datadir <- c("E:/repo/data", a$default.datadir)

@@ -343,7 +343,7 @@ sshfiles <- function(ssha = FALSE) {
     cfiles <- list.files(data.source, pattern = ".nc$", full.names = TRUE)
     datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
     currentdates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
-   sfs <- data.frame(file = cfiles, date = currentdates, stringsAsFactors = FALSE)
+   cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = currentdates, fullname = cfiles, stringsAsFactors = FALSE)
        ## look at these bad boys
 
     ##696 //aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data/ssh/aviso/upd/7d/nrt_global_merged_madt_h_20130320_20130320_20130326.nc 2013-03-20 11:00:00
@@ -352,7 +352,6 @@ sshfiles <- function(ssha = FALSE) {
     ##699 //aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data/ssh/aviso/upd/7d/nrt_global_merged_madt_h_20130403_20130403_20130409.nc 2013-04-03 11:00:00
     ##700 //aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data/ssh/aviso/upd/7d/nrt_global_merged_madt_h_20130410_20130410_20130416.nc 2013-04-10 10:00:00
 
-    cfs <- data.frame(file = cfiles, date = currentdates, stringsAsFactors = FALSE)
         cfs[diff(cfs$date) > 0, ]
 
 }
@@ -410,7 +409,7 @@ readssh <- function (date, time.resolution = "weekly",
     nfiles <- length(findex)
     r <- vector("list", nfiles)
     for (ifile in seq_len(nfiles)) {
-        r0 <- read0(files$file[findex[ifile]], varname = "Grid_0001")
+        r0 <- read0(files$fullname[findex[ifile]], varname = "Grid_0001")
     ##    r0 <- .readAVISO(files$file[findex[ifile]], justone = TRUE)
         if (lon180)
             r0 <- suppressWarnings(rotate(r0))
@@ -1976,7 +1975,7 @@ l <- vector("list", length(findex))
 
 
 
-       r <- setZ(brick(stack(l)), date)
+       r <- if (length(l) > 1) setZ(brick(stack(l)), date) else setZ(l[[1L]], date)
         ## lots of cells are wasted with nodata
 
        r

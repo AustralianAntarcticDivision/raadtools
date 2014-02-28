@@ -395,6 +395,7 @@ readssh <- function (date, time.resolution = "weekly",
     if (missing(date)) date <- min(files$date)
      date <- timedateFrom(date)
     findex <- .processDates(date, files$date, time.resolution)
+     date <- files$date[findex]
 ##    if (length(findex) > 1L & !magonly & !dironly) {
 ##        findex <- findex[1L]
 ##        date <- files$date[findex[1L]]
@@ -419,11 +420,9 @@ readssh <- function (date, time.resolution = "weekly",
         if (verbose & ifile%%10L == 0L)
             .progressreport(ifile, nfiles)
     }
-    r <- brick(stack(r))
+    r <- if (nfiles > 1) brick(stack(r)) else r[[1L]]
+    setZ(r, date)
 
-        r <- setZ(r, date)
-
-    return(r)
 }
 
 

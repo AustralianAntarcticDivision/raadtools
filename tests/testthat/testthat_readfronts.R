@@ -7,7 +7,7 @@ test_that("reqeusted files only are returned as a data.frame", {
     ffs <- readfronts(returnfiles = TRUE)
     expect_that(ffs, is_a("data.frame"))
 
-    expect_that(all(names(ffs) %in% c("date", "file", "fullname")), is_true())
+    expect_that(all(c("date", "file", "fullname") %in% names(ffs)), is_true())
     expect_that(all(file.exists(ffs$fullname[sample(nrow(ffs), 100)])), is_true())
     expect_that(sum(is.na(ffs$date)), equals(0))
 

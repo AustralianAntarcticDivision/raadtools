@@ -65,6 +65,19 @@ fasticefiles <- function(datadir = getOption("default.datadir")) {
     data.frame(file = file.path(pref, fs), date = dates, fullname = file.path(datadir, pref, fs), stringsAsFactors = FALSE)
 }
 
+
+## shared stuff
+## datadir
+## normalize input dates - need index and value
+
+## private, but common
+## dims, projection, bbox
+## files
+ .processFiles <- function(dt, f, tr) {
+        findex <- .processDates(dt, f$date, tr)
+        f[findex, ]
+    }
+
 ##' Read fast ice data, optionally with a mask
 ##'
 ##' Fast ice data on original Equal Area Cylindrical grid
@@ -80,12 +93,11 @@ fasticefiles <- function(datadir = getOption("default.datadir")) {
 ##' @examples r <- readfastice(c("2002-02-10", "2002-03-03"))
 ##'
 readfastice <-
-function(date = as.Date("2000-03-01"), time.resolution = "weekly3",
+function(date, time.resolution = "weekly3",
          xylim = NULL, returnfiles = FALSE, ...) {
 
     dims <- c(4300, 425)
     datadir = getOption("default.datadir")
-
     gridmask <- t(matrix(readBin(file.path(datadir, "fastice", "fraser_fastice", "geoloc", "coastmask.img"), "integer", size = 2, n = prod(dims), endian = "little"), dims[1]))
      read0 <- function(x) {
         projstring <- "+proj=cea +lon_0=91 +lat_0=-90 +lat_ts=-65 +datum=WGS84"
@@ -102,12 +114,14 @@ function(date = as.Date("2000-03-01"), time.resolution = "weekly3",
         raster(d, crs = projstring, xmn = topleft[1], xmx = botright[1], ymn = botright[2], ymx = topleft[2])
     }
 
-
-    date <- timedateFrom(date)
     files <- fasticefiles()
-    if (returnfiles) return(files)
 
     if (missing(date)) date <- min(files$date)
+    date <- timedateFrom(date)
+
+    if (returnfiles) return(files)
+
+
     findex <- .processDates(date, files$date, time.resolution)
 
 
@@ -127,7 +141,7 @@ function(date = as.Date("2000-03-01"), time.resolution = "weekly3",
         }
         r[[ifile]] <- r0
     }
-    r <- brick(stack(r))
+    r <- if (nfiles > 1) brick(stack(r)) else r[[1L]]
     names(r) <- sprintf("fastice_%s", format(files$date[findex], "%Y%m%d"))
 
     setZ(r, files$date[findex])
@@ -343,7 +357,8 @@ sshfiles <- function(ssha = FALSE) {
     cfiles <- list.files(data.source, pattern = ".nc$", full.names = TRUE)
     datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
     currentdates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
-   cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = currentdates, fullname = cfiles, stringsAsFactors = FALSE)
+   cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = currentdates,
+                     fullname = cfiles, stringsAsFactors = FALSE)
        ## look at these bad boys
 
     ##696 //aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data/ssh/aviso/upd/7d/nrt_global_merged_madt_h_20130320_20130320_20130326.nc 2013-03-20 11:00:00
@@ -1932,7 +1947,7 @@ readfronts <- function(date,
       wks <- seq(timedateFrom("1992-10-14"), by = "7 days", length = 854)
     ## get file names and dates and full path
     files <- data.frame(file = file.path("fronts", "ACCfronts.nc"), fullname = file.path(datadir, "fronts", "ACCfronts.nc"),
-                        date = wks, band = seq_along(wks))
+                        date = wks, band = seq_along(wks), stringsAsFactors = FALSE)
 
        ##frontname <- c("sBdy", "SACCF_S", "SACCF_N", "PF_S", "PF_M", "PF_N", "SAF_S",
        ##          "SAF_M", "SAF_N", "SAZ_S", "SAZ_M", "SAZ_N")

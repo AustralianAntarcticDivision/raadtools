@@ -1,5 +1,5 @@
 %\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{raadtools-install}
+%\VignetteIndexEntry{Installing and maintaining raadtools}
 
 # Installing the raadtools package, Michael Sumner
 

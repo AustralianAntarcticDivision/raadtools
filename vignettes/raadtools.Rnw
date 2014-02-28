@@ -11,8 +11,9 @@ backref=false,colorlinks=true,urlcolor=blue]{hyperref}
 \hypersetup{pdfstartview={XYZ null null 1}}
 \usepackage{breakurl}
 
-%\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{Using the raadtools package}
+
+% \VignetteIndexEntry{Using the raadtools package}
+% \VignetteEngine{knitr::knitr}
 
 \begin{document}
 

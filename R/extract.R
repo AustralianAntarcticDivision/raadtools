@@ -76,7 +76,7 @@
 #' @docType methods
 #' @rdname raadtools-extract
 #' @import methods
-#' @aliases extract,function,Date-method
+#' @aliases extract extract,function,Date-method
 #' extract,function,POSIXt-method extract,function,character-method
 #' extract,function,data.frame-method extract,function,missing-method
 #' @exportMethod extract

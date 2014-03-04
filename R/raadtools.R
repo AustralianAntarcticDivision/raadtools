@@ -1958,8 +1958,11 @@ readfronts <- function(date,
 
        if (missing(date)) date <- min(files$date)
 
-       findex <- .processDates(date, files$date, time.resolution)
-       date <- files$date[findex]
+       ##findex <- .processDates(date, files$date, time.resolution)
+       ##date <- files$date[findex]
+       files <- .processFiles(date, files, time.resolution)
+       nfiles <- nrow(files)
+
        proj <- "+proj=merc +ellps=WGS84"
        if (!lon180) proj <- paste(proj, "+over")
        ##extreme.points <- as.matrix(expand.grid(c(-180, 180), c(-82, -30.24627)))
@@ -1969,9 +1972,9 @@ readfronts <- function(date,
        epoints.merc <- structure(c(0, 2 * 20037508, 0,
                                    2 * 20037508, -16925422, -16925422, -3513725, -3513725), .Dim = c(4L, 2L))
 
-l <- vector("list", length(findex))
+l <- vector("list", nfiles)
        for (i in seq_along(l)) {
-           r0 <- raster(file, band = findex[i], stopIfNotEqualSpaced=FALSE)
+           r0 <- raster(file, band = files$band[i], stopIfNotEqualSpaced=FALSE)
            extent(r0) <- extent(bbox(epoints.merc))
            projection(r0) <- proj
            e <- new("Extent", xmin = 0, xmax = 2 * 20037508, ymin = -11087823.8567493 , ymax = -3513725)
@@ -1991,7 +1994,7 @@ l <- vector("list", length(findex))
 
 
 
-       r <- if (length(l) > 1) setZ(brick(stack(l)), date) else setZ(l[[1L]], date)
+       r <- if (length(l) > 1) setZ(brick(stack(l)), files$date) else setZ(l[[1L]], files$date)
         ## lots of cells are wasted with nodata
 
        r

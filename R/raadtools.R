@@ -1467,8 +1467,9 @@ readsst <- function(date, time.resolution = c("daily", "monthly"), varname = c("
     if (missing(date)) date <- min(files$date)
     date <- timedateFrom(date)
      ## from this point one, we don't care about the input "date" - this is our index into all files and that's what we use
-    findex <- .processDates(date, files$date, time.resolution)
-    date <- files$date[findex]
+    ##findex <- .processDates(date, files$date, time.resolution)
+    ##date <- files$date[findex]
+    files <- .processFiles(date, files, time.resolution)
 
     ## process xylim
     cropit <- FALSE
@@ -1478,13 +1479,13 @@ readsst <- function(date, time.resolution = c("daily", "monthly"), varname = c("
         ##rtemplate <- crop(rtemplate, cropext)
     }
 
-    nfiles <- length(findex)
+    nfiles <- nrow(files)
     r <- vector("list", nfiles)
     if (time.resolution == "daily") {
-        rtemplate <- raster(files$fullname[findex[1]], varname = varname)
+        rtemplate <- raster(files$fullname[1L], varname = varname)
         if (lon180) rtemplate <- rotate(rtemplate)
         for (ifile in seq_len(nfiles)) {
-            r0 <- raster(files$fullname[findex[ifile]], varname = varname)
+            r0 <- raster(files$fullname[ifile], varname = varname)
             if (lon180) r0 <- rotate(r0)
             if(cropit) r0 <- crop(r0, cropext)
             r0[r0 < -2] <- NA
@@ -1494,7 +1495,7 @@ readsst <- function(date, time.resolution = c("daily", "monthly"), varname = c("
     } else {
         landmask <- readBin(file.path(datadir, "sst", "oimonth_v2", "lstags.onedeg.dat"), "numeric", size = 4, n = 360 * 180, endian = "big")
         for (ifile in seq_len(nfiles)) {
-             fname <- files$fullname[findex[ifile]]
+             fname <- files$fullname[ifile]
              con <- gzfile(fname, open = "rb")
              version <- readBin(con, "integer", size = 4, n = 1, endian = "big")
              date <-  readBin(con, "integer", size = 4, n = 7, endian = "big")
@@ -1515,8 +1516,8 @@ readsst <- function(date, time.resolution = c("daily", "monthly"), varname = c("
     }
 
          if (nfiles > 1) r <- brick(stack(r)) else r <- r[[1L]]
-          names(r) <- paste("sst", time.resolution, format(files$date[findex], "%Y%m%d"), sep = "_")
-             r <- setZ(r, files$date[findex])
+          names(r) <- paste("sst", time.resolution, format(files$date, "%Y%m%d"), sep = "_")
+             r <- setZ(r, files$date)
 
              return(r)
 

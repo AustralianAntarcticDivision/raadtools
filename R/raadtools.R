@@ -976,13 +976,15 @@ function(data.source = "", time.resolution = c("daily")) {
 ##' }
 ##' @export
 readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = TRUE,
-                     magonly = FALSE, dironly = FALSE, returnfiles = FALSE, ...) {
+                     magonly = FALSE, dironly = FALSE,
+                     uonly = FALSE,
+                     vonly = FALSE,
+                     returnfiles = FALSE, ...) {
 
      time.resolution <- match.arg(time.resolution)
-    files <- windfiles()
-    if (returnfiles) return(files)
-
-
+     if ((magonly + dironly + uonly + vonly) > 1) stop("only one of magonly, dironly, uonly or vonly may be used, exiting")
+     files <- windfiles()
+     if (returnfiles) return(files)
 
      if (missing(date)) date <- min(files$date)
      date <- timedateFrom(date)
@@ -991,9 +993,10 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
 
 
      nfiles <- nrow(files)
-     if (!(magonly | dironly) & nfiles > 1L) {
-         warning("only one time index can be read at once unless magonly or dironly is TRUE")
-         files <- files[1,]
+     if (nfiles > 1L & !magonly & !dironly & !uonly & !vonly) {
+         warning("only one time index can be read at once unless 'magonly', 'dironly', 'uonly' or 'vonly' is TRUE")
+         files <- files[1L,]
+         nfiles <- 1L
      }
 
 
@@ -1007,6 +1010,13 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
         rasterfun <- function(x1, x2) sqrt(x1 * x1 + x2 * x2)
     if (dironly)
         rasterfun <- function(x1, x2) (90 - atan2(x2, x1) * 180/pi)%%360
+
+      if (!(magonly | dironly)) {
+        if (uonly) rasterfun <- function(x1, x2) x1
+        if (vonly) rasterfun <- function(x1, x2) x2
+    }
+
+
     cropit <- FALSE
     if (!is.null(xylim)) {
         cropit <- TRUE
@@ -1024,7 +1034,7 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
 
     }
     r <- brick(stack(r))
-    if (magonly | dironly)  {
+    if (magonly | dironly | uonly | vonly)  {
         r <- setZ(r, files$date)
         names(r) <- sprintf("wind_%s", format(files$date, "%Y%m%d"))
     } else {
@@ -1638,7 +1648,7 @@ readcurr <- function(date,
                      verbose = TRUE,
                      ...) {
 
-read0 <- function(x, varname) {
+    read0 <- function(x, varname) {
         xtreme <- 20037508
         ytreme <- 16925422
         x <- flip(flip(t(raster(x, varname = varname, stopIfNotEqualSpaced=FALSE)), direction = "y"),
@@ -1648,7 +1658,7 @@ read0 <- function(x, varname) {
         x
     }
 
-    datadir = getOption("default.datadir")
+
     time.resolution <- match.arg(time.resolution)
     if ((magonly + dironly + uonly + vonly) > 1) stop("only one of magonly, dironly, uonly or vonly may be used, exiting")
 
@@ -1658,16 +1668,20 @@ read0 <- function(x, varname) {
 
     if (missing(date)) date <- min(files$date)
 
-date <- timedateFrom(date)
+    date <- timedateFrom(date)
     ##findex <- .processDates(date, files$date, time.resolution)
-files <- .processFiles(date, files, time.resolution)
+    files <- .processFiles(date, files, time.resolution)
 
-nfiles <- nrow(files)
+
+    nfiles <- nrow(files)
     ## prevent reading more than one unless mag/dironly
     if (nfiles > 1L & !magonly & !dironly & !uonly & !vonly) {
-        files <- files[1,]
-        warning("only one time step can be read at once unless magonly, dironly uonly or vonly is TRUE")
+        files <- files[1L,]
+        nfiles <- 1L
+        warning("only one time step can be read at once unless 'magonly', 'dironly', 'uonly' or 'vonly' is TRUE")
     }
+
+
 
     if (!(magonly | dironly)) rasterfun <- function(x1, x2) {x <- brick(x1, x2); names(x) <- c("U", "V");x}
     if (magonly) rasterfun <- function(x1, x2) sqrt(x1 * x1 + x2 *x2)
@@ -1704,6 +1718,18 @@ nfiles <- nrow(files)
 
     r <- brick(stack(r))
      if (magonly | dironly | uonly | vonly) r <- setZ(r, files$date) else r <- setZ(r, rep(files$date, 2L))
+
+        if (magonly | dironly | uonly | vonly)  {
+        r <- setZ(r, files$date)
+        names(r) <- sprintf("wind_%s", format(files$date, "%Y%m%d"))
+    } else {
+
+        r <- setZ(r, rep(files$date, 2L))
+        names(r) <- sprintf("%scurrents_%s", c("U", "V"), format(files$date, "%Y%m%d"))
+    }
+
+
+
 ##    if (lon180) r <- suppressWarnings(rotate(r))
     return(r)
 

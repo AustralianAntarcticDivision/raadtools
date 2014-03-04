@@ -819,6 +819,7 @@ prodfiles <- function() {
     pfiles <- data.frame(file = gsub("^/", "", gsub(datadir, "", fs)), date = dates, stringsAsFactors = FALSE)
     save(pfiles, file = file.path(datadir, "cache", "prodfiles.Rdata"))
     pfiles
+
 }
 
 ##' Read Arrigo production data.
@@ -833,7 +834,8 @@ prodfiles <- function() {
 ##' @return RasterLayer or RasterBrick
 ##' @export
 readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfiles = FALSE, ...) {
-      read0 <- function(x) {
+
+    read0 <- function(x) {
         proj <- "+proj=stere +lat_0=-90 +lon_0=180 +ellps=sphere"
         offset <- c(5946335, 5946335)
         dims <- c(1280L, 1280L)
@@ -842,9 +844,12 @@ readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfile
         x <- list(x = seq(-offset[1L], offset[1L], length = dims[1L]),
                    y =  seq(-offset[2L], offset[2L], length = dims[2L]),
                    z = matrix(proddata, dims[1L])[rev(seq_len(dims[2L])),])
+
         raster(x, crs = proj)
 
     }
+
+
     time.resolution <- match.arg(time.resolution)
 
     files <- prodfiles()
@@ -853,6 +858,7 @@ readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfile
     if (missing(date)) date <- min(files$date)
     date <- timedateFrom(date)
 ##    findex <- .processDates(date, files$date, time.resolution)
+
     files <- .processFiles(date, files, time.resolution)
     cropit <- FALSE
     if (!is.null(xylim)) {
@@ -860,7 +866,9 @@ readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfile
         cropext <- extent(xylim)
     }
 
+
     nfiles <- nrow(files)
+
     r <- vector("list", nfiles)
 
     for (ifile in seq_len(nfiles)) {
@@ -869,10 +877,12 @@ readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfile
             r0 <- crop(r0, cropext)
         r[[ifile]] <- r0
     }
+
     r <- brick(stack(r))
     names(r) <- sprintf("prod_%s", format(files$date, "%Y%m%d"))
 
     setZ(r, files$date)
+
 }
 
 
@@ -1818,24 +1828,18 @@ readice <- function(date,
                     debug = FALSE,
                     verbose = TRUE,
                     returnfiles = FALSE, ...) {
-    datadir = getOption("default.datadir")
-    time.resolution <- match.arg(time.resolution)
 
+    time.resolution <- match.arg(time.resolution)
     product <- match.arg(product)
     ## get file names and dates and full path
     files <- .loadfiles(product, time.resolution = time.resolution)
     ##files$fullname <- file.path(datadir, files$file)
     if (returnfiles) return(files)
-
     if (missing(date)) date <- min(files$date)
     date <- timedateFrom(date)
-    ## from this point one, we don't care about the input "date" - this is our index into all files and that's what we use
-    files <- .processDates(date, files, time.resolution)
-
-
+    files <- .processFiles(date, files, time.resolution)
     ## NSIDC projection and grid size for the Southern Hemisphere
     stersouth <-  "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
-
     ## modify based on dataproduct
     dims <- switch(product,
                    nsidc = c(316L, 332L),
@@ -1843,45 +1847,34 @@ readice <- function(date,
     res <-  switch(product,
                    nsidc = c(25000, 25000),
                    ssmi = c(12500, 12500))
-
     rtemplate <- raster(GridTopology(c(-3937500, -3937500), res, dims))
-
-
     ## process xylim
     cropit <- FALSE
     if (!is.null(xylim)) {
         cropit <- TRUE
         cropext <- extent(xylim)
-        ##rtemplate <- crop(rtemplate, cropext)
     }
 
     nfiles <- nrow(files)
-
     r <- vector("list", nfiles)
-
     ## note that this can be replaced by a direct raster(file) once the package
     ## gets updated (post raster_2.1-49, October 2013)
     .readNSIDC <- function(fname) {
-
         con <- file(fname, open = "rb")
-      trash <- readBin(con, "integer", size = 1, n = 300)
-      dat <- readBin(con, "integer", size = 1, n = prod(dims), endian = "little", signed = FALSE)
-      close(con)
-      r100 <- dat > 250
-      r0 <- dat < 1
-
-
-      if (rescale) {
-        dat <- dat/2.5  ## rescale back to 100
-      }
-      if (setNA) {
-        dat[r100] <- NA
-        dat[r0] <- NA
-      }
-      raster(t(matrix(dat, dims[1])), template = rtemplate)
-
+        trash <- readBin(con, "integer", size = 1, n = 300)
+        dat <- readBin(con, "integer", size = 1, n = prod(dims), endian = "little", signed = FALSE)
+        close(con)
+        r100 <- dat > 250
+        r0 <- dat < 1
+        if (rescale) {
+            dat <- dat/2.5  ## rescale back to 100
+        }
+        if (setNA) {
+            dat[r100] <- NA
+            dat[r0] <- NA
+        }
+        raster(t(matrix(dat, dims[1])), template = rtemplate)
     }
-
     .readSSMI <- function(fname) {
         x <- raster(fname, varname = "concentration")
         x <- flip(x, "y")
@@ -1890,30 +1883,26 @@ readice <- function(date,
         } else {
             x[x > 100 | x < 1] <- NA
         }
-
         extent(x) <- extent(rtemplate)
         x
-
     }
 
     ## loop over file indices
     for (ifile in seq_len(nfiles)) {
-
-
-    r0 <- switch(product,
+        r0 <- switch(product,
                 nsidc = .readNSIDC(files$fullname[ifile]),
                 ssmi = .readSSMI(files$fullname[ifile]))
 
-      if (cropit) r0 <- crop(r0, cropext)
-      r[[ifile]] <- r0
-      ##if (verbose & ifile %% 10L == 0L) .progressreport(ifile, nfiles)
-  }
+        if (cropit) r0 <- crop(r0, cropext)
+        r[[ifile]] <- r0
+    }
     if (nfiles > 1) r <- brick(stack(r)) else r <- r[[1L]]
+
     projection(r) <- stersouth
     names(r) <- basename(files$file)
-    r <- setZ(r, files$date
-    r
+    setZ(r, files$date)
 }
+
 
 
 ##' Read data from the Sokolov/Rintoul Southern Ocean fronts analysis.

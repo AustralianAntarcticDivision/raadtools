@@ -1166,11 +1166,12 @@ readchla <- function(date, time.resolution = c("weekly", "monthly"),
   if (missing(date)) date <- min(files$date)
   date <- timedateFrom(date)
   ## from this point one, we don't care about the input "date" - this is our index into all files and that's what we use
-  findex <- .processDates(date, files$date, time.resolution)
-  date <- files$date[findex]
+  ##findex <- .processDates(date, files$date, time.resolution)
+  files <- .processFiles(date, files, time.resolution)
 
 
-  rtemplate <- if (product == "oceancolor") raster(files$fullname[findex[1L]], band = files$band[findex[1L]]) else raster(files$fullname[findex[1L]])
+
+  rtemplate <- if (product == "oceancolor") raster(files$fullname[1L], band = files$band[1L]) else raster(files$fullname[1L])
   ##if (lon180) rtemplate <- rotate(rtemplate)
 
   ## process xylim
@@ -1181,11 +1182,11 @@ readchla <- function(date, time.resolution = c("weekly", "monthly"),
     ##rtemplate <- crop(rtemplate, cropext)
   }
 
-  nfiles <- length(findex)
+  nfiles <- nrow(files)
   r <- vector("list", nfiles)
 
   for (ifile in seq_len(nfiles)) {
-    r0 <- if (product == "oceancolor") raster(files$fullname[findex[ifile]], band = files$band[findex[ifile]]) else raster(files$fullname[findex[ifile]])
+    r0 <- if (product == "oceancolor") raster(files$fullname[ifile], band = files$band[ifile]) else raster(files$fullname[ifile])
     ##if (lon180) r0 <- rotate(r0)
     if(cropit) r0 <- crop(r0, cropext)
     ## r0[r0 < -2] <- NA
@@ -1196,8 +1197,8 @@ readchla <- function(date, time.resolution = c("weekly", "monthly"),
   if (nfiles > 1)
     r <- brick(stack(r))
   else r <- r[[1L]]
-  names(r) <- basename(files$file[findex])
-  r <- setZ(r, files$date[findex])
+  names(r) <- basename(files$file)
+  r <- setZ(r, files$date)
   return(r)
 }
 

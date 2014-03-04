@@ -944,34 +944,26 @@ readssh <- function (date, time.resolution = "weekly",
         return(files)
     if (missing(date)) date <- min(files$date)
      date <- timedateFrom(date)
-    findex <- .processDates(date, files$date, time.resolution)
-     date <- files$date[findex]
-##    if (length(findex) > 1L & !magonly & !dironly) {
-##        findex <- findex[1L]
-##        date <- files$date[findex[1L]]
-##        warning("only one time step can be read at once")
-##    }
+    ##findex <- .processDates(date, files$date, time.resolution)
+     files <- .processFiles(date, files, time.resolution)
 
     cropit <- FALSE
     if (!is.null(xylim)) {
         cropit <- TRUE
         cropext <- extent(xylim)
     }
-    nfiles <- length(findex)
+    nfiles <- nrow(findex)
     r <- vector("list", nfiles)
     for (ifile in seq_len(nfiles)) {
-        r0 <- read0(files$fullname[findex[ifile]], varname = "Grid_0001")
-    ##    r0 <- .readAVISO(files$file[findex[ifile]], justone = TRUE)
+        r0 <- read0(files$fullname[ifile], varname = "Grid_0001")
         if (lon180)
             r0 <- suppressWarnings(rotate(r0))
         if (cropit)
             r0 <- crop(r0, cropext)
         r[[ifile]] <- r0
-        if (verbose & ifile%%10L == 0L)
-            .progressreport(ifile, nfiles)
     }
     r <- if (nfiles > 1) brick(stack(r)) else r[[1L]]
-    setZ(r, date)
+    setZ(r, files$date)
 
 }
 

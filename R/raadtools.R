@@ -962,7 +962,7 @@ readssh <- function (date, time.resolution = "weekly",
         cropit <- TRUE
         cropext <- extent(xylim)
     }
-    nfiles <- nrow(findex)
+    nfiles <- nrow(files)
     r <- vector("list", nfiles)
     for (ifile in seq_len(nfiles)) {
         r0 <- read0(files$fullname[ifile], varname = "Grid_0001")

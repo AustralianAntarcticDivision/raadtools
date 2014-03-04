@@ -845,35 +845,34 @@ readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfile
         raster(x, crs = proj)
 
     }
-    datadir = getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
 
     files <- prodfiles()
     if (returnfiles) return(files)
 
-
     if (missing(date)) date <- min(files$date)
     date <- timedateFrom(date)
-    findex <- .processDates(date, files$date, time.resolution)
+##    findex <- .processDates(date, files$date, time.resolution)
+    files <- .processFiles(date, files, time.resolution)
     cropit <- FALSE
     if (!is.null(xylim)) {
         cropit <- TRUE
         cropext <- extent(xylim)
     }
 
-    nfiles <- length(findex)
+    nfiles <- nrow(files)
     r <- vector("list", nfiles)
 
     for (ifile in seq_len(nfiles)) {
-        r0 <- read0(files$fullname[findex[ifile]])
+        r0 <- read0(files$fullname[ifile])
         if (cropit)
             r0 <- crop(r0, cropext)
         r[[ifile]] <- r0
     }
     r <- brick(stack(r))
-    names(r) <- sprintf("prod_%s", format(files$date[findex], "%Y%m%d"))
+    names(r) <- sprintf("prod_%s", format(files$date, "%Y%m%d"))
 
-    setZ(r, files$date[findex])
+    setZ(r, files$date)
 }
 
 

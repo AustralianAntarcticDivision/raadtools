@@ -769,11 +769,9 @@ function(date, time.resolution = "weekly3",
     if (missing(date)) date <- min(files$date)
     date <- timedateFrom(date)
 
+    ## it would be nice here to trim down if there were input dates
     if (returnfiles) return(files)
-
-
-    findex <- .processDates(date, files$date, time.resolution)
-
+    files <- .processFiles(date, files, time.resolution)
 
     cropit <- FALSE
     if (!is.null(xylim)) {
@@ -781,20 +779,20 @@ function(date, time.resolution = "weekly3",
         cropext <- extent(xylim)
     }
 
-    nfiles <- length(findex)
+    nfiles <- nrow(files)
     r <- vector("list", nfiles)
 
     for (ifile in seq_len(nfiles)) {
-        r0 <- read0(files$fullname[findex[ifile]])
+        r0 <- read0(files$fullname[ifile])
         if (cropit) {
             r0 <- crop(r0, cropext)
         }
         r[[ifile]] <- r0
     }
     r <- if (nfiles > 1) brick(stack(r)) else r[[1L]]
-    names(r) <- sprintf("fastice_%s", format(files$date[findex], "%Y%m%d"))
+    names(r) <- sprintf("fastice_%s", format(files$date, "%Y%m%d"))
 
-    setZ(r, files$date[findex])
+    setZ(r, files$date)
 
 }
 
@@ -835,17 +833,15 @@ prodfiles <- function() {
 ##' @return RasterLayer or RasterBrick
 ##' @export
 readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfiles = FALSE, ...) {
-    ##if (!length(file) == 1) stop("only one file can be read at once")
-    ##stopifnot(file.exists(file[1]))
-    ##type <- as.character(type[1])
-    ##type <- match.arg(type)
-
-    read0 <- function(x) {
+      read0 <- function(x) {
         proj <- "+proj=stere +lat_0=-90 +lon_0=180 +ellps=sphere"
-        offset <- 5946335
-          proddata <- readBin(x, numeric(), (1280^2), size = 4, endian = "little")
-          proddata[proddata < 0] <- NA
-         x <- list(x = seq(-offset, offset, length = 1280), y =  seq(-offset, offset, length = 1280), z = matrix(proddata, 1280)[1280:1,])
+        offset <- c(5946335, 5946335)
+        dims <- c(1280L, 1280L)
+        proddata <- readBin(x, numeric(), prod(dims), size = 4, endian = "little")
+        proddata[proddata < 0] <- NA
+        x <- list(x = seq(-offset[1L], offset[1L], length = dims[1L]),
+                   y =  seq(-offset[2L], offset[2L], length = dims[2L]),
+                   z = matrix(proddata, dims[1L])[rev(seq_len(dims[2L])),])
         raster(x, crs = proj)
 
     }

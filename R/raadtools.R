@@ -1730,24 +1730,16 @@ read0 <- function(x, varname) {
     if (missing(date)) date <- min(files$date)
 
 date <- timedateFrom(date)
-    findex <- .processDates(date, files$date, time.resolution)
+    ##findex <- .processDates(date, files$date, time.resolution)
+files <- .processFiles(date, files, time.resolution)
 
-
+nfiles <- nrow(files)
     ## prevent reading more than one unless mag/dironly
-    if (length(findex) > 1L & !magonly & !dironly & !uonly & !vonly) {
-        findex <- findex[1L]
-        date <- files$date[findex[1L]]
+    if (nfiles > 1L & !magonly & !dironly & !uonly & !vonly) {
+        files <- files[1,]
         warning("only one time step can be read at once unless magonly, dironly uonly or vonly is TRUE")
     }
-    ##i <- 1
 
-     ##    r1 <- read0(files$file[findex[i]], varname = "Grid_0001")
-     ##    r2 <- read0(files$file[findex[i]], varname = "Grid_0002")
-    ##if (!(magonly | dironly)) {
-     ##   r <- brick(r1, r2)
-     ##    names(r) <- c("U", "V")
-     ##    return(r)
-    ##}
     if (!(magonly | dironly)) rasterfun <- function(x1, x2) {x <- brick(x1, x2); names(x) <- c("U", "V");x}
     if (magonly) rasterfun <- function(x1, x2) sqrt(x1 * x1 + x2 *x2)
     if (dironly) rasterfun <- function(x1, x2) (90 - atan2(x2, x1) * 180/pi) %% 360
@@ -1766,11 +1758,11 @@ date <- timedateFrom(date)
     }
 
 
-    nfiles <- length(findex)
+
     r <- vector("list", nfiles) ##brick(rasterfun(r1, r2), nl = length(findex))
     for (ifile in seq_len(nfiles)) {
-       r1 <- read0(files$fullname[findex[ifile]], varname = "Grid_0001")
-        r2 <- read0(files$fullname[findex[ifile]], varname = "Grid_0002")
+       r1 <- read0(files$fullname[ifile], varname = "Grid_0001")
+        r2 <- read0(files$fullname[ifile], varname = "Grid_0002")
         ##r1 <- .readAVISO(files$fullname[findex[ifile]], justone = FALSE)
         ##r <- setValues(r, values(rasterfun(r1, r2)), layer = i)
         r0 <- rasterfun(r1, r2)
@@ -1782,7 +1774,7 @@ date <- timedateFrom(date)
     }
 
     r <- brick(stack(r))
-     if (magonly | dironly | uonly | vonly) r <- setZ(r, date) else r <- setZ(r, rep(date, 2L))
+     if (magonly | dironly | uonly | vonly) r <- setZ(r, files$date) else r <- setZ(r, rep(files$date, 2L))
 ##    if (lon180) r <- suppressWarnings(rotate(r))
     return(r)
 
@@ -1838,7 +1830,7 @@ readice <- function(date,
     if (missing(date)) date <- min(files$date)
     date <- timedateFrom(date)
     ## from this point one, we don't care about the input "date" - this is our index into all files and that's what we use
-    findex <- .processDates(date, files$date, time.resolution)
+    files <- .processDates(date, files, time.resolution)
 
 
     ## NSIDC projection and grid size for the Southern Hemisphere
@@ -1863,9 +1855,9 @@ readice <- function(date,
         ##rtemplate <- crop(rtemplate, cropext)
     }
 
-    nfiles <- length(findex)
+    nfiles <- nrow(files)
 
-    r <- vector("list", length(findex))
+    r <- vector("list", nfiles)
 
     ## note that this can be replaced by a direct raster(file) once the package
     ## gets updated (post raster_2.1-49, October 2013)
@@ -1905,21 +1897,21 @@ readice <- function(date,
     }
 
     ## loop over file indices
-    for (ifile in seq_along(findex)) {
+    for (ifile in seq_len(nfiles)) {
 
 
     r0 <- switch(product,
-                nsidc = .readNSIDC(files$fullname[findex[ifile]]),
-                ssmi = .readSSMI(files$fullname[findex[ifile]]))
+                nsidc = .readNSIDC(files$fullname[ifile]),
+                ssmi = .readSSMI(files$fullname[ifile]))
 
       if (cropit) r0 <- crop(r0, cropext)
       r[[ifile]] <- r0
       ##if (verbose & ifile %% 10L == 0L) .progressreport(ifile, nfiles)
   }
-    if (length(findex) > 1) r <- brick(stack(r)) else r <- r[[1L]]
+    if (nfiles > 1) r <- brick(stack(r)) else r <- r[[1L]]
     projection(r) <- stersouth
-    names(r) <- files$file[findex]
-    r <- setZ(r, files$date[findex])
+    names(r) <- basename(files$file)
+    r <- setZ(r, files$date
     r
 }
 

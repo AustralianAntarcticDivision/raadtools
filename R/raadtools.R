@@ -1057,15 +1057,14 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
 
      if (missing(date)) date <- min(files$date)
      date <- timedateFrom(date)
-    findex <- .processDates(date, files$date, time.resolution)
-##    findex <- findInterval(timedateFrom(date), files$date)
+   ## findex <- .processDates(date, files$date, time.resolution)
+     files <- .processFiles(date, files, time.resolution)
 
-     band <- files$band[findex]
-##     doy <- as.POSIXlt(date)$yday + 1
 
-     if (!(magonly | dironly) & length(findex) > 1L) {
+     nfiles <- nrow(files)
+     if (!(magonly | dironly) & nfiles > 1L) {
          warning("only one time index can be read at once unless magonly or dironly is TRUE")
-         findex <- findex[1L]
+         files <- files[1,]
      }
 
 
@@ -1084,11 +1083,11 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
         cropit <- TRUE
         cropext <- extent(xylim)
     }
-    nfiles <- length(findex)
+
     r <- vector("list", nfiles)
     for (ifile in seq_len(nfiles)) {
-        r1 <- raster(files$ufullname[findex[ifile]], band = files$band[findex[ifile]])
-        r2 <- raster(files$vfullname[findex[ifile]], band = files$band[findex[ifile]])
+        r1 <- raster(files$ufullname[ifile], band = files$band[ifile])
+        r2 <- raster(files$vfullname[ifile], band = files$band[ifile])
         r0 <- rasterfun(r1, r2)
         if (lon180)     r0 <- suppressWarnings(rotate(r0))
         if (cropit) r0 <- crop(r0, cropext)
@@ -1097,12 +1096,12 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
     }
     r <- brick(stack(r))
     if (magonly | dironly)  {
-        r <- setZ(r, date)
-        names(r) <- sprintf("wind_%s", format(files$date[findex], "%Y%m%d"))
+        r <- setZ(r, files$date)
+        names(r) <- sprintf("wind_%s", format(files$date, "%Y%m%d"))
     } else {
 
-        r <- setZ(r, rep(date, 2L))
-        names(r) <- sprintf("%swind_%s", c("U", "V"), format(files$date[findex], "%Y%m%d"))
+        r <- setZ(r, rep(files$date, 2L))
+        names(r) <- sprintf("%swind_%s", c("U", "V"), format(files$date, "%Y%m%d"))
     }
 
 

@@ -1889,6 +1889,69 @@ readice <- function(date,
     setZ(r, files$date)
 }
 
+##internal for now
+##' .. content for \description{} (no empty lines) ..
+##'
+##' .. content for \details{} ..
+##' @title
+##' @param dates
+##' @param level
+##' @param simplify
+##' @return SpatialLinesDataFrame with columns
+##' \item{level} The raw integer index from the Sokolov/Rintoul data set
+##' \item{front} The matching name of the front region (top or bottom?)
+##' \item{date} The date of the week
+contourfronts <-
+function(date, level = NULL, simplify = TRUE) {
+  ##conts <- c(sBdy =  1, SACCF_S = 2, SACCF_N = 3,PF_S = 4,PF_M = 5, PF_N =  6, SAF_S = 7, SAF_M = 8, SAF_N =  9, SAZ_S = 10, SAZ_M = 11, SAZ_N = 12)
+
+  ##if (!is.null(level)) conts <- conts[level]
+  files <- readfronts(returnfiles = TRUE)
+  if (missing(date)) date <- files$date[1L]
+  files <- .processFiles(date, files, "weekly")
+  nfiles <- nrow(files)
+  for (ifile in seq_len(nfiles)) {
+    f <- readfronts(files$date[ifile], RAT = TRUE)
+    if (ifile == 1L) levs <- levels(f)[[1L]]
+    ## better explore this, drop the south of sBdy?
+    cl0 <-  ContourLines2SLDF(contourLines(as.image.SpatialGridDataFrame(as(deratify(f, complete = TRUE), "SpatialGridDataFrame")), levels = levs$ID[-1L]))
+    if (simplify) {
+      cl0 <- .dropAllButCoordiest(cl0)
+    }
+    proj4string(cl0) <- CRS(projection(f))
+    cl0$front <- levs$name[-1L]
+    cl0$date <- files$date[ifile]
+
+    if (ifile > 1) {
+      cl0 <- incrementIDs(cl0, ifile)
+      ## this obviously is slow, better fix
+      cl <- spRbind(cl, cl0)
+    } else {
+      cl <- cl0
+    }
+    if (interactive()) invisible("harass user")
+  }
+  spTransform(cl, CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"))
+}
+
+.dropAllButCoordiest <-
+function(x) {
+    for (iObj in seq_len(nrow(x))) {
+        if (inherits(x, "SpatialLinesDataFrame")) {
+                        wmax <- which.max(sapply(x[iObj, ]@lines[[1]]@Lines, function(x) nrow(x@coords)))
+                        x@lines[[iObj]]@Lines <- x@lines[[iObj]]@Lines[wmax]
+            }
+        if (inherits(x, "SpatialPolygonsDataFrame")) {
+             wmax <- which.max(sapply(x[iLine, ]@lines[[1]]@Lines, function(x) nrow(x@coords)))
+             x@lines[[iLine]]@Lines <- x@lines[[iLine]]@Lines[wmax]
+        }
+    }
+        x
+}
+
+
+contourfronts()
+
 
 
 ##' Read data from the Sokolov/Rintoul Southern Ocean fronts analysis.

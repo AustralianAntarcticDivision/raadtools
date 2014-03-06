@@ -214,13 +214,13 @@ xylim <- extent(projectExtent(raster(extent(130, 150, -50, -30), crs = "+proj=lo
 
 plotcurrents <- function(date = as.Date("1999-11-24"), ext = NULL, scale = 2000, ...) {
      x <- readcurr(date)
-     x <- crop(x, ext)
+     if (!is.null(ext)) x <- crop(x, ext)
      crds <- coordinates(x)
-     plot(sqrt(x[["U"]]^2 + x[["V"]]^2), ...)
+     plot(sqrt(x[[1L]]^2 + x[[2L]]^2), ...)
      x1 <- crds[,1]
      y1 <- crds[,2]
-     x2 <- crds[,1] + values(x[["U"]]) * scale
-     y2 <- crds[,2] + values(x[["V"]]) * scale
+     x2 <- crds[,1] + values(x[[1L]]) * scale
+     y2 <- crds[,2] + values(x[[2L]]) * scale
      arrows(x1, y1, x2, y2, length = 0.03)
      invisible(NULL)
  }

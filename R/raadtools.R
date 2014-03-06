@@ -51,7 +51,46 @@ NULL
     }
 }
 
+##' Read map images.
+##'
+##' The ancient lost art of cartography.
+##'
+##' ibcso_background: The IBCSO RGB-map rasterlayer in high resolution
+##' ant_and_sthn_ocean_13989: Antarctica and the Sourthern Ocean
+##' ant_sthn_ocean_ed9_13939: Antarctica and the Sourthern Ocean Ed. 9
+##' kerguelen_to_antarctica_bathy_14033: Kerguelen and Antarctica
+##' @title Maps of places
+##' @param map name of the map to load
+##' @param fact resize factor, see \code{\link[raster]{aggregate}}
+##' @return RasterBrick, with R G B bands
+##' @references
+##' \url{http://www.ibcso.org/data.html}
+##' @export
+imagemap <- function(map =
+                     c("ant_and_sthn_ocean_13989",
+                       "ant_sthn_ocean_ed9_13939",
+                       "ibcso_background_hq",
+                       "kerguelen_to_antarctica_bathy_14033"),
+                       fact = 1L) {
+    datadir <- getOption("default.datadir")
+    map <- match.arg(map)
+    fpath <- switch(map,
+                    ibcso_background_hq = file.path(datadir,  "bathymetry", "ibcso", "image", "ibcso_background_hq.tif"),
+                    ant_and_sthn_ocean_13989 = file.path(datadir,  "maps", "ant_and_sthn_ocean_13989.tif"),
+                    ant_sthn_ocean_ed9_13939 = file.path(datadir, "maps", "ant_sthn_ocean_ed9_13939.tif"),
+                    kerguelen_to_antarctica_bathy_14033 = file.path(datadir, "maps",  "kerguelen_to_antarctica_bathy_14033.tif")
+        )
 
+    if (file.exists(fpath) & interactive()) message("\n\nremember to plot with plotRGB(x)")
+    x <- brick(fpath)
+    if (fact > 1) {
+        ##aggregate(x, fact, fun = function(x, na.rm = TRUE) sample(x, 1L))
+        x <- resample(x, raster(extent(x), nrows = ceiling(nrow(x)/fact), ncol = ceiling(ncol(x)/fact), crs = projection(x)), method = "ngb")
+
+    }
+    names(x) <- c("R", "G", "B")
+    x
+}
 
 
 
@@ -948,6 +987,8 @@ function(data.source = "", time.resolution = c("daily")) {
 ##' @param magonly return just the magnitude from the U and V
 ##' components
 ##' @param dironly return just the direction from the U and V, in degrees N=0, E=90, S=180, W=270
+##' @param uonly return just the horizontal component of velocity, U
+##' @param vonly return just the vertical component of velocity, V
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param xylim crop
 ##' @param lon180 Pacific or Atlantic

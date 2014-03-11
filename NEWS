@@ -2,7 +2,7 @@
 
 o tidy internal handling of file indexes
 
-o new function imagemap to read map images
+o new function imagemap to load map images
 
   CHANGES IN raadtools VERSION 0.1-0
 

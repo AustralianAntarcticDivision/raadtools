@@ -28,6 +28,8 @@ NULL
     existing <- getOption("default.datadir")
     if (!is.null(existing)) {
         possibles <- c(existing, possibles)
+    } else {
+
     }
     for (i in seq_along(possibles)) {
         fi <- file.info(possibles[i])
@@ -1883,17 +1885,17 @@ readice <- function(date,
 }
 
 ##internal for now
-##' .. content for \description{} (no empty lines) ..
-##'
-##' .. content for \details{} ..
-##' @title
-##' @param dates
-##' @param level
-##' @param simplify
-##' @return SpatialLinesDataFrame with columns
-##' \item{level} The raw integer index from the Sokolov/Rintoul data set
-##' \item{front} The matching name of the front region (top or bottom?)
-##' \item{date} The date of the week
+## .. content for \description{} (no empty lines) ..
+##
+## .. content for \details{} ..
+## title
+## param dates
+## param level
+## param simplify
+## return SpatialLinesDataFrame with columns
+## \item{level} The raw integer index from the Sokolov/Rintoul data set
+## \item{front} The matching name of the front region (top or bottom?)
+## \item{date} The date of the week
 contourfronts <-
 function(date, level = NULL, simplify = TRUE) {
   ##conts <- c(sBdy =  1, SACCF_S = 2, SACCF_N = 3,PF_S = 4,PF_M = 5, PF_N =  6, SAF_S = 7, SAF_M = 8, SAF_N =  9, SAZ_S = 10, SAZ_M = 11, SAZ_N = 12)
@@ -1935,8 +1937,8 @@ function(x) {
                         x@lines[[iObj]]@Lines <- x@lines[[iObj]]@Lines[wmax]
             }
         if (inherits(x, "SpatialPolygonsDataFrame")) {
-             wmax <- which.max(sapply(x[iLine, ]@lines[[1]]@Lines, function(x) nrow(x@coords)))
-             x@lines[[iLine]]@Lines <- x@lines[[iLine]]@Lines[wmax]
+             wmax <- which.max(sapply(x[iObj, ]@lines[[1]]@Lines, function(x) nrow(x@coords)))
+             x@lines[[iObj]]@Lines <- x@lines[[iObj]]@Lines[wmax]
         }
     }
         x
@@ -2069,6 +2071,7 @@ icefiles <- function(time.resolution = c("daily", "monthly"), product = c("nsidc
 
 .updateicefiles <- function(datadir = getOption("default.datadir")) {
 
+    if (!file.exists(datadir)) stop(sprintf("data repository not found at %s", datadir))
 
     for (time.resolution in c("daily", "monthly")) {
         subpath <- file.path("seaice", "smmr_ssmi_nasateam", time.resolution)

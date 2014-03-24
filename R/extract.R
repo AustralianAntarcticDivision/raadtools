@@ -112,13 +112,15 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
                   ## TODO somehow manage climatology exceptions
                   ## unique indexes
                   findex <- suppressWarnings(.processDates(times, files$date, timeres = time.resolution))
+                  ##files <- .processFiles(times, files, timeres = time.resolution)
                   ## all indexes (need to integrate in general processing setup with above)
                   windex <- integer(length(times))
                   for (i in seq_along(times)) {
-                      windex[i] <- which.min(abs(times[i] - files$date))
+                     windex[i] <- which.min(abs(times[i] - files$date))
                   }
                   ## this won't always work, need to zap anything out of range . . .
-                  if (max(times) >= max(files$date[findex])) findex <- c(findex, max(findex) + 1)
+                  if (max(times) == max(files$date[findex])) findex <- c(findex, max(findex) + 1)
+                  findex <- findex[findex <= nrow(files)]
                   date <- files$date[findex]
                   resize <- FALSE
                   ## TODO careful checks that resizing makes a difference

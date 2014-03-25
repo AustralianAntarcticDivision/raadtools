@@ -53,6 +53,64 @@ NULL
     }
 }
 
+.rrfiles <- function() {
+    datadir <- getOption("default.datadir")
+    subp <- "rapid_response"
+    fs <- list.files(file.path(datadir, subp), pattern = "tif$")
+    data.frame(file = file.path(subp, fs), date = timedateFrom(strptime(fs, "Antarctica.%Y%j")),
+               fullname = file.path(datadir, subp, fs), stringsAsFactors = FALSE)
+}
+
+
+##' Read MODIS Rapid Response RGB images
+##'
+##' MODIS Rapid Response, Antarctica
+##'
+##' @title MODIS Rapid Response images
+##' @param date date of image to load
+##' @param returnfiles return just the list of files
+##' @param ... other arguments for \code{\link[raster]{brick}}
+readrapid_response <- function(date, returnfiles = FALSE, ...) {
+    files <- .rrfiles()
+    if (returnfiles) return(files)
+
+    if (missing(date)) date <- min(files$date)
+    files <- .processFiles(date, files, "daily")
+
+    nfiles <- nrow(files)
+    if (nfiles > 1L) {
+        warning("only one time-step can be read, for now")
+        ## use pct = TRUE to return a palette image time series")
+
+
+        files <- files[1L,]
+    }
+        return(brick(files$fullname[1L], ...))
+
+
+    ## this won't work until raster has plot(Brick, legend)
+    ## ## otherwise we build a single-band palette, somehow
+    ## r <- vector("list", nfiles)
+    ## for (i in seq_along(r)) {
+    ##     x <- brick(files$fullname[i])
+    ##     if (i == 1L) {
+    ##         ## this is not actually very efficient
+    ##         vals <- values(x) / 256
+    ##         col <- rgb(vals[,1], vals[,2], vals[,3])
+    ##         f <- factor(col)
+    ##     }
+    ##     r[[i]] <- setValues(raster(x), as.integer(unclass(f)))
+
+    ## }
+
+    ## r <- brick(stack(r, quick = TRUE), ...)
+    ## r@legend@colortable <- levels(f)
+    ## x
+}
+
+
+
+
 ##' Read map images.
 ##'
 ##' The ancient lost art of cartography.

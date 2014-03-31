@@ -730,9 +730,10 @@ adminmap <- function(map = c("sectors", "ssrus",
 ##' A data frame with file, date, fullname
 ##' @title fast ice files
 ##' @param datadir data repository path
+##' @param ... reserved for future use, currently ignored
 ##' @return data frame
 ##' @export
-fasticefiles <- function(datadir = getOption("default.datadir")) {
+fasticefiles <- function(datadir = getOption("default.datadir"), ...) {
     pref <- file.path("fastice", "fraser_fastice", "binary_fast_ice")
     fs <- list.files(file.path(datadir, pref), pattern = "img$")
     dates <- as.POSIXct(strptime(fs, "binary_%Y_%j"), tz = "GMT")
@@ -813,9 +814,10 @@ function(date, time.resolution = "weekly3",
 ##' original NASA algorithm.
 ##' @title Arrigo production files
 ##' @param fromCache load file catalog from cache, or rebuild it
+##' @param ... reserved for future use, currently ignored
 ##' @return  data.frame of file names and dates
 ##' @export
-prodfiles <- function(fromCache = TRUE) {
+prodfiles <- function(fromCache = TRUE, ...) {
     datadir <- getOption("default.datadir")
     dirpath <- file.path(datadir, "prod", "Arrigo", "8d")
     if (fromCache) {
@@ -903,10 +905,11 @@ readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfile
 ##' A data.frame of file names and dates
 ##' @title AVISO sea surface height / anomaly files
 ##' @param ssha logical value, return absolute (SSH) or relative (SSHA anomaly) values
+##' @param ... reserved for future use, currently ignored
 ##' @seealso \code{\link{readssh}}
 ##' @return data.frame of file names and dates
 ##' @export
-sshfiles <- function(ssha = FALSE) {
+sshfiles <- function(ssha = FALSE, ...) {
     datadir = getOption("default.datadir")
     product <- if(ssha) "ssha" else "ssh"
     data.source = file.path(datadir, product, "aviso", "upd", "7d")
@@ -1242,10 +1245,11 @@ readchla <- function(date, time.resolution = c("weekly", "monthly"),
 ##' @title Chlorophyll-a
 ##' @param time.resolution weekly (8day) or monthly
 ##' @param product choice of sea ice product, see \code{readchla}
+##' @param ... reserved for future use, currently ignored
 ##' @return data.frame
 ##' @export
 chlafiles <- function(time.resolution = c("weekly", "monthly"),
-                      product = c("johnson", "oceancolor")) {
+                      product = c("johnson", "oceancolor"), ...) {
   datadir <- getOption("default.datadir")
   product <- match.arg(product)
   time.resolution <- match.arg(time.resolution)
@@ -1408,10 +1412,10 @@ readbathy <- readtopo
 ##' @title OISST sea surface temperature files
 ##' @param time.resolution time resolution read
 ##' @param fromCache load from cache or rebuild file catalog
-##' ##' @param ... reserved for future use
+##' @param ... reserved for future use, currently ignored
 ##' @return data.frame of file names and dates
 ##' @export
-sstfiles <- function(time.resolution = c("daily", "monthly"), fromCache = TRUE) {
+sstfiles <- function(time.resolution = c("daily", "monthly"), fromCache = TRUE, ...) {
     datadir <- getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
     if (fromCache) {
@@ -1564,10 +1568,11 @@ readsst <- function(date, time.resolution = c("daily", "monthly"), varname = c("
 ##' A data.frame of file names and dates
 ##' @title AVISO ocean currents files
 ##' @param fromCache load cached file catalog, or rebuild that
+##' @param ... reserved for future use, currently ignored
 ##' @seealso \code{\link{readcurr}}
 ##' @return data.frame of file names and dates
 ##' @export
-currentsfiles <- function(fromCache = TRUE) {
+currentsfiles <- function(fromCache = TRUE, ...) {
     datadir = getOption("default.datadir")
     cachefile <- file.path(datadir, "cache", sprintf("currentsfiles_weekly.Rdata"))
     if (fromCache) {
@@ -2107,6 +2112,7 @@ l <- vector("list", nfiles)
 ##' ice products.
 ##' @param time.resolution daily or monthly files?
 ##' @param product choice of sea ice product, see \code{\link{readice}}
+##' @param ... reserved for future use, currently ignored
 ##' @export
 ##' @examples
 ##' \dontrun{
@@ -2114,7 +2120,7 @@ l <- vector("list", nfiles)
 ##' icf[which.min((as.Date("1995-01-01") + runif(1, -4000, 4000)) - as.Date(icf$date), ]
 ##' }
 ##' @return data.frame of \code{file} and \code{date}
-icefiles <- function(time.resolution = c("daily", "monthly"), product = c("nsidc", "ssmi")) {
+icefiles <- function(time.resolution = c("daily", "monthly"), product = c("nsidc", "ssmi"), ...) {
     time.resolution <- match.arg(time.resolution)
     product <- match.arg(product)
     datadir <- getOption("default.datadir")

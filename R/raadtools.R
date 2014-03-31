@@ -812,12 +812,12 @@ function(date, time.resolution = "weekly3",
 ##' These are 8 day estimates from MODIS and SeaWiFS satellite data,
 ##' original NASA algorithm.
 ##' @title Arrigo production files
+##' @param fromCache load file catalog from cache, or rebuild it
 ##' @return  data.frame of file names and dates
 ##' @export
-prodfiles <- function() {
+prodfiles <- function(fromCache = TRUE) {
     datadir <- getOption("default.datadir")
     dirpath <- file.path(datadir, "prod", "Arrigo", "8d")
-    fromCache <- TRUE
     if (fromCache) {
         load(file.path(datadir, "cache", "prodfiles.Rdata"))
         pfiles$fullname <- file.path(datadir, pfiles$file)
@@ -828,7 +828,7 @@ prodfiles <- function() {
 
 
     pfiles <- data.frame(file = gsub("^/", "", gsub(datadir, "", fs)), date = dates, stringsAsFactors = FALSE)
-    save(pfiles, file = file.path(datadir, "cache", "prodfiles.Rdata"))
+    ##save(pfiles, file = file.path(datadir, "cache", "prodfiles.Rdata"))
     pfiles
 
 }
@@ -1562,14 +1562,13 @@ readsst <- function(date, time.resolution = c("daily", "monthly"), varname = c("
 ##'
 ##' A data.frame of file names and dates
 ##' @title AVISO ocean currents files
+##' @param fromCache load cached file catalog, or rebuild that
 ##' @seealso \code{\link{readcurr}}
 ##' @return data.frame of file names and dates
 ##' @export
-currentsfiles <- function() {
+currentsfiles <- function(fromCache = TRUE) {
     datadir = getOption("default.datadir")
     cachefile <- file.path(datadir, "cache", sprintf("currentsfiles_weekly.Rdata"))
-
-    fromCache <- TRUE
     if (fromCache) {
        load(cachefile)
        cfs$fullname <- file.path(datadir, cfs$file)

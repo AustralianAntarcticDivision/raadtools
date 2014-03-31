@@ -3,7 +3,7 @@ library(testthat)
 
 #library(testthat)
 library(raadtools)
-fs <- list.files("tests", pattern = ".R$", full.names = TRUE)
+fs <- list.files("testthat", pattern = ".R$", full.names = TRUE)
 source(grep("fileexists", fs, value = TRUE)[1])
 ##for (i in seq_along(fs)) source(fs[i])
 

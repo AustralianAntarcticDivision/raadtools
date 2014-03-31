@@ -1,6 +1,6 @@
   CHANGES IN raadtools VERSION 0.1-1
 
-o tidy internal handling of file indexes
+o tidy internal handling of file indexes, and file catalog functions
 
 o new function readrapid_response to read MODIS Antarctica images
 

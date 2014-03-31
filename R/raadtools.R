@@ -996,14 +996,15 @@ readssh <- function (date, time.resolution = "weekly",
 ##' @title Files containing NCEP2 wind vector data
 ##' @param data.source ignored, reserved for future use
 ##' @param time.resolution  time resolution data to read, daily only for now
+##' @param fromCache load file catalog from cache or rebuild
 ##' @return \code{data.frame} of file names and dates
 ##' @export
 windfiles <-
-function(data.source = "", time.resolution = c("daily")) {
+function(data.source = "", time.resolution = c("daily"), fromCache = TRUE, ...) {
       datadir <- getOption("default.datadir")
       time.resolution <- match.arg(time.resolution)
 ##      fromCache <- TRUE
-     fromCache <- TRUE
+
       if (fromCache) {
           load(file.path(datadir, "cache", sprintf("%s_windfiles.Rdata", time.resolution)))
           wf$ufullname <- file.path(datadir,  wf$ufile)
@@ -1410,10 +1411,10 @@ readbathy <- readtopo
 ##' ##' @param ... reserved for future use
 ##' @return data.frame of file names and dates
 ##' @export
-sstfiles <- function(time.resolution = c("daily", "monthly"), fromcache = TRUE) {
+sstfiles <- function(time.resolution = c("daily", "monthly"), fromCache = TRUE) {
     datadir <- getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
-    if (fromcache) {
+    if (fromCache) {
         load(file.path(datadir, "cache", sprintf("sstfiles_%s.Rdata", time.resolution)))
         sstf$fullname <- file.path(datadir, sstf$file)
 

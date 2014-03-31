@@ -1405,12 +1405,12 @@ readbathy <- readtopo
 ##'
 ##' A data frame of file names and datres
 ##' @title OISST sea surface temperature files
-##' @param fromcache load from cache?
 ##' @param time.resolution time resolution read
-##' @param ... reserved for future use
+##' @param fromCache load from cache or rebuild file catalog
+##' ##' @param ... reserved for future use
 ##' @return data.frame of file names and dates
 ##' @export
-sstfiles <- function(fromcache = TRUE, time.resolution = c("daily", "monthly")) {
+sstfiles <- function(time.resolution = c("daily", "monthly"), fromcache = TRUE) {
     datadir <- getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
     if (fromcache) {

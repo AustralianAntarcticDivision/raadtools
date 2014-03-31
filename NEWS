@@ -2,7 +2,7 @@
 
 o tidy internal handling of file indexes
 
-o new function imagemap to load map images
+o new function readrapid_response to read MODIS Antarctica images
 
   CHANGES IN raadtools VERSION 0.1-0
 

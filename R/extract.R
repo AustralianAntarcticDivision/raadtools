@@ -149,13 +149,17 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
                           thisx1 <- thisx2
                           ## report happy times
                           if (interactive() & verbose) {
-                              message(paste(rep("\b", nchar(mess1)), collapse = ""), appendLF = FALSE)
+    ##                          message(paste(rep("\b", nchar(mess1)), collapse = ""), appendLF = FALSE)
+                              cat(paste(rep("\b", nchar(mess1)), collapse = ""))
                               mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
-                              message(mess1, appendLF = FALSE)
+  ##                            message(mess1, appendLF = FALSE)
+                              cat(mess1)
+
                               flush.console()
                           }
                       }
-                      message("", appendLF = TRUE)
+##                      message("", appendLF = TRUE)
+                      cat("\n")
                   } else {
                       ## TODO, fix up the if/else here with an exception for the first/last for ctstime
                       for (i in seq_along(date)) {
@@ -166,13 +170,16 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
                           if (any(asub)) {result[asub] <- suppressWarnings(extract(thisx, y[asub, ], ...))}
 
                             if (interactive() & verbose) {
-                              message(paste(rep("\b", nchar(mess1)), collapse = ""), appendLF = FALSE)
+##                              message(paste(rep("\b", nchar(mess1)), collapse = ""), appendLF = FALSE)
+                              cat(paste(rep("\b", nchar(mess1)), collapse = ""))
                               mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
-                              message(mess1, appendLF = FALSE)
+                              ##message(mess1, appendLF = FALSE)
+                              cat(mess1)
                               flush.console()
                           }
                       }
-                      message("", appendLF = TRUE)
+                      ##message("", appendLF = TRUE)
+                      cat("\n")
 
                   }
                   result

@@ -999,6 +999,7 @@ readssh <- function (date, time.resolution = "weekly",
 ##' @title Files containing NCEP2 wind vector data
 ##' @param data.source ignored, reserved for future use
 ##' @param time.resolution  time resolution data to read, daily only for now
+##' @param ... reserved for future use, currently ignored
 ##' @param fromCache load file catalog from cache or rebuild
 ##' @return \code{data.frame} of file names and dates
 ##' @export
@@ -1319,7 +1320,8 @@ topofile <- function(topo = c("gebco_08", "ibcso",
                               "kerguelen", "george_v_terre_adelie",
                               "smith_sandwell"),
                      polar = FALSE,
-                     lon180 = TRUE, ...) {
+                     lon180 = TRUE,
+                     ...) {
 
     datadir = getOption("default.datadir")
     topo <- match.arg(topo)
@@ -1366,7 +1368,7 @@ topofile <- function(topo = c("gebco_08", "ibcso",
 ##' }
 ##' @title Topography data
 ##' @name readtopo
-##' @aliases topofile readbathy
+##' @aliases readtopo topofile readbathy
 ##' @param topo Data source, see Details.
 ##' @param lon180 Flag for returning data in Atlantic [-180, 180] rather than Pacific [0, 360] view.
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details

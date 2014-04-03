@@ -1884,8 +1884,12 @@ readice <- function(date,
     if (missing(date)) date <- min(files$date)
     date <- timedateFrom(date)
     files <- .processFiles(date, files, time.resolution)
+
+    ## check that files are available
+
+
     ## NSIDC projection and grid size for the Southern Hemisphere
-    stersouth <-  "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
+    stersouth <-  "+proj=stere +lat_0=-90 +lat_ts=-70 +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m +no_defs "
     ## modify based on dataproduct
     dims <- switch(product,
                    nsidc = c(316L, 332L),

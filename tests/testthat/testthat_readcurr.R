@@ -22,7 +22,9 @@ test_that("multi layers returned with magonly or dironly", {
 
 
 test_that("dates not available within 4 days give error", {
-     expect_that(readcurr("1999-11-19"), throws_error("no data file within"))
+    expect_that(readcurr("1992-10-08"), throws_error("no data file within"))
+    ## we now have data for this date
+    expect_that(readcurr("1999-11-19"), is_a("RasterBrick"))
 })
 
 

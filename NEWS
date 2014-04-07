@@ -4,6 +4,10 @@ ACKNOWLEDEGEMENTS
 
 o Thanks to Neal Young for pointing out incorrect PROJ.4 string for ice data. 
 
+NEW FEATURES
+
+o extract now works for readtopo, assuming lon/lat input
+
 o tidy internal handling of file indexes, and file catalog functions
 
 o new function readrapid_response to read MODIS Antarctica images

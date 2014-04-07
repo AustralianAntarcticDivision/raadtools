@@ -1373,6 +1373,7 @@ topofile <- function(topo = c("gebco_08", "ibcso",
 ##' @param lon180 Flag for returning data in Atlantic [-180, 180] rather than Pacific [0, 360] view.
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
 ##' @param polar Flag for returning the polar version of the IBCSO data.
+##' @param returnfiles Return just the relevant file name
 ##' @param ... reserved for future use, ignored currently
 ##' @return
 ##' \describe{
@@ -1389,6 +1390,7 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
                      polar = FALSE,
                      lon180 = TRUE,
                      xylim = NULL,
+                     returnfiles = FALSE,
                      ...) {
     topo <- match.arg(topo)
 
@@ -1589,7 +1591,11 @@ currentsfiles <- function(fromCache = TRUE, ...) {
 
     cfs <- data.frame(file = gsub("^/", "", gsub(datadir, "", cfiles)), date = currentdates, stringsAsFactors = FALSE)
     cfs <- cfs[diff(cfs$date) > 0, ]
+
+    ## drop duplicates, this should prefer upd to nrt
+    cfs <- cfs[!duplicated(cfs$date), ]
     save(cfs, file = cachefile)
+    cfs$fullname <- file.path(datadir, cfs$file)
     cfs
 
 }

@@ -1,8 +1,16 @@
   CHANGES IN raadtools VERSION 0.1-1
 
+ACKNOWLEDEGEMENTS
+
+o Thanks to Neal Young for pointing out incorrect PROJ.4 string for ice data. 
+
 o tidy internal handling of file indexes, and file catalog functions
 
 o new function readrapid_response to read MODIS Antarctica images
+
+BUG FIXES
+
+o fixed incorrect PROJ.4 string for NSIDC ice data
 
   CHANGES IN raadtools VERSION 0.1-0
 

@@ -92,13 +92,32 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
           function(x, y, ...) {
               .local <- function (x, y,  ctstime = FALSE, fact = NULL, verbose = TRUE, ...) {
                   result <- rep(as.numeric(NA), nrow(y))
-                  times <- try(timedateFrom(y[,3]))
+
+
+                  resize <- FALSE
+
+                  if (!is.null(fact)) resize <- TRUE
+                  notime <- FALSE
+                  if (length(x(returnfiles = TRUE)) == 1L) {
+                      notime <- TRUE
+                  }
+
                   ## data.frame input has  assumed structure
                   ## we assume y is lon,lat,time
-                  y <- SpatialPoints(as.matrix(y[,1:2]), CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"))
-                  ## chuck a spacker
+                  y1 <- SpatialPoints(as.matrix(y[,1:2]), CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"))
+
+
+                  if (notime) {
+                      ## assume we want topo/bathy values
+                      thisx1 <- x()
+                      if (resize) thisx1 <- aggregate(thisx1, fact = fact, fun = 'mean')
+                      return(extract(thisx1, y1, ...))
+                  }
+                  times <- try(timedateFrom(y[,3]))
+                  y <- y1
+                  ## chuck a
                   if (inherits(times, "try-error") | any(is.na(times))) {
-                      .standard.assumeXYT.TimeError()
+                      ##.standard.assumeXYT.TimeError()
                   }
                   ## TODO, will have to figure out how to do this
                   args <- list(...)
@@ -122,9 +141,7 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
                   if (max(times) == max(files$date[findex])) findex <- c(findex, max(findex) + 1)
                   findex <- findex[findex <= nrow(files)]
                   date <- files$date[findex]
-                  resize <- FALSE
-                  ## TODO careful checks that resizing makes a difference
-                  if (!is.null(fact)) resize <- TRUE
+
                   mess1 <- ""
                   ## interpolate in time?
                   if (ctstime) {
@@ -137,7 +154,7 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
                           ## TODO check do we have to store the time-value BEFORE aggregating
                           ##t2 <- getZ(thisx2)
                           if(resize) thisx2 <- aggregate(thisx2, fact = fact, fun = "mean")
-                          ## findInterval is too hard to use reliably (for this black duck)
+                          ## findInterval is too hard to use reliably
                           ## asub <- findInterval(times, date) == (i - 1)
                           asub <- windex == findex[i]
 

@@ -1447,7 +1447,7 @@ sstfiles <- function(time.resolution = c("daily", "monthly"), fromCache = TRUE, 
         bname <- gsub(".gz", "", basename(fs))
         dates <- timedateFrom(as.POSIXct(strptime(paste0(bname, "01"), "oiv2mon.%Y%m%d"), tz = "GMT"))
     }
-    sstf <- data.frame(files = gsub("^/", "", gsub(datadir, "", fs)), date = dates, stringsAsFactors = FALSE)[order(dates), ]
+    sstf <- data.frame(file = gsub("^/", "", gsub(datadir, "", fs)), date = dates, stringsAsFactors = FALSE)[order(dates), ]
     save(sstf, file = file.path(datadir, "cache", sprintf("sstfiles_%s.Rdata", time.resolution)))
 
     sstf

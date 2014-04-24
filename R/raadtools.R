@@ -70,6 +70,7 @@ NULL
 ##' @param date date of image to load
 ##' @param returnfiles return just the list of files
 ##' @param ... other arguments for \code{\link[raster]{brick}}
+##' @export
 readrapid_response <- function(date, returnfiles = FALSE, ...) {
     files <- .rrfiles()
     if (returnfiles) return(files)

@@ -1421,37 +1421,43 @@ readbathy <- readtopo
 ##' @param ... reserved for future use, currently ignored
 ##' @return data.frame of file names and dates
 ##' @export
-sstfiles <- function(time.resolution = c("daily", "monthly"), fromCache = TRUE, ...) {
+sstfiles <- sstfiles <- function (time.resolution = c("daily", "monthly"), fromCache = TRUE,
+    ...)
+{
     datadir <- getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
     if (fromCache) {
-        load(file.path(datadir, "cache", sprintf("sstfiles_%s.Rdata", time.resolution)))
+        load(file.path(datadir, "cache", sprintf("sstfiles_%s.Rdata",
+            time.resolution)))
         sstf$fullname <- file.path(datadir, sstf$file)
-
         return(sstf)
     }
-
     if (time.resolution == "daily") {
         dirpath <- file.path(datadir, "sst", "OI-daily-v2", "daily")
-        fs <- list.files(dirpath, pattern = "\\.nc$", recursive = TRUE, full.names = TRUE)
-
-        ## flakey!!!!
+        fs <- list.files(dirpath, pattern = "\\.nc$", recursive = TRUE,
+            full.names = TRUE)
         fsstrings <- as.Date(substr(basename(fs), 15, 22), "%Y%m%d")
-
         dates <- timedateFrom(as.Date(fsstrings, "%Y%m%d"))
-
+	    sstf <- data.frame(files = gsub("^/", "", gsub(datadir, "",
+        fs)), date = dates, stringsAsFactors = FALSE)[order(dates),
+        ]
     }
     if (time.resolution == "monthly") {
-        dirpath <- file.path(datadir, "sst", "oimonth_v2", "monthly")
-        fs <- list.files(dirpath, full.names = TRUE)
-        bname <- gsub(".gz", "", basename(fs))
-        dates <- timedateFrom(as.POSIXct(strptime(paste0(bname, "01"), "oiv2mon.%Y%m%d"), tz = "GMT"))
+        dirpath <- file.path(datadir, "sst", "oiv2")
+	r <- stack(file.path(dirpath, "sst.mnmean.nc"), quick = TRUE)
+
+        fs <- rep(file.path(dirpath, "sst.mnmean.nc"), nlayers(r))
+
+        dates <- timedateFrom(strptime(names(r), "X%Y.%m.%d"))
+    sstf <- data.frame(file = gsub("^/", "", gsub(datadir, "",
+        fs)), date = dates, stringsAsFactors = FALSE)[order(dates),
+        ]
+	sstf$band <- seq_len(nlayers(r))
     }
-    sstf <- data.frame(file = gsub("^/", "", gsub(datadir, "", fs)), date = dates, stringsAsFactors = FALSE)[order(dates), ]
-    save(sstf, file = file.path(datadir, "cache", sprintf("sstfiles_%s.Rdata", time.resolution)))
 
+    save(sstf, file = file.path(datadir, "cache", sprintf("sstfiles_%s.Rdata",
+        time.resolution)))
     sstf
-
 }
 
 .progressreport <- function(current, finish) {
@@ -1540,16 +1546,17 @@ readsst <- function(date, time.resolution = c("daily", "monthly"), varname = c("
         landmask <- readBin(file.path(datadir, "sst", "oimonth_v2", "lstags.onedeg.dat"), "numeric", size = 4, n = 360 * 180, endian = "big")
         for (ifile in seq_len(nfiles)) {
              fname <- files$fullname[ifile]
-             con <- gzfile(fname, open = "rb")
-             version <- readBin(con, "integer", size = 4, n = 1, endian = "big")
-             date <-  readBin(con, "integer", size = 4, n = 7, endian = "big")
-             d <- readBin(con, "numeric", size = 4, n = 360 * 180, endian = "big")
-             close(con)
-              d[d > 500] <- NA
-             d[landmask < 1] <- NA
-             sst <- flip(raster(t(matrix(d,   360, 180)),
-                                xmn = 0, xmx = 360, ymn = -90, ymx = 90,
-                                crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"), "y")
+             ##con <- gzfile(fname, open = "rb")
+             ##version <- readBin(con, "integer", size = 4, n = 1, endian = "big")
+             ##date <-  readBin(con, "integer", size = 4, n = 7, endian = "big")
+             ##d <- readBin(con, "numeric", size = 4, n = 360 * 180, endian = "big")
+             ##close(con)
+             ## d[d > 500] <- NA
+             ##d[landmask < 1] <- NA
+             ##sst <- flip(raster(t(matrix(d,   360, 180)),
+             ##                   xmn = 0, xmx = 360, ymn = -90, ymx = 90,
+             ##                   crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"), "y")
+             sst <- raster(fname, band = files$band[ifile])
              if (lon180) sst <- rotate(sst)
              if (cropit) sst <- crop(sst,cropext)
              r[[ifile]] <- sst

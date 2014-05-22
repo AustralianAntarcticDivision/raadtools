@@ -1051,7 +1051,7 @@ function(data.source = "", time.resolution = c("daily"), fromCache = TRUE, ...) 
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param xylim crop
 ##' @param lon180 Pacific or Atlantic
-##' @param ... ignored
+##' @param ... arguments passed to \code{\link[raster]{brick}}, i.e. \code{filename}
 ##' @return raster object
 ##' @examples
 ##' \dontrun{
@@ -1133,7 +1133,8 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
         r[[ifile]] <- r0
 
     }
-    r <- brick(stack(r))
+    r <- brick(stack(r), ...
+               )
     if (magonly | dironly | uonly | vonly)  {
         r <- setZ(r, files$date)
         names(r) <- sprintf("wind_%s", format(files$date, "%Y%m%d"))
@@ -1234,7 +1235,7 @@ readchla <- function(date, time.resolution = c("weekly", "monthly"),
   }
 
   if (nfiles > 1)
-    r <- brick(stack(r))
+    r <- brick(stack(r), ...)
   else r <- r[[1L]]
   names(r) <- basename(files$file)
   r <- setZ(r, files$date)
@@ -1962,7 +1963,8 @@ readice <- function(date,
         if (cropit) r0 <- crop(r0, cropext)
         r[[ifile]] <- r0
     }
-    if (nfiles > 1) r <- brick(stack(r)) else r <- r[[1L]]
+    ## TODO need filename for the singleton case
+    if (nfiles > 1) r <- brick(stack(r), ...) else r <- r[[1L]]
 
     projection(r) <- stersouth
     names(r) <- basename(files$file)

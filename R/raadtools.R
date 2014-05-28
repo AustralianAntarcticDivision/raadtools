@@ -749,7 +749,7 @@ fasticefiles <- function(datadir = getOption("default.datadir"), ...) {
 ##' @param time.resolution fixed at roughly "3 weekly"
 ##' @param xylim extent in native space of the grid
 ##' @param returnfiles return the file details only
-##' @param ... other arguments, ignored
+##' @param ... reserved for future use, currently ignored
 ##' @return RasterBrick with 1 for fast ice pixels, 0 for other, NA for land mask
 ##' @references \url{http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=modis_20day_fast_ice}
 ##' @export
@@ -802,7 +802,7 @@ function(date, time.resolution = "weekly3",
         }
         r[[ifile]] <- r0
     }
-    r <- if (nfiles > 1) brick(stack(r)) else r[[1L]]
+    r <- if (nfiles > 1) brick(stack(r), ...) else r[[1L]]
     names(r) <- sprintf("fastice_%s", format(files$date, "%Y%m%d"))
 
     setZ(r, files$date)
@@ -844,7 +844,7 @@ prodfiles <- function(fromCache = TRUE, ...) {
 ##' @param returnfiles if TRUE return just the files from \code{prodfiles}
 ##' @param time.resolution choice of temporal resolution, weekly only
 ##' @param xylim crop or not
-##' @param ... ignored
+##' @param ... reserved for future use, currently ignored
 ##' @return RasterLayer or RasterBrick
 ##' @export
 readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfiles = FALSE, ...) {
@@ -892,7 +892,7 @@ readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfile
         r[[ifile]] <- r0
     }
 
-    r <- brick(stack(r))
+    r <- brick(stack(r), ...)
     names(r) <- sprintf("prod_%s", format(files$date, "%Y%m%d"))
 
     setZ(r, files$date)
@@ -944,7 +944,7 @@ sshfiles <- function(ssha = FALSE, ...) {
 ##' @param ssha logical, to optionally return anomaly or height
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param verbose print messages on progress etc.
-##' @param ... reserved for future use, currently ignored
+##' @param ... passed to brick, primarily for \code{filename}
 ##' @export
 ##' @return data.frame
 readssh <- function (date, time.resolution = "weekly",
@@ -987,7 +987,7 @@ readssh <- function (date, time.resolution = "weekly",
             r0 <- crop(r0, cropext)
         r[[ifile]] <- r0
     }
-    r <- if (nfiles > 1) brick(stack(r)) else r[[1L]]
+    r <- if (nfiles > 1) brick(stack(r), ...) else r[[1L]]
     setZ(r, files$date)
 
 }
@@ -1172,7 +1172,7 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param verbose print messages on progress etc.
-##' @param ... reserved for future use, currently ignored
+##' @param ... passed to brick, for \code{filename}
 ##' @references  Johnson, R, PG Strutton, SW Wright, A McMinn, and KM
 ##' Meiners (2013) Three improved satellite chlorophyll algorithms for
 ##' the Southern Ocean, J. Geophys. Res. Oceans, 118,
@@ -1483,7 +1483,7 @@ sstfiles <- sstfiles <- function (time.resolution = c("daily", "monthly"), fromC
 ##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param verbose print messages on progress etc.
-##' @param ... reserved for future use, currently ignored
+##' @param ... passed in to brick, primarily for \code{filename}
 ##' @export
 ##' @return \code{\link[raster]{raster}} object
 ##' @seealso \code{\link{icefiles}} for details on the repository of
@@ -1568,7 +1568,7 @@ readsst <- function(date, time.resolution = c("daily", "monthly"), varname = c("
 
     }
 
-         if (nfiles > 1) r <- brick(stack(r)) else r <- r[[1L]]
+         if (nfiles > 1) r <- brick(stack(r), ...) else r <- r[[1L]]
           names(r) <- paste("sst", time.resolution, format(files$date, "%Y%m%d"), sep = "_")
              r <- setZ(r, files$date)
 
@@ -1711,7 +1711,7 @@ currentsfiles <- function(fromCache = TRUE, ...) {
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param verbose print messages on progress etc.
-##' @param ... reserved for future use, currently ignored
+##' @param ... passed to brick, primarily for \code{filename}
 ##' @export
 ##' @note These data are stored in a Mercator projection on Pacific
 ##' view \[0, 360\], the default behaviour is to reset this to Atlantic
@@ -1834,7 +1834,7 @@ readcurr <- function(date,
 
     }
 
-    r <- brick(stack(r))
+    r <- brick(stack(r), ...)
      if (magonly | dironly | uonly | vonly) r <- setZ(r, files$date) else r <- setZ(r, rep(files$date, 2L))
 
         if (magonly | dironly | uonly | vonly)  {
@@ -1877,7 +1877,7 @@ readcurr <- function(date,
 ##' @param debug ignore data request and simply report on what would be returned after processing arguments
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param verbose print messages on progress etc.
-##' @param ... reserved for future use, currently ignored
+##' @param ... passed to brick, primarily for \code{filename}
 ##' @export
 ##' @return \code{\link[raster]{raster}} object
 ##' @seealso \code{\link{icefiles}} for details on the repository of

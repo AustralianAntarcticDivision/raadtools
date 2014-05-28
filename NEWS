@@ -1,6 +1,6 @@
   CHANGES IN raadtools VERSION 0.1-2
 
-o pass the dots argument to brick for readwind
+o pass the dots argument to brick for most read functions
 
   CHANGES IN raadtools VERSION 0.1-1
 

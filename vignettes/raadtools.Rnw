@@ -47,21 +47,25 @@ The very first step is to load the package, and if the required data
 repository is not found it will provide a message on what must be
 done.
 <<get-start>>=
+options(default.datadir = Sys.getenv("RAAD_DIR"))
 library(raadtools)
 @
+
+
 
 (If there's no message about trouble setting the repository then you
 are good to go.)
 
+
+<<read_ice>>=
+ice <- readice()
+plot(ice)
+@
 \section{Simple data read}
 \label{sec:simpleread}
 There are functions to read data based on a sequence of date-time
 values.
 
-<<read-ice, fig.width=4, fig.height=4, out.width='.4\\linewidth'>>=
-ice <- readice()
-plot(ice)
-@
 
 At the simplest level, these functions may be run without setting any
 arguments and will return the first available time step for the
@@ -196,7 +200,7 @@ argument. The Smith and Sandwell data set is returned in Pacific view
 on the Mercator projection by default. Use \textbf{lon180 = FALSE} to
 return Atlantic view.
 
-<<>>=
+<<read-topo>>=
 geb <- readtopo("gebco_08", xylim = extent(150, 220, -75, -60))
 
 @
@@ -245,6 +249,10 @@ ani.stop()
 
 
 @
+
+
+
+
 \section{Extract spatio-temporal data from read functions}
 \label{sec:extractfun}
 <<spatio-temporal,eval=FALSE,echo=FALSE>>=
@@ -319,7 +327,7 @@ aurora$chla <- extract(readchla, aurora)
 \subsection{Extract spatio-temporal data with spatial, temporal
   interpolation, and spatial aggregation}
 \label{sec:extractwithinterp}
-<<example-extract-withinterp,message=FALSE>>=
+<<example-extract-withinterp,message=FALSE,results=FALSE,eval=FALSE>>=
 d1 <- data.frame(lon = c(130, 125, 120, -52.27, 123.21, -25.42, 36.96, -36.28),
                  lat = c(-50, -52, -55,-66.31, -74.55, -69.66, -71.85, -68.56),
                  gmt = as.POSIXct("2006-02-08 00:00:00") + 24 *3600 * c(0, 1, 2, 3, 106, 118, 118, 190))
@@ -327,7 +335,6 @@ d1 <- data.frame(lon = c(130, 125, 120, -52.27, 123.21, -25.42, 36.96, -36.28),
 llproj <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
 
 library(raadtools)
-library(ncdf)
 library(rgdal)
 
 ## test extract vs extractxyt
@@ -376,8 +383,6 @@ plot(chl2, col = pal$col, breaks = pal$breaks, legend = FALSE, addfun = function
 
 @
 
-
-
 \section{Data sets and the native projection}
 \label{sec:nativeproj}
 
@@ -389,7 +394,7 @@ plot(chl2, col = pal$col, breaks = pal$breaks, legend = FALSE, addfun = function
 \TeX{} document was built with Sweave using knitr
 \url{http://yihui.name/knitr/}.
 
-\nocite{ncdf}
+\nocite{ncdf4}
 \nocite{R}
 \nocite{raster}
 \nocite{rgdal}

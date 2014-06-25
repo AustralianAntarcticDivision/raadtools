@@ -163,7 +163,7 @@ There are tests that will run via the __testthat__ package, but note
 the following options that can be used to force a quick informal
 build/INSTALL/check:
 
-```
+```{shell eval=FALSE}
 R CMD build raadtools --no-build-vignettes
 R CMD INSTALL raadtools_0.0-28.tar.gz --build
 R CMD check raadtools_0.0-28.tar.gz --no-tests
@@ -172,7 +172,7 @@ R CMD check raadtools_0.0-28.tar.gz --no-tests
 See the help page for each individual command. 
 
 Definition of the "roxy" shell script. 
-```bash 
+```{shell eval=FALSE} 
 #!/bin/bash
 STR="library(roxygen2);roxygenize('$1')"
 echo $STR
@@ -185,7 +185,7 @@ I have the following batch file to build/install/check and finally
 write the package source/binaries to a file repository (yes it's
 awkwardly hardcoded, but it works and lots of bleeding was involved):
 
-```
+```{shell eval=FALSE}
 cd C:\Users\michae_sum\Documents\GIT
 
 rem build for current and ship

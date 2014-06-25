@@ -503,7 +503,7 @@ chl.pal <- function(x, palette = FALSE, alpha = 1) {
 
 
 
-##' Read the \enc{Sallée}{Sallee} Mixed layer depth climatology.
+##' Read the \enc{Sall?e}{Sallee} Mixed layer depth climatology.
 ##'
 ##' http://soki.aad.gov.au/display/Data/Mixed+layer+depth
 ##' @title Mixed Layer Depth
@@ -1431,6 +1431,10 @@ sstfiles <- sstfiles <- function (time.resolution = c("daily", "monthly"), fromC
     if (fromCache) {
         load(file.path(datadir, "cache", sprintf("sstfiles_%s.Rdata",
             time.resolution)))
+        ## kludge fix
+        imatch <- which("files" == names(sstf))
+        if (length(imatch) > 0) names(sstf)[imatch] <- "file"
+        ###############
         sstf$fullname <- file.path(datadir, sstf$file)
         return(sstf)
     }
@@ -1440,7 +1444,7 @@ sstfiles <- sstfiles <- function (time.resolution = c("daily", "monthly"), fromC
             full.names = TRUE)
         fsstrings <- as.Date(substr(basename(fs), 15, 22), "%Y%m%d")
         dates <- timedateFrom(as.Date(fsstrings, "%Y%m%d"))
-	    sstf <- data.frame(files = gsub("^/", "", gsub(datadir, "",
+	    sstf <- data.frame(file = gsub("^/", "", gsub(datadir, "",
         fs)), date = dates, stringsAsFactors = FALSE)[order(dates),
         ]
     }
@@ -2236,6 +2240,10 @@ commonprojections <- list(longlat = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no
                           polar = "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
                           laea = "+proj=laea +lat_0=-90 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
                           merc = "+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
+
+
+
+
 
 
 

@@ -1,45 +1,43 @@
 
+
 .read.generic  <- function(x, y, ...) {
-              ## read function "x", takes "y" as Date, POSIXct, character
-                  x(y, ...)
-          }
+  ## read function "x", takes "y" as Date, POSIXct, character
+  x(y, ...)
+}
 
 .standard.assumeXYT.TimeError <- function() {
-    stop("invalid times in data, ensure that y is a data.frame with values of longitude, latitude, and date-times")
+  stop("invalid times in data, ensure that y is a data.frame with values of longitude, latitude, and date-times")
 }
 
-## x is dates from files
+
 .determine.time.resolution <- function(x, ...) {
-    rng <- range(difftime(x[-1L], x[-length(x)], units = "days"))
-    a <- round(min(rng))
-    if (a == 1) {
-        return("daily")
-    }
-    if (a %in% 5:9) {
-        val = "weekly"
-} else {
+  rng <- range(difftime(x[-1L], x[-length(x)], units = "days"))
+  a <- round(min(rng))
+  if (a == 1) {
+    return("daily")
+  }
+  if (a %in% 5:9) {
+    val = "weekly"
+  } else {
     val = "monthly"
-}
-    val
+  }
+  val
 }
 
 
-## functions for basic linear interpolation between two  time steps
- .interp <- function(x1, x2, proportion) {
-     x1 * (1 - proportion) + x2 * proportion
- }
+
+.interp <- function(x1, x2, proportion) {
+  x1 * (1 - proportion) + x2 * proportion
+}
 
 .calcProportion <- function(xmin, xmax, x) {
-    (unclass(x) - unclass(xmin) ) / (unclass(xmax) - unclass(xmin))
+  (unclass(x) - unclass(xmin) ) / (unclass(xmax) - unclass(xmin))
 }
 
-
-
-##############################################################
 #' Extract methods for raadtools read functions
 #'
 #' Extract data from read functions in various ways.
-#'
+#' @title extract
 #' @param x A raadtools read function.
 #' @param y Object to use for querying from the raadtools read
 #' functions, such as a vector of character, Date, or POSIXt values,
@@ -58,36 +56,25 @@
 #' -69, -54, -40, -49, -54)), .Names = c("x", "y"), row.names = c(NA,
 #' -19L), class = "data.frame")
 #'
-#' #a$time <- structure(c(5479, 5479, 5479, 5479, 5479, 5479, 5479, 5479, 5479,
-#' #5479, 5479, 5489, 5529, 5529, 5529, 5579, 5579, 5579, 5579), class = "Date")
-#' #extract(readsst, a)
-#'
-#' #extract(readsst, a, method = "bilinear")
-#'
-#' #extract(readsst, time.resolution = "daily")
+#' a$time <- structure(c(5479, 5479, 5479, 5479, 5479, 5479, 5479, 5479, 5479,
+#' 5479, 5479, 5489, 5529, 5529, 5529, 5579, 5579, 5579, 5579), class = "Date")
+#' extract(readsst, a)
+#' extract(readsst, a, method = "bilinear")
 #' a$time <-  sort(as.Date("2005-01-01") + sample(c(0, 0, 0, 8, 20, 50), nrow(a), replace = TRUE))
-#' #extract(readsst, a)
-#' #extract(readchla, time.resolution = "weekly")
-#' #extract(readchla, a, time.resolution = "weekly")
-#' ##extract(readwind, a, time.resolution = "weekly")
-#' #extract(readwind)
-#' ##readwind(dironly = TRUE)
-#' @export
-#' @docType methods
-#' @rdname raadtools-extract
-#' @import methods
-#' @aliases extract extract,function,Date-method
+#' extract(readsst, a)
+#' @aliases extract  extract,function,data.frame-method 
+#' extract,function,missing-method extract,function,Date-method
 #' extract,function,POSIXt-method extract,function,character-method
-#' extract,function,data.frame-method extract,function,missing-method
-#' @exportMethod extract
+#' @import methods
+#' @export
 setMethod("extract", signature(x = 'function', y = 'missing'), function(x, y, ctstime = FALSE, fact = NULL, verbose = TRUE, ...) x(...))
-#' @exportMethod extract
+#' @export
 setMethod("extract", signature(x = 'function', y = 'POSIXt'), .read.generic)
-##' @exportMethod extract
+#' @export
 setMethod("extract", signature(x = 'function', y = 'Date'), .read.generic)
-##' @exportMethod extract
+#' @export
 setMethod("extract", signature(x = 'function', y = 'character'), .read.generic)
-##' @exportMethod extract
+#' @export
 setMethod("extract", signature(x = 'function', y = 'data.frame'),
           function(x, y, ...) {
               .local <- function (x, y,  ctstime = FALSE, fact = NULL, verbose = TRUE, ...) {
@@ -166,17 +153,22 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
                           thisx1 <- thisx2
                           ## report happy times
                           if (interactive() & verbose) {
+                            
+                            cat(.makeMessage(paste(rep("\b", nchar(mess1)), collapse = ""), domain=NA, appendLF = FALSE))
+                            mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
+                            cat(.makeMessage(mess1, domain=NA, appendLF = (i == length(date))))
+                            
     ##                          message(paste(rep("\b", nchar(mess1)), collapse = ""), appendLF = FALSE)
-                              cat(paste(rep("\b", nchar(mess1)), collapse = ""))
-                              mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
+                            ##  cat(paste(rep("\b", nchar(mess1)), collapse = ""))
+                             ## mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
   ##                            message(mess1, appendLF = FALSE)
-                              cat(mess1)
+                           ##   cat(mess1)
 
                               flush.console()
                           }
                       }
 ##                      message("", appendLF = TRUE)
-                      cat("\n")
+                if (interactive() & verbose) cat("\n")
                   } else {
                       ## TODO, fix up the if/else here with an exception for the first/last for ctstime
                       for (i in seq_along(date)) {
@@ -187,16 +179,20 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'),
                           if (any(asub)) {result[asub] <- suppressWarnings(extract(thisx, y[asub, ], ...))}
 
                             if (interactive() & verbose) {
-##                              message(paste(rep("\b", nchar(mess1)), collapse = ""), appendLF = FALSE)
-                              cat(paste(rep("\b", nchar(mess1)), collapse = ""))
+                              cat(.makeMessage(paste(rep("\b", nchar(mess1)), collapse = ""), domain=NA, appendLF = FALSE))
                               mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
+                              cat(.makeMessage(mess1, domain=NA, appendLF = (i == length(date))))
+                              
+##                              message(paste(rep("\b", nchar(mess1)), collapse = ""), appendLF = FALSE)
+                              ##cat(paste(rep("\b", nchar(mess1)), collapse = ""))
+                             
                               ##message(mess1, appendLF = FALSE)
-                              cat(mess1)
+                             ## cat(mess1)
                               flush.console()
                           }
                       }
                       ##message("", appendLF = TRUE)
-                      cat("\n")
+            ##if (interactive() & verbose)   cat("\n")
 
                   }
                   result

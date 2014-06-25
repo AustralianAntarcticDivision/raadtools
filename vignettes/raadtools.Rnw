@@ -190,8 +190,7 @@ argument).
 \label{sec:readtopo}
 
 The \textbf{readtopo} (\textbf{readbathy} is a synonym) will return
-one of several available data sets
-(\Sexpr{as.character(formals(readtopo)[["topo"]])[-1]}). See the help
+one of several available data sets. See the help
 page for the details and source of each one. As these data are not
 dynamic on short time scales they do not provide a \textbf{date}
 argument. The \textbf{ibcso} data set is optionally available on a
@@ -200,9 +199,8 @@ argument. The Smith and Sandwell data set is returned in Pacific view
 on the Mercator projection by default. Use \textbf{lon180 = FALSE} to
 return Atlantic view.
 
-<<read-topo>>=
+<<read-topo,eval=FALSE>>=
 geb <- readtopo("gebco_08", xylim = extent(150, 220, -75, -60))
-
 @
 
 

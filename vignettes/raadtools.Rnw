@@ -46,8 +46,18 @@ assistance.
 The very first step is to load the package, and if the required data
 repository is not found it will provide a message on what must be
 done.
+
+<<fakey,eval=TRUE,echo=FALSE>>=
+local({ 
+  dd <- getOption("default.datadir")
+  if (is.null(dd["default.datadir"])) {
+    dd["default.datadir"] <- Sys.getenv("RAAD_DIR")
+  }
+  options(default.datadir = dd)
+  })
+@
+
 <<get-start>>=
-options(default.datadir = Sys.getenv("RAAD_DIR"))
 library(raadtools)
 @
 
@@ -61,6 +71,8 @@ are good to go.)
 ice <- readice()
 plot(ice)
 @
+
+
 \section{Simple data read}
 \label{sec:simpleread}
 There are functions to read data based on a sequence of date-time

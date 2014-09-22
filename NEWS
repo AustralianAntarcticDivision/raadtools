@@ -2,6 +2,9 @@
 
 o pass the dots argument to brick for most read functions
 
+o internalized usage of raster's rotate, to catch breaking change
+
+
   CHANGES IN raadtools VERSION 0.1-1
 
 ACKNOWLEDEGEMENTS
@@ -19,6 +22,7 @@ o new function readrapid_response to read MODIS Antarctica images
 BUG FIXES
 
 o fixed incorrect PROJ.4 string for NSIDC ice data
+
 
   CHANGES IN raadtools VERSION 0.1-0
 

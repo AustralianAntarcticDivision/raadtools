@@ -1,3 +1,385 @@
+commit 5d0b1974be7134fa235dc4ddd6914c0488609297
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Mon Sep 22 20:57:21 2014 +1000
+
+    new method for setting up default datadir, since envvars are read but profile is not run for package build
+
+commit d330faf8904881014d1f767541eaf160bbc4f4b0
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Mon Sep 22 20:24:00 2014 +1000
+
+    don't seem to be able to document methods imported?
+
+commit efc643a70a6eee27d8cbbe8bd7e91eacf39e6220
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Mon Sep 22 20:23:26 2014 +1000
+
+    internal .rotate, to get around chage in raster
+    
+    added import for raster's merge (for .rotate)
+    
+    remove palettes
+
+commit 7139bcd4383da34d0fc7bef4a1ca01c657514879
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Mon Sep 22 20:22:06 2014 +1000
+
+    prepare to remove palettes to a new package
+
+commit a4f4c531b79e7e6ad63a8898850901c7a1ee9b73
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Mon Sep 22 20:21:48 2014 +1000
+
+    delete allocfile
+
+commit 73ae2e437fa9f53c3aa53370803ede677f1b8c1a
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Mon Sep 22 13:15:15 2014 +1000
+
+    remove alloc
+
+commit aa7ca894bd97f0552100d093ab682eefc9194a4b
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Jun 25 05:19:04 2014 +0000
+
+    vignette now builds
+
+commit b161ee961f02ff1a64c7356abea91b65dca9896f
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Jun 25 05:18:45 2014 +0000
+
+    moving around tearing hair out
+
+commit 67e02f1da73578dd72c4177683538da1b6ce39b1
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Jun 25 05:08:01 2014 +0000
+
+    fixed up environment for building vignettes
+
+commit 23a279a8e3b7f5c8b11152d76ad616a84a1a6bad
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Jun 25 03:30:52 2014 +0000
+
+    ncdf4 update
+
+commit 00d95b8a2d646d1fe0f88dcc1779eae087a47ee4
+Author: Mike Sumner <mdsumner@sudoecho.novalocal>
+Date:   Wed Jun 25 03:28:38 2014 +0000
+
+    temp fix for "files" in sstfiles
+
+commit b4af28ae0eba40cbd9aff916532d1cebf445ffb0
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Thu May 29 08:37:42 2014 +1000
+
+    news
+
+commit 541dcb315e36c52603f63c082e47f0301b950680
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Thu May 29 08:36:06 2014 +1000
+
+    ... for all read functions, prob need more check/testing
+
+commit 6dd68bba1788d5c389ac959e1a43d022a077f862
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Thu May 22 14:56:04 2014 +1000
+
+    dots arg for readice and readchla
+
+commit 6d2fcf408f516d2c73d15658e080131272bcffc3
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Thu Apr 24 11:44:30 2014 +1000
+
+    export for rapid response
+
+commit 99e32bc52e69ed8c704114762f59288eb46b4253
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Thu Apr 24 11:44:16 2014 +1000
+
+    sstfiles from NC
+
+commit a30d6938f7624bc1a26222e179ba0c08b3974429
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Wed Apr 23 11:19:43 2014 +1000
+
+    file/s typo
+
+commit 70878c0fcd323db95852a15d6a4efb82a61ee968
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Mon Apr 7 11:58:23 2014 +1000
+
+    news for release
+
+commit 475acc6a6a13f557adfc9c16633142f8e23ea325
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Mon Apr 7 11:44:39 2014 +1000
+
+    extract for readtopo
+
+commit 384e42ca6ec7943ffb6395c26c9b538f86f9872f
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Mon Apr 7 11:34:13 2014 +1000
+
+    test update for currents
+
+commit 992fc1763bbaea96834ec63ec3b96861c5aca04f
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Mon Apr 7 11:33:43 2014 +1000
+
+    bug fix news
+
+commit 9a6ac4501cc4ec4feda926980f1bed858e55ffd2
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Mon Apr 7 11:33:30 2014 +1000
+
+    update to currents files handling
+
+commit d99f8deaf9e7c544164f18cb144b85cd35b5fe80
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Thu Apr 3 12:11:31 2014 +1100
+
+    fix incorrect projection for NSIDC
+
+commit 6b16ecf8a2a4ee8e0a4dabf6c1d8e0c4b67eb5c2
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Apr 1 12:04:04 2014 +1100
+
+    use cat not message
+
+commit 799363c5918ef13e4ac549748a120c41deb57776
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Apr 1 10:52:28 2014 +1100
+
+    NEWS minor update
+
+commit 7c180cfe23021be2c619c9d8dd5ebd05ab70bade
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Apr 1 10:51:12 2014 +1100
+
+    added dots to all files functions
+
+commit 80cd8f6e7a05c06909449b553220c1af623ae4d3
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Apr 1 10:47:33 2014 +1100
+
+    fromCache fixes
+
+commit fbf0f5d80f8af22d2b69711556a4414c6166a769
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Apr 1 10:43:04 2014 +1100
+
+    renamed sstfiles fromcache to camel case
+
+commit a1c6d4f180c89b2f73bfd591ab3c9baa0592cbb2
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Apr 1 10:41:10 2014 +1100
+
+    test fixes
+
+commit 69b3e5861ad8800463459967232be7a39cac70fb
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Apr 1 10:06:41 2014 +1100
+
+    files, cache option
+
+commit 072abb61ecbb0d006622f311042db3657abc5697
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Apr 1 09:42:49 2014 +1100
+
+    NEWS
+
+commit 0c57dbe23c4224d105964e388f9e83ebe705d6bb
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Mar 25 14:07:56 2014 +1100
+
+    read rapid modis
+
+commit a0cc473201605f72e7aaa8cfb13ecca380106401
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Mon Mar 24 13:57:03 2014 +1100
+
+    extract and tests
+
+commit b076f97cc1bccf8a0a7bb98327f4de71955a5cfb
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Wed Mar 12 09:10:13 2014 +1100
+
+    tests
+
+commit 6cb88bef78c73ffacae0cf57b109751f1f065eec
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Mar 11 14:41:45 2014 +1100
+
+    removed stray code line
+
+commit a58ee412a555d118963a90ca4882edd26c19ef43
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Mar 11 12:44:48 2014 +1100
+
+    removed useful AADC maps
+
+commit 50ba5e9a9a2c1e7df7ce96299cd6694a3d0da262
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Mar 11 12:43:24 2014 +1100
+
+    beginnings of function,Spatial extract method
+
+commit 9fb097801685879d027b8e82800d7b33222bb5b1
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Fri Mar 7 09:29:31 2014 +1100
+
+    added contourfronts for Sokolov / Rintoul, hidden for now
+
+commit 9d1a7ce4b211a5b14cc1bc1177424cb5002cf8fe
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Thu Mar 6 14:43:05 2014 +1100
+
+    R G B names for imagemap
+
+commit b1725dfcdb28061bb8e8a9cb7cf0280b27d0ea1c
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Wed Mar 5 07:32:17 2014 +1100
+
+    fixes to vector data
+
+commit 022ced1c59967cbd4b1f3d4bfd551f137cdf418d
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Wed Mar 5 07:07:08 2014 +1100
+
+    tidy
+
+commit 0afe65538a3bffe52ba6d7967d3d1a40f8713c2b
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Mar 4 14:51:47 2014 +1100
+
+    stray findex
+
+commit 549442228979d344fd805a7721e730b86e6f420d
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Mar 4 14:46:29 2014 +1100
+
+    news
+
+commit 9feae8df9af19395f8a376d7ad763cb8e63f44c4
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Mar 4 14:45:52 2014 +1100
+
+    fixed some errors
+
+commit fc7a932a367f5f08b6376613b9d55dee1a630d3a
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Mar 4 14:36:34 2014 +1100
+
+    processFiles for readfronts
+
+commit 989465164788dc8a9bf86176bf0e36685587caf3
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Mar 4 14:34:33 2014 +1100
+
+    processFiles for readice
+
+commit 65c794a292da37b551a6309adc71d52c3f454481
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Mar 4 14:31:27 2014 +1100
+
+    processFiles for readsst
+
+commit 2d4dd57368913764a6cc9d8c563c420ff68b2911
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Mar 4 14:29:42 2014 +1100
+
+    processFiles for readchla
+
+commit aa93bc87b03c001f1191525a06a2e431a0e27b17
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Mar 4 14:27:11 2014 +1100
+
+    processFiles for readwind
+
+commit 7ee10ed9a2baa56946f390eaba38d1656e18e598
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Mar 4 14:20:38 2014 +1100
+
+    processFiles for readssh
+
+commit 699dc17d68225326116188e6030ecee38ff22d1b
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Mar 4 14:18:36 2014 +1100
+
+    processFiles for readprod
+
+commit eb627251eac536db36d6be4f8a6517657089a119
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Mar 4 14:17:19 2014 +1100
+
+    processFiles for readfastice
+
+commit 4336e62108255743982dc0ad40ce5e8b5a785eef
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Fri Feb 28 16:54:33 2014 +1100
+
+    code tidy
+
+commit b2ffee62d552b74ee90eda926c9b0f0ef3f9e8bb
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Fri Feb 28 16:37:34 2014 +1100
+
+    some file problems fixed
+
+commit 7b09ff15136569356a44a744638d2bc8f8a5edba
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Fri Feb 28 15:58:30 2014 +1100
+
+    alias extract
+
+commit 99742e3f675a89e2cbf98c131bc212015caaab9a
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Fri Feb 28 15:56:09 2014 +1100
+
+    kill bogus test
+
+commit 57ac06e474adf3e9db83e61564979efa987d1ec7
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Fri Feb 28 15:49:16 2014 +1100
+
+    RasterLayer for singleton fronts and ssh fullname
+
+commit 32ac1350536938d1dc84172eb6e8d73105d282c8
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Fri Feb 28 15:34:41 2014 +1100
+
+    added tests for readssh
+
+commit dfc4e1c3c9c52a43becb6085bbc79d84087af13b
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Fri Feb 28 15:34:31 2014 +1100
+
+    added tests for readfronts and readfastice
+
+commit 412bafa97630cf2d2b791ef2d87340197c81bcb2
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Fri Feb 28 15:14:08 2014 +1100
+
+    using new testthat scheme
+
+commit 1a469ca641dc7d2df5d018722ce2310c4b13deaf
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Fri Feb 28 11:05:56 2014 +1100
+
+    roll version
+
+commit aca69916278afe4277b7b88f2be8c372a3672d54
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Fri Feb 28 11:03:53 2014 +1100
+
+    fix vignette, problem with name class
+
+commit 47dcfcf498e68d2530a5bd106069a45d53b8a3ec
+Author: Mike Sumner <Michael.Sumner@aad.gov.au>
+Date:   Thu Feb 27 11:19:07 2014 +1100
+
+    log
+
 commit cf31e04f14aa03f00693d07faed4f78fe395c336
 Author: Mike Sumner <Michael.Sumner@aad.gov.au>
 Date:   Thu Feb 27 11:15:56 2014 +1100

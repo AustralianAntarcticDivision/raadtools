@@ -545,7 +545,10 @@ fasticefiles <- function(datadir = getOption("default.datadir"), ...) {
 ##' @return RasterBrick with 1 for fast ice pixels, 0 for other, NA for land mask
 ##' @references \url{http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=modis_20day_fast_ice}
 ##' @export
-##' @examples r <- readfastice(c("2002-02-10", "2002-03-03"))
+##' @examples 
+##'
+##' r <- readfastice(c("2002-02-10", "2002-03-03"))
+##' 
 ##'
 readfastice <-
 function(date, time.resolution = "weekly3",
@@ -1801,7 +1804,7 @@ function(date, level = NULL, simplify = TRUE) {
     cl0$date <- files$date[ifile]
 
     if (ifile > 1) {
-      cl0 <- incrementIDs(cl0, ifile)
+      cl0 <- .incrementIDs(cl0, ifile)
       ## this obviously is slow, better fix
       cl <- spRbind(cl, cl0)
     } else {
@@ -1810,6 +1813,12 @@ function(date, level = NULL, simplify = TRUE) {
     if (interactive()) invisible("harass user")
   }
   spTransform(cl, CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"))
+}
+
+
+.incrementIDs <- function(x, incr) {
+  ids <- paste(rownames(as.data.frame(x)), incr, sep = "_")
+  spChFIDs(x, ids)
 }
 
 .dropAllButCoordiest <-

@@ -48,7 +48,7 @@
 ## @param ... Additional arguments passed to the read function.
 ## @return data values extracted by the read functions
 ## @seealso \code{\link{readsst}} and \code{\link{extract}}
-## @import methods
+#' @import methods
 ## @importFrom raster extract
 ## @importMethodsFrom raster extract
 ## @export

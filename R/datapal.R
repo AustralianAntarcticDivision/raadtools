@@ -9,7 +9,6 @@
 ##' @return colours, palette, or function, see Details
 ##' @export
 sst.pal <- function(x, palette = FALSE, alpha = 1) {
-  browser()
   ##pal <- read.table("http://oceancolor.gsfc.nasa.gov/DOCS/palette_sst.txt", header = TRUE, colClasses = "integer", comment.char = "")
   ##cols <- rgb(pal[,2], pal[,3], pal[,4], maxColorValue = 255)
   ##dput(cols)

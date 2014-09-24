@@ -39,6 +39,15 @@ NULL
             break;
         }
     }
+    ## try RAAD_DIR, which may only be available to R CMD check from ~/.R/check.Renviron
+    r <- getOption("repos")
+    dd <- getOption("default.datadir")
+    if (is.null(dd["default.datadir"])) {
+      dd["default.datadir"] <- Sys.getenv("RAAD_DIR");
+      options(repos = r, default.datadir = dd); 
+    }
+    
+    
     success
 }
 .onAttach <- function(libname, pkgname) {

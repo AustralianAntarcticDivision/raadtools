@@ -4,6 +4,7 @@ o pass the dots argument to brick for most read functions
 
 o internalized usage of raster's rotate, to catch breaking change
 
+o new model for env vars for default.datadir
 
   CHANGES IN raadtools VERSION 0.1-1
 

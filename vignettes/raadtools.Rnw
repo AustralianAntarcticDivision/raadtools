@@ -47,15 +47,6 @@ The very first step is to load the package, and if the required data
 repository is not found it will provide a message on what must be
 done.
 
-<<fakey,eval=TRUE,echo=FALSE>>=
-local({ 
-  dd <- getOption("default.datadir")
-  if (is.null(dd["default.datadir"])) {
-    dd["default.datadir"] <- Sys.getenv("RAAD_DIR")
-  }
-  options(default.datadir = dd)
-  })
-@
 
 <<get-start>>=
 library(raadtools)
@@ -65,7 +56,6 @@ library(raadtools)
 
 (If there's no message about trouble setting the repository then you
 are good to go.)
-
 
 <<read_ice>>=
 ice <- readice()
@@ -235,7 +225,9 @@ plotcurrents <- function(date = as.Date("1999-11-24"), ext = NULL, scale = 2000,
      y1 <- crds[,2]
      x2 <- crds[,1] + values(x[[1L]]) * scale
      y2 <- crds[,2] + values(x[[2L]]) * scale
+     op <- options(warn = -1)
      arrows(x1, y1, x2, y2, length = 0.03)
+     options(op)
      invisible(NULL)
  }
 

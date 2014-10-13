@@ -1351,7 +1351,8 @@ readsst <- function(date, time.resolution = c("daily", "monthly"), varname = c("
         }
     ## monthly
     } else {
-        landmask <- readBin(file.path(datadir, "sst", "oimonth_v2", "lstags.onedeg.dat"), "numeric", size = 4, n = 360 * 180, endian = "big")
+        ##landmask <- readBin(file.path(datadir, "sst", "oimonth_v2", "lstags.onedeg.dat"), "numeric", size = 4, n = 360 * 180, endian = "big")
+        landmask <- raster(file.path(datadir, "sst", "oiv2", "lsmask.nc"))
         for (ifile in seq_len(nfiles)) {
              fname <- files$fullname[ifile]
              ##con <- gzfile(fname, open = "rb")
@@ -1365,6 +1366,7 @@ readsst <- function(date, time.resolution = c("daily", "monthly"), varname = c("
              ##                   xmn = 0, xmx = 360, ymn = -90, ymx = 90,
              ##                   crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"), "y")
              sst <- raster(fname, band = files$band[ifile])
+             sst[!landmask] <- NA
              if (lon180) sst <- .rotate(sst)
              if (cropit) sst <- crop(sst,cropext)
              r[[ifile]] <- sst

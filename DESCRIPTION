@@ -15,7 +15,7 @@ Suggests:
     knitr
 LazyData: yes
 VignetteBuilder: knitr
-Version: 0.1-2
+Version: 0.1-3
 Authors@R: person("Michael D.","Sumner", role = c("aut", "cre"), email =
     "mdsumner@gmail.com")
 Description: Tools for reading, plotting and manipulating spatial data.

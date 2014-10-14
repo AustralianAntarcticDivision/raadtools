@@ -400,8 +400,26 @@ plot(chl2, col = pal$col, breaks = pal$breaks, legend = FALSE, addfun = function
 \section{Data sets and the native projection}
 \label{sec:nativeproj}
 
-All data sets availalable in \textbf{raadtools} are provided in their \emph{native projection}. This means that a data set always has a \emph{coordinate reference system} explicitly and that the data must be used with this coordinate system. Many data sets are provided in \textbf{longitude/latitude} but note that this is still not enough information since angular longitude/latitude can only be defined with reference to a particular \emph{datum}. 
+All data sets availalable in \textbf{raadtools} are provided in their \emph{native projection}. This means that a data set always has a \emph{coordinate reference system} explicitly and that the data must be used with this coordinate system. A good example is the passive microwave sea ice concentration data, which are provided on a polar stereographic grid for both poles. Another examples is the Smith and Sandwell bathymetry which is provided in a Mercator grid.   Many data sets are provided in \textbf{longitude/latitude} but note that this is still not enough information since angular longitude/latitude can only be defined with reference to a particular \emph{datum}. 
 
+R provides all of the tools required to work with these data. 
+
+Coordinate reprojection: raw coordinates and point, line, or polygon objects can be transformed between different map projections using the \textbf{rgdal} package. 
+
+Flexible extraction methods: the \textbf{raster} package provides extraction methods to do a huge range of \textbf{query-based extractions} from gridded data. These include: 
+
+\begin{itemize}
+\item extract values from grids by points
+\item extract values from grids by objects: SpatialPoints, SpatialLines, SpatialPolygons
+\item extraction with function-based aggregation (for queries where more than one pixel is returned for an object, i.e. lines and polygons)
+\item extraction by objects with different map projections to the grid data, where the extraction will apply reprojection to the grid automatically
+\item extraction for multi-dimensional grids, i.e. extract values for multiple times for each point/line/polygon
+\item interpolation relative to a points location in a cell
+\item extraction return weights for each pixel, allowing weighting of an object's coverage relative to a cell
+\item extraction more abstractly, returning the cell numbers rather than values allowing flexible repetitive-extraction
+\end{itemize}
+
+Together all of these features allow practically any required extraction task. 
 
 What is a datum:  the combination of an \emph{ellipsoid} and the orientation parameters used to align that ellipsoid relative to the Earth's form. An ellipsoid is simply an oblate spheroid defined by either an inverse flattening ratio or a pair of radiuses (these are equivalent ways to define the same thing).   Links:
 

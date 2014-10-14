@@ -28,10 +28,26 @@ options(replace.assign=TRUE,width=90)
 \title{Using the {\tt raadtools} package}
 
 \author{Michael D. Sumner\footnote{Australian Antarctic Division, 203
-    Channel Highway, Kingston, Tasmania 7050, Australia. {\tt michael.sumner@aad.gov.au}}}
+Channel Highway, Kingston, Tasmania 7050, Australia. {\tt michael.sumner@aad.gov.au}}}
 
 \maketitle
 \tableofcontents
+
+\section{Overview}
+
+The \textbf{raadtools} package provides a set of helper functions based on functionality in the \textbf{raster} package, to simplify fast and efficient use of time series environmental data including
+
+\begin{itemize}
+\item chlorophyll-a concentation
+\item colour images
+\item sea ice concentration
+\item sea surface current vectors
+\item sea surface height and height anomaly
+\item sea surface temperature 
+\item sea surface wind vectors. 
+\end{itemize}
+
+There is ongoing work to simplify extension of these tools to a wider range of data, but here we focus on the existing examples just to highlight the preferred ways of working with these data in \textbf{R}. 
 
 \section{Introduction}
 \label{sec:introduction}
@@ -39,19 +55,16 @@ This document introduces the \textbf{raadtools} package. Some
 familiarity with \textbf{R} and the \textbf{raster} package is
 assumed.
 
-There are some requirements for tasks that require reading data from a
-local file system, so please contact the author/s if you need
-assistance.
+This package relies on the availability of a local file repository which must be present please contact the authors if you need assistance.
 
-The very first step is to load the package, and if the required data
-repository is not found it will provide a message on what must be
-done.
 
+
+The very first step is to load the package, which also triggers an attempt to connect to the file repository. 
 
 <<get-start>>=
 library(raadtools)
+library(raster)
 @
-
 
 
 (If there's no message about trouble setting the repository then you
@@ -74,8 +87,7 @@ arguments and will return the first available time step for the
 default data source. This is handy for becoming familiar with the
 kinds of data before getting really specific. Plotting the resulting
 \textbf{ice} object provides a familiar polar view. These data are a
-single time slice from the daily NSIDC sea ice concentration time
-series, here the very first one that is available (from
+single time slice from the daily passive microwave sea ice concentration, here the very first one that is available (from
 \Sexpr{getZ(ice)}).
 
 Other read functions include \textbf{reachla}, \textbf{readcurr},
@@ -142,8 +154,8 @@ with raster data, including images, surfaces, DEMs and time series
 satellite data. From the \textbf{raster} package DESCRIPTION:
 
 \quote{Reading, writing, manipulating, analyzing and modeling of
-  gridded spatial data. The package implements basic and high-level
-  functions and processing of very large files is supported.}
+gridded spatial data. The package implements basic and high-level
+functions and processing of very large files is supported.}
 
 This package should be consulted for documentation on the use of
 Raster objects, and in particular the vignette \textbf{Raster} is a
@@ -217,19 +229,19 @@ tst <- readcurr()
 xylim <- extent(projectExtent(raster(extent(130, 150, -50, -30), crs = "+proj=longlat"), projection(tst)))
 
 plotcurrents <- function(date = as.Date("1999-11-24"), ext = NULL, scale = 2000, ...) {
-     x <- readcurr(date)
-     if (!is.null(ext)) x <- crop(x, ext)
-     crds <- coordinates(x)
-     plot(sqrt(x[[1L]]^2 + x[[2L]]^2), ...)
-     x1 <- crds[,1]
-     y1 <- crds[,2]
-     x2 <- crds[,1] + values(x[[1L]]) * scale
-     y2 <- crds[,2] + values(x[[2L]]) * scale
-     op <- options(warn = -1)
-     arrows(x1, y1, x2, y2, length = 0.03)
-     options(op)
-     invisible(NULL)
- }
+  x <- readcurr(date)
+  if (!is.null(ext)) x <- crop(x, ext)
+  crds <- coordinates(x)
+  plot(sqrt(x[[1L]]^2 + x[[2L]]^2), ...)
+  x1 <- crds[,1]
+  y1 <- crds[,2]
+  x2 <- crds[,1] + values(x[[1L]]) * scale
+  y2 <- crds[,2] + values(x[[2L]]) * scale
+  op <- options(warn = -1)
+  arrows(x1, y1, x2, y2, length = 0.03)
+  options(op)
+  invisible(NULL)
+}
 
 plotcurrents(date = as.Date("2000-01-05"), ext = xylim, scale = 2100)
 
@@ -262,11 +274,11 @@ ani.stop()
 library(raadtools)
 
 
-     a <- structure(list(x = c(174, 168, 156, 111, 99, 64, 52, 46, -4,
-     -15, -30, -38, -47, -62, -87, -127, -145, -160, -161), y = c(-72,
-     -39, -50, -58, -35, -38, -48, -60, -48, -35, -37, -51, -68, -72,
-     -69, -54, -40, -49, -54)), .Names = c("x", "y"), row.names = c(NA,
-     -19L), class = "data.frame")
+a <- structure(list(x = c(174, 168, 156, 111, 99, 64, 52, 46, -4,
+                          -15, -30, -38, -47, -62, -87, -127, -145, -160, -161), y = c(-72,
+                                                                                       -39, -50, -58, -35, -38, -48, -60, -48, -35, -37, -51, -68, -72,
+                                                                                       -69, -54, -40, -49, -54)), .Names = c("x", "y"), row.names = c(NA,
+                                                                                                                                                      -19L), class = "data.frame")
 
 a$time <-  sort(as.Date("2005-01-01") + sample(c(0, 0, 0, 8, 20, 50), nrow(a), replace = TRUE))
 
@@ -293,8 +305,8 @@ a$time <- sort(as.Date("1985-01-01") + sample(c(0, 0, 0, 10, 100, 50), nrow(a), 
 ##extract(readsst, a)
 
 
- ##extract(readsst)
- ##extract(readsst, time.resolution = "daily")
+##extract(readsst)
+##extract(readsst, time.resolution = "daily")
 
 
 ##extract(readsst, a)
@@ -327,7 +339,7 @@ aurora$chla <- extract(readchla, aurora)
 @
 
 \subsection{Extract spatio-temporal data with spatial, temporal
-  interpolation, and spatial aggregation}
+interpolation, and spatial aggregation}
 \label{sec:extractwithinterp}
 <<example-extract-withinterp,message=FALSE,results=FALSE,eval=FALSE>>=
 d1 <- data.frame(lon = c(130, 125, 120, -52.27, 123.21, -25.42, 36.96, -36.28),
@@ -387,6 +399,17 @@ plot(chl2, col = pal$col, breaks = pal$breaks, legend = FALSE, addfun = function
 
 \section{Data sets and the native projection}
 \label{sec:nativeproj}
+
+All data sets availalable in \textbf{raadtools} are provided in their \emph{native projection}. This means that a data set always has a \emph{coordinate reference system} explicitly and that the data must be used with this coordinate system. Many data sets are provided in \textbf{longitude/latitude} but note that this is still not enough information since angular longitude/latitude can only be defined with reference to a particular \emph{datum}. 
+
+
+What is a datum:  the combination of an \emph{ellipsoid} and the orientation parameters used to align that ellipsoid relative to the Earth's form. An ellipsoid is simply an oblate spheroid defined by either an inverse flattening ratio or a pair of radiuses (these are equivalent ways to define the same thing).   Links:
+
+\url{http://www.geo.hunter.cuny.edu/~jochen/gtech201/lectures/lec6concepts/map%20coordinate%20systems/how%20to%20choose%20a%20projection.htm}
+
+\url{http://www.georeference.org/doc/guide_to_selecting_map_projections.htm}
+
+\url{http://msdn.microsoft.com/en-us/library/cc749633(v=sql.100).aspx}
 
 \section{Acknowledgements}
 \label{sec:ackk} The \textbf{raadtools} package was built with R

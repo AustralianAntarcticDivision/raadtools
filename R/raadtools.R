@@ -719,33 +719,61 @@ readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfile
 ##' @seealso \code{\link{readssh}}
 ##' @return data.frame of file names and dates
 ##' @export
-sshfiles <- function(ssha = FALSE, ...) {
+sshfiles <- function(time.resolution = c("daily", "monthly", "monthly_clim", "seasonal_clim"), ssha = FALSE, ...) {
   datadir = getOption("default.datadir")
   product <- if(ssha) "msla" else "madt"
   ##ftp.aviso.altimetry.fr/global/near-real-time/grids/madt/all-sat-merged/h
   ##ftp.aviso.altimetry.fr/global/delayed-time/grids/madt/all-sat-merged/h
+  time.resolution <- match.arg(time.resolution)
   
+  tpat <- switch(time.resolution, 
+                 daily = "/h/", 
+                 monthly = "monthly_mean", 
+                 monthly_clim = "monthly_clim",
+                 seasonal_clim = "seasonal_clim"
+                 )
+  if (time.resolution != "daily" & product == "madt") stop("ssha=FALSE is only compatible with daily time resolution")
   ftx <- .allfilelist()
   cfiles0 <- grep("ftp.aviso.altimetry.fr", ftx, value = TRUE)
   cfiles1 <- grep(product, cfiles0, value = TRUE)
-  cfiles2 <- grep("/h/", cfiles1, value = TRUE)
+  cfiles2 <- grep(tpat, cfiles1, value = TRUE)
   cfiles <- grep(".nc$", cfiles2, value = TRUE)
-    
-  datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
-  currentdates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
-  ## just the last one
-  nas <- is.na(currentdates[length(currentdates)])
-  if (nas) currentdates[length(currentdates)] <- max(currentdates, na.rm = TRUE) + 24 * 3600
+ 
   
-  cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = currentdates,
-                    fullname = cfiles, stringsAsFactors = FALSE)[order(currentdates), ]
+  ## daily: dt_global_allsat_msla_h_19930101_20140106.nc
+  ## monthly_mean: dt_global_allsat_msla_h_y1993_m01.nc
+  ## monthly_clim: dt_global_allsat_msla_h_y1993_2013_m01.nc
+  ## seasonal_clim: dt_global_allsat_msla_h_y1993_2013_m10_12.nc
+  if (length(cfiles) < 1) stop("no files found")
+
+  doffs <- if(time.resolution == "monthly_clim") 0 else 1
+  datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x) - doffs])
+  
+
+  if (time.resolution == "daily") {
+    dates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
+    ## just the last one
+    nas <- is.na(dates[length(dates)])
+    if (nas) dates[length(dates)] <- max(dates, na.rm = TRUE) + 24 * 3600
+  } else if (time.resolution == "monthly") {
+    dateparts <- sapply(strsplit(basename(cfiles), "_"), function(x) paste(c(tail(x, 2), "01"), collapse = " "))
+    dates <- as.POSIXct(strptime(dateparts, "y%Y m%m.nc %d"))
+    
+  } else {
+    m <- as.numeric(substr(datepart, 2, 3))
+    dates <- ISOdatetime(1993, m, 1, 0, 0, 0, tz = "GMT")
+  }
+
+  cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = dates,
+                    fullname = cfiles, stringsAsFactors = FALSE)[order(dates), ]
   ## drop any duplicated, this occurs with the delayed/near-real time update
   cfs <- cfs[!duplicated(cfs$date), ]
   
   cfs
 }
 
-##' Load file names and dates of AVISO SSH/SSHA data
+
+
 ##'
 ##' A data.frame of file names and dates
 ##' @title AVISO sea surface height / anomaly files

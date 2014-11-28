@@ -701,7 +701,14 @@ readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfile
 
 }
 
-
+.allfilelist <- function(rda = TRUE) {
+  if (rda) {
+    load(file.path(datadir, "admin", "filelist", "allfiles.Rdata"))
+    return(fs)
+  }  
+  readLines(file.path(datadir, "admin", "filelist", "allfiles.txt"))
+  
+}
 
 ##' Load file names and dates of AVISO SSH/SSHA data
 ##'
@@ -713,6 +720,41 @@ readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfile
 ##' @return data.frame of file names and dates
 ##' @export
 sshfiles <- function(ssha = FALSE, ...) {
+  datadir = getOption("default.datadir")
+  product <- if(ssha) "msla" else "madt"
+  ##ftp.aviso.altimetry.fr/global/near-real-time/grids/madt/all-sat-merged/h
+  ##ftp.aviso.altimetry.fr/global/delayed-time/grids/madt/all-sat-merged/h
+  
+  ftx <- .allfilelist()
+  cfiles0 <- grep("ftp.aviso.altimetry.fr", ftx, value = TRUE)
+  cfiles1 <- grep(product, cfiles0, value = TRUE)
+  cfiles2 <- grep("/h/", cfiles1, value = TRUE)
+  cfiles <- grep(".nc$", cfiles2, value = TRUE)
+    
+  datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
+  currentdates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
+  ## just the last one
+  nas <- is.na(currentdates[length(currentdates)])
+  if (nas) currentdates[length(currentdates)] <- max(currentdates, na.rm = TRUE) + 24 * 3600
+  
+  cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = currentdates,
+                    fullname = cfiles, stringsAsFactors = FALSE)[order(currentdates), ]
+  ## drop any duplicated, this occurs with the delayed/near-real time update
+  cfs <- cfs[!duplicated(cfs$date), ]
+  
+  cfs
+}
+
+##' Load file names and dates of AVISO SSH/SSHA data
+##'
+##' A data.frame of file names and dates
+##' @title AVISO sea surface height / anomaly files
+##' @param ssha logical value, return absolute (SSH) or relative (SSHA anomaly) values
+##' @param ... reserved for future use, currently ignored
+##' @seealso \code{\link{readssh}}
+##' @return data.frame of file names and dates
+##' @export
+.sshfiles1 <- function(ssha = FALSE, ...) {
     datadir = getOption("default.datadir")
     product <- if(ssha) "ssha" else "ssh"
     data.source = file.path(datadir, product, "aviso", "upd", "7d")

@@ -1,3 +1,5 @@
+
+
 ##' R tools for spatial data, extensions using raster to read and extract
 ##'
 ##' Tools in R for reading, plotting and manipulating spatial data, originally 
@@ -702,7 +704,9 @@ readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfile
 }
 
 .allfilelist <- function(rda = TRUE) {
+  datadir <- getOption("default.datadir")
   if (rda) {
+    fs <- NULL
     load(file.path(datadir, "admin", "filelist", "allfiles.Rdata"))
     return(fs)
   }  
@@ -714,13 +718,14 @@ readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfile
 ##'
 ##' A data.frame of file names and dates
 ##' @title AVISO sea surface height / anomaly files
+##' @param time.resolution time resolution to find
 ##' @param ssha logical value, return absolute (SSH) or relative (SSHA anomaly) values
 ##' @param ... reserved for future use, currently ignored
 ##' @seealso \code{\link{readssh}}
 ##' @return data.frame of file names and dates
 ##' @export
 sshfiles <- function(time.resolution = c("daily", "monthly", "monthly_clim", "seasonal_clim"), ssha = FALSE, ...) {
-  datadir = getOption("default.datadir")
+  datadir <- getOption("default.datadir")
   product <- if(ssha) "msla" else "madt"
   ##ftp.aviso.altimetry.fr/global/near-real-time/grids/madt/all-sat-merged/h
   ##ftp.aviso.altimetry.fr/global/delayed-time/grids/madt/all-sat-merged/h
@@ -774,14 +779,63 @@ sshfiles <- function(time.resolution = c("daily", "monthly", "monthly_clim", "se
 
 
 
+
+##' Sea surface height/anomaly
 ##'
-##' A data.frame of file names and dates
-##' @title AVISO sea surface height / anomaly files
-##' @param ssha logical value, return absolute (SSH) or relative (SSHA anomaly) values
-##' @param ... reserved for future use, currently ignored
-##' @seealso \code{\link{readssh}}
-##' @return data.frame of file names and dates
+##' Details
+##' @title read SSH/A
+##' @param date date or dates of data to read, see Details
+##' @param time.resolution time resolution to read
+##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
+##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
+##' components, in degrees (0 north, 90 east, 180 south, 270 west)
+##' @param ssha logical, to optionally return anomaly or height
+##' @param returnfiles ignore options and just return the file names and dates
+##' @param verbose print messages on progress etc.
+##' @param ... passed to brick, primarily for \code{filename}
 ##' @export
+##' @return data.frame
+readssh <- function (date, time.resolution = c("daily", "monthly", "monthly_clim", "seasonal_clim"),
+                     xylim = NULL, lon180 = TRUE, ssha = FALSE,
+                     returnfiles = FALSE, verbose = TRUE, ...)
+{
+  time.resolution <- match.arg(time.resolution)
+
+  files <- sshfiles(time.resolution = time.resolution, ssha = ssha)
+  if (returnfiles)
+    return(files)
+  if (missing(date)) date <- min(files$date)
+  
+  if (time.resolution %in% c("monthly_clim", "seasonal_clim")) {
+    stop(sprintf("only daily or monthly read currently available for specific date input. \n Use x <- sshfiles(time.resolution = %s) and raster(x$fullname[1]) etc.", time.resolution)) 
+  }
+  date <- timedateFrom(date)
+  files <- .processFiles(date, files, time.resolution)
+  
+  cropit <- FALSE
+  if (!is.null(xylim)) {
+    cropit <- TRUE
+    cropext <- extent(xylim)
+  }
+  nfiles <- nrow(files)
+  r <- vector("list", nfiles)
+  for (ifile in seq_len(nfiles)) {
+    ##r0 <- read0(files$fullname[ifile], varname = "Grid_0001")
+    r0 <- suppressWarnings(raster(files$fullname[ifile]))
+    if (lon180)
+##      r0 <- suppressWarnings(.rotate(r0))
+      r0 <- rotate(r0)
+      
+    if (cropit)
+      r0 <- crop(r0, cropext)
+    r[[ifile]] <- r0
+  }
+  r <- if (nfiles > 1) brick(stack(r), ...) else r[[1L]]
+  setZ(r, files$date)
+  
+}
+
+
 .sshfiles1 <- function(ssha = FALSE, ...) {
     datadir = getOption("default.datadir")
     product <- if(ssha) "ssha" else "ssh"
@@ -804,22 +858,7 @@ sshfiles <- function(time.resolution = c("daily", "monthly", "monthly_clim", "se
 }
 
 
-##' Sea surface height/anomaly
-##'
-##' Details
-##' @title read SSH/A
-##' @param date date or dates of data to read, see Details
-##' @param time.resolution time resolution to read
-##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
-##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
-##' components, in degrees (0 north, 90 east, 180 south, 270 west)
-##' @param ssha logical, to optionally return anomaly or height
-##' @param returnfiles ignore options and just return the file names and dates
-##' @param verbose print messages on progress etc.
-##' @param ... passed to brick, primarily for \code{filename}
-##' @export
-##' @return data.frame
-readssh <- function (date, time.resolution = "weekly",
+.readssh1 <- function (date, time.resolution = "weekly",
     xylim = NULL, lon180 = TRUE, ssha = FALSE,
     returnfiles = FALSE, verbose = TRUE, ...)
 {

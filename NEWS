@@ -2,7 +2,7 @@ DEV
 
 o applied missing landmask for monthly SST
 
-o sshfiles now uses the new repository structure, old version of sshfiles is now called .sshfiles1
+o sshfiles and readssh now uses the new repository structure, old versions now internal-only, called .sshfiles1 and .readssh1
 
    CHANGES IN raadtools VERSION 0.1-2
 

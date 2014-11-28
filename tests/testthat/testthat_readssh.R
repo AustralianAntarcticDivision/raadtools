@@ -12,7 +12,7 @@ test_that("multiple dates return a multilayer object", {
 
       })
 
-testthat("date ranges are valid", {
+test_that("date ranges are valid", {
   dr <- range(sshfiles()$date)
   expect_that(dr, is_a("POSIXct"))
   expect_that(all(!is.na(dr)), is_true())
@@ -34,6 +34,5 @@ testthat("date ranges are valid", {
   
   expect_that(nrow(sshfiles(time.resolution = "seasonal_clim", ssha=TRUE)), equals(4))
   expect_that(nrow(sshfiles(time.resolution = "monthly_clim", ssha=TRUE)), equals(12))
-  
-  
-}
+
+})

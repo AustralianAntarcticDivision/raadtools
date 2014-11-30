@@ -1,5 +1,3 @@
-
-
 ##' R tools for spatial data, extensions using raster to read and extract
 ##'
 ##' Tools in R for reading, plotting and manipulating spatial data, originally 
@@ -875,7 +873,7 @@ readssh <- function (date, time.resolution = c("daily", "monthly", "monthly_clim
     datadir = getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
 
-    files <- sshfiles(ssha = ssha)
+    files <- .sshfiles1(ssha = ssha)
     if (returnfiles)
         return(files)
     if (missing(date)) date <- min(files$date)

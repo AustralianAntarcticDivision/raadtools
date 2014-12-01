@@ -1433,6 +1433,7 @@ sstfiles <- function(time.resolution = c("daily"), ...) {
 ##' @param varname variable to return from the data files, default is
 ##' "sst" or "anom", "err", "ice"
 ##' @param returnfiles ignore options and just return the file names and dates
+##' @param readall FALSE by default
 ##' @param ... passed in to brick, primarily for \code{filename}
 ##' @export
 ##' @return \code{\link[raster]{raster}} object
@@ -1455,7 +1456,7 @@ sstfiles <- function(time.resolution = c("daily"), ...) {
 readsst <-  function (date, time.resolution = c("daily", "monthly"),
   xylim = NULL, lon180 = TRUE, 
   varname = c("sst", "anom", "err", "ice"),
-  returnfiles = FALSE, ...) {
+  returnfiles = FALSE, readall = FALSE, ...) {
   time.resolution <- match.arg(time.resolution)
   varname <- match.arg(varname)
   if (time.resolution == "monthly") stop("sorry, no monthly SST at the moment")
@@ -1467,7 +1468,11 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
   if (missing(date)) date <- min(files$date)
   
   date <- timedateFrom(date)
-  files <- .processFiles(date, files, time.resolution)
+  if (!readall) {
+    files <- .processFiles(date, files, time.resolution)
+    lon180 <- FALSE
+    xylim <- NULL
+  }
   
   cropit <- FALSE
   if (!is.null(xylim)) {

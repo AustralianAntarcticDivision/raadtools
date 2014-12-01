@@ -1,5 +1,7 @@
 DEV
 
+o readsst gains a "readall" argument, if TRUE then lon180 and xylim arguments are ignored
+
 o icefiles now returns dates and file names with options for product, hemisphere, and time.resolution
 
 o readcurr now returns data in "longitude/latitude" on the sphere, rather than Mercator as the data source has been changed by 

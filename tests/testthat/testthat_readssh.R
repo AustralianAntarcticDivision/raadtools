@@ -11,8 +11,8 @@ test_that("multiple dates return a multilayer object", {
           expect_that(suppressWarnings(readssh(c("2000-01-01", "2003-01-10", "1998-08-01"))), is_a("RasterBrick"))
          
       })
-test_that("using filename gives a brick", {
-  expect_that(readssh("2000-01-01", filename = sprintf("%s.grd", tempfile())), is_a("RasterBrick"))
+test_that("using filename with two dates gives a brick", {
+  expect_that(readssh(c("2000-01-01", "2002-01-01"), filename = sprintf("%s.grd", tempfile())), is_a("RasterBrick"))
 
 })
 
@@ -46,3 +46,6 @@ test_that("date ranges are valid", {
   expect_that(nrow(sshfiles(time.resolution = "monthly_clim", ssha=TRUE)), equals(12))
 
 })
+
+
+

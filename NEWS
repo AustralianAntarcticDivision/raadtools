@@ -1,8 +1,13 @@
 DEV
 
-o applied missing landmask for monthly SST
+o readcurr now returns data in "longitude/latitude" on the sphere, rather than Mercator as the data source has been changed by 
+the provider
 
-o sshfiles and readssh now uses the new repository structure, old versions now internal-only, called .sshfiles1 and .readssh1
+o currentsfiles and readcurr now use the new repository structure, old versions now internal-only, called .currentsfiles1 and .readcurr
+
+o sshfiles and readssh now use the new repository structure, old versions now internal-only, called .sshfiles1 and .readssh1
+
+o applied missing landmask for monthly SST
 
    CHANGES IN raadtools VERSION 0.1-2
 

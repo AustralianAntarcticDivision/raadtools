@@ -9,7 +9,8 @@ test_that("sst data is returned as a raster object", {
 test_that("multiple dates return a multilayer object", {
           expect_that(readsst(c("2000-01-01", "2003-01-10", "1998-08-01")), is_a("RasterBrick"))
 
-          expect_that(readsst(c("2000-01-01", "2003-01-10", "1998-08-01"), time.resolution = "monthly"), is_a("RasterBrick"))
+        
+          expect_that(readsst(c("2000-01-01", "2003-01-10", "1998-08-01"), time.resolution = "monthly"), throws_error())
       })
 
 d <- readsst(c("2000-01-01", "2003-01-10"))

@@ -1333,11 +1333,42 @@ readbathy <- readtopo
 ##' A data frame of file names and datres
 ##' @title OISST sea surface temperature files
 ##' @param time.resolution time resolution read
-##' @param fromCache load from cache or rebuild file catalog
 ##' @param ... reserved for future use, currently ignored
 ##' @return data.frame of file names and dates
 ##' @export
-sstfiles <- sstfiles <- function (time.resolution = c("daily", "monthly"), fromCache = TRUE,
+sstfiles <- function(time.resolution = c("daily"), ...) {
+  datadir <- getOption("default.datadir")
+  
+  ## data/eclipse.ncdc.noaa.gov/pub/OI-daily-v2/NetCDF/1981/AVHRR
+  ## "avhrr-only-v2.19810901.nc"   
+  
+  time.resolution <- match.arg(time.resolution)
+
+  ftx <- .allfilelist()
+  cfiles0 <- grep("eclipse.ncdc.noaa.gov", ftx, value = TRUE)
+  cfiles1 <- grep("OI-daily-v2", cfiles0, value = TRUE)
+  cfiles <- grep(".nc$", cfiles1, value = TRUE)
+  
+  
+  if (length(cfiles) < 1) stop("no files found")
+  
+  doffs <-  1
+  datepart <- sapply(strsplit(basename(cfiles), "\\."), function(x) x[length(x) - doffs])
+ 
+  dates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
+ 
+  cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = dates,
+                    fullname = cfiles, stringsAsFactors = FALSE)[order(dates), ]
+  ## shouldn't be any, but no harm
+  fs <- cfs[!duplicated(cfs$date), ]
+  if (nrow(fs) < nrow(cfs)) warning("Some duplicated files in OI-daily-V2 collection? Please report to maintainer. ")
+  fs
+}
+
+
+
+
+.sstfiles1 <- function (time.resolution = c("daily", "monthly"), fromCache = TRUE,
     ...)
 {
     datadir <- getOption("default.datadir")
@@ -1386,6 +1417,8 @@ sstfiles <- sstfiles <- function (time.resolution = c("daily", "monthly"), fromC
         flush.console()
         invisible(NULL)
 }
+
+
 ##' Read OISST sea surface temperature data from daily files
 ##'
 ##' SST data read from files managed by
@@ -1395,10 +1428,10 @@ sstfiles <- sstfiles <- function (time.resolution = c("daily", "monthly"), fromC
 ##' returned.
 ##' @param date date or dates of data to read, see Details
 ##' @param time.resolution time resoution data to read, daily or monthly
-##' @param varname variable to return from the data files, default is
-##' "sst" or "anom", "err", "ice"
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
 ##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
+##' @param varname variable to return from the data files, default is
+##' "sst" or "anom", "err", "ice"
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param verbose print messages on progress etc.
 ##' @param ... passed in to brick, primarily for \code{filename}
@@ -1419,7 +1452,58 @@ sstfiles <- sstfiles <- function (time.resolution = c("daily", "monthly"), fromC
 ##' dts <- seq(as.Date("2001-01-03"), by = "1 week", length = 100)
 ##' sst <- readsst(dts, xylim = ext)
 ##' }
-readsst <- function(date, time.resolution = c("daily", "monthly"), varname = c("sst", "anom", "err", "ice"),
+##' 
+readsst <-  function (date, time.resolution = c("daily", "monthly"),
+  xylim = NULL, lon180 = TRUE, 
+  varname = c("sst", "anom", "err", "ice"),
+  returnfiles = FALSE, ...) {
+  time.resolution <- match.arg(time.resolution)
+  varname <- match.arg(varname)
+  if (time.resolution == "monthly") stop("sorry, no monthly SST at the moment")
+  
+  files <- sstfiles(time.resolution = time.resolution)
+  if (returnfiles)
+    return(files)
+  
+  if (missing(date)) date <- min(files$date)
+  
+  date <- timedateFrom(date)
+  files <- .processFiles(date, files, time.resolution)
+  
+  cropit <- FALSE
+  if (!is.null(xylim)) {
+    cropit <- TRUE
+    cropext <- extent(xylim)
+  }
+  nfiles <- nrow(files)
+  if (nfiles > 1) {
+    r0 <- suppressWarnings(stack(files$fullname, quick = TRUE, varname = varname))
+  } else {
+    r0 <- suppressWarnings(raster(files$fullname, varname = varname))
+  }
+  ## note that here the object gets turned into a brick, 
+  ## presumably with a tempfile backing - that's something to think about more
+  ## in terms of passing in "filename"
+  if (lon180) r0 <- rotate(r0)
+  if (cropit) r0 <- crop(r0, cropext)
+  
+  ## need to determine if "filename" was passed in
+  dots <- list(...)
+  if ("filename" %in% names(dots)) {
+    r0 <- writeRaster(r0, ...)
+  }
+  
+  
+  setZ(r0, files$date)
+  
+}
+
+
+
+
+
+
+.readsst1 <- function(date, time.resolution = c("daily", "monthly"), varname = c("sst", "anom", "err", "ice"),
                     xylim = NULL,
                     lon180 = TRUE,
                     returnfiles = FALSE,
@@ -1431,7 +1515,7 @@ readsst <- function(date, time.resolution = c("daily", "monthly"), varname = c("
     varname <- match.arg(varname)
 
     if (! varname == "sst" & time.resolution == "monthly") stop("only sst available for monthly data")
-    files <- sstfiles(time.resolution = time.resolution)
+    files <- .sstfiles1(time.resolution = time.resolution)
     if (returnfiles) return(files)
 
     if (missing(date)) date <- min(files$date)

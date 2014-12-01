@@ -1,13 +1,22 @@
 DEV
 
+o readcurr and readssh now provide daily data, and no weekly time step is available
+
+o readice provides NSIDC northern and southern hemisphere data, as well as AMSR southern hemisphere data
+
+o readice temporarily does not provide SSMI data
+
+o readice now leaves zero-value pixels without setting to NA, the setNA argument only applies to the (scaled) values 101 and 102
+
 o readsst gains a "readall" argument, if TRUE then lon180 and xylim arguments are ignored
 
 o icefiles now returns dates and file names with options for product, hemisphere, and time.resolution
 
-o readcurr now returns data in "longitude/latitude" on the sphere, rather than Mercator as the data source has been changed by 
-the provider
+o readcurr now returns data in "longitude/latitude" on the sphere, rather than Mercator as the data source has been changed by the provider
 
-o support for monthly SST has been temporarily removed 
+o support for monthly SST has been temporarily removed (o applied missing landmask for monthly SST)
+
+o readice and icefiles now use the new repository structure, with the old versions now internal only called .icefiles1 and .readice1
 
 o sstfiles and readsst now use the new repository structure, old versions now internal-only, called .sstfiles1 and .readsst1
 
@@ -15,7 +24,6 @@ o currentsfiles and readcurr now use the new repository structure, old versions 
 
 o sshfiles and readssh now use the new repository structure, old versions now internal-only, called .sshfiles1 and .readssh1
 
-o applied missing landmask for monthly SST
 
    CHANGES IN raadtools VERSION 0.1-2
 

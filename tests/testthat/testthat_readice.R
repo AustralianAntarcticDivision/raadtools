@@ -1,7 +1,16 @@
 require(testthat)
 require(raadtools)
 
-
+test_that("all variants are available", {
+  r1 <- readice(time.resolution = "monthly", hemisphere = "south")
+  r2 <- readice(time.resolution = "monthly", hemisphere = "north")
+  r3 <- readice(time.resolution = "daily", hemisphere = "south")
+  r4 <- readice(time.resolution = "daily", hemisphere = "north")
+  
+  r5 <- readice(product = "amsr")
+  expect_that(readice(product = "ssmi"), throws_error())
+  
+})
 
 test_that("reqeusted files only are returned as a data.frame", {
     ffs <- readice(returnfiles = TRUE)

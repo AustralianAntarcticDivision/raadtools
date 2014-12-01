@@ -1433,7 +1433,6 @@ sstfiles <- function(time.resolution = c("daily"), ...) {
 ##' @param varname variable to return from the data files, default is
 ##' "sst" or "anom", "err", "ice"
 ##' @param returnfiles ignore options and just return the file names and dates
-##' @param verbose print messages on progress etc.
 ##' @param ... passed in to brick, primarily for \code{filename}
 ##' @export
 ##' @return \code{\link[raster]{raster}} object
@@ -1586,7 +1585,7 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
 ##'
 ##' A data.frame of file names and dates
 ##' @title AVISO ocean currents files
-##' @param fromCache load cached file catalog, or rebuild that
+##' @param time.resolution time resolution to load
 ##' @param ... reserved for future use, currently ignored
 ##' @seealso \code{\link{readcurr}}
 ##' @return data.frame of file names and dates

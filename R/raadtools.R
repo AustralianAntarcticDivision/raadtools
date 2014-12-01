@@ -954,7 +954,7 @@ function(data.source = "", time.resolution = c("daily"), fromCache = TRUE, ...) 
 ##' Read wind
 ##'
 ##' Read wind data
-##' @title title1
+##' @title readwind
 ##' @param date date or dates of data to read, see Details
 ##' @param time.resolution time resolution to read
 ##' @param magonly return just the magnitude from the U and V
@@ -1617,7 +1617,7 @@ currentsfiles <- function(time.resolution = c("daily"), ...) {
 }
 
 
-##' Read AVISO ocean current data from weekly files
+##' Read AVISO ocean current data 
 ##'
 ##' Current data is read from files managed by
 ##' \code{\link{currentsfiles}}. Dates are matched to file names by
@@ -1641,16 +1641,10 @@ currentsfiles <- function(time.resolution = c("daily"), ...) {
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... passed to brick, primarily for \code{filename}
 ##' @export
-##' @note These data are stored in a Mercator projection on Pacific
+##' @note These data are stored in longitude/latitude projection on the sphere between longitudes in the Pacific
 ##' view \[0, 360\], the default behaviour is to reset this to Atlantic
-##' view \[-180, 180\] with \code{lon180}. The Mercator projection is
-##' preserved, see \code{\link[raster]{projectRaster}} and
-##' \code{\link[raster]{resample}} for transformation methods.
+##' view \[-180, 180\] with \code{lon180}. 
 ##'
-##' \code{xylim} is expected to be consistent with the source
-##' data itself (which is not necessarily in longitude/latitude) and
-##' with \code{lon180}, if in doubt first read a single time slice,
-##' plot it and draw an \code{\link[raster]{extent}}.
 ##' @return \code{\link[raster]{raster}} object with the "U"
 ##' (horizontal/X) and "V" (vertical/Y) components of velocity in
 ##' cm/s. Setting either of the (mutually exclusive) \code{magonly}

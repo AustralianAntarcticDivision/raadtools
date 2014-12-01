@@ -30,12 +30,12 @@ test_that("dates not available within 4 days give error", {
 
 test_that("input crop extent works for a time series", {
 
-  ext <- extent(0, 20037508, -13500000, -5400000)
-
+  ##ext <- extent(0, 20037508, -13500000, -5400000)
+ext <- extent(-180, 180, -90, -30)
   dts <- seq(as.Date("2001-01-03"), by = "1 month", length = 5)
   curr <- readcurr(dts, xylim = ext, magonly = TRUE)
   expect_that(curr, is_a("RasterBrick"))
-  expect_that(dim(curr), equals(c(219L, 540L, 5L)))
+  expect_that(dim(curr), equals(c(240L, 1440L, 5L)))
 
 })
 

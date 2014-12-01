@@ -2324,7 +2324,70 @@ l <- vector("list", nfiles)
 ##' icf[which.min((as.Date("1995-01-01") + runif(1, -4000, 4000)) - as.Date(icf$date), ]
 ##' }
 ##' @return data.frame of \code{file} and \code{date}
-icefiles <- function(time.resolution = c("daily", "monthly"), product = c("nsidc", "ssmi"), ...) {
+icefiles <- function(time.resolution = c("daily", "monthly"), product = c("NSIDC", "AMSR"), hemisphere =c("south", "north"), ...) {
+  
+  datadir <- getOption("default.datadir")
+  
+  time.resolution <- match.arg(time.resolution)
+  product <- match.arg(product)
+  hemisphere <- match.arg(hemisphere)
+  
+  ## data/sidads.colorado.edu/pub/DATASETS/nsidc0081_nrt_nasateam_seaice/north
+  ## data/sidads.colorado.edu/pub/DATASETS/nsidc0081_nrt_nasateam_seaice/south
+  ## data/sidads.colorado.edu/pub/DATASETS/nsidc0051_gsfc_nasateam_seaice/final-gsfc/north/daily/
+  ## data/sidads.colorado.edu/pub/DATASETS/nsidc0051_gsfc_nasateam_seaice/final-gsfc/north/monthly/
+  ## data/sidads.colorado.edu/pub/DATASETS/nsidc0051_gsfc_nasateam_seaice/final-gsfc/south/daily/
+  ## data/sidads.colorado.edu/pub/DATASETS/nsidc0051_gsfc_nasateam_seaice/final-gsfc/south/monthly/  
+  
+  ## data/www.iup.uni-bremen.de+8084/amsr2data/asi_daygrid_swath/s6250
+  
+  if (time.resolution != "daily" & product == "AMSR") stop("product=\"AMSR\" is only compatible with daily time resolution")
+  ftx <- .allfilelist()
+  
+  ppat <- switch(product, 
+                 NSIDC = "sidads.colorado.edu", 
+                 AMSR = "www.iup.uni-bremen.de:8084")
+  strpat <- switch(product, 
+                   NSIDC = "nt_", 
+                   AMSR = "AMSR2")
+                   
+  epat <- switch(product, 
+                 NSIDC = ".bin$", 
+                 AMSR = ".hdf$")
+  
+  cfiles0 <- grep(ppat, ftx, value = TRUE)
+  cfiles1 <- if(product == "NSIDC") grep(time.resolution, cfiles0, value = TRUE) else cfiles0
+  cfiles2 <- if(product == "NSIDC") grep(hemisphere, cfiles1, value = TRUE) else cfiles1
+  
+  cfiles3 <- grep(strpat, cfiles2, value = TRUE)
+  cfiles <- grep(epat, cfiles2, value = TRUE)
+  
+   if (length(cfiles) < 1) stop("no files found")
+  
+  doffs <- if(product == "NSIDC") 3 else 1
+  sep <- if(product == "NSIDC") "_" else "-"
+  datepart <- sapply(strsplit(basename(cfiles), sep), function(x) x[length(x) - doffs])
+  
+  
+  datepat <-  "%Y%m%d"
+  if (time.resolution == "monthly") datepart <- sprintf("%s01", datepart)
+  dates <- timedateFrom(as.Date(strptime(datepart, datepat, tz = "GMT")))
+
+  nas <- is.na(dates)
+  dates <- dates[!nas]
+  cfiles <- cfiles[!nas]
+  
+  cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = dates,
+                    fullname = cfiles, stringsAsFactors = FALSE)[order(dates), ]
+ 
+  cfs <- cfs[!duplicated(cfs$date), ]
+  
+  cfs
+}
+
+
+
+.icefiles1 <- function(time.resolution = c("daily", "monthly"), product = c("nsidc", "ssmi"), ...) {
     time.resolution <- match.arg(time.resolution)
     product <- match.arg(product)
     datadir <- getOption("default.datadir")

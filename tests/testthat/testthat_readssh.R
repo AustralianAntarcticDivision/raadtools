@@ -8,9 +8,19 @@ test_that("ssh data is returned as a raster object", {
       })
 
 test_that("multiple dates return a multilayer object", {
-          expect_that(readssh(c("2000-01-01", "2003-01-10", "1998-08-01")), is_a("RasterBrick"))
-
+          expect_that(suppressWarnings(readssh(c("2000-01-01", "2003-01-10", "1998-08-01"))), is_a("RasterBrick"))
+         
       })
+test_that("using filename gives a brick", {
+  expect_that(readssh("2000-01-01", filename = sprintf("%s.grd", tempfile())), is_a("RasterBrick"))
+
+})
+
+test_that("nuances of different defaults for multilayer object", {
+  expect_that(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10")), is_a("RasterBrick"))
+  expect_that(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10"), lon180 = FALSE), is_a("RasterStack"))
+  expect_that(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10"), xylim = extent(-180, 180, -90, -40)), is_a("RasterBrick"))
+})
 
 test_that("date ranges are valid", {
   dr <- range(sshfiles()$date)

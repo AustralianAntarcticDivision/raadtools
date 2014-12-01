@@ -816,21 +816,40 @@ readssh <- function (date, time.resolution = c("daily", "monthly", "monthly_clim
     cropext <- extent(xylim)
   }
   nfiles <- nrow(files)
-  r <- vector("list", nfiles)
-  for (ifile in seq_len(nfiles)) {
-    ##r0 <- read0(files$fullname[ifile], varname = "Grid_0001")
-    r0 <- suppressWarnings(raster(files$fullname[ifile]))
-    if (lon180)
-##      r0 <- suppressWarnings(.rotate(r0))
-      r0 <- rotate(r0)
-      
-    if (cropit)
-      r0 <- crop(r0, cropext)
-    r[[ifile]] <- r0
+  if (nfiles > 1) {
+    r0 <- suppressWarnings(stack(files$fullname, quick = TRUE))
+  } else {
+    r0 <- suppressWarnings(raster(files$fullname, quick = TRUE))
   }
-  r <- if (nfiles > 1) brick(stack(r), ...) else r[[1L]]
-  setZ(r, files$date)
+  ## note that here the object gets turned into a brick, 
+  ## presumably with a tempfile backing - that's something to think about more
+  ## in terms of passing in "filename"
+  if (lon180) r0 <- rotate(r0)
+  if (cropit) r0 <- crop(r0, cropext)
   
+  ## need to determine if "filename" was passed in
+  dots <- list(...)
+  if ("filename" %in% names(dots)) {
+    r0 <- brick(r0, ...)
+  }
+    
+  
+  return(setZ(r0, files$date))
+#   r <- vector("list", nfiles)
+#   for (ifile in seq_len(nfiles)) {
+#     ##r0 <- read0(files$fullname[ifile], varname = "Grid_0001")
+#     r0 <- suppressWarnings(raster(files$fullname[ifile]))
+#     if (lon180)
+# ##      r0 <- suppressWarnings(.rotate(r0))
+#       r0 <- rotate(r0)
+#       
+#     if (cropit)
+#       r0 <- crop(r0, cropext)
+#     r[[ifile]] <- r0
+#   }
+#   r <- if (nfiles > 1) brick(stack(r), ...) else r[[1L]]
+#   setZ(r, files$date)
+#   
 }
 
 

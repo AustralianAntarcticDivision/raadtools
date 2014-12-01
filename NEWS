@@ -16,6 +16,9 @@ o readcurr now returns data in "longitude/latitude" on the sphere, rather than M
 
 o support for monthly SST has been temporarily removed (o applied missing landmask for monthly SST)
 
+o new function rapid_responsefiles uses new repository structure, along with modifications to readrapid_response 
+function
+
 o readice and icefiles now use the new repository structure, with the old versions now internal only called .icefiles1 and .readice1
 
 o sstfiles and readsst now use the new repository structure, old versions now internal-only, called .sstfiles1 and .readsst1

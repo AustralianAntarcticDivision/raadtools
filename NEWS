@@ -1,5 +1,7 @@
    CHANGES IN raadtools VERSION 0.2-0
 
+o previously deprecated function extractxyt has been removed
+
 o modified all dependencies to work as explicit imports
 
 o new function ocfiles for NASA ocean colour

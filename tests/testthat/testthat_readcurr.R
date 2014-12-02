@@ -2,6 +2,7 @@
 require(testthat)
 require(raadtools)
 require(ncdf)
+
 test_that("current data is returned as a raster object", {
            expect_that(readcurr("2000-01-01"), is_a("RasterBrick"))
       })

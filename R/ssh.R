@@ -92,7 +92,7 @@ readssh <- function (date, time.resolution = c("daily", "monthly", "monthly_clim
   if (returnfiles)
     return(files)
   if (missing(date)) date <- min(files$date)
-  if (latest) date <- min(files$date)
+  if (latest) date <- max(files$date)
   if (time.resolution %in% c("monthly_clim", "seasonal_clim")) {
     stop(sprintf("only daily or monthly read currently available for specific date input. \n Use x <- sshfiles(time.resolution = %s) and raster(x$fullname[1]) etc.", time.resolution)) 
   }

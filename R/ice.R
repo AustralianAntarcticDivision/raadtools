@@ -223,7 +223,7 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
                  nsidc = ".bin$", 
                  
                  amsr = ".hdf$")
-  
+  if (product == "amsr" & hemisphere != "south") stop("no north hemisphere for amsr")
   cfiles0 <- grep(ppat, ftx, value = TRUE)
   cfiles1 <- if(product == "nsidc") {
     c(grep(time.resolution, cfiles0, value = TRUE), grep("_nrt_", cfiles0, value = TRUE))

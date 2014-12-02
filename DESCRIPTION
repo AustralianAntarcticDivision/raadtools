@@ -10,10 +10,10 @@ Imports:
     raster (>= 2.2-5),
     sp
 Suggests:
-    testthat,
+    knitr,
     ncdf4,
     rgdal,
-    knitr
+    testthat
 LazyData: yes
 VignetteBuilder: knitr
 Version: 0.2-0

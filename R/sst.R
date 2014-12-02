@@ -142,8 +142,9 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
   if (missing(date)) date <- min(files$date)
   if (latest) date <- max(files$date)
   date <- timedateFrom(date)
-  if (!readall) {
-    files <- .processFiles(date, files, time.resolution)
+  files <- .processFiles(date, files, time.resolution)
+  if (readall) {
+    files <- sstfiles(time.resolution = time.resolution)
     lon180 <- FALSE
     xylim <- NULL
   }

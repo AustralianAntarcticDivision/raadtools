@@ -7,7 +7,7 @@ test_that("sst data is returned as a raster object", {
       })
 
 test_that("multiple dates return a multilayer object", {
-          expect_that(readsst(c("2000-01-01", "2003-01-10", "1998-08-01")), is_a("RasterStack"))
+          expect_that(nlayers(readsst(c("2000-01-01", "2003-01-10", "1998-08-01"))) > 1L, is_true() )
 
         
           expect_that(readsst(c("2000-01-01", "2003-01-10", "1998-08-01"), time.resolution = "monthly"), throws_error())
@@ -20,6 +20,9 @@ test_that("readsst multi read returns data in -180,180", {
 
 })
 
+test_that("readsst latest works", {
+  expect_that(readsst(latest = TRUE), is_a("RasterLayer"))
+})
 d <- readsst(c("2003-01-10"))
 test_that("readsst single read returns data in -180,180", {
     expect_that(xmin(d) < 0, is_true())

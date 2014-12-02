@@ -2,6 +2,7 @@ Package: raadtools
 Type: Package
 Title: R tools for spatial data.
 Depends:
+    raster,
     R (>= 2.15)
 Imports:
     maptools,

@@ -1,3 +1,99 @@
+commit 8f29b62176f87a7f10cba5ab06cb093876bcb3fb
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Dec 2 04:01:40 2014 -1000
+
+    was missing the nrt ice files
+
+commit 7ebb0f9bbac763bc9fe2c1cdd94987778e00b1bc
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Dec 2 03:59:39 2014 -1000
+
+    depends raster
+
+commit 80fcacfcf21e859dcfd696d4b13670bfc0931c49
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Dec 2 03:52:59 2014 -1000
+
+    broken latest
+
+commit ffea7da7c17f28ee02794834bd069ff5a4e48f0f
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Dec 2 03:52:50 2014 -1000
+
+    examples not example
+
+commit fefbf789f0836018744da264dfbaaba0c40388e1
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Dec 2 03:47:03 2014 -1000
+
+    cleanup
+
+commit 5a2eed07c2bcc41a48baa209f85376f08bfdeaf8
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Dec 2 03:43:43 2014 -1000
+
+    saved by the tests
+
+commit 79d22ff846d32d89ff9b0af605b45f1407ed8e41
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Dec 2 03:18:39 2014 -1000
+
+    tidy
+
+commit 74ea6431326da6c1ea6157939d83d3a1fb692de4
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Dec 2 02:39:57 2014 -1000
+
+    raster needs to be loaded for normal use case
+
+commit 93ba2b425617ed723b2bf717abd4af726f0b22b0
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Dec 2 02:39:42 2014 -1000
+
+    latest option for all read functions
+
+commit badf56268c3ddcc25114bb46c1f1a42a97e108da
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Dec 2 01:03:27 2014 -1000
+
+    test cleanup
+
+commit f02e729ef9d22834a9417564d333e13225e848b7
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Dec 2 01:02:56 2014 -1000
+
+    it's working!
+
+commit d880a1f4cde3fd278679ebbf10683e269c173883
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Mon Dec 1 20:19:03 2014 -1000
+
+    imports
+
+commit 05ca2383afe1ad878e94933d964e17628efe0bf0
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Mon Dec 1 20:18:55 2014 -1000
+
+    turn off method doc, cannot figure out
+
+commit faf0665dd66a09447675675a4052f6a68eea42d1
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Mon Dec 1 20:18:34 2014 -1000
+
+    news
+
+commit cafb2b2c6ce7a88948104d7d6a0dacfa32ba358d
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Mon Dec 1 19:08:02 2014 -1000
+
+    import stack from raster
+
+commit 490e945f76517d50586d97cc8000a11d3bb81d0a
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Mon Dec 1 19:07:43 2014 -1000
+
+    version bump
+
 commit fb0c31c32824f247fa28f160ba08106e37621f34
 Author: Mike Sumner <mdsumner@gmail.com>
 Date:   Mon Dec 1 19:03:12 2014 -1000

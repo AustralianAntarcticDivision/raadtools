@@ -35,7 +35,7 @@ rapid_responsefiles <- function(...) {
 ##' @param ... other arguments for \code{\link[raster]{brick}}
 ##' @export
 readrapid_response <- function(date, returnfiles = FALSE, ...) {
-  files <- .rrfiles()
+  files <- rapid_responsefiles()
   if (returnfiles) return(files)
   
   if (missing(date)) date <- min(files$date)

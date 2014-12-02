@@ -18,6 +18,7 @@
 ##' @param date date or dates of data to read, see Details
 ##' @param time.resolution time resoution data to read, daily or monthly
 ##' @param product choice of sea ice product, see Details
+##' @param hemisphere north or south
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
 ##' @param setNA mask zero and values greater than 100 as NA
 ##' @param rescale rescale values from integer range?
@@ -143,6 +144,7 @@ readice <- function(date,
 ##' ice products.
 ##' @param time.resolution daily or monthly files?
 ##' @param product choice of sea ice product, see \code{\link{readice}}
+##' @param hemisphere north or south
 ##' @param ... reserved for future use, currently ignored
 ##' @export
 ##' @examples
@@ -151,7 +153,8 @@ readice <- function(date,
 ##' icf[which.min((as.Date("1995-01-01") + runif(1, -4000, 4000)) - as.Date(icf$date), ]
 ##' }
 ##' @return data.frame of \code{file} and \code{date}
-icefiles <- function(time.resolution = c("daily", "monthly"), product = c("nsidc", "amsr"), hemisphere =c("south", "north"), ...) {
+icefiles <- function(time.resolution = c("daily", "monthly"), 
+                     product = c("nsidc", "amsr"), hemisphere =c("south", "north"), ...) {
   
   datadir <- getOption("default.datadir")
   

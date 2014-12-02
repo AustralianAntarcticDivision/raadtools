@@ -9,10 +9,6 @@
 ##' @param bz2.rm ignore files that are compressed
 ##' @param ... reserved for future use, currently ignored
 ##' @export
-##' @examples
-##' \dontrun{
-##' 
-##' }
 ##' @return data.frame of \code{file} and \code{date}
  ocfiles <- function(time.resolution = c("daily", "weekly"),
                     product = c("MODISA", "SeaWiFS"), 

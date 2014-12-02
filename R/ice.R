@@ -26,6 +26,41 @@
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... passed to brick, primarily for \code{filename}
 ##' @export
+##' @example 
+##' \dontrun{
+##' # library(raadtools)
+##' # 
+##' # ice <- readice(product = "amsr", latest = TRUE)
+##' # 
+##' # sensor <- "MODISA"
+##' # ocf <- ocfiles(product = sensor, varname = "RRS")
+##' # 
+##' # library(roc)
+##' # rrs <- readL3(ocf$fullname[nrow(ocf)])
+##' # chl <- chla(rrs, algo = "johnson", sensor = sensor)/rrs$weights
+##' # 
+##' # library(rgdal)
+##' # pxy <- project(do.call(cbind, bin2lonlat(rrs$bin_num, rrs$NUMROWS)), projection(ice))
+##' # 
+##' # par(bg = grey(0))
+##' # ##plot(ice, col = grey(seq(0, 0.9, length = 100)), axes = FALSE, legend = FALSE)
+##' # plot(ice, col = "transparent", axes = FALSE, legend = FALSE)
+##' # points(pxy, cex = 0.1, pch = 16, col = chl.pal(chl))
+##' # 
+##' # n <- 14
+##' # ss <-  rev( 1/((1:n)^.3))
+##' # 
+##' # for (i in 1:n) {
+##' #   rrs <- readL3(ocf$fullname[nrow(ocf) - i])
+##' #   chl <- chla(rrs, algo = "johnson", sensor = sensor)/rrs$weights
+##' #   ice <- readice(ocf$date[nrow(ocf) - i], product = "amsr")
+##' #   xy <- do.call(cbind, bin2lonlat(rrs$bin_num, rrs$NUMROWS))
+##' #   asub <- xy[,2] < -38
+##' #   pxy <- project(xy[asub, ], projection(ice))
+##' #   points(pxy, cex = 0.2, pch = 16, col = chl.pal(chl[asub], alpha = 1/(i + 0.1)))
+##' #   contour(ice, lev = 15, col =  rgb(1, 1, 1, alpha = 0.2, add = TRUE, lwd = 1.3)
+##' # }  
+##' }
 ##' @return \code{\link[raster]{raster}} object
 ##' @seealso \code{\link{icefiles}} for details on the repository of
 ##' data files, \code{\link[raster]{raster}} for the return value

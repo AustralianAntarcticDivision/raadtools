@@ -1,5 +1,7 @@
 DEV
 
+o new function ocfiles for NASA ocean colour
+
 o readcurr and readssh now provide daily data, and no weekly time step is available
 
 o readice provides NSIDC northern and southern hemisphere data, as well as AMSR southern hemisphere data

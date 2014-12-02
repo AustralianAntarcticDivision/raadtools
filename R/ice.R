@@ -225,7 +225,11 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
                  amsr = ".hdf$")
   
   cfiles0 <- grep(ppat, ftx, value = TRUE)
-  cfiles1 <- if(product == "nsidc") grep(time.resolution, cfiles0, value = TRUE) else cfiles0
+  cfiles1 <- if(product == "nsidc") {
+    c(grep(time.resolution, cfiles0, value = TRUE), grep("_nrt_", cfiles0, value = TRUE))
+    }  else {
+      cfiles0
+    }
   cfiles2 <- if(product == "nsidc") grep(hemisphere, cfiles1, value = TRUE) else cfiles1
   
   cfiles3 <- grep(strpat, cfiles2, value = TRUE)

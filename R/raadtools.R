@@ -14,7 +14,7 @@ NULL
 
 #' @importFrom sp as.image.SpatialGridDataFrame bbox CRS GridTopology overlay proj4string<- SpatialPoints SpatialPointsDataFrame spChFIDs spTransform 
 #' @importFrom maptools ContourLines2SLDF spRbind
-#' @importFrom raster brick crop deratify extent<- extract getZ nlayers projection projection<- raster res resample rotate setZ writeRaster xmax xmin ymax ymin
+#' @importFrom raster brick crop deratify extent<- extract getZ nlayers projection projection<- raster res resample rotate setZ stack writeRaster xmax xmin ymax ymin
 
 ## internal rotate to match old behaviour
 ## https://r-forge.r-project.org/scm/viewvc.php/pkg/raster/R/rotate.R?root=raster&r1=2782&r2=2981

@@ -1,4 +1,5 @@
 library(testthat)
+options(default.datadir = "/rdsi/PRIVATE")
 test_check("raadtools")
 
 # #library(testthat)

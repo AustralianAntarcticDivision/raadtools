@@ -256,18 +256,6 @@ function(layer = c("cst10_polygon", "cst01_polygon", "cst00_polygon"), fromCache
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 ##' Read the \enc{Sall?e}{Sallee} Mixed layer depth climatology.
 ##'
 ##' http://soki.aad.gov.au/display/Data/Mixed+layer+depth

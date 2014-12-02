@@ -26,7 +26,7 @@
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... passed to brick, primarily for \code{filename}
 ##' @export
-##' @example 
+##' @examples 
 ##' \dontrun{
 ##' # library(raadtools)
 ##' # 

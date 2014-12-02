@@ -34,8 +34,7 @@
 }
 
 
-.big.extract <-  function(x, y, ...) {
-  .local <- function (x, y,  ctstime = FALSE, fact = NULL, verbose = TRUE, ...) {
+.big.extract <-  function (x, y,  ctstime = FALSE, fact = NULL, verbose = TRUE, ...) {
     result <- rep(as.numeric(NA), nrow(y))
     
     
@@ -154,9 +153,9 @@
       
     }
     result
-  }
-  .local(x, y, ...)
+
 }
+
 
 
 ##' Extract methods for raadtools read functions
@@ -171,8 +170,6 @@
 ##' @param ... Additional arguments passed to the read function.
 ##' @return data values extracted by the read functions
 ##' @seealso \code{\link{readsst}} and \code{\link{extract}}
-##' @docType methods
-##' @name extract
 ##' @examples
 ##' x <- extract(readsst)
 ##' a <- structure(list(x = c(174, 168, 156, 111, 99, 64, 52, 46, -4,
@@ -187,18 +184,28 @@
 ##' extract(readsst, a, method = "bilinear")
 ##' a$time <-  sort(as.Date("2005-01-01") + sample(c(0, 0, 0, 8, 20, 50), nrow(a), replace = TRUE))
 ##' extract(readsst, a)
-##' @rdname extract
-##' @exportMethod extract
-setMethod("extract", signature(x = 'function', y = 'missing'), function(x, y, ctstime = FALSE, fact = NULL, verbose = TRUE, ...) x(...))
-##' @rdname extract
-##' @exportMethod extract
+##' @aliases extract,function,missing-method
+##' @name extract
+##' @export
+setMethod("extract", signature(x = 'function', y = 'missing'), 
+          function(x, y, ctstime = FALSE, fact = NULL, verbose = TRUE, ...) {
+            x(...)}
+  )
+##' @aliases extract,function,POSIXt-method
+##' @name extract
+##' @export
 setMethod("extract", signature(x = 'function', y = 'POSIXt'), .read.generic)
-##' @rdname extract
-##' @exportMethod extract
+##' @aliases extract,function,Date-method
+##' @name extract
+##' @export
 setMethod("extract", signature(x = 'function', y = 'Date'), .read.generic)
-##' @rdname extract
-##' @exportMethod extract
+##' @name extract
+##' @export
+##' @aliases extract,function,character-method
 setMethod("extract", signature(x = 'function', y = 'character'), .read.generic)
+##' @name extract
+##' @export
+##' @aliases extract,function,data.frame-method
 setMethod("extract", signature(x = 'function', y = 'data.frame'), .big.extract)
 
 

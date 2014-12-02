@@ -1,3 +1,7 @@
+  DEV
+
+o new function allfiles that returns just the raw list of available repository files
+
    CHANGES IN raadtools VERSION 0.2-0
 
 o read functions gain a "latest" argument

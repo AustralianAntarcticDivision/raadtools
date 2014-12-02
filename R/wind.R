@@ -53,6 +53,7 @@ windfiles <-
 ##' @param dironly return just the direction from the U and V, in degrees N=0, E=90, S=180, W=270
 ##' @param uonly return just the horizontal component of velocity, U
 ##' @param vonly return just the vertical component of velocity, V
+##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param xylim crop
 ##' @param lon180 Pacific or Atlantic
@@ -84,6 +85,7 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
                      magonly = FALSE, dironly = FALSE,
                      uonly = FALSE,
                      vonly = FALSE,
+                     latest = FALSE,
                      returnfiles = FALSE, ...) {
   
   time.resolution <- match.arg(time.resolution)
@@ -92,6 +94,7 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
   if (returnfiles) return(files)
   
   if (missing(date)) date <- min(files$date)
+  if (latest) date <- max(files$date)
   date <- timedateFrom(date)
   ## findex <- .processDates(date, files$date, time.resolution)
   files <- .processFiles(date, files, time.resolution)

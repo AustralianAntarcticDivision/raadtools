@@ -103,6 +103,7 @@ sstfiles <- function(time.resolution = c("daily"), ...) {
 ##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
 ##' @param varname variable to return from the data files, default is
 ##' "sst" or "anom", "err", "ice"
+##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param readall FALSE by default
 ##' @param ... passed in to brick, primarily for \code{filename}
@@ -127,6 +128,7 @@ sstfiles <- function(time.resolution = c("daily"), ...) {
 readsst <-  function (date, time.resolution = c("daily", "monthly"),
                       xylim = NULL, lon180 = TRUE, 
                       varname = c("sst", "anom", "err", "ice"),
+                      latest = FALSE,
                       returnfiles = FALSE, readall = FALSE, ...) {
   time.resolution <- match.arg(time.resolution)
   varname <- match.arg(varname)
@@ -136,8 +138,9 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
   if (returnfiles)
     return(files)
   
-  if (missing(date)) date <- min(files$date)
   
+  if (missing(date)) date <- min(files$date)
+  if (latest) date <- max(files$date)
   date <- timedateFrom(date)
   if (!readall) {
     files <- .processFiles(date, files, time.resolution)

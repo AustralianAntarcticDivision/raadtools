@@ -75,6 +75,7 @@ sshfiles <- function(time.resolution = c("daily", "monthly", "monthly_clim", "se
 ##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
 ##' components, in degrees (0 north, 90 east, 180 south, 270 west)
 ##' @param ssha logical, to optionally return anomaly or height
+##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param verbose print messages on progress etc.
 ##' @param ... passed to brick, primarily for \code{filename}
@@ -82,6 +83,7 @@ sshfiles <- function(time.resolution = c("daily", "monthly", "monthly_clim", "se
 ##' @return data.frame
 readssh <- function (date, time.resolution = c("daily", "monthly", "monthly_clim", "seasonal_clim"),
                      xylim = NULL, lon180 = TRUE, ssha = FALSE,
+                     latest = FALSE,
                      returnfiles = FALSE, verbose = TRUE, ...)
 {
   time.resolution <- match.arg(time.resolution)
@@ -90,7 +92,7 @@ readssh <- function (date, time.resolution = c("daily", "monthly", "monthly_clim
   if (returnfiles)
     return(files)
   if (missing(date)) date <- min(files$date)
-  
+  if (latest) date <- min(files$date)
   if (time.resolution %in% c("monthly_clim", "seasonal_clim")) {
     stop(sprintf("only daily or monthly read currently available for specific date input. \n Use x <- sshfiles(time.resolution = %s) and raster(x$fullname[1]) etc.", time.resolution)) 
   }

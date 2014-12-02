@@ -31,14 +31,16 @@ rapid_responsefiles <- function(...) {
 ##'
 ##' @title MODIS Rapid Response images
 ##' @param date date of image to load
+##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
 ##' @param returnfiles return just the list of files
 ##' @param ... other arguments for \code{\link[raster]{brick}}
 ##' @export
-readrapid_response <- function(date, returnfiles = FALSE, ...) {
+readrapid_response <- function(date, latest = FALSE, returnfiles = FALSE, ...) {
   files <- rapid_responsefiles()
   if (returnfiles) return(files)
   
   if (missing(date)) date <- min(files$date)
+  if (latest) date <- max(files$date)
   files <- .processFiles(date, files, "daily")
   
   nfiles <- nrow(files)

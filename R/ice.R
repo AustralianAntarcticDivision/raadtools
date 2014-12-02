@@ -22,6 +22,7 @@
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
 ##' @param setNA mask zero and values greater than 100 as NA
 ##' @param rescale rescale values from integer range?
+##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... passed to brick, primarily for \code{filename}
 ##' @export
@@ -33,7 +34,8 @@ readice <- function(date,
                     product = c("nsidc", "amsr", "ssmi"),
                     hemisphere = c("south", "north"), 
                     xylim = NULL,
-                    setNA = TRUE, rescale = TRUE,     
+                    setNA = TRUE, rescale = TRUE, 
+                    latest = FALSE,
                     returnfiles = FALSE, ...) {
   
   time.resolution <- match.arg(time.resolution)
@@ -44,6 +46,7 @@ readice <- function(date,
   ##files$fullname <- file.path(datadir, files$file)
   if (returnfiles) return(files)
   if (missing(date)) date <- min(files$date)
+  if (latest) date <- max(files$date)
   date <- timedateFrom(date)
   files <- .processFiles(date, files, time.resolution)
   

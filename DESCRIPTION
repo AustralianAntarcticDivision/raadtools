@@ -19,5 +19,6 @@ VignetteBuilder: knitr
 Version: 0.2-0
 Authors@R: person("Michael D.","Sumner", role = c("aut", "cre"), email =
     "mdsumner@gmail.com")
-Description: Tools for reading, plotting and manipulating spatial data, particularly from remote sensing and model output.
+Description: Tools for reading, plotting and manipulating spatial data,
+    particularly from remote sensing and model output.
 License: GPL-3

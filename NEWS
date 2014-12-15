@@ -2,6 +2,8 @@
 
 o new function allfiles that returns just the raw list of available repository files
 
+o raadtools now requires R version 3.1.2 and raster 2.3-12
+
    CHANGES IN raadtools VERSION 0.2-0
 
 o read functions gain a "latest" argument

@@ -96,7 +96,7 @@ topofile <- function(topo = c("gebco_08", "ibcso",
     if (topo %in% c("ibcso")) {
       polarsubdir <- "ps71"
     } else {
-      warning("no polar version of ", topo, "consider projectRaster(x, crs = '+proj=stere +lat_0=-71')")
+      warning("no polar version of ", topo, "consider projectRaster(x, crs = '+proj=stere +lat_0=-71', filename = 'mycopy.grd')")
     }
   }
   if (!lon180 & !(topo %in% c("smith_sandwell"))) warning("no Pacific view version available of ", topo)

@@ -4,8 +4,8 @@
 \title{Load metadata and location of files of ocean colour data products.}
 \usage{
 ocfiles(time.resolution = c("daily", "weekly"), product = c("MODISA",
-  "SeaWiFS"), varname = c("RRS", "CHL"), type = c("L3b", "L3m"),
-  bz2.rm = TRUE, ...)
+  "SeaWiFS"), varname = c("RRS", "CHL", "POC", "KD490", "PAR"),
+  type = c("L3b", "L3m"), bz2.rm = TRUE, ...)
 }
 \arguments{
 \item{time.resolution}{daily or monthly files?}

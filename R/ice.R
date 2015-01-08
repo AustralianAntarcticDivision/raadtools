@@ -1,5 +1,4 @@
 
-
 ##' Read data from sea ice data products.
 ##'
 ##'
@@ -8,7 +7,7 @@
 ##' Currently available products are
 ##'
 ##' \describe{
-##' \item{'nsidc'}{daily or monthly NSIDC concentration data for the Southern Hemisphere, processed by the SMMR/SSMI NASA Team}
+##' \item{'nsidc'}{daily or monthly NSIDC concentration data, processed by the SMMR/SSMI NASA Team}
 ##' \item{'ssmi'}{daily SSMI concentration data for the Southern Hemisphere}
 ##' }
 ##'
@@ -19,12 +18,15 @@
 ##' @param time.resolution time resoution data to read, daily or monthly
 ##' @param product choice of sea ice product, see Details
 ##' @param hemisphere north or south
-##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
+##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
 ##' @param setNA mask zero and values greater than 100 as NA
 ##' @param rescale rescale values from integer range?
 ##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... passed to brick, primarily for \code{filename}
+##' @details For NSIDC data a \code{\link[raster]{ratify}}ied raster is returned if \code{setNA} and 
+##' \code{rescale} are both set to \code{FALSE}. 
+##' The values used are documented here \url{http://nsidc.org/data/docs/daac/nsidc0051_gsfc_seaice.gd.html}
 ##' @export
 ##' @examples 
 ##' \dontrun{
@@ -133,7 +135,24 @@ readice <- function(date,
       dat[r100] <- NA
       ##dat[r0] <- NA
     }
-    raster(t(matrix(dat, dims[1])), template = rtemplate)
+    
+    # 251  Circular mask used in the Arctic to cover the irregularly-shaped data gap around the pole (caused by the orbit inclination and instrument swath)
+    # 252	Unused
+    # 253	Coastlines
+    # 254	Superimposed land mask
+    # 255	Missing data
+    # 
+    ## ratify if neither rescale nor setNA set
+    r <- raster(t(matrix(dat, dims[1])), template = rtemplate)
+    if (!setNA && !rescale) {
+      ##r <- ratify(r)
+      rat <- data.frame(ID = 0:255, icecover = c(0:250, "ArcticMask", "Unused", "Coastlines", "LandMask", "Missing"), 
+                  code = 0:255, stringsAsFactors = FALSE)
+      levels(r) <- rat
+      r
+    } else {
+      r
+    }
   }
   .readAMSR <- function(fname) {
     x <- flip(raster(fname), direction = "y")

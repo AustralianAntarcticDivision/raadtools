@@ -17,7 +17,7 @@ readice(date, time.resolution = c("daily", "monthly"), product = c("nsidc",
 
 \item{hemisphere}{north or south}
 
-\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details}
+\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}}
 
 \item{setNA}{mask zero and values greater than 100 as NA}
 
@@ -39,13 +39,17 @@ Sea ice data is read from files managed by \code{\link{icefiles}}.
 Currently available products are
 
 \describe{
-\item{'nsidc'}{daily or monthly NSIDC concentration data for the Southern Hemisphere, processed by the SMMR/SSMI NASA Team}
+\item{'nsidc'}{daily or monthly NSIDC concentration data, processed by the SMMR/SSMI NASA Team}
 \item{'ssmi'}{daily SSMI concentration data for the Southern Hemisphere}
 }
 
 Dates are matched to file names by finding the nearest match in
 time within a short duration. If \code{date} is greater than
 length 1 then the sorted set of unique matches is returned.
+
+For NSIDC data a \code{\link[raster]{ratify}}ied raster is returned if \code{setNA} and
+\code{rescale} are both set to \code{FALSE}.
+The values used are documented here \url{http://nsidc.org/data/docs/daac/nsidc0051_gsfc_seaice.gd.html}
 }
 \examples{
 \dontrun{

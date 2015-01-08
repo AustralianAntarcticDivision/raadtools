@@ -1,5 +1,15 @@
   DEV
 
+o new ratify option for NSIDC data from readice
+
+o new variables and checks for ocfiles
+
+o development now uses devtools-like approach
+
+o update to work with VRT for Smith and Sandwell
+
+
+
 o new function allfiles that returns just the raw list of available repository files
 
 o raadtools now requires R version 3.1.2 and raster 2.3-12

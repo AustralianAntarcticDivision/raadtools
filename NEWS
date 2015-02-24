@@ -1,14 +1,12 @@
-  DEV
+   CHANGES IN raadtools VERSION 0.2-2
 
-o new ratify option for NSIDC data from readice
+o new ratify value for NSIDC data from readice when setNA and rescale both FALSE
 
 o new variables and checks for ocfiles
 
 o development now uses devtools-like approach
 
 o update to work with VRT for Smith and Sandwell
-
-
 
 o new function allfiles that returns just the raw list of available repository files
 

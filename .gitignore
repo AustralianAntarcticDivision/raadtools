@@ -10,8 +10,8 @@
 *~
 .R~
 *#
-NAMESPACE
-man/*.Rd
+##NAMESPACE
+##man/*.Rd
 auto/
 *.tex
 *.aux

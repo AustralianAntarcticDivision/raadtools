@@ -589,16 +589,6 @@ readprod <- function(date,  time.resolution = "weekly", xylim = NULL, returnfile
 
 }
 
-.allfilelist <- function(rda = TRUE) {
-  datadir <- getOption("default.datadir")
-  if (rda) {
-    fs <- NULL
-    load(file.path(datadir, "admin", "filelist", "allfiles.Rdata"))
-    return(fs)
-  }  
-  readLines(file.path(datadir, "admin", "filelist", "allfiles.txt"))
-  
-}
 
 ##' Read Chlorophyll-a for the Southern Ocean
 ##'

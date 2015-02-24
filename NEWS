@@ -1,3 +1,17 @@
+   CHANGES IN raadtools VERSION 0.2-2
+
+o new ratify value for NSIDC data from readice when setNA and rescale both FALSE
+
+o new variables and checks for ocfiles
+
+o development now uses devtools-like approach
+
+o update to work with VRT for Smith and Sandwell
+
+o new function allfiles that returns just the raw list of available repository files
+
+o raadtools now requires R version 3.1.2 and raster 2.3-12
+
    CHANGES IN raadtools VERSION 0.2-0
 
 o read functions gain a "latest" argument

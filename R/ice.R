@@ -25,7 +25,9 @@
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... passed to brick, primarily for \code{filename}
 ##' @details For NSIDC data a \code{\link[raster]{ratify}}ied raster is returned if \code{setNA} and 
-##' \code{rescale} are both set to \code{FALSE}. 
+##' \code{rescale} are both set to \code{FALSE}.  Use \code{levels(x)} to return the data.frame of values 
+##' and levels (there's no straight-through rule, all numeric values are explicit along with special
+##' values like "Unused"). 
 ##' The values used are documented here \url{http://nsidc.org/data/docs/daac/nsidc0051_gsfc_seaice.gd.html}
 ##' @export
 ##' @examples 

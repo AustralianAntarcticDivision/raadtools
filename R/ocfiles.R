@@ -12,7 +12,7 @@
 ##' @return data.frame of \code{file} and \code{date}
  ocfiles <- function(time.resolution = c("daily", "weekly"),
                     product = c("MODISA", "SeaWiFS"), 
-                    varname = c("RRS", "CHL"), 
+                    varname = c("RRS", "CHL", "POC", "KD490", "PAR"), 
                     type = c("L3b", "L3m"),
                     bz2.rm = TRUE, 
                     ...) {
@@ -39,6 +39,7 @@
   cfiles2 <- grep(mtag, cfiles1, value = TRUE)
   cfiles <- if (bz2.rm)  grep("main$", cfiles2, value = TRUE) else cfiles2
   tokens <- .filetok(basename(cfiles))
+  if (length(cfiles) < 1) stop("no files found for ", paste(product, varname, type, time.resolution, collapse = ", "))
   dates <- as.POSIXct(strptime(paste0(tokens$year, tokens$jday), "%Y%j", tz = "GMT"))
   cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), fullname = cfiles, 
                     date = dates, stringsAsFactors = FALSE)[order(dates), ]

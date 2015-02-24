@@ -1,3 +1,81 @@
+commit 72223f416c77732def91599dc3a4768e96b626dd
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Feb 24 00:58:37 2015 -1000
+
+    rolled to new file list
+
+commit cdad9a6f5e46541cecc2769a406ebddeae4737af
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Feb 24 00:46:58 2015 -1000
+
+    bump
+
+commit 729c07f6a825a116f67484d00d280fa97ea68ab8
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Feb 24 00:42:06 2015 -1000
+
+    extra details for ratice
+
+commit 296bfd9d62291688a7cadab0c3150b8283d59d12
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Jan 7 17:34:31 2015 -1000
+
+    news
+
+commit c24b679d5b8ea0d48dec1c5197105cf062a13331
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Jan 7 17:22:42 2015 -1000
+
+    new ratify option for NSIDC
+
+commit 64bb74b5b2b29a4415f283cc484e22513a73e921
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Jan 7 13:43:00 2015 -1000
+
+    new variables, and checks for available files
+
+commit 256839db7e43c709b6e994966be20704ea0b1c7e
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Dec 17 19:13:01 2014 -1000
+
+    go with devtools approach
+
+commit 3ff0b6b1907b5f134ec615fdd9da40fcbdd393c9
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Dec 17 19:11:51 2014 -1000
+
+    ongoing topo file work
+
+commit 4e77d219e57c178f4dc8a5ff9a706aebc304f262
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Mon Dec 15 17:17:20 2014 -1000
+
+    update to work with VRT for smith and sandwell
+
+commit 48d51b588a2f361a56419b0e71c77b54d38f101d
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Sun Dec 14 16:42:01 2014 -1000
+
+    bump required R and raster version
+
+commit 020109d36bdbaa25e81b897424df9b6fdbc527df
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Mon Dec 8 13:26:08 2014 -1000
+
+    allfiles
+
+commit 9c6a7b2519ae1c968b57295e881626f6c2ed5b3a
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Dec 2 04:06:12 2014 -1000
+
+    clash for amsr fix
+
+commit d79f78fe1a40a30cba7e50688b22998ba094c0da
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Dec 2 04:02:47 2014 -1000
+
+    change log
+
 commit 8f29b62176f87a7f10cba5ab06cb093876bcb3fb
 Author: Mike Sumner <mdsumner@gmail.com>
 Date:   Tue Dec 2 04:01:40 2014 -1000

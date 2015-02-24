@@ -2,8 +2,8 @@ Package: raadtools
 Type: Package
 Title: Tools for Synoptic Environmental Spatial Data.
 Depends:
-    raster (>= 2.2-5),
-    R (>= 2.15)
+    raster (>= 2.3-12),
+    R (>= 3.1.2)
 Imports:
     maptools,
     methods,
@@ -16,7 +16,7 @@ Suggests:
     testthat
 LazyData: yes
 VignetteBuilder: knitr
-Version: 0.2-0
+Version: 0.2-2
 Authors@R: person("Michael D.","Sumner", role = c("aut", "cre"), email =
     "mdsumner@gmail.com")
 Description: Tools for reading, plotting and manipulating spatial data,

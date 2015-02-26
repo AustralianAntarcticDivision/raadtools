@@ -1,3 +1,61 @@
+commit 32375c8f83e9eb93c2f0bc537629291ed8dfe2b6
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Feb 25 18:30:25 2015 -1000
+
+    fix readtopo and add tests for projections
+
+commit 7c57759f2f0af9a8ebce194f380b61f3e5dbc7f6
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Feb 25 18:15:49 2015 -1000
+
+    bug fix for missing projection metadata
+
+commit a202a0deeacd28092da7e62afa7a7aca04791e12
+Merge: 3b7855a ab64de7
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Feb 25 16:15:28 2015 -1000
+
+    Merge branch 'master' of https://github.com/mdsumner/raadtools
+
+commit 3b7855a0ab9460cb973d32fa1f72789cfeabe0ae
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Feb 25 16:13:55 2015 -1000
+
+    cleanup and /data tweak
+
+commit ab64de7036877af5b0bf47f5093f10b1296848b8
+Author: mdsumner <mdsumner@gmail.com>
+Date:   Thu Feb 26 12:48:26 2015 +1100
+
+    Update readme.md
+
+commit 37fde7eb6ff1702381173bc0e2b3a27c7d3359f2
+Merge: 9262c32 7800d58
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Feb 24 01:13:19 2015 -1000
+
+    Merge branch 'master' of https://github.com/mdsumner/raadtools
+
+commit 9262c322d6d45950b935c2dc61c234510f081bda
+Merge: d79dff8 04d92e4
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Feb 24 01:10:29 2015 -1000
+
+    Merge branch 'dev'
+
+commit 7800d585d9f8256ed78e865f55788df7859489b5
+Merge: d79dff8 04d92e4
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Feb 24 01:10:29 2015 -1000
+
+    Merge branch 'dev'
+
+commit 04d92e47a9bb36ffe9f33dcb082d09fb3e79ca92
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Feb 24 01:10:10 2015 -1000
+
+    ship it 0.2-2
+
 commit 72223f416c77732def91599dc3a4768e96b626dd
 Author: Mike Sumner <mdsumner@gmail.com>
 Date:   Tue Feb 24 00:58:37 2015 -1000
@@ -65,6 +123,32 @@ Date:   Mon Dec 8 13:26:08 2014 -1000
     allfiles
 
 commit 9c6a7b2519ae1c968b57295e881626f6c2ed5b3a
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Dec 2 04:06:12 2014 -1000
+
+    clash for amsr fix
+
+commit d79dff8e294e9e1a8d284e0bd6d9bcf9b97531c9
+Author: Michael Sumner <michael.sumner@aad.gov.au>
+Date:   Thu Dec 4 16:52:52 2014 -1000
+
+    don't get Ripleyed
+
+commit 3db06cf3505b63f07d6e4c22e2896bbd83685c2e
+Author: mdsumner <mdsumner@gmail.com>
+Date:   Thu Dec 4 07:44:38 2014 +1100
+
+    Update DESCRIPTION
+    
+    CRAN policy
+
+commit 954fd6936b380dd01b1b7bf6248120dc22222f7a
+Author: mdsumner <mdsumner@gmail.com>
+Date:   Thu Dec 4 07:26:55 2014 +1100
+
+    Update ocfiles.R
+
+commit b3de237de367dbfdcfa2a39006c4b65c7ec34916
 Author: Mike Sumner <mdsumner@gmail.com>
 Date:   Tue Dec 2 04:06:12 2014 -1000
 

@@ -1063,9 +1063,8 @@ NULL
 
 .possiblepaths <- function() {
   a <- list(default.datadir =  c(
-    "//aad.gov.au/files/AADC/Scientific_Data/Data/gridded/data",
     "/Volumes/files/data",
-    "/mnt/raadtools"))
+    "/mnt/raad"))
   a
 }
 .trysetpath <- function() {
@@ -1078,7 +1077,7 @@ NULL
     
   }
   for (i in seq_along(possibles)) {
-    fi <- file.info(possibles[i])
+    fi <- file.info(file.path(possibles[i], "data"))
     if (!is.na(fi$isdir) & fi$isdir) {
       options(default.datadir = possibles[i])
       success <- TRUE

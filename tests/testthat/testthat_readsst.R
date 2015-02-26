@@ -41,6 +41,12 @@ test_that("input crop extent works for a time series", {
 
 })
 
+test_that("object projection is not missing", {
+  prj <- projection(readsst())
+  expect_that(is.na(prj), is_false())
+
+})
+
 
 ## test_that("dates not available within 1.5 days give error", {
 ##     expect_that(readice("1978-10-18"), throws_error("no ice data file within"))

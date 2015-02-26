@@ -177,6 +177,10 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
   }
   
   if (topo == "etopo2") projection(res) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
+  if (topo == "kerguelen") projection(res) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
+  if (topo == "george_v_terre_adelie") projection(res) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
+  
+  
   if (!is.null(xylim)) res <- crop(res, xylim)
   res
 }

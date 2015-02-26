@@ -21,3 +21,8 @@ test_that("dates not available within 1.5 days give error", {
     expect_that(readfronts("1975-10-18"), throws_error("no data file within"))
 })
 
+test_that("fronts projection is not missing", {
+  prj <- projection(readfronts())
+  expect_that(is.na(prj), is_false())
+  
+})

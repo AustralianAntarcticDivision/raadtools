@@ -18,3 +18,5 @@ test_that("we get ocean colour files", {
   ## this might fail if we didn't drop the ST93c files :)
   expect_that(all(file.exists(ocwS$fullname)), is_true())
 })
+
+

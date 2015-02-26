@@ -42,3 +42,12 @@ test_that("file options result in actual data layers", {
 
       })
 
+
+test_that("topo projection is not missing", {
+  prj <- projection(readtopo("kerguelen"))
+  expect_that(is.na(prj), is_false())
+  
+  prj <- projection(readtopo("george_v_terre_adelie"))
+  expect_that(is.na(prj), is_false())
+  
+})

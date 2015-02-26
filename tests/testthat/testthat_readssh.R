@@ -47,5 +47,9 @@ test_that("date ranges are valid", {
 
 })
 
-
+test_that("ssh projection is not missing", {
+  prj <- projection(readssh())
+  expect_that(is.na(prj), is_false())
+  
+})
 

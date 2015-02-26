@@ -87,4 +87,10 @@ test_that("multi read on out of order dates sorts them", {
 })
 
 
+test_that("ice projection is not missing", {
+  prj <- projection(readice())
+  expect_that(is.na(prj), is_false())
+  
+})
+
 

@@ -40,4 +40,9 @@ ext <- extent(-180, 180, -90, -30)
 
 })
 
+test_that("curr projection is not missing", {
+  prj <- projection(readcurr())
+  expect_that(is.na(prj), is_false())
+  
+})
 

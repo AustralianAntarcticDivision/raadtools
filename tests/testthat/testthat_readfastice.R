@@ -21,3 +21,8 @@ test_that("dates not available within 1.5 days give error", {
     expect_that(readfastice("1975-10-18"), throws_error("no data file within"))
 })
 
+test_that("fastic projection is not missing", {
+  prj <- projection(readfastice())
+  expect_that(is.na(prj), is_false())
+  
+})

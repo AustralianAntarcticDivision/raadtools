@@ -157,6 +157,8 @@ readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = 
   extent(r) <- extent(c(xmin(r) + res(r)[1]/2, xmax(r) + res(r)[1]/2,
                         ymin(r), ymax(r)))
   
+  if (is.na(projection(r))) projection(r) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
+  
   r
   
 }

@@ -672,6 +672,8 @@ readchla <- function(date, time.resolution = c("weekly", "monthly"),
     r <- brick(stack(r), ...)
   else r <- r[[1L]]
   names(r) <- basename(files$file)
+  if (is.na(projection(r))) projection(r) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
+  
   r <- setZ(r, files$date)
   return(r)
 }

@@ -1,3 +1,8 @@
+   CHANGES IN raadtools VERSION 0.2-3
+   
+o bug fix to restore projection metadata for readsst, readwind, readchla, and readssh
+
+
    CHANGES IN raadtools VERSION 0.2-2
 
 o new ratify value for NSIDC data from readice when setNA and rescale both FALSE

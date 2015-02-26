@@ -122,6 +122,7 @@ readssh <- function (date, time.resolution = c("daily", "monthly", "monthly_clim
     r0 <- writeRaster(r0, ...)
   }
   
+  if (is.na(projection(r0))) projection(r0) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
   
   setZ(r0, files$date)
   

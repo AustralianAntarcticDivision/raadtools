@@ -958,9 +958,10 @@ l <- vector("list", nfiles)
            extent(r0) <- extent(bbox(epoints.merc))
            projection(r0) <- proj
            e <- new("Extent", xmin = 0, xmax = 2 * 20037508, ymin = -11087823.8567493 , ymax = -3513725)
+           if (lon180)  r0 <- suppressWarnings(.rotate(r0))
            if (!is.null(xylim)) r0<- crop(r0, extent(xylim)) else r0 <- crop(r0, e)
 
-           if (lon180)  r0 <- suppressWarnings(.rotate(r0))
+           
     r0[is.nan(r0)] <- NA
              if (RAT) {
            rat <- data.frame(ID = 0:12, name = c("south of sBdy", "between SACCF-S & sBdy", "SACCF-N & SACCF-S",

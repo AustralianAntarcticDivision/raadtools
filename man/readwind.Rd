@@ -3,9 +3,9 @@
 \alias{readwind}
 \title{readwind}
 \usage{
-readwind(date, time.resolution = c("daily"), xylim = NULL, lon180 = TRUE,
-  magonly = FALSE, dironly = FALSE, uonly = FALSE, vonly = FALSE,
-  latest = FALSE, returnfiles = FALSE, ...)
+readwind(date, time.resolution = c("6hourly", "daily"), xylim = NULL,
+  lon180 = TRUE, magonly = FALSE, dironly = FALSE, uonly = FALSE,
+  vonly = FALSE, latest = FALSE, returnfiles = FALSE, ...)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}

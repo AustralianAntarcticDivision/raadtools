@@ -3,7 +3,7 @@
 \alias{windfiles}
 \title{Files containing NCEP2 wind vector data}
 \usage{
-windfiles(data.source = "", time.resolution = c("daily"),
+windfiles(data.source = "", time.resolution = c("6hourly", "daily"),
   fromCache = TRUE, ...)
 }
 \arguments{

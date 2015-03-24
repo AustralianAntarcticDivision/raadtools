@@ -135,7 +135,7 @@ readcurr <- function (date, time.resolution = c("daily"),
   
   if ((magonly + dironly + uonly + vonly) == 0) {
     r0 <- stack(uraster, vraster)
-    names(r0) <- c("u", "v")
+    names(r0) <-  sprintf("%scurr_%s", c("U", "V"), format(files$date, "%Y%m%d"))
     r0 <- setZ(r0, rep(files$date, 2L))
   }
   

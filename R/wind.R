@@ -29,7 +29,7 @@ windfiles <-
     dates$mon <- 0
     dates <- as.POSIXct(dates, tz = "UTC")
     wf <- data.frame(ufullname = ufiles, vfullname = vfiles, date = dates, stringsAsFactors = FALSE)
-    wfU <- .expandFileDateList(wf$ufullname, fastNC = TRUE, varname = "time")
+    wfU <- .expandFileDateList(wf$ufullname)
     ##wfV <- .expandFileDateList( wf$vfullname, fastNC = TRUE, varname = "time")
     
     wf <- data.frame(ufile = gsub("^/", "", gsub(datadir, "", wfU$file)), 
@@ -38,7 +38,8 @@ windfiles <-
                      vfullname = gsub("uwnd", "vwnd", wfU$file), 
                      date = wfU$date, band = wfU$band, stringsAsFactors = FALSE)
     ## "hours since 1800-1-1 00:00:0.0" 
-    wf$date <- ISOdatetime(1800, 1, 1, 0, 0, 0, tz = "UTC") + wf$date * 3600
+    ## this line only if fastNC is used
+    ##wf$date <- ISOdatetime(1800, 1, 1, 0, 0, 0, tz = "UTC") + wf$date * 3600
    wf
     
   }

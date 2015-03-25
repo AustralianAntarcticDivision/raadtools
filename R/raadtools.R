@@ -319,7 +319,7 @@ readmld <- function(date, xylim = NULL, returnfiles = FALSE, ...) {
 #   require(ncdf4)
 #   ncvar_get(nc_open(x), varname)
 # }
-.expandFileDateList <- function(x, fastNC = FALSE, varname = "") {
+.expandFileDateList <- function(x) {
     vl <- vector("list", length(x))
     for (i in seq_along(x)) {
 #       if (fastNC) {

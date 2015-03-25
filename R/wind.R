@@ -7,11 +7,10 @@
 ##' @param data.source ignored, reserved for future use
 ##' @param time.resolution  time resolution data to read, daily only for now
 ##' @param ... reserved for future use, currently ignored
-##' @param fromCache load file catalog from cache or rebuild
 ##' @return \code{data.frame} of file names and dates
 ##' @export
 windfiles <-
-  function(data.source = "", time.resolution = c("6hourly", "daily"), fromCache = TRUE, ...) {
+  function(data.source = "", time.resolution = c("6hourly", "daily"),  ...) {
     datadir <- getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
     ##      fromCache <- TRUE
@@ -60,8 +59,17 @@ windfiles <-
 ##' @param xylim crop
 ##' @param lon180 Pacific or Atlantic
 ##' @param ... arguments passed to \code{\link[raster]{brick}}, i.e. \code{filename}
+##' @param files input the files data base to speed up initialization
 ##' @return raster object
+##' @details The \code{inputfiles} argument may be used to speed up individual reads, see the examples. Note that 
+##' this must then ignore the \code{time.resolution} argument, which is also set by \code{windfiles} - and no
+##' warning is given.  If using this argument you must give the same \code{time.resolution} as was used to create the files
+##' \code{data.frame}. 
 ##' @examples
+##' # Speed up individual read calls. 
+##' ff <- windfiles(time.resolution = "6hourly")
+##' t1 <- system.time({readwind(max(ff$date))})
+##' t2 <- system.time({readwind(max(ff$date), inputfiles = ff)})
 ##' \dontrun{
 ##'  dts <- seq(as.Date("2000-01-01"), by = "1 days", length = 350)
 ##'  library(animation)
@@ -88,11 +96,17 @@ readwind <- function(date, time.resolution = c("6hourly", "daily"), xylim = NULL
                      uonly = FALSE,
                      vonly = FALSE,
                      latest = FALSE,
-                     returnfiles = FALSE, ...) {
+                     returnfiles = FALSE, ..., 
+                     inputfiles = NULL) {
   
   time.resolution <- match.arg(time.resolution)
   if ((magonly + dironly + uonly + vonly) > 1) stop("only one of magonly, dironly, uonly or vonly may be used, exiting")
-  files <- windfiles(time.resolution = time.resolution)
+  
+  if (is.null(inputfiles)) {
+    files <- windfiles(time.resolution = time.resolution)
+    } else {
+      files <- inputfiles
+    }
   if (returnfiles) return(files)
   
   if (missing(date)) date <- min(files$date)

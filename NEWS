@@ -1,5 +1,7 @@
 DEV
 
+o experimental addition of inputfiles for readwind (really this needs metadata to be placed on the files object)
+
 o upgrade to readwind for 6hourly NCEP2
 
 

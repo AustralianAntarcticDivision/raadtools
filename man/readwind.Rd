@@ -3,9 +3,10 @@
 \alias{readwind}
 \title{readwind}
 \usage{
-readwind(date, time.resolution = c("daily"), xylim = NULL, lon180 = TRUE,
-  magonly = FALSE, dironly = FALSE, uonly = FALSE, vonly = FALSE,
-  latest = FALSE, returnfiles = FALSE, ...)
+readwind(date, time.resolution = c("6hourly", "daily"), xylim = NULL,
+  lon180 = TRUE, magonly = FALSE, dironly = FALSE, uonly = FALSE,
+  vonly = FALSE, latest = FALSE, returnfiles = FALSE, ...,
+  inputfiles = NULL)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -30,6 +31,8 @@ components}
 \item{returnfiles}{ignore options and just return the file names and dates}
 
 \item{...}{arguments passed to \code{\link[raster]{brick}}, i.e. \code{filename}}
+
+\item{inputfiles}{input the files data base to speed up initialization}
 }
 \value{
 raster object
@@ -39,8 +42,17 @@ Read wind
 }
 \details{
 Read wind data
+
+The \code{inputfiles} argument may be used to speed up individual reads, see the examples. Note that
+this must then ignore the \code{time.resolution} argument, which is also set by \code{windfiles} - and no
+warning is given.  If using this argument you must give the same \code{time.resolution} as was used to create the files
+\code{data.frame}.
 }
 \examples{
+# Speed up individual read calls.
+ff <- windfiles(time.resolution = "6hourly")
+t1 <- system.time({readwind(max(ff$date))})
+t2 <- system.time({readwind(max(ff$date), inputfiles = ff)})
 \dontrun{
  dts <- seq(as.Date("2000-01-01"), by = "1 days", length = 350)
  library(animation)

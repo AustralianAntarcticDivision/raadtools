@@ -1,4 +1,5 @@
 
+
 ##' NCEP2 wind files
 ##'
 ##' Files containing NCEP2 wind vector data
@@ -6,39 +7,40 @@
 ##' @param data.source ignored, reserved for future use
 ##' @param time.resolution  time resolution data to read, daily only for now
 ##' @param ... reserved for future use, currently ignored
-##' @param fromCache load file catalog from cache or rebuild
 ##' @return \code{data.frame} of file names and dates
 ##' @export
 windfiles <-
-  function(data.source = "", time.resolution = c("daily"), fromCache = TRUE, ...) {
+  function(data.source = "", time.resolution = c("6hourly", "daily"),  ...) {
     datadir <- getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
     ##      fromCache <- TRUE
     
-    if (fromCache) {
-      load(file.path(datadir, "cache", sprintf("%s_windfiles.Rdata", time.resolution)))
-      wf$ufullname <- file.path(datadir,  wf$ufile)
-      wf$vfullname <- file.path(datadir,  wf$vfile)
-      return(wf)
-    }
-    
-    
-    cfiles <- list.files(file.path(datadir, "wind", "ncep2", time.resolution), pattern = ".nc$", full.names = TRUE)
-    cfiles <- file.path("wind", "ncep2", time.resolution, basename(cfiles))
-    ufiles <- grep("uwnd", cfiles, value = TRUE)
-    vfiles <- grep("vwnd", cfiles, value = TRUE)
-    
+    trestok <- c("6hourly" = "ncep.reanalysis2/gaussian_grid", daily = "ncep.reanalysis2.dailyavgs/gaussian_grid")[time.resolution]
+    allfiles <- .allfilelist()
+    cfiles1 <- grep("ftp.cdc.noaa.gov/Datasets/", allfiles, value = TRUE)
+    cfiles2 <- grep(trestok, cfiles1, value = TRUE)
+    cfiles3 <- grep("uwnd|vwnd", cfiles2, value = TRUE)
+    ufiles <- grep("uwnd", cfiles3, value = TRUE)
+    vfiles <- grep("vwnd", cfiles3, value = TRUE)
+
     ##datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
     dates <- as.POSIXlt(as.Date(basename(ufiles), "uwnd.10m.gauss.%Y"))
     dates$mday <- 1
     dates$mon <- 0
-    dates <- as.POSIXct(dates)
-    wf <- data.frame(ufile = ufiles, vfile = vfiles, date = dates, stringsAsFactors = FALSE)
-    wfU <- .expandFileDateList(file.path(datadir, wf$ufile))
-    wfV <- .expandFileDateList(file.path(datadir, wf$vfile))
-    wf <- data.frame(ufile = gsub("^/", "", gsub(datadir, "", wfU$file)), vfile = gsub("^/", "", gsub(datadir, "", wfV$file)), date = wfU$date, band = wfU$band, stringsAsFactors = FALSE)
-    save(wf, file = file.path(datadir, "cache", sprintf("%s_windfiles.Rdata", time.resolution)))
-    wf
+    dates <- as.POSIXct(dates, tz = "UTC")
+    wf <- data.frame(ufullname = ufiles, vfullname = vfiles, date = dates, stringsAsFactors = FALSE)
+    wfU <- .expandFileDateList(wf$ufullname)
+    ##wfV <- .expandFileDateList( wf$vfullname, fastNC = TRUE, varname = "time")
+    
+    wf <- data.frame(ufile = gsub("^/", "", gsub(datadir, "", wfU$file)), 
+                     vfile = gsub("uwnd", "vwnd", gsub("^/", "", gsub(datadir, "", wfU$file))), 
+                     ufullname = wfU$file, 
+                     vfullname = gsub("uwnd", "vwnd", wfU$file), 
+                     date = wfU$date, band = wfU$band, stringsAsFactors = FALSE)
+    ## "hours since 1800-1-1 00:00:0.0" 
+    ## this line only if fastNC is used
+    ##wf$date <- ISOdatetime(1800, 1, 1, 0, 0, 0, tz = "UTC") + wf$date * 3600
+   wf
     
   }
 
@@ -58,8 +60,17 @@ windfiles <-
 ##' @param xylim crop
 ##' @param lon180 Pacific or Atlantic
 ##' @param ... arguments passed to \code{\link[raster]{brick}}, i.e. \code{filename}
+##' @param inputfiles input the files data base to speed up initialization
 ##' @return raster object
+##' @details The \code{inputfiles} argument may be used to speed up individual reads, see the examples. Note that 
+##' this must then ignore the \code{time.resolution} argument, which is also set by \code{windfiles} - and no
+##' warning is given.  If using this argument you must give the same \code{time.resolution} as was used to create the files
+##' \code{data.frame}. 
 ##' @examples
+##' # Speed up individual read calls. 
+##' ff <- windfiles(time.resolution = "6hourly")
+##' t1 <- system.time({readwind(max(ff$date))})
+##' t2 <- system.time({readwind(max(ff$date), inputfiles = ff)})
 ##' \dontrun{
 ##'  dts <- seq(as.Date("2000-01-01"), by = "1 days", length = 350)
 ##'  library(animation)
@@ -81,16 +92,22 @@ windfiles <-
 ##'
 ##' }
 ##' @export
-readwind <- function(date, time.resolution = c("daily"), xylim = NULL, lon180 = TRUE,
+readwind <- function(date, time.resolution = c("6hourly", "daily"), xylim = NULL, lon180 = TRUE,
                      magonly = FALSE, dironly = FALSE,
                      uonly = FALSE,
                      vonly = FALSE,
                      latest = FALSE,
-                     returnfiles = FALSE, ...) {
+                     returnfiles = FALSE, ..., 
+                     inputfiles = NULL) {
   
   time.resolution <- match.arg(time.resolution)
   if ((magonly + dironly + uonly + vonly) > 1) stop("only one of magonly, dironly, uonly or vonly may be used, exiting")
-  files <- windfiles()
+  
+  if (is.null(inputfiles)) {
+    files <- windfiles(time.resolution = time.resolution)
+    } else {
+      files <- inputfiles
+    }
   if (returnfiles) return(files)
   
   if (missing(date)) date <- min(files$date)

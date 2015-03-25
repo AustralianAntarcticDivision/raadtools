@@ -1,3 +1,69 @@
+commit c181d17d642e725d02b49d2cc2f1556af26bc361
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Mar 25 04:48:06 2015 -1000
+
+    leftovers from a test, now fixed
+
+commit e363b111bde032a6db17d07f64494d2476cbb60a
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Mar 25 04:29:27 2015 -1000
+
+    pal fix
+
+commit 02d22ea79d25967ee827ef95d623570e9f881e9d
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Mar 25 04:19:47 2015 -1000
+
+    updates for wind
+
+commit bd8816b850ad3a4553a4fdeb186f63019ca467e0
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Mar 25 04:19:10 2015 -1000
+
+    fix for breaks in chl.pal
+
+commit a69561b4902b5c5b785d9fafd2e20f10245f4c78
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Mar 25 03:58:33 2015 -1000
+
+    prepare for release
+
+commit 2755aca1db71f3eabcb531d0e897f5481c78dc3b
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Mar 24 02:03:18 2015 -1000
+
+    doc
+
+commit c6ba145e45c00934659a54c71806c5a3856f3f20
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Mar 24 02:02:54 2015 -1000
+
+    names
+
+commit b5aba168975b3aaaf9de6a5e8d727d3b0f025b92
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Mar 24 01:11:11 2015 -1000
+
+    news
+
+commit 79e377eb909a4a57ba17f51f48c3f0b6aa3bba8c
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Mar 24 01:09:33 2015 -1000
+
+    new time resolution and upgrade to new file method
+
+commit a0924ac6c12677757d22d326b8fd4b40bf666801
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Mar 24 01:09:06 2015 -1000
+
+    new timeres, and speed ups for file list (readwind specific)
+
+commit 53f6d34e2f492c74f4fac23c29c4eae5c946a0a4
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Feb 25 18:31:48 2015 -1000
+
+    changelog
+
 commit 32375c8f83e9eb93c2f0bc537629291ed8dfe2b6
 Author: Mike Sumner <mdsumner@gmail.com>
 Date:   Wed Feb 25 18:30:25 2015 -1000

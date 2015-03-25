@@ -1,5 +1,11 @@
-    CHANGES IN raadtools VERSION 0.2-4
-   
+   CHANGES IN raadtools VERSION 0.2-4
+
+o breaks in chl.pal have been updated to top out at 20 mg / m3, which is what the NASA palette provides
+
+o experimental addition of inputfiles for readwind (really this needs metadata to be placed on the files object)
+
+o upgrade to readwind for 6hourly NCEP2 - this means that the default has now changed from daily to 6hourly
+
 o bug fix, rotate before crop in readfronts
 
    CHANGES IN raadtools VERSION 0.2-3

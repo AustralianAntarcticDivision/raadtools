@@ -315,13 +315,23 @@ readmld <- function(date, xylim = NULL, returnfiles = FALSE, ...) {
         f[findex, ]
     }
 
-
+# .fastNCvar <- function(x, varname) {
+#   require(ncdf4)
+#   ncvar_get(nc_open(x), varname)
+# }
 .expandFileDateList <- function(x) {
     vl <- vector("list", length(x))
     for (i in seq_along(x)) {
-        b <- brick(x[i])
+#       if (fastNC) {
+#         ## essentially we rely on the readx function to what metadata to apply
+#         ## (until we get some better general nc tools)
+#        dates <- .fastNCvar(x[i], varname) 
+#       } else {
+         b <- brick(x[i], quick = TRUE)
         dates <- timedateFrom(getZ(b))
-        vl[[i]] <- data.frame(file = rep(x[i], length(dates)), date = dates, band = seq_along(dates))
+      
+        vl[[i]] <- data.frame(file = rep(x[i], length(dates)), date = dates, band = seq_along(dates), 
+                              stringsAsFactors = FALSE)
     }
     do.call("rbind", vl)
 }
@@ -408,7 +418,7 @@ readmld <- function(date, xylim = NULL, returnfiles = FALSE, ...) {
         findex <- dedupedates$index
         date <- dedupedates$date
 
-        .matchFiles(date, fdate[findex], findex, daytest = switch(timeres,daily = 1.5, weekly = 4, monthly = 15, weekly3 = 26))
+        .matchFiles(date, fdate[findex], findex, daytest = switch(timeres, "6hourly" = 0.25, daily = 1.5, weekly = 4, monthly = 15, weekly3 = 26))
     }
 
 

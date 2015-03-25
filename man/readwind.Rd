@@ -32,7 +32,7 @@ components}
 
 \item{...}{arguments passed to \code{\link[raster]{brick}}, i.e. \code{filename}}
 
-\item{files}{input the files data base to speed up initialization}
+\item{inputfiles}{input the files data base to speed up initialization}
 }
 \value{
 raster object
@@ -44,13 +44,15 @@ Read wind
 Read wind data
 
 The \code{inputfiles} argument may be used to speed up individual reads, see the examples. Note that
-this must then ignore the \code{time.resolution} argument, which is also set by \code{windfiles}.
+this must then ignore the \code{time.resolution} argument, which is also set by \code{windfiles} - and no
+warning is given.  If using this argument you must give the same \code{time.resolution} as was used to create the files
+\code{data.frame}.
 }
 \examples{
 # Speed up individual read calls.
 ff <- windfiles(time.resolution = "6hourly")
 t1 <- system.time({readwind(max(ff$date))})
-t2 <- system.time({readwind(max(ff$date), files = ff)})
+t2 <- system.time({readwind(max(ff$date), inputfiles = ff)})
 \dontrun{
  dts <- seq(as.Date("2000-01-01"), by = "1 days", length = 350)
  library(animation)

@@ -315,21 +315,21 @@ readmld <- function(date, xylim = NULL, returnfiles = FALSE, ...) {
         f[findex, ]
     }
 
-.fastNCvar <- function(x, varname) {
-  require(ncdf4)
-  ncvar_get(nc_open(x), varname)
-}
+# .fastNCvar <- function(x, varname) {
+#   require(ncdf4)
+#   ncvar_get(nc_open(x), varname)
+# }
 .expandFileDateList <- function(x, fastNC = FALSE, varname = "") {
     vl <- vector("list", length(x))
     for (i in seq_along(x)) {
-      if (fastNC) {
-        ## essentially we rely on the readx function to what metadata to apply
-        ## (until we get some better general nc tools)
-       dates <- .fastNCvar(x[i], varname) 
-      } else {
-        b <- brick(x[i], quick = TRUE)
+#       if (fastNC) {
+#         ## essentially we rely on the readx function to what metadata to apply
+#         ## (until we get some better general nc tools)
+#        dates <- .fastNCvar(x[i], varname) 
+#       } else {
+         b <- brick(x[i], quick = TRUE)
         dates <- timedateFrom(getZ(b))
-      }
+      
         vl[[i]] <- data.frame(file = rep(x[i], length(dates)), date = dates, band = seq_along(dates), 
                               stringsAsFactors = FALSE)
     }

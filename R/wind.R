@@ -59,7 +59,7 @@ windfiles <-
 ##' @param xylim crop
 ##' @param lon180 Pacific or Atlantic
 ##' @param ... arguments passed to \code{\link[raster]{brick}}, i.e. \code{filename}
-##' @param files input the files data base to speed up initialization
+##' @param inputfiles input the files data base to speed up initialization
 ##' @return raster object
 ##' @details The \code{inputfiles} argument may be used to speed up individual reads, see the examples. Note that 
 ##' this must then ignore the \code{time.resolution} argument, which is also set by \code{windfiles} - and no

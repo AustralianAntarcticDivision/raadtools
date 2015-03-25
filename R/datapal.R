@@ -115,7 +115,7 @@ chl.pal <- function(x, palette = FALSE, alpha = 1) {
   ##cols <- rgb(pal[,2], pal[,3], pal[,4], maxColorValue = 255)
   ##dput(cols)
 ##  breaks <-  c(0, exp(round(seq(-4.6, 4.1, length = 255), digits = 2)))
-  breaks <- c(0, 10^seq(-2, log10(20), length  = length(pal$cols) - 1), 1000)
+  breaks <- c(0, 10^seq(-2, log10(20), length  = 254), 1000)
 
   cols <- c("#000000", "#90006F", "#8D0072", "#8A0075", "#870078", "#84007B",
             "#81007E", "#7E0081", "#7B0084", "#780087", "#75008A", "#72008D",

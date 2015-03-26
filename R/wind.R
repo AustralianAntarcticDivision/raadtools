@@ -172,27 +172,6 @@ readwind <- function(date, time.resolution = c("6hourly", "daily"), xylim = NULL
                         ymin(r), ymax(r)))
   
   if (is.na(projection(r))) projection(r) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
-  rmeta  <- list()
-  umeta <- paste(capture.output(nc_open(files$ufullname[1])), collapse = "\n")
-  vmeta <- paste(capture.output(nc_open(files$vfullname[1])), collapse = "\n")
-  
-  rmeta$UFile1 <- umeta 
-  rmeta$Vfile1 <- vmeta
-  
-  if (uonly) rmeta$VFile1 <- NULL
-  if (vonly) rmeta$Ufile1 <- NULL
-  
-  rmeta$sessionInfo <- paste(capture.output(sessionInfo()), collapse = "\n") 
-  call0 <- match.call() 
-  rmeta$call <-  paste(capture.output(call0))
-  ##class(rmeta) <- c("rasmeta", "list")
-  metadata(r) <- lapply(rmeta, function(x) {class(x) <- c("rasmeta", "character"); x})
-  r
+r
 }
-
-#' @export
-show.rasmeta <- function(x) {writeLines(x); invisible(x)}
-
-#' @export
-print.rasmeta <- function(x) {writeLines(x); invisible(x)}
 

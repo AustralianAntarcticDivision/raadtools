@@ -22,7 +22,7 @@ windfiles <-
     cfiles3 <- grep("uwnd|vwnd", cfiles2, value = TRUE)
     ufiles <- grep("uwnd", cfiles3, value = TRUE)
     vfiles <- grep("vwnd", cfiles3, value = TRUE)
-
+    
     ##datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
     dates <- as.POSIXlt(as.Date(basename(ufiles), "uwnd.10m.gauss.%Y"))
     dates$mday <- 1
@@ -38,10 +38,7 @@ windfiles <-
                      vfullname = gsub("uwnd", "vwnd", wfU$file), 
                      date = wfU$date, band = wfU$band, stringsAsFactors = FALSE)
     ## "hours since 1800-1-1 00:00:0.0" 
-    ## this line only if fastNC is used
-    ##wf$date <- ISOdatetime(1800, 1, 1, 0, 0, 0, tz = "UTC") + wf$date * 3600
-   wf
-    
+wf 
   }
 
 ##' Read wind
@@ -175,10 +172,27 @@ readwind <- function(date, time.resolution = c("6hourly", "daily"), xylim = NULL
                         ymin(r), ymax(r)))
   
   if (is.na(projection(r))) projection(r) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
+  rmeta  <- list()
+  umeta <- paste(capture.output(nc_open(files$ufullname[1])), collapse = "\n")
+  vmeta <- paste(capture.output(nc_open(files$vfullname[1])), collapse = "\n")
   
+  rmeta$UFile1 <- umeta 
+  rmeta$Vfile1 <- vmeta
+  
+  if (uonly) rmeta$VFile1 <- NULL
+  if (vonly) rmeta$Ufile1 <- NULL
+  
+  rmeta$sessionInfo <- paste(capture.output(sessionInfo()), collapse = "\n") 
+  call0 <- match.call() 
+  rmeta$call <-  paste(capture.output(call0))
+  ##class(rmeta) <- c("rasmeta", "list")
+  metadata(r) <- lapply(rmeta, function(x) {class(x) <- c("rasmeta", "character"); x})
   r
-  
 }
 
+#' @export
+show.rasmeta <- function(x) {writeLines(x); invisible(x)}
 
+#' @export
+print.rasmeta <- function(x) {writeLines(x); invisible(x)}
 

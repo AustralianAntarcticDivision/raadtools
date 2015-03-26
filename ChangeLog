@@ -1,3 +1,22 @@
+commit 2c1a5c6df5871e5b072626c3106e39c7cdf75fab
+Merge: 55cfeea 22878ea
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Mar 25 04:57:01 2015 -1000
+
+    merge dev for release
+    
+    Merge branch 'dev'
+    
+    Conflicts:
+    	NEWS
+    	R/datapal.R
+
+commit 22878ea0d7ed94d5066fb7138b4577fdaf98e23b
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Mar 25 04:49:24 2015 -1000
+
+    change log for release
+
 commit c181d17d642e725d02b49d2cc2f1556af26bc361
 Author: Mike Sumner <mdsumner@gmail.com>
 Date:   Wed Mar 25 04:48:06 2015 -1000
@@ -57,6 +76,46 @@ Author: Mike Sumner <mdsumner@gmail.com>
 Date:   Tue Mar 24 01:09:06 2015 -1000
 
     new timeres, and speed ups for file list (readwind specific)
+
+commit 55cfeeacfee8209b12894df1ecbed3545f4b6113
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Sun Mar 22 13:39:54 2015 -1000
+
+    stub for NCEP2 upgrade
+
+commit d442db7c7ed628e29a9ff8dfd49de3e0974e2e7f
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Sun Mar 22 13:39:16 2015 -1000
+
+    work on arrows
+
+commit 38279d374c0b8da7cf2bc180fe176c0c036056cf
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Fri Mar 20 11:09:30 2015 -1000
+
+    new breaks
+
+commit a7a89323c07dcf92c7635d3da4daab579233702a
+Author: mdsumner <mdsumner@gmail.com>
+Date:   Fri Feb 27 12:22:55 2015 +1100
+
+    Update NEWS
+    
+    bug fix, rotate before crop in readfronts
+
+commit 925eba9b7aad6eae9b68d94997dd1e4b7e66d079
+Author: mdsumner <mdsumner@gmail.com>
+Date:   Fri Feb 27 12:21:24 2015 +1100
+
+    Update raadtools.R
+    
+    rotate before crop!
+
+commit 7ea3009d6b28dde7a1ae4479e5147079192c6e68
+Author: mdsumner <mdsumner@gmail.com>
+Date:   Fri Feb 27 12:19:44 2015 +1100
+
+    Update DESCRIPTION
 
 commit 53f6d34e2f492c74f4fac23c29c4eae5c946a0a4
 Author: Mike Sumner <mdsumner@gmail.com>

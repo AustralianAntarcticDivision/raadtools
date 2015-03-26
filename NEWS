@@ -1,4 +1,8 @@
-   CHANGES IN raadtools VERSION 0.2-4
+DEV
+
+o new readderivice and derivicefiles functions
+
+CHANGES IN raadtools VERSION 0.2-4
 
 o breaks in chl.pal have been updated to top out at 20 mg / m3, which is what the NASA palette provides
 

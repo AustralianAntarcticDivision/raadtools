@@ -20,7 +20,7 @@ detail.
 ```{r eval=FALSE,tidy=FALSE}
 install.packages(c("maptools", "raster", "testthat", "ncdf", "rgdal", "rgeos", "knitr"),
                  dependencies = TRUE)
-install.packages("raadtools", repos ="file://aad.gov.au/files/Transfer/toolbox/RAAD")
+devtools::install_github("AustralianAntarcticDivision/raadtools")
 ```
 
 Now to load the package, use the usual package loading code here. If
@@ -72,14 +72,13 @@ functionality please do run the following installations as well.
 
 
 ```{r eval=FALSE}
-install.packages("ncdf", "rgdal", "rgeos")
+install.packages("ncdf", "rgdal", "rgeos", "devtools", "testthat")
 ```
 
-Finally, install the latest version of __raadtools__ from the
-local AAD repository.
+Finally, install the latest version of the package. 
 
 ```{r eval=FALSE}
-install.packages("raadtools", repos ="file://aad.gov.au/files/Transfer/toolbox/RAAD")
+devtools::install_github("AustralianAntarcticDivision/raadtools")
 ```
 
 ## Development of raadtools
@@ -179,36 +178,3 @@ echo $STR
 RScript -e $STR
 ```
 
-### Deploy raadtools package to the local CRAN-like repository
-
-I have the following batch file to build/install/check and finally
-write the package source/binaries to a file repository (yes it's
-awkwardly hardcoded, but it works and lots of bleeding was involved):
-
-```{shell eval=FALSE}
-cd C:\Users\michae_sum\Documents\GIT
-
-rem build for current and ship
-rem R CMD build raadtools
-rem R CMD INSTALL raadtools --build
-
-
-RScript -e "p = 'Z:/Transfer/toolbox/RAAD';file.copy('raadtools_0.0-5.tar.gz', contrib.url(p, 'source'), overwrite = TRUE);tools::write_PACKAGES(contrib.url(p, 'source'), type = 'source')"
-
-rem cp raadtools_0.0-5.tar.gz \\aad.gov.au\files\Transfer\toolbox\RAAD\src\contrib
-RScript -e "p = 'Z:/Transfer/toolbox/RAAD';file.copy('raadtools_0.0-5.zip', contrib.url(p, getOption('pkgType')), overwrite = TRUE);tools::write_PACKAGES(contrib.url(p, getOption('pkgType')))"
-
-rem build for 2.15 and ship
-cd build
-C:\inst\R\2.15\R\bin\x64\R CMD INSTALL ../raadtools_0.0-5.tar.gz --build -l .
-C:\inst\R\2.15\R\bin\x64\RScript -e "p = 'Z:/Transfer/toolbox/RAAD';file.copy('raadtools_0.0-5.zip', contrib.url(p, getOption('pkgType')), overwrite = TRUE);tools::write_PACKAGES(contrib.url(p, getOption('pkgType')))"
-
-cd ..
-
-```
-
-TODO
-
-tidy up deployment hardcoded values
-find a mechanism to build MacOSX packages
-host repository on a webserver, not the file share

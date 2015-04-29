@@ -93,9 +93,9 @@ The following section expands on the Git option.
 
 ## Process of committing changes to the Git source of raadtools
 
-The raadtools package source is hosted on a Stash site at the AAD. This is located here, but for now we won't mention Stash again. 
+The raadtools package source is hosted on GithHub. 
 
-[Stash at the AAD](http://stash.aad.gov.au/projects/MDS/repos/raadtools/browse)
+https://github.com/AustralianAntarcticDivision/raadtools
 
 ### Install prerequisites for building raadtools
 

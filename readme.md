@@ -16,7 +16,7 @@ Analogous facilities exist for SST, Aviso currents/ssh, ocean colour, NCEP winds
 
 ```{r,eval=FALSE}
 ## install packages
-devtools::install_github("mdsumner/raadtools")
+devtools::install_github("AustralianAntarcticDivision/raadtools")
 devtools::install_github("AustralianAntarcticDataCentre/raadsync")
 
 ## 1. configure to download  the southern ocean NSDIC 25km ice for 2014 to a local repo 

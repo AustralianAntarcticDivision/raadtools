@@ -2,9 +2,9 @@
 ##'
 ##' Tools in R for reading, plotting and manipulating spatial data, originally 
 ##' used at the Australian Antarctic Division (AAD).
-##' @author Michael D. Sumner \email{mdsumner@@gmail.com}
+##' @author Michael D. Sumner \email{michael.sumner@@aad.gov.au}
 ##'
-##' Maintainer: Michael D. Sumner \email{mdsumner@@gmail.com}
+##' Maintainer: Michael D. Sumner \email{michael.sumner@@aad.gov.au}
 ##'
 ##' @name raadtools
 ##' @docType package

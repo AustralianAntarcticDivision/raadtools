@@ -2,6 +2,10 @@
 
 Tools for reading, plotting and manipulating spatial data used at the Australian Antarctic Division (AAD).
 
+raadsync keeps it up to date:  https://github.com/AustralianAntarcticDataCentre/raadsync
+
+This configuration makes it work: https://github.com/mdsumner/nectar/blob/master/r-spatial.sh
+
 Michael D. Sumner michael.sumner@aad.gov.au
 
 

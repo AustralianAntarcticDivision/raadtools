@@ -173,6 +173,7 @@ readice <- function(date,
     x
   }
   
+  if (!product == "nsidc") {
   ## loop over file indices
   for (ifile in seq_len(nfiles)) {
     r0 <- switch(product,
@@ -183,12 +184,22 @@ readice <- function(date,
     if (cropit) r0 <- crop(r0, cropext)
     r[[ifile]] <- r0
   }
-  ## TODO need filename for the singleton case
-  if (nfiles > 1) r <- brick(stack(r), ...) else r <- r[[1L]]
+    r <- stack(r)
+  } else {
+    r <- stack(files$fullname)
+  }
   
   projection(r) <- prj
   names(r) <- basename(files$file)
-  setZ(r, files$date)
+  r <- setZ(r, files$date)
+  
+  ## TODO need filename for the singleton case
+ ## r <- brick(r, ...)
+  if ("filename" %in% names(list(...))) r <- writeRaster(r, ...)
+  if (nfiles == 1) r <- r[[1L]]
+  r
+  
+
 }
 
 #r <- readice("1995-01-01", dataproduct = "ssmi")

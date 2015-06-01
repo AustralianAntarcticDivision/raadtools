@@ -116,16 +116,17 @@ readssh <- function (date, time.resolution = c("daily", "monthly", "monthly_clim
   if (lon180) r0 <- rotate(r0)
   if (cropit) r0 <- crop(r0, cropext)
   
+  if (is.na(projection(r0))) projection(r0) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
+  
+  r0 <- setZ(r0, files$date)
+  
   ## need to determine if "filename" was passed in
   dots <- list(...)
   if ("filename" %in% names(dots)) {
     r0 <- writeRaster(r0, ...)
   }
   
-  if (is.na(projection(r0))) projection(r0) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
-  
-  setZ(r0, files$date)
-  
+  r0
 }
 
 

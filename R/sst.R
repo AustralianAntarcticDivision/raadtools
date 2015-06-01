@@ -26,7 +26,7 @@ sstfiles <- function(time.resolution = c("daily"), ...) {
   doffs <-  1
   datepart <- sapply(strsplit(basename(cfiles), "\\."), function(x) x[length(x) - doffs])
   
-  dates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
+  dates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d", tz = "GMT")))
   
   cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = dates,
                     fullname = cfiles, stringsAsFactors = FALSE)[order(dates), ]
@@ -59,7 +59,7 @@ sstfiles <- function(time.resolution = c("daily"), ...) {
     fs <- list.files(dirpath, pattern = "\\.nc$", recursive = TRUE,
                      full.names = TRUE)
     fsstrings <- as.Date(substr(basename(fs), 15, 22), "%Y%m%d")
-    dates <- timedateFrom(as.Date(fsstrings, "%Y%m%d"))
+    dates <- timedateFrom(as.Date(fsstrings, "%Y%m%d", tz = "UTC"))
     sstf <- data.frame(file = gsub("^/", "", gsub(datadir, "",
                                                   fs)), date = dates, stringsAsFactors = FALSE)[order(dates),
                                                                                                 ]
@@ -165,6 +165,8 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
   ## in terms of passing in "filename"
   if (lon180) r0 <- rotate(r0)
   if (cropit) r0 <- crop(r0, cropext)
+  if (is.na(projection(r0))) projection(r0) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
+  r0 <- setZ(r0, files$date)
   
   ## need to determine if "filename" was passed in
   dots <- list(...)
@@ -172,9 +174,9 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
     r0 <- writeRaster(r0, ...)
   }
   
-  if (is.na(projection(r0))) projection(r0) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
-  setZ(r0, files$date)
-  
+  if (nfiles == 1) r <- r[[1L]]
+  r0
+ 
 }
 
 

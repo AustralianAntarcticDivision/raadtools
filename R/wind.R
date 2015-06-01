@@ -155,8 +155,7 @@ readwind <- function(date, time.resolution = c("6hourly", "daily"), xylim = NULL
     r[[ifile]] <- r0
     
   }
-  r <- brick(stack(r), ...
-  )
+  r <- stack(r)
   if (magonly | dironly | uonly | vonly)  {
     r <- setZ(r, files$date)
     names(r) <- sprintf("wind_%s", format(files$date, "%Y%m%d"))
@@ -172,6 +171,14 @@ readwind <- function(date, time.resolution = c("6hourly", "daily"), xylim = NULL
                         ymin(r), ymax(r)))
   
   if (is.na(projection(r))) projection(r) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
+  
+  ## need to determine if "filename" was passed in
+  dots <- list(...)
+  if ("filename" %in% names(dots)) {
+    r <- writeRaster(r, ...)
+  }
+  
+  
 r
 }
 

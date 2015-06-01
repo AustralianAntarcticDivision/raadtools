@@ -147,12 +147,6 @@ readcurr <- function (date, time.resolution = c("daily"),
   if (lon180) r0 <- rotate(r0)
   if (cropit) r0 <- crop(r0, cropext)
   
-  ## need to determine if "filename" was passed in
-  dots <- list(...)
-  if ("filename" %in% names(dots)) {
-    r0 <- writeRaster(r0, ...)
-  }
-  
   if (nlayers(r0) == nrow(files)) r0 <- setZ(r0, files$date)
   varnm <- gsub("\\.", " ", varnm)
   varnm <- paste(sapply(strsplit(varnm, " "), function(x) x[-length(x)]), collapse = " ")
@@ -164,7 +158,14 @@ readcurr <- function (date, time.resolution = c("daily"),
   names(r0) <- sprintf("X%i", 1:nlayers(r0))
   
   projection(r0) <- "+proj=longlat +a=6371000 +b=6371000 +no_defs"
-  r0
+  
+  ## need to determine if "filename" was passed in
+  dots <- list(...)
+  if ("filename" %in% names(dots)) {
+    r0 <- writeRaster(r0, ...)
+  }
+  
+r0
 }
 
 # dimensions:

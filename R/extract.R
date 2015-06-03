@@ -189,7 +189,7 @@
 ##' @export
 setMethod("extract", signature(x = 'function', y = 'missing'), 
           function(x, y, ctstime = FALSE, fact = NULL, verbose = TRUE, ...) {
-            x(...)}
+            x()}
   )
 ##' @aliases extract,function,POSIXt-method
 ##' @name extract

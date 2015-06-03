@@ -49,7 +49,7 @@ readderivice <- function(date,
   product <- match.arg(product)
   
   ## get file names and dates and full path
-  files <- derivicefiles(time.resolution = time.resolution, product = product, hemisphere = hemisphere)
+  files <- derivicefiles(product = product, ...)
   ##files$fullname <- file.path(datadir, files$file)
   if (returnfiles) return(files)
   if (missing(date)) date <- min(files$date)

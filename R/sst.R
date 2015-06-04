@@ -174,7 +174,7 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
     r0 <- writeRaster(r0, ...)
   }
   
-  if (nfiles == 1) r <- r[[1L]]
+  if (nfiles == 1) r0 <- r0[[1L]]
   r0
  
 }

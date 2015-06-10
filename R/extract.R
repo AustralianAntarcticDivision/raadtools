@@ -42,7 +42,7 @@
     
     if (!is.null(fact)) resize <- TRUE
     notime <- FALSE
-    if (length(x(returnfiles = TRUE)) == 1L) {
+    if (length(x(returnfiles = TRUE, ...)) == 1L) {
       notime <- TRUE
     }
     
@@ -53,7 +53,7 @@
     
     if (notime) {
       ## assume we want topo/bathy values
-      thisx1 <- x()
+      thisx1 <- x(...)
       if (resize) thisx1 <- aggregate(thisx1, fact = fact, fun = 'mean')
       return(extract(thisx1, y1, ...))
     }
@@ -64,11 +64,11 @@
       ##.standard.assumeXYT.TimeError()
     }
     ## TODO, will have to figure out how to do this
-    args <- list(...)
+   ## args <- list(...)
     if ("time.resolution" %in% names(args)) {
-      files <- x(returnfiles = TRUE, time.resolution = args$time.resolution)
+      files <- x(returnfiles = TRUE, ...)
     } else {
-      files <- x(returnfiles = TRUE)
+      files <- x(returnfiles = TRUE, ...)
     }
     ## TODO, this is awful need a fix
     time.resolution <- .determine.time.resolution(files$date)
@@ -91,10 +91,10 @@
     if (ctstime) {
       ## we need to store start and end values
       resm <- cbind(result, result)
-      thisx1 <- x(date[1L], verbose = FALSE)
+      thisx1 <- x(date[1L], verbose = FALSE, ...)
       if(resize) thisx1 <- aggregate(thisx1, fact = fact, fun = "mean")
       for (i in seq_along(date)[-1]) {
-        thisx2 <- x(date[i], verbose = FALSE)
+        thisx2 <- x(date[i], verbose = FALSE, ...)
         ## TODO check do we have to store the time-value BEFORE aggregating
         ##t2 <- getZ(thisx2)
         if(resize) thisx2 <- aggregate(thisx2, fact = fact, fun = "mean")
@@ -189,7 +189,7 @@
 ##' @export
 setMethod("extract", signature(x = 'function', y = 'missing'), 
           function(x, y, ctstime = FALSE, fact = NULL, verbose = TRUE, ...) {
-            x()}
+            x(...)}
   )
 ##' @aliases extract,function,POSIXt-method
 ##' @name extract

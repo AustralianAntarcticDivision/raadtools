@@ -173,7 +173,7 @@ readice <- function(date,
     x
   }
   
-  if (!product == "nsidc") {
+ ## if (!product == "nsidc") {
   ## loop over file indices
   for (ifile in seq_len(nfiles)) {
     r0 <- switch(product,
@@ -185,9 +185,9 @@ readice <- function(date,
     r[[ifile]] <- r0
   }
     r <- stack(r)
-  } else {
-    r <- stack(files$fullname)
-  }
+  ##} else {
+  ##  r <- stack(files$fullname)
+  ##}
   
   projection(r) <- prj
   names(r) <- basename(files$file)

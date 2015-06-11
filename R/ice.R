@@ -79,11 +79,13 @@ readice <- function(date,
   
   time.resolution <- match.arg(time.resolution)
   product <- match.arg(product)
+  
   hemisphere <- match.arg(hemisphere)
   ## get file names and dates and full path
   files <- icefiles(time.resolution = time.resolution, product = product, hemisphere = hemisphere)
   ##files$fullname <- file.path(datadir, files$file)
   if (returnfiles) return(files)
+  if (product == "amsr" & .Platform$OS.type == "windows") warning("sorry, AMSR2 files are HDF4 so this is unlikely to work on your machine")
   if (missing(date)) date <- min(files$date)
   if (latest) date <- max(files$date)
   date <- timedateFrom(date)
@@ -242,6 +244,7 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   ## data/www.iup.uni-bremen.de+8084/amsr2data/asi_daygrid_swath/s6250
   
   if (time.resolution != "daily" & product == "amsr") stop("product=\"AMSR\" is only compatible with daily time resolution")
+  
   ftx <- .allfilelist()
   
   ppat <- switch(product, 

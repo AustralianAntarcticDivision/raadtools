@@ -245,8 +245,9 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   ftx <- .allfilelist()
   
   ppat <- switch(product, 
-                 nsidc = "sidads.colorado.edu", 
-                 amsr = "www.iup.uni-bremen.de:8084")
+                 nsidc = "sidads.colorado.edu",
+                 ## need to use the + for some reason
+                 amsr = "www.iup.uni-bremen.de\\+8084")
   strpat <- switch(product, 
                    nsidc = "nt_", 
                    amsr = "AMSR2")

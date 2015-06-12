@@ -12,7 +12,7 @@ test_that("all variants are available", {
   
 })
 
-test_that("reqeusted files only are returned as a data.frame", {
+test_that("requested files only are returned as a data.frame", {
     ffs <- readice(returnfiles = TRUE)
     expect_that(ffs, is_a("data.frame"))
 

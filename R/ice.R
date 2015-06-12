@@ -161,6 +161,8 @@ readice <- function(date,
   .readAMSR <- function(fname) {
     x <- flip(raster(fname), direction = "y")
     extent(x) <- extent(rtemplate)
+    ## earlier files were 0,1
+    if (grepl("asi.nl.s6250", basename(fname))) x <- x * 100
     x
   }
   .readSSMI <- function(fname) {
@@ -198,7 +200,7 @@ readice <- function(date,
   ## TODO need filename for the singleton case
  ## r <- brick(r, ...)
   if ("filename" %in% names(list(...))) r <- writeRaster(r, ...)
-  if (nfiles == 1) r <- r[[1L]]
+  
   r
   
 
@@ -246,7 +248,8 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   if (time.resolution != "daily" & product == "amsr") stop("product=\"AMSR\" is only compatible with daily time resolution")
   
   ftx <- .allfilelist()
-  
+  ## just shortcut here for AMSR (need to review code below)
+  if (product == "amsr") return(.amsr625files(ftx))
   ppat <- switch(product, 
                  nsidc = "sidads.colorado.edu",
                  ## need to use the + for some reason
@@ -292,6 +295,27 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   cfs <- cfs[!duplicated(cfs$date), ]
   
   cfs
+}
+
+.amsr625files <- function(allfiles) {
+  ## 2002:2011
+  f1 <- "ftp-projects.zmaw.de/seaice/AMSR-E_ASI_IceConc/no_landmask/hdf/s6250/"
+  ## 2012:2015+
+  f2 <- "www.iup.uni-bremen.de\\+8084/amsr2data/asi_daygrid_swath/s6250"
+  datadir <- getOption("default.datadir")
+  f3 <- allfiles[c(grep(f1, allfiles), grep(f2, allfiles))]
+  f4 <- grep("hdf$", f3, value = TRUE)
+  ## que?
+  f5 <- f4[-grep("s12500", f4)]
+  files <- data.frame(fullname = f5, 
+             file = gsub(paste0(datadir, "/data/"), "", f5), 
+             date = as.POSIXct(strptime(sapply(strsplit(basename(f5), "-"), "[", 4), "%Y%m%d"), tz = "UTC"), 
+             stringsAsFactors = FALSE)
+  
+           
+  files <- files[order(files$date), ]  
+  ## keep the last of the duplicates
+  files[!rev(duplicated(rev(files$date))), ]
 }
 
 

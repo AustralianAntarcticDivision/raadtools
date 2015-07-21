@@ -117,7 +117,7 @@ topofile <- function(topo = c("gebco_08", "ibcso",
                                
   ))
   }
-  if (!file.exists(topopath)) stop(sprint("expected to find file, but it's not there: ", topopath))
+  if (!file.exists(topopath)) stop(sprintf("expected to find file, but it's not there: ", topopath))
   topopath
 }
 

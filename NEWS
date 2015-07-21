@@ -1,6 +1,6 @@
 CHANGES in raadtools VERSION 0.3.1
 
-o readchla is only partially supported
+o readchla, readfastice and readprod are now only partially supported
 
 o Monthly SST is re-established
 

@@ -26,11 +26,6 @@ fasticefiles <- function(datadir = getOption("default.datadir"), ...) {
 ##' @return RasterBrick with 1 for fast ice pixels, 0 for other, NA for land mask
 ##' @references \url{http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=modis_20day_fast_ice}
 ##' @export
-##' @examples 
-##'
-##' r <- readfastice(c("2002-02-10", "2002-03-03"))
-##' 
-##'
 readfastice <-
   function(date, time.resolution = "weekly3",
            xylim = NULL, returnfiles = FALSE, ...) {

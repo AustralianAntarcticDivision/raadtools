@@ -172,7 +172,8 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
   if (nfiles > 1) {
     r0 <- suppressWarnings(stack(files$fullname, quick = TRUE, varname = varname, bands = bands))
   } else {
-    r0 <- suppressWarnings(raster(files$fullname, varname = varname))
+    if (is.null(bands)) bands <- 1
+    r0 <- suppressWarnings(raster(files$fullname, varname = varname, band = bands))
   }
   
   

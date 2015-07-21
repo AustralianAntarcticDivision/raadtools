@@ -4,7 +4,7 @@
 \alias{sstfiles}
 \title{OISST sea surface temperature files}
 \usage{
-sstfiles(time.resolution = c("daily"), ...)
+sstfiles(time.resolution = c("daily", "monthly"), ...)
 }
 \arguments{
 \item{time.resolution}{time resolution read}

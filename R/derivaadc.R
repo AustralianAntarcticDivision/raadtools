@@ -49,6 +49,7 @@ readderivaadc <- function(products,
   if (nfiles > 1) r <- brick(stack(r), ...) else r <- r[[1L]]
 
   projection(r) <- prj
+  extent(r) <- extent(-180, 180, -80, -30)
   names(r) <- basename(files$file)
   r
 }

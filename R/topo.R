@@ -117,7 +117,7 @@ topofile <- function(topo = c("gebco_08", "ibcso",
                                
   ))
   }
-  if (!file.exists(topopath)) stop(sprintf("expected to find file, but it's not there: ", topopath))
+  if (!file.exists(topopath)) stop(sprintf("expected to find file, but it's not there: %s", topopath))
   topopath
 }
 
@@ -153,9 +153,7 @@ topofile <- function(topo = c("gebco_08", "ibcso",
 ##' \item{}{\code{topofile} returns a character string of the full path to a file name}
 ##' \item{}{\code{readtopo} and \code{readbathy} return the requested data as a RasterLayer (these are aliases)}
 ##' }
-##' @examples
-##' ibcso <- readtopo("ibcso", polar = TRUE)
-##' @export
+##'  @export
 readtopo <- function(topo = c("gebco_08", "ibcso",
                               "etopo1", "etopo2",
                               "kerguelen", "george_v_terre_adelie",

@@ -1,4 +1,12 @@
-DEV
+CHANGES in raadtools VERSION 0.3.1
+
+o readchla is only partially supported
+
+o Monthly SST is re-established
+
+o PROJ.4 update incorprated, must include "ellps"
+
+o AMSR2 ice data now available through readice
 
 o new readderivice and derivicefiles functions
 

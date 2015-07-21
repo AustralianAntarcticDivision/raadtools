@@ -106,7 +106,8 @@ library(help = raadtools)
 Read a simple example from each of the data types mentioned above and plot.
 <<read-other,echo=TRUE,output=FALSE>>=
 
-chla <- readchla("2009-10-01")
+## chlorophyll-a is currently only patchily supported
+##chla <- readchla("2009-10-01")
 curr <- readcurr("2012-01-09", magonly = TRUE, lon180 = FALSE)
 sst <- readsst(c("2000-01-01", "2009-06-08"))
 wind <- readwind()
@@ -114,8 +115,8 @@ topo <- readtopo("george_v_terre_adelie", xylim = extent(140, 141.5, -65, -64))
 
 apal <- chl.pal(palette = TRUE)
 op <- par(mfcol = c(2, 2))
-plot(chla, col = chl.pal(apal$breaks), breaks = apal$breaks,
-     main = "Johnson chl-a", legend = FALSE)
+#plot(chla, col = chl.pal(apal$breaks), breaks = apal$breaks,
+#     main = "Johnson chl-a", legend = FALSE)
 plot(curr, main = "ocean surface current magnitude")
 plot(sst[[2]], main = "SST")
 plot(topo, main = "George V Terre Adelie bathymetry",
@@ -287,8 +288,8 @@ extract(readssh, a, ssha = TRUE)
 extract(readcurr, a, magonly = TRUE)
 extract(readice, a)
 
-extract(readchla, time.resolution = "weekly")
-extract(readchla, a, time.resolution = "weekly")
+#extract(readchla, time.resolution = "weekly")
+#extract(readchla, a, time.resolution = "weekly")
 
 
 
@@ -318,7 +319,7 @@ a$time <- sort(as.Date("1985-01-01") + sample(c(0, 0, 0, 10, 100, 50), nrow(a), 
 data(aurora)
 
 aurora$sst <- extract(readsst, aurora)
-aurora$chla <- extract(readchla, aurora)
+#aurora$chla <- extract(readchla, aurora)
 
 ## nothing for 2013 yet
 ##aurora$windmag <- extract(readwind, aurora[,1:3], magonly = TRUE)
@@ -380,20 +381,20 @@ d2 <- data.frame(x = c(-40, -25, -6, 12, 33, 60, 89, 107),
                  time = as.POSIXct("2006-12-18 00:00:00") + 24 *3600 * 7 * seq_len(8))
 
 ## resize by a factor in space so we get "more coverage"
-chla1 <- extract(readchla, d2)
-chla2 <- extract(readchla, d2, ctstime = TRUE, method = "bilinear")
-chla3 <- extract(readchla, d2, ctstime = TRUE, method = "bilinear", fact = 16)
-data.frame(chla = chla1, chla_spacetimeinterp = chla2, chla_resizespacetimeinterp = chla3)
-
-chl <- readchla(d2$time, xylim = extent(as.matrix(d2[,1:2])))
-chl2 <- aggregate(chl, fact = 16)
-pal <- chl.pal(palette = TRUE)
-
-## compare the two plots, with and without spatial aggregation for "coverage"
-plot(chl, col = pal$col, breaks = pal$breaks, legend = FALSE, addfun = function() lines(d2[,1:2]))
-
-plot(chl2, col = pal$col, breaks = pal$breaks, legend = FALSE, addfun = function() lines(d2[,1:2]))
-
+# chla1 <- extract(readchla, d2)
+# chla2 <- extract(readchla, d2, ctstime = TRUE, method = "bilinear")
+# chla3 <- extract(readchla, d2, ctstime = TRUE, method = "bilinear", fact = 16)
+# data.frame(chla = chla1, chla_spacetimeinterp = chla2, chla_resizespacetimeinterp = chla3)
+# 
+# chl <- readchla(d2$time, xylim = extent(as.matrix(d2[,1:2])))
+# chl2 <- aggregate(chl, fact = 16)
+# pal <- chl.pal(palette = TRUE)
+# 
+# ## compare the two plots, with and without spatial aggregation for "coverage"
+# plot(chl, col = pal$col, breaks = pal$breaks, legend = FALSE, addfun = function() lines(d2[,1:2]))
+# 
+# plot(chl2, col = pal$col, breaks = pal$breaks, legend = FALSE, addfun = function() lines(d2[,1:2]))
+# 
 
 @
 

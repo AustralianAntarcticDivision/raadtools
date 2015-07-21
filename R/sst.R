@@ -168,11 +168,14 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
     cropext <- extent(xylim)
   }
   nfiles <- nrow(files)
+  bands <- files$band
   if (nfiles > 1) {
-    r0 <- suppressWarnings(stack(files$fullname, quick = TRUE, varname = varname))
+    r0 <- suppressWarnings(stack(files$fullname, quick = TRUE, varname = varname, bands = bands))
   } else {
-    r0 <- suppressWarnings(raster(files$fullname, varname = varname))
+    r0 <- suppressWarnings(raster(files$fullname, varname = varname, bands = bands))
   }
+  
+  
   ## note that here the object gets turned into a brick,
   ## presumably with a tempfile backing - that's something to think about more
   ## in terms of passing in "filename"

@@ -17,7 +17,7 @@ Suggests:
     testthat
 LazyData: yes
 VignetteBuilder: knitr
-Version: 0.3.1
+Version: 0.3.1.9000
 Authors@R: c(
    person("Michael D.","Sumner", role = c("aut", "cre"), email = "michael.sumner@aad.gov.au"), 
    person("Ben", "Raymond", role = "ctb", email = "ben.raymond@aad.gov.au")

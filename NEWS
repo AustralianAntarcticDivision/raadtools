@@ -1,3 +1,9 @@
+CHANGES in raadtools DEV
+
+O updated Etopo1 to raadsync process and to the grid-registered version
+
+o updated Etopo2 to raadsync process
+
 CHANGES in raadtools VERSION 0.3.1
 
 o readchla, readfastice and readprod are now only partially supported

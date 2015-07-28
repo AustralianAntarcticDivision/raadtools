@@ -89,8 +89,12 @@ topofile <- function(topo = c("gebco_08", "ibcso",
                      lon180 = TRUE,
                      ...) {
   
+  allfiles <- raadtools:::.allfilelist()
+  
   datadir = getOption("default.datadir")
   topo <- match.arg(topo)
+  
+   
   polarsubdir <- "latlon"
   if (polar) {
     if (topo %in% c("ibcso")) {
@@ -105,18 +109,29 @@ topofile <- function(topo = c("gebco_08", "ibcso",
     topopath <- .smithsandwellvrt(lon180 = lon180)
   } else {
     
+    
   topopath <- file.path(datadir, "bathymetry", topo,
                         switch(topo,
                                gebco_08 = "gebco_08.tif",
                                ibcso = file.path(polarsubdir, "ibcso_v1_is.tif"),
-                               etopo1 = "ETOPO1_Ice_g_gdal.grd",
-                               etopo2 = "ETOPO2v2c_f4.nc",
+                              # etopo1 = "ETOPO1_Ice_g_gdal.grd",
+                              # etopo2 = "ETOPO2v2c_f4.nc",
                                kerguelen = "kerg_dem_100m.grd",
                                george_v_terre_adelie = "gvdem100m_v3.nc"
                                ## use the RAW file via GDAL VRT
                                
   ))
   }
+  
+  if (topo == "etopo1") {
+    cfiles <- grep("ngdc.noaa.gov", allfiles, value = TRUE)
+    topopath <- grep("ETOPO1_Ice_g_gdal.grd", cfiles, value = TRUE)
+  }
+  if (topo == "etopo2") {
+    cfiles <- grep("ngdc.noaa.gov", allfiles, value = TRUE)
+    topopath <- grep("ETOPO2v2c_f4.nc", cfiles, value = TRUE)
+  }
+  
   if (!file.exists(topopath)) stop(sprintf("expected to find file, but it's not there: %s", topopath))
   topopath
 }
@@ -165,7 +180,7 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
                      ...) {
   topo <- match.arg(topo)
   
-  if (!lon180 & topo %in% c("geboc_08", "ibcso", "etopo1", "etopo2")) {
+  if (!lon180 & topo %in% c("geboc_08", "ibcso", "etopo2")) {
     tfile <- topofile(topo = topo, polar = FALSE, ...)
     if (returnfiles) return(tfile)
     if (is.null(xylim)) res <- .rotate(raster(tfile))

@@ -168,12 +168,17 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
     cropext <- extent(xylim)
   }
   nfiles <- nrow(files)
-  bands <- files$band
+  
   if (nfiles > 1) {
-    r0 <- suppressWarnings(stack(files$fullname, quick = TRUE, varname = varname, bands = bands))
+    r0 <- suppressWarnings(stack(files$fullname, quick = TRUE, varname = varname))
   } else {
-    if (is.null(bands)) bands <- 1
-    r0 <- suppressWarnings(raster(files$fullname, varname = varname, band = bands))
+    bands <- files$band
+    if (is.null(bands)) {
+      r0 <- suppressWarnings(raster(files$fullname, varname = varname))
+    } else {
+      r0 <- suppressWarnings(stack(files$fullname[1], bands = bands))
+    
+    }
   }
   
   

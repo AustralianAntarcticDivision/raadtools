@@ -181,7 +181,7 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
       if (setNA) {
         mm <- raster(file.path(files$fullname[1], "lsmask.nc"))
         mm[mm < 1] <- NA_real_
-        r0 <- mask(r0, mm)
+        ##r0 <- mask(r0, mm)
       }
     }
   }
@@ -190,8 +190,15 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
   ## note that here the object gets turned into a brick,
   ## presumably with a tempfile backing - that's something to think about more
   ## in terms of passing in "filename"
-  if (lon180) r0 <- rotate(r0)
-  if (cropit) r0 <- crop(r0, cropext)
+  if (lon180) {
+    r0 <- rotate(r0)
+    if (setNA) mm <- rotate(mm)
+  }
+  if (cropit) {
+    r0 <- crop(r0, cropext, snap = "out")
+    if (setNA) mm <- crop(mm, cropext, snap = "out")
+  }
+  if (setNA) r0 <- mask(r0, mm)
   if (is.na(projection(r0))) projection(r0) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
   r0 <- setZ(r0, files$date)
 

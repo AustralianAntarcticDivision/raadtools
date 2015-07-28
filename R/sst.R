@@ -141,6 +141,7 @@ sstfiles <- function(time.resolution = c("daily","monthly"), ...) {
 readsst <-  function (date, time.resolution = c("daily", "monthly"),
                       xylim = NULL, lon180 = TRUE,
                       varname = c("sst", "anom", "err", "ice"),
+                      setNA = TRUE,
                       latest = FALSE,
                       returnfiles = FALSE, readall = FALSE, ...) {
   time.resolution <- match.arg(time.resolution)
@@ -177,7 +178,11 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
       r0 <- suppressWarnings(raster(files$fullname, varname = varname))
     } else {
       r0 <- suppressWarnings(stack(files$fullname[1], bands = bands))
-    
+      if (setNA) {
+        mm <- raster(file.path(files$fullname[1], "lsmask.nc"))
+        mm[mm < 1] <- NA_real_
+        r0 <- mask(r0, mm)
+      }
     }
   }
   

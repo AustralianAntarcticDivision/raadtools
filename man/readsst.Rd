@@ -20,6 +20,8 @@ readsst(date, time.resolution = c("daily", "monthly"), xylim = NULL,
 \item{varname}{variable to return from the data files, default is
 "sst" or "anom", "err", "ice"}
 
+\item{setNA}{mask out land values (only applies to monthly time.resolution)}
+
 \item{latest}{if TRUE return the latest time available, ignoring the 'date' argument}
 
 \item{returnfiles}{ignore options and just return the file names and dates}

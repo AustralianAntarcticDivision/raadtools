@@ -103,6 +103,9 @@ sstfiles <- function(time.resolution = c("daily","monthly"), ...) {
 }
 
 
+.readmonsst <- function(date) {
+  
+}
 ##' Read OISST sea surface temperature data from daily files
 ##'
 ##' SST data read from files managed by
@@ -116,6 +119,7 @@ sstfiles <- function(time.resolution = c("daily","monthly"), ...) {
 ##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
 ##' @param varname variable to return from the data files, default is
 ##' "sst" or "anom", "err", "ice"
+##' @param setNA mask out land values (only applies to monthly time.resolution)
 ##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param readall FALSE by default
@@ -170,21 +174,30 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
   }
   nfiles <- nrow(files)
   
-  if (nfiles > 1) {
-    r0 <- suppressWarnings(stack(files$fullname, quick = TRUE, varname = varname))
-  } else {
-    bands <- files$band
-    if (is.null(bands)) {
-      r0 <- suppressWarnings(raster(files$fullname, varname = varname))
-    } else {
-      r0 <- suppressWarnings(stack(files$fullname[1], bands = bands))
-      if (setNA) {
-        mm <- raster(file.path(files$fullname[1], "lsmask.nc"))
-        mm[mm < 1] <- NA_real_
-        ##r0 <- mask(r0, mm)
-      }
+  if (time.resolution == "monthly") {
+    r0 <- suppressWarnings(stack(files$fullname[1], bands = files$band))
+    if (setNA) {
+      mm <- raster(file.path(dirname(files$fullname[1]), "lsmask.nc"))
+      mm[mm < 1] <- NA_real_
     }
+  } else {
+    r0 <- suppressWarnings(stack(files$fullname, quick = TRUE, varname = varname))
   }
+#   if (nfiles > 1) {
+#     r0 <- suppressWarnings(stack(files$fullname, quick = TRUE, varname = varname))
+#   } else {
+#     bands <- files$band
+#     if (is.null(bands)) {
+#       r0 <- suppressWarnings(raster(files$fullname, varname = varname))
+#     } else {
+#       r0 <- suppressWarnings(stack(files$fullname[1], bands = bands))
+#       if (setNA) {
+#         mm <- raster(file.path(files$fullname[1], "lsmask.nc"))
+#         mm[mm < 1] <- NA_real_
+#         ##r0 <- mask(r0, mm)
+#       }
+#     }
+#   }
   
   
   ## note that here the object gets turned into a brick,
@@ -192,13 +205,13 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
   ## in terms of passing in "filename"
   if (lon180) {
     r0 <- rotate(r0)
-    if (setNA) mm <- rotate(mm)
+    if (setNA & time.resolution == "monthly") mm <- rotate(mm)
   }
   if (cropit) {
     r0 <- crop(r0, cropext, snap = "out")
-    if (setNA) mm <- crop(mm, cropext, snap = "out")
+    if (setNA & time.resolution == "monthly") mm <- crop(mm, cropext, snap = "out")
   }
-  if (setNA) r0 <- mask(r0, mm)
+  if (setNA & time.resolution == "monthly") r0 <- mask(r0, mm)
   if (is.na(projection(r0))) projection(r0) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
   r0 <- setZ(r0, files$date)
 

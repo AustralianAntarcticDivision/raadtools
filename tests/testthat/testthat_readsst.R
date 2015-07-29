@@ -10,7 +10,8 @@ test_that("multiple dates return a multilayer object", {
           expect_that(nlayers(readsst(c("2000-01-01", "2003-01-10", "1998-08-01"))) > 1L, is_true() )
 
         
-          expect_that(readsst(c("2000-01-01", "2003-01-10", "1998-08-01"), time.resolution = "monthly"), throws_error())
+          expect_that(tmon <- readsst(c("2000-01-01", "2003-01-10", "1998-08-01"), time.resolution = "monthly"),  gives_warning("dates out of order"))
+          expect_that(tmon, is_a("RasterBrick"))
       })
 
 d <- readsst(c("2000-01-01", "2003-01-10"))
@@ -47,14 +48,22 @@ test_that("object projection is not missing", {
 
 })
 
+test_that("dates  within 1.5 months succeed", {
+  expect_that(readsst("1981-11-18", time.resolution = "monthly"), is_a("RasterLayer"))
+})
+
+test_that("daily is different from monthly", {
+  x1 <- readsst("1981-11-18", time.resolution = "monthly")
+  x2 <- readsst("1981-11-18", time.resolution = "daily")
+
+  expect_that(compareRaster(x1, x2), throws_error("different number or columns"))
+})
 
 ## test_that("dates not available within 1.5 days give error", {
 ##     expect_that(readice("1978-10-18"), throws_error("no ice data file within"))
 ## })
 
-## test_that("dates  within 1.5 months succeed", {
-##     expect_that(readice("1978-10-18", time.resolution = "monthly"), is_a("RasterLayer"))
-## })
+
 
 ## test_that("input data can be Date",
 ##           expect_that(readice(as.Date("2000-01-01")), is_a("RasterLayer"))

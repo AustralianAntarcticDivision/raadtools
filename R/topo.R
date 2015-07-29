@@ -125,14 +125,14 @@ topofile <- function(topo = c("gebco_08", "ibcso",
   
   if (topo == "etopo1") {
     cfiles <- grep("ngdc.noaa.gov", allfiles, value = TRUE)
-    topopath <- grep("ETOPO1_Ice_g_gdal.grd", cfiles, value = TRUE)
+    topopath <- grep("ETOPO1_Ice_g_gdal.grd$", cfiles, value = TRUE)
   }
   if (topo == "etopo2") {
     cfiles <- grep("ngdc.noaa.gov", allfiles, value = TRUE)
-    topopath <- grep("ETOPO2v2c_f4.nc", cfiles, value = TRUE)
+    topopath <- grep("ETOPO2v2c_f4.nc$", cfiles, value = TRUE)
   }
   
-  if (!file.exists(topopath)) stop(sprintf("expected to find file, but it's not there: %s", topopath))
+  if (length(topopath) < 1) stop(sprintf("cannot find %s", topo))
   topopath
 }
 

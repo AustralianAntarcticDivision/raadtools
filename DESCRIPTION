@@ -11,14 +11,17 @@ Imports:
     sp
 Suggests:
     knitr,
+    ncdf,
     ncdf4,
     rgdal,
     testthat
 LazyData: yes
 VignetteBuilder: knitr
-Version: 0.3.0.9000
-Authors@R: person("Michael D.","Sumner", role = c("aut", "cre"), email =
-    "mdsumner@gmail.com")
+Version: 0.3.1.9001
+Authors@R: c(
+   person("Michael D.","Sumner", role = c("aut", "cre"), email = "michael.sumner@aad.gov.au"), 
+   person("Ben", "Raymond", role = "ctb", email = "ben.raymond@aad.gov.au")
+   )
 Description: Tools for reading, plotting and manipulating spatial data,
     particularly from remote sensing and model output.
 License: GPL-3

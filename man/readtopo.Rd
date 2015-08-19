@@ -56,7 +56,4 @@ The following data sets are available using the argument \code{topo}.
 \item{smith_sandwell}{Global seafloor topography from satellite altimetry and ship depth soundings. \url{http://topex.ucsd.edu/WWW_html/mar_topo.html}}
 }
 }
-\examples{
-ibcso <- readtopo("ibcso", polar = TRUE)
-}
 

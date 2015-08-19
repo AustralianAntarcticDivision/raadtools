@@ -5,8 +5,8 @@
 \title{Read OISST sea surface temperature data from daily files}
 \usage{
 readsst(date, time.resolution = c("daily", "monthly"), xylim = NULL,
-  lon180 = TRUE, varname = c("sst", "anom", "err", "ice"), latest = FALSE,
-  returnfiles = FALSE, readall = FALSE, ...)
+  lon180 = TRUE, varname = c("sst", "anom", "err", "ice"), setNA = TRUE,
+  latest = FALSE, returnfiles = FALSE, readall = FALSE, ...)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -19,6 +19,8 @@ readsst(date, time.resolution = c("daily", "monthly"), xylim = NULL,
 
 \item{varname}{variable to return from the data files, default is
 "sst" or "anom", "err", "ice"}
+
+\item{setNA}{mask out land values (only applies to monthly time.resolution)}
 
 \item{latest}{if TRUE return the latest time available, ignoring the 'date' argument}
 

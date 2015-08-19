@@ -1,4 +1,20 @@
-DEV
+CHANGES in raadtools DEV
+
+o bug fix for readsst
+
+o updated Etopo1 to raadsync process and to the grid-registered version
+
+o updated Etopo2 to raadsync process
+
+CHANGES in raadtools VERSION 0.3.1
+
+o readchla, readfastice and readprod are now only partially supported
+
+o Monthly SST is re-established
+
+o PROJ.4 update incorprated, must include "ellps"
+
+o AMSR2 ice data now available through readice
 
 o new readderivice and derivicefiles functions
 

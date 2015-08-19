@@ -112,7 +112,7 @@
         if (interactive() & verbose) {
           
           cat(.makeMessage(paste(rep("\b", nchar(mess1)), collapse = ""), domain=NA, appendLF = FALSE))
-          mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
+          mess1 <- sprintf("file %i of %i",  i, length(date))
           cat(.makeMessage(mess1, domain=NA, appendLF = (i == length(date))))
           
           ##                          message(paste(rep("\b", nchar(mess1)), collapse = ""), appendLF = FALSE)

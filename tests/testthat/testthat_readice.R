@@ -29,7 +29,7 @@ test_that("spatial crop works as expected", {
 })
 
 test_that("ice data is returned as a raster object", {
-          expect_that(readice("2000-01-01"), is_a("RasterLayer"))
+          expect_that(readice("2000-01-01"), is_a("RasterStack"))
       })
 
 test_that("dates not available within 1.5 days give error", {
@@ -41,11 +41,11 @@ test_that("dates not available within 1.5 days give error", {
 ##})
 
 test_that("input data can be Date",
-          expect_that(readice(as.Date("2000-01-01")), is_a("RasterLayer"))
+          expect_that(readice(as.Date("2000-01-01")), is_a("RasterStack"))
           )
 
 test_that("input data can be POSIXct",
-          expect_that(readice(as.POSIXct("2000-01-01")), is_a("RasterLayer"))
+          expect_that(readice(as.POSIXct("2000-01-01")), is_a("RasterStack"))
           )
 
 x <- readice(); y <- readice(rescale = FALSE);
@@ -63,7 +63,7 @@ test_that("missing values are greater in number for setNA",
 
 ## first test for readmulti
 test_that("valid multi dates is returned as a raster object", {
-         expect_that(readice(c("2000-01-01", "2000-01-10")), is_a("RasterBrick"))
+         expect_that(readice(c("2000-01-01", "2000-01-10")), is_a("RasterStack"))
 })
 
 b1 <- readice("1997-04-06")

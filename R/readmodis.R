@@ -1,0 +1,17 @@
+readmsst <- function(date, returnfiles = FALSE, latest  = FALSE) {
+  
+  files <- list.files("/rdsi/PRIVATE/data/oceandata.sci.gsfc.nasa.gov/MODIST/Mapped/Monthly/9km/SST", 
+                      pattern = "SST_9$", full.names = TRUE)
+  files <- data.frame(fullname = files, date = as.POSIXct(strptime(basename(files), "T%Y%j")), 
+                      stringsAsFactors = FALSE)
+  if (returnfiles) return(files)
+  if (missing(date)) date <- min(files$date)
+  if (latest) date <- max(files$date)
+  files <- raadtools:::.processFiles(files$date, date, "monthly")
+  files$sds <- sprintf('HDF4_SDS:UNKNOWN:%s:0', files$fullname)
+  
+  x <-  setExtent(raster(files$sds),  extent(-180, 180, -90, 90))
+  projection(x) <- "+proj=longlat +ellps=WGS84"
+  x
+  
+}

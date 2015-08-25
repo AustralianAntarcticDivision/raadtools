@@ -15,6 +15,6 @@ readmsst <- function(date, returnfiles = FALSE, latest  = FALSE) {
   
   x <-  setExtent(raster(files$sds),  extent(-180, 180, -90, 90))
   projection(x) <- "+proj=longlat +ellps=WGS84"
-  x
+  x * 0.000717184972 -2
   
 }

@@ -1,4 +1,4 @@
-readmsst <- function(date, returnfiles = FALSE, latest  = FALSE) {
+readmsst <- function(date, returnfiles = FALSE, latest  = FALSE, filename = NULL) {
   
   
   files <- list.files("/rdsi/PRIVATE/data/oceandata.sci.gsfc.nasa.gov/MODIST/Mapped/Monthly/9km/SST", 
@@ -13,7 +13,7 @@ readmsst <- function(date, returnfiles = FALSE, latest  = FALSE) {
   files <- raadtools:::.processFiles( date, files, "monthly")
   files$sds <- sprintf('HDF4_SDS:UNKNOWN:%s:0', files$fullname)
   
-  x <-  setExtent(raster(files$sds),  extent(-180, 180, -90, 90))
+  x <-  setExtent(brick(stack(files$sds), filename = filename),  extent(-180, 180, -90, 90))
   projection(x) <- "+proj=longlat +ellps=WGS84"
   x * 0.000717184972 -2
   

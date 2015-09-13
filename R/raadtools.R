@@ -10,7 +10,8 @@
 ##' @docType package
 ##' @keywords package
 ##' @import methods
-##' @importFrom sp as.image.SpatialGridDataFrame bbox CRS GridTopology overlay proj4string<- SpatialPoints SpatialPointsDataFrame spChFIDs spTransform 
+##' @importFrom raster overlay
+##' @importFrom sp as.image.SpatialGridDataFrame bbox CRS GridTopology  proj4string<- SpatialPoints SpatialPointsDataFrame spChFIDs spTransform 
 ##' @importFrom maptools ContourLines2SLDF spRbind
 ##' @importFrom raster brick crop deratify extent<- extract getZ nlayers projection projection<- raster res resample rotate setZ stack writeRaster xmax xmin ymax ymin
 

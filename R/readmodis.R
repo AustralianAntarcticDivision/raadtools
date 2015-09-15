@@ -13,7 +13,7 @@ readmsst <- function(date, returnfiles = FALSE, latest  = FALSE, rescale = TRUE)
   files <- raadtools:::.processFiles( date, files, "monthly")
   files$sds <- sprintf('HDF4_SDS:UNKNOWN:%s:0', files$fullname)
   
-  x <-  setExtent(brick(stack(files$sds), filename = filename),  extent(-180, 180, -90, 90))
+  x <-  setExtent(brick(stack(files$sds)),  extent(-180, 180, -90, 90))
   projection(x) <- "+proj=longlat +ellps=WGS84"
   if (rescale) x * 0.000717184972 -2 else x
   

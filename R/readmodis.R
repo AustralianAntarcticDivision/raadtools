@@ -1,4 +1,4 @@
-readmsst <- function(date, returnfiles = FALSE, latest  = FALSE, rescale = TRUE, filename = NULL) {
+readmsst <- function(date, returnfiles = FALSE, latest  = FALSE, rescale = TRUE) {
   
   
   files <- list.files("/rdsi/PRIVATE/data/oceandata.sci.gsfc.nasa.gov/MODIST/Mapped/Monthly/9km/SST", 

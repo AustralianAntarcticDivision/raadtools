@@ -1,3 +1,15 @@
+## function to find intersections with lines at a given longitude
+longint <- function(lines, longitudes, latrange = c(-90, 90), fun = median) {
+  require(rgeos)
+  latitudes <- rep(NA_real_, length(longitudes))
+  for (i in seq_along(longitudes)) {
+    line <- SpatialLines(list(Lines(list(Line(cbind(rep(longitudes[i], 2), latrange))), "1")), proj4string = CRS(projection(lines)))
+    pts <- try(gIntersection(lines, line))
+    if (!inherits(pts, "try-error") & !is.null(pts)) latitudes[i] <- median(coordinates(pts)[,2])
+  }
+  cbind(longitudes, latitudes)
+}
+
 keepOnlyMostComplexLine <- function(x) {
   for (iObj in seq_len(nrow(x))) {
     if (inherits(x, "SpatialLinesDataFrame")) {

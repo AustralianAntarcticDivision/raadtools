@@ -124,8 +124,8 @@ readcurr <- function (date, time.resolution = c("daily"),
     warning("only one time step can be read at once unless one of 'magonly', 'dironly', 'uonly' or 'vonly' is TRUE")
   }
   
-  uraster <- suppressWarnings(stack(files$fullname, varname = "u", quick = TRUE))
-  vraster <- suppressWarnings(stack(files$fullname, varname = "v", quick = TRUE))
+  if (!vonly) uraster <- suppressWarnings(stack(files$fullname, varname = "u", quick = TRUE))
+  if (!uonly) vraster <- suppressWarnings(stack(files$fullname, varname = "v", quick = TRUE))
   
   varnm <- names(uraster)[1]
   if (magonly) r0 <- sqrt(uraster * uraster + vraster * vraster)

@@ -35,7 +35,7 @@ ocfiles <- function(time.resolution = c("daily", "weekly"),
   #AT108 and AT109 are the MODIS-Aqua test set designators.  These designations 
   # will NOT be part of the reprocessing filenames.  
   mtag <- sprintf(paste0("%s.*\\.", ext), paste(type, time, varname, sep = "_"))
- #print(mtag)
+  #print(mtag)
   ##cfiles1 <- sapply(product, function(x) file.path("oceandata.sci.gsfc.nasa.gov", x)
   cfiles1 <- grep(file.path("oceandata.sci.gsfc.nasa.gov", product), ftx, value = TRUE)
   cfiles2 <- grep(mtag, cfiles1, value = TRUE)

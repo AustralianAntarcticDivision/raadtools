@@ -102,7 +102,7 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
   product <- match.arg(product)
   time.resolution <- match.arg(time.resolution)
   #ftx <- .allfilelis()
-  cfiles0 <- grep("")
+  #cfiles0 <- grep("")
   fromCache <- TRUE
   if (fromCache) {
     ## print(file.path(datadir, "cache", sprintf("%s_%s_chlafiles.Rdata", product, time.resolution)))

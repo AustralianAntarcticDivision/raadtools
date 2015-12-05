@@ -11,7 +11,7 @@ amsr2files <- function(date, product = c("tif", "hdf", "nic", "visual"),
                      tif = "tif$", 
                      hdf = "hdf$",
                      nic = "nic.png$", 
-                     visual = "visual.png#")
+                     visual = "visual.png")
     #www.iup.uni-bremen.de+8084/amsr2data/asi_daygrid_swath/s3125/2015/nov/DavisSea/asi-AMSR2-s3125-20151130.tif
     
     cfiles1 <- grep("www.iup.uni-bremen.de", ftx, value = TRUE)

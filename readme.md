@@ -18,6 +18,16 @@ Extreme minimal install of raadtools sytem
 
 Analogous facilities exist for SST, Aviso currents/ssh, ocean colour, NCEP winds, topography, etc. 
 
+Note that the my_datadir value in step 1 will become populated with the source paths of the data collections. I.e. if "my_datdir <- 'C:/temp/dat'" then after running the synchronization it will contain a subfolder path will all the raw files: 
+
+C:/temp/dat/data/data/ftp.aviso.altimetry.fr/global
+
+etc. etc. eg: 
+
+C:/temp/dat/data/sidads.colorado.edu/
+
+C:/temp/dat/data/sidads.colorado.edu/pub/DATASETS/nsidc0051_gsfc_nasateam_seaice/final-gsfc/south/daily/2014
+
 ```{r,eval=FALSE}
 ## install packages
 devtools::install_github("AustralianAntarcticDivision/raadtools")
@@ -31,6 +41,7 @@ cfg$do_sync <- seq(nrow(cfg)) == ice_index
 ## limit our data to only the last year
 cfg$method_flags[1] <- paste0(cfg$method_flags[1], " --accept=\"*nt_2014*\"")
 ## specify local repository location
+## NOTE: this should point to your permanent data collection - at whatever path you need
 my_datadir <- normalizePath("~/raaddata")
 options(default.datadir = my_datadir)
 cfg$local_file_root <- file.path(my_datadir, "data")

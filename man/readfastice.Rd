@@ -19,7 +19,12 @@ readfastice(date, time.resolution = "weekly3", xylim = NULL,
 \item{...}{reserved for future use, currently ignored}
 }
 \value{
-RasterBrick with 1 for fast ice pixels, 0 for other, NA for land mask
+RasterBrick with 
+0: Southern Ocean, pack ice or icebergs, corresponding to light blue in the PNG files.
+1: Antarctic continent (including ice shelves), as defined using the Mosaic of Antarctica product, corresponding to white in the PNG files.
+2: Fast ice, as classified from a single 20-day MODIS composite image, corresponding to dark blue in the PNG files
+3: Fast ice, as classified using a single 20-day AMSR-E composite image, corresponding to yellow in the PNG files
+4: Fast ice, as classified using the previous or next 20-day MODIS composite images, corresponding to red in the PNG files
 }
 \description{
 Read fast ice data, optionally with a mask

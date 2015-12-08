@@ -112,7 +112,7 @@
 readtopo <- function(topo = c("gebco_08", "ibcso",
                               "etopo1", "etopo2",
                               "kerguelen", "george_v_terre_adelie",
-                              "smith_sandwell", "gebco_14"),
+                              "smith_sandwell", "gebco_14", "macrie1100m", "macrie2100m"),
                      polar = FALSE,
                      lon180 = TRUE,
                      xylim = NULL,
@@ -151,7 +151,7 @@ readbathy <- readtopo
 topofile <- function(topo = c("gebco_08",  "ibcso",
                               "etopo1", "etopo2",
                               "kerguelen", "george_v_terre_adelie",
-                              "smith_sandwell", "gebco_14"),
+                              "smith_sandwell", "gebco_14", "macrie1100m", "macrie2100m"),
                      polar = FALSE,
                      lon180 = TRUE,
                      ...) {
@@ -196,7 +196,16 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
   }
   
   
+ 
+  if (topo ==  "macrie1100m") {
+    cfiles <- grep("Macquarie1WGS84UTM57S_100m", allfiles, value = TRUE)
+    topopath <- grep("w001001.adf$", cfiles, value = TRUE)
+  }
   
+  if (topo ==  "macrie2100m") {
+    cfiles <- grep("Macquarie2WGS84UTM58S_100m", allfiles, value = TRUE)
+    topopath <- grep("w001001.adf$", cfiles, value = TRUE)
+  }
   
   if (length(topopath) < 1) stop(sprintf("cannot find %s", topo))
   topopath

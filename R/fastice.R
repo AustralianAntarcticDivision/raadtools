@@ -22,7 +22,7 @@ fasticefiles <- function(product = "binary_fast_ice", mask = FALSE, ...) {
   }
   cfiles2 <- grep("sqc.img$", allfiles, value = TRUE)
   
-  dates <- as.POSIXct(strptime(basename(cfiles2), "binary_%Y_%j"), tz = "GMT")
+  dates <- as.POSIXct(strptime(basename(cfiles2), "%Y_%j"), tz = "GMT")
   data.frame(date = dates, fullname = cfiles2, stringsAsFactors = FALSE)
 }
 
@@ -35,7 +35,12 @@ fasticefiles <- function(product = "binary_fast_ice", mask = FALSE, ...) {
 ##' @param xylim extent in native space of the grid
 ##' @param returnfiles return the file details only
 ##' @param ... reserved for future use, currently ignored
-##' @return RasterBrick with 1 for fast ice pixels, 0 for other, NA for land mask
+##' @return RasterBrick with 
+##' 0: Southern Ocean, pack ice or icebergs, corresponding to light blue in the PNG files.
+##' 1: Antarctic continent (including ice shelves), as defined using the Mosaic of Antarctica product, corresponding to white in the PNG files.
+##' 2: Fast ice, as classified from a single 20-day MODIS composite image, corresponding to dark blue in the PNG files
+##' 3: Fast ice, as classified using a single 20-day AMSR-E composite image, corresponding to yellow in the PNG files
+##' 4: Fast ice, as classified using the previous or next 20-day MODIS composite images, corresponding to red in the PNG files
 ##' @references \url{http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=modis_20day_fast_ice}
 ##' @export
 readfastice <-

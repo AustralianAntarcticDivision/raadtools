@@ -4,7 +4,7 @@
 ##' A data frame with file, date, fullname
 ##' @title fast ice files
 #' @param product which product
-#' @mask mask if TRUE return mask file name
+#' @param mask if TRUE return mask file name
 ##' @param ... reserved for future use, currently ignored
 ##' @return data frame
 ##' @export
@@ -14,13 +14,13 @@ fasticefiles <- function(product = "binary_fast_ice", mask = FALSE, ...) {
   #fs <- list.files(file.path(datadir, pref), pattern = "img$")
   allfiles <- .allfilelist()
 
-  cfiles <- grep("fastice", allfiles, value = TRUE)
-  cfiles1 <- grep("fraser_fastice", allfiles, value = TRUE)
+  cfiles <- grep("data.aad.gov.au", allfiles, value = TRUE)
+  cfiles1 <- grep("3656", allfiles, value = TRUE)
   if (mask) {
-    f <- grep("geoloc",cfiles1, value = TRUE)
+    f <- grep("geo",cfiles1, value = TRUE)
     return(grep("coastmask.img$", f, value = TRUE))
   }
-  cfiles2 <- grep(product, allfiles, value = TRUE)
+  cfiles2 <- grep("sqc.img$", allfiles, value = TRUE)
   
   dates <- as.POSIXct(strptime(basename(cfiles2), "binary_%Y_%j"), tz = "GMT")
   data.frame(date = dates, fullname = cfiles2, stringsAsFactors = FALSE)

@@ -392,7 +392,7 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   time.resolution <- match.arg(time.resolution)
   product <- match.arg(product)
   ## get file names and dates and full path
-  files <- .loadfiles(product, time.resolution = time.resolution)
+  files <- icefiles(product, time.resolution = time.resolution)
   ##files$fullname <- file.path(datadir, files$file)
   if (returnfiles) return(files)
   if (missing(date)) date <- min(files$date)

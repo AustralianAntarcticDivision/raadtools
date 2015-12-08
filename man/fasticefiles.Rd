@@ -4,12 +4,14 @@
 \alias{fasticefiles}
 \title{fast ice files}
 \usage{
-fasticefiles(product = "binary_fast_ice", ...)
+fasticefiles(product = "binary_fast_ice", mask = FALSE, ...)
 }
 \arguments{
-\item{...}{reserved for future use, currently ignored}
+\item{product}{which product}
 
-\item{datadir}{data repository path}
+\item{mask}{if TRUE return mask file name}
+
+\item{...}{reserved for future use, currently ignored}
 }
 \value{
 data frame

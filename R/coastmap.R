@@ -56,7 +56,7 @@ coastmap <- function(map = c(
 
 .manifoldcoast <-  function(layer = c("Countries_hires"), fromCache = TRUE, debug = FALSE) {
   datapath <- getOption("default.datadir")
-  cachepath <- file.path(datapath, "cache", "vector_cache")
+  cachepath <- file.path(datapath, "data_local", "vector_cache")
   
   layer = match.arg(layer)
   
@@ -115,7 +115,7 @@ coastmap <- function(map = c(
   function(layer = c("cst10_polygon", "cst01_polygon", "cst00_polygon"), fromCache = TRUE, debug = FALSE) {
     ##require(rgdal)
     datapath <- getOption("default.datadir")
-    cachepath <- file.path(datapath, "cache", "vector_cache")
+    cachepath <- file.path(datapath, "data_local", "vector_cache")
     
     ##     gispath <- getOption("gispath")
     ##     cachepath <- getOption("cachepath")

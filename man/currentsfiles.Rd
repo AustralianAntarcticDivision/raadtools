@@ -4,7 +4,7 @@
 \alias{currentsfiles}
 \title{AVISO ocean currents files}
 \usage{
-currentsfiles(time.resolution = c("daily"), ...)
+currentsfiles(time.resolution = c("daily", "weekly"), ...)
 }
 \arguments{
 \item{time.resolution}{time resolution to load}

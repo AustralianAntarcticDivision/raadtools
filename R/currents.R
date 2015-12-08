@@ -8,7 +8,7 @@
 ##' @seealso \code{\link{readcurr}}
 ##' @return data.frame of file names and dates
 ##' @export
-currentsfiles <- function(time.resolution = c("daily"), ...) {
+currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
   datadir <- getOption("default.datadir")
   ## ftp.aviso.altimetry.fr/global/delayed-time/grids/madt/all-sat-merged/uv/1993/dt_global_allsat_madt_uv_19930101_20140106.nc
   ## ftp.aviso.altimetry.fr/global/delayed-time/grids/madt/all-sat-merged/uv/1993/dt_global_allsat_madt_uv_19930102_20140106.nc" 
@@ -60,10 +60,12 @@ currentsfiles <- function(time.resolution = c("daily"), ...) {
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... passed to brick, primarily for \code{filename}
 ##' @export
-##' @note These data are stored in longitude/latitude projection on the sphere between longitudes in the Pacific
+##' @note These data for daily files are stored in longitude/latitude projection on the sphere between longitudes in the Pacific
 ##' view \[0, 360\], the default behaviour is to reset this to Atlantic
 ##' view \[-180, 180\] with \code{lon180}. 
 ##'
+##' For weekly files, this source is no longer provided by Aviso but is cached by the raadtools system at AAD/ACE, for the period 1992 to 2014. 
+##' Note that the projection was Mercator for this earlier product. 
 ##' @return \code{\link[raster]{raster}} object with the "U"
 ##' (horizontal/X) and "V" (vertical/Y) components of velocity in
 ##' cm/s. Setting either of the (mutually exclusive) \code{magonly}
@@ -91,7 +93,7 @@ currentsfiles <- function(time.resolution = c("daily"), ...) {
 ##' y2 <- crds[,2] + values(x1[["V"]]) * scale
 ##' arrows(x1, y1, x2, y2, length = 0.03)
 ##' }
-readcurr <- function (date, time.resolution = c("daily"),
+readcurr <- function (date, time.resolution = c("daily", "weekly"),
                       xylim = NULL, lon180 = TRUE, 
                       magonly = FALSE,
                       dironly = FALSE,
@@ -100,7 +102,10 @@ readcurr <- function (date, time.resolution = c("daily"),
                       latest = FALSE,
                       returnfiles = FALSE, ...) {
   time.resolution <- match.arg(time.resolution)
-  
+  if (time.resolution == "weekly") {
+    return(.readcurr1(date, time.resolution = time.resolution, xylim = xylim, lon180 = lon180, magonly = magonly, dironly = dironly, 
+             uonly = uonly, vonly = vonly, latest = latest, returnfiles = returnfiles, ...))
+  }
   files <- currentsfiles(time.resolution = time.resolution)
   if (returnfiles)
     return(files)
@@ -175,7 +180,7 @@ readcurr <- function (date, time.resolution = c("daily"),
   }
   
   cleanup <- unique(cleanup)
- stop("better check this is working")
+ #stop("better check this is working")
   #x <- readcurr(seq(as.Date("2000-01-01"), length = 250, by = "1 day"), uonly = TRUE)
 #  file.exists(filename(x))
   
@@ -269,25 +274,31 @@ r0
 
 
 .currentsfiles1 <- function(fromCache = TRUE, ...) {
-  datadir = getOption("default.datadir")
-  cachefile <- file.path(datadir, "cache", sprintf("currentsfiles_weekly.Rdata"))
-  if (fromCache) {
-    load(cachefile)
-    cfs$fullname <- file.path(datadir, cfs$file)
-    return(cfs)
-  }
-  data.source = file.path(datadir, "current", "aviso", "upd", "7d")
-  cfiles <- list.files(data.source, pattern = ".nc$", full.names = TRUE)
-  datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
+  # datadir = getOption("default.datadir")
+  # cachefile <- file.path(datadir, "cache", sprintf("currentsfiles_weekly.Rdata"))
+  # if (fromCache) {
+  #   load(cachefile)
+  #   cfs$fullname <- file.path(datadir, cfs$file)
+  #   return(cfs)
+  # }
+  # 
+  ftx <- .allfilelist()
+  cfiles <- grep("aviso_old", ftx, value = TRUE)
+  cfiles1 <- grep("current", cfiles, value = TRUE)
+  cfiles2 <- grep("merged_madt", cfiles1, value = TRUE)
+  cfiles3 <- grep("nc$", cfiles2, value = TRUE)
+  #data.source = file.path(datadir, "current", "aviso", "upd", "7d")
+  #cfiles <- list.files(data.source, pattern = ".nc$", full.names = TRUE)
+  datepart <- sapply(strsplit(basename(cfiles3), "_"), function(x) x[length(x)-1])
   currentdates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
   
-  cfs <- data.frame(file = gsub("^/", "", gsub(datadir, "", cfiles)), date = currentdates, stringsAsFactors = FALSE)
+  cfs <- data.frame(fullname = cfiles3,  date = currentdates, stringsAsFactors = FALSE)
   cfs <- cfs[diff(cfs$date) > 0, ]
   
   ## drop duplicates, this should prefer upd to nrt
   cfs <- cfs[!duplicated(cfs$date), ]
-  save(cfs, file = cachefile)
-  cfs$fullname <- file.path(datadir, cfs$file)
+  #save(cfs, file = cachefile)
+  #cfs$fullname <- file.path(datadir, cfs$file)
   cfs
   
 }
@@ -304,6 +315,7 @@ r0
                        vonly = FALSE,
                        
                        lon180 = TRUE,
+                       latest = FALSE,
                        returnfiles = FALSE,
                        verbose = TRUE,
                        ...) {
@@ -327,7 +339,7 @@ r0
   
   
   if (missing(date)) date <- min(files$date)
-  
+  if (latest) date <- max(files$date)
   date <- timedateFrom(date)
   ##findex <- .processDates(date, files$date, time.resolution)
   files <- .processFiles(date, files, time.resolution)

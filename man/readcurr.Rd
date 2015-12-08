@@ -4,9 +4,9 @@
 \alias{readcurr}
 \title{Read AVISO ocean current data}
 \usage{
-readcurr(date, time.resolution = c("daily"), xylim = NULL, lon180 = TRUE,
-  magonly = FALSE, dironly = FALSE, uonly = FALSE, vonly = FALSE,
-  latest = FALSE, returnfiles = FALSE, ...)
+readcurr(date, time.resolution = c("daily", "weekly"), xylim = NULL,
+  lon180 = TRUE, magonly = FALSE, dironly = FALSE, uonly = FALSE,
+  vonly = FALSE, latest = FALSE, returnfiles = FALSE, ...)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -52,9 +52,12 @@ direction, U or V only.
 This is the "SSALTO/DUACS - DT Geostrophic Velocities - Up-to-date Global Processing". See References.
 }
 \note{
-These data are stored in longitude/latitude projection on the sphere between longitudes in the Pacific
+These data for daily files are stored in longitude/latitude projection on the sphere between longitudes in the Pacific
 view \[0, 360\], the default behaviour is to reset this to Atlantic
-view \[-180, 180\] with \code{lon180}.
+view \[-180, 180\] with \code{lon180}. 
+
+For weekly files, this source is no longer provided by Aviso but is cached by the raadtools system at AAD/ACE, for the period 1992 to 2014. 
+Note that the projection was Mercator for this earlier product.
 }
 \examples{
 \dontrun{

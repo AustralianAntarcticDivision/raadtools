@@ -124,8 +124,15 @@ readcurr <- function (date, time.resolution = c("daily"),
     warning("only one time step can be read at once unless one of 'magonly', 'dironly', 'uonly' or 'vonly' is TRUE")
   }
   
-  if (!vonly) uraster <- suppressWarnings(stack(files$fullname, varname = "u", quick = TRUE))
-  if (!uonly) vraster <- suppressWarnings(stack(files$fullname, varname = "v", quick = TRUE))
+  cleanup <- NULL
+  if (!vonly) {
+    uraster <- suppressWarnings(stack(files$fullname, varname = "u", quick = TRUE))
+    cleanup <- c(cleanup, filename(uraster))
+  }
+  if (!uonly) {
+    vraster <- suppressWarnings(stack(files$fullname, varname = "v", quick = TRUE))
+    cleanup <- c(cleanup, filename(vraster))
+  }
   
   varnm <- names(uraster)[1]
   if (magonly) r0 <- sqrt(uraster * uraster + vraster * vraster)
@@ -145,7 +152,9 @@ readcurr <- function (date, time.resolution = c("daily"),
   ## presumably with a tempfile backing - that's something to think about more
   ## in terms of passing in "filename"
   if (lon180) r0 <- rotate(r0)
+  cleanup <- c(cleanup, filename(r0))
   if (cropit) r0 <- crop(r0, cropext)
+  cleanup <- c(cleanup, filename(r0))
   
   if (nlayers(r0) == nrow(files)) r0 <- setZ(r0, files$date)
   varnm <- gsub("\\.", " ", varnm)
@@ -163,6 +172,19 @@ readcurr <- function (date, time.resolution = c("daily"),
   dots <- list(...)
   if ("filename" %in% names(dots)) {
     r0 <- writeRaster(r0, ...)
+  }
+  
+  cleanup <- unique(cleanup)
+ stop("better check this is working")
+  #x <- readcurr(seq(as.Date("2000-01-01"), length = 250, by = "1 day"), uonly = TRUE)
+#  file.exists(filename(x))
+  
+  for (i in seq_along(cleanup)) {
+    print(cleanup[i])
+    if (file.exists(cleanup[i]) & (!cleanup[i] == filename(r0))) {
+      unlink(cleanup[i])
+      unlink(gsub("grd$", "gri", cleanup[i]))
+    }
   }
   
 r0

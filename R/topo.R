@@ -94,35 +94,17 @@ topofile <- function(topo = c("gebco_08", "ibcso",
   datadir = getOption("default.datadir")
   topo <- match.arg(topo)
   
-   
-  polarsubdir <- "latlon"
-  if (polar) {
-    if (topo %in% c("ibcso")) {
-      polarsubdir <- "ps71"
-    } else {
-      warning("no polar version of ", topo, "consider projectRaster(x, crs = '+proj=stere +lat_0=-71', filename = 'mycopy.grd')")
-    }
-  }
-  if (!lon180 & !(topo %in% c("smith_sandwell"))) warning("no Pacific view version available of ", topo)
-  
   if (topo == "smith_sandwell") {
     topopath <- .smithsandwellvrt(lon180 = lon180)
-  } else {
-    
-    
-  topopath <- file.path(datadir, "bathymetry", topo,
-                        switch(topo,
-                               gebco_08 = "gebco_08.tif",
-                               ibcso = file.path(polarsubdir, "ibcso_v1_is.tif"),
-                              # etopo1 = "ETOPO1_Ice_g_gdal.grd",
-                              # etopo2 = "ETOPO2v2c_f4.nc",
-                               kerguelen = "kerg_dem_100m.grd",
-                               george_v_terre_adelie = "gvdem100m_v3.nc"
-                               ## use the RAW file via GDAL VRT
-                               
-  ))
+  } 
+  if (topo == "gebco_08") {
+    cfiles <- grep("www.bodc.ac.uk", allfiles, value = TRUE)
+    topopath <- grep("GRIDONE_2D.nc$", cfiles, value = TRUE)
   }
-  
+  if (topo == "ibcso") {
+    cfiles <- grep("hs.pangaea.de", allfiles, value = TRUE)
+    topopath <- grep("ibcso_v1_is.tif$", cfiles, value = TRUE)
+  }
   if (topo == "etopo1") {
     cfiles <- grep("ngdc.noaa.gov", allfiles, value = TRUE)
     topopath <- grep("ETOPO1_Ice_g_gdal.grd$", cfiles, value = TRUE)
@@ -131,6 +113,19 @@ topofile <- function(topo = c("gebco_08", "ibcso",
     cfiles <- grep("ngdc.noaa.gov", allfiles, value = TRUE)
     topopath <- grep("ETOPO2v2c_f4.nc$", cfiles, value = TRUE)
   }
+  
+  if (topo == "kerguelen") {
+    cfiles <- grep("ftt.jcu.edu.au", allfiles, value = TRUE)
+    topopath <- grep("kerg_dem.grd$", cfiles, value = TRUE)
+  }
+  
+  if (topo == "george_v_terre_adelie") {
+    cfiles <- grep("data.aad.gov.au", allfiles, value = TRUE)
+    topopath <- grep("gvdem250m_v3.nc$", cfiles, value = TRUE)
+  }
+  
+  
+  
   
   if (length(topopath) < 1) stop(sprintf("cannot find %s", topo))
   topopath

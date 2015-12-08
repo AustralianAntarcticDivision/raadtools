@@ -81,10 +81,10 @@
 
 ##' @rdname readtopo
 ##' @export
-topofile <- function(topo = c("gebco_08", "ibcso",
+topofile <- function(topo = c("gebco_08",  "ibcso",
                               "etopo1", "etopo2",
                               "kerguelen", "george_v_terre_adelie",
-                              "smith_sandwell"),
+                              "smith_sandwell", "gebco_14"),
                      polar = FALSE,
                      lon180 = TRUE,
                      ...) {
@@ -100,6 +100,10 @@ topofile <- function(topo = c("gebco_08", "ibcso",
   if (topo == "gebco_08") {
     cfiles <- grep("www.bodc.ac.uk", allfiles, value = TRUE)
     topopath <- grep("GRIDONE_2D.nc$", cfiles, value = TRUE)
+  }
+  if (topo == "gebco_14") {
+    cfiles <- grep("www.bodc.ac.uk", allfiles, value = TRUE)
+    topopath <- grep("GEBCO_2014_2D.nc$", cfiles, value = TRUE)
   }
   if (topo == "ibcso") {
     cfiles <- grep("hs.pangaea.de", allfiles, value = TRUE)
@@ -167,7 +171,7 @@ topofile <- function(topo = c("gebco_08", "ibcso",
 readtopo <- function(topo = c("gebco_08", "ibcso",
                               "etopo1", "etopo2",
                               "kerguelen", "george_v_terre_adelie",
-                              "smith_sandwell"),
+                              "smith_sandwell", "gebco_14"),
                      polar = FALSE,
                      lon180 = TRUE,
                      xylim = NULL,

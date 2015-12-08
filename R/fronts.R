@@ -96,14 +96,17 @@ readfronts <- function(date,
                        xylim = NULL,
                        lon180 = TRUE,
                        returnfiles = FALSE, RAT = TRUE, ...) {
-  datadir = getOption("default.datadir")
   time.resolution <- match.arg(time.resolution)
+  ftx <- .allfilelist()
+  if (missing(date)) date <- min(files$date)
   
+  date <- timedateFrom(date)
+  cfiles <- grep("fronts", ftx, value = TRUE)
+  cfiles1 <- grep("ACCfronts.nc", cfiles, value = TRUE)
   product <- match.arg(product)
-  file <- file.path(datadir, "fronts", "ACCfronts.nc")
   wks <- seq(timedateFrom("1992-10-14"), by = "7 days", length = 854)
   ## get file names and dates and full path
-  files <- data.frame(file = file.path("fronts", "ACCfronts.nc"), fullname = file.path(datadir, "fronts", "ACCfronts.nc"),
+  files <- data.frame(fullname = cfiles1,
                       date = wks, band = seq_along(wks), stringsAsFactors = FALSE)
   
   ##frontname <- c("sBdy", "SACCF_S", "SACCF_N", "PF_S", "PF_M", "PF_N", "SAF_S",
@@ -111,7 +114,6 @@ readfronts <- function(date,
   
   if (returnfiles) return(files)
   
-  if (missing(date)) date <- min(files$date)
   
   ##findex <- .processDates(date, files$date, time.resolution)
   ##date <- files$date[findex]
@@ -129,7 +131,7 @@ readfronts <- function(date,
   
   l <- vector("list", nfiles)
   for (i in seq_along(l)) {
-    r0 <- raster(file, band = files$band[i], stopIfNotEqualSpaced=FALSE)
+    r0 <- raster(files$fullname[i], band = files$band[i], stopIfNotEqualSpaced=FALSE)
     extent(r0) <- extent(bbox(epoints.merc))
     projection(r0) <- proj
     e <- new("Extent", xmin = 0, xmax = 2 * 20037508, ymin = -11087823.8567493 , ymax = -3513725)

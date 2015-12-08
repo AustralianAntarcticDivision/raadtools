@@ -3,15 +3,27 @@
 ##'
 ##' A data frame with file, date, fullname
 ##' @title fast ice files
-##' @param datadir data repository path
+#' @param product which product
+#' @mask mask if TRUE return mask file name
 ##' @param ... reserved for future use, currently ignored
 ##' @return data frame
 ##' @export
-fasticefiles <- function(datadir = getOption("default.datadir"), ...) {
-  pref <- file.path("fastice", "fraser_fastice", "binary_fast_ice")
-  fs <- list.files(file.path(datadir, pref), pattern = "img$")
-  dates <- as.POSIXct(strptime(fs, "binary_%Y_%j"), tz = "GMT")
-  data.frame(file = file.path(pref, fs), date = dates, fullname = file.path(datadir, pref, fs), stringsAsFactors = FALSE)
+fasticefiles <- function(product = "binary_fast_ice", mask = FALSE, ...) {
+  product <- match.arg(product)
+  #pref <- file.path("fastice", "fraser_fastice", product)
+  #fs <- list.files(file.path(datadir, pref), pattern = "img$")
+  allfiles <- .allfilelist()
+
+  cfiles <- grep("fastice", allfiles, value = TRUE)
+  cfiles1 <- grep("fraser_fastice", allfiles, value = TRUE)
+  if (mask) {
+    f <- grep("geoloc",cfiles1, value = TRUE)
+    return(grep("coastmask.img$", f, value = TRUE))
+  }
+  cfiles2 <- grep(product, allfiles, value = TRUE)
+  
+  dates <- as.POSIXct(strptime(basename(cfiles2), "binary_%Y_%j"), tz = "GMT")
+  data.frame(date = dates, fullname = cfiles2, stringsAsFactors = FALSE)
 }
 
 ##' Read fast ice data, optionally with a mask
@@ -31,8 +43,8 @@ readfastice <-
            xylim = NULL, returnfiles = FALSE, ...) {
     
     dims <- c(4300, 425)
-    datadir = getOption("default.datadir")
-    gridmask <- t(matrix(readBin(file.path(datadir, "fastice", "fraser_fastice", "geoloc", "coastmask.img"), "integer", size = 2, n = prod(dims), endian = "little"), dims[1]))
+    
+    gridmask <- t(matrix(readBin(fasticefiles(mask = TRUE), "integer", size = 2, n = prod(dims), endian = "little"), dims[1]))
     read0 <- function(x) {
       projstring <- "+proj=cea +lon_0=91 +lat_0=-90 +lat_ts=-65 +datum=WGS84"
       ## bbox in cea

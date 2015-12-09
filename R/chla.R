@@ -43,6 +43,7 @@ readchla <- function(date, time.resolution = c("weekly", "monthly"),
                      verbose = TRUE,
                      ...) {
   
+  ## Note, fixing this can used the old updatechlafiles below
   warning("readchla is going to be deprecated, it only works with a static collection of data, no longer updated")
   time.resolution <- match.arg(time.resolution)
   product <- match.arg(product)
@@ -104,6 +105,8 @@ readchla <- function(date, time.resolution = c("weekly", "monthly"),
 chlafiles <- function(time.resolution = c("weekly", "monthly"),
                       product = c("johnson", "oceancolor"),
                       platform = c("MODISA", "SeaWiFS"), ...) {
+  
+  if (product == "oceancolor") stop('sorry MODISA not currently supported')
   ##datadir <- getOption("default.datadir")
   product <- match.arg(product)
   platform <- match.arg(platform)
@@ -114,11 +117,12 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
   cfiles1 <- grep(product, cfiles, value = TRUE)
   cfiles2 <- grep(tolower(gsub("A$", "", platform)), cfiles1, value = TRUE )
   cfiles3 <- grep(time.resolution, cfiles2, value = TRUE)
+  cfiles3 <- grep("nc$", cfiles3, value = TRUE)
   dates <- timedateFrom(strptime(substr(basename(cfiles3), 2, 8), "%Y%j"))
   
   
   chlf <- data.frame(fullname= cfiles3, date = dates,  stringsAsFactors = FALSE)[order(dates), ]
-  
+  chlf
 }
 
 # .updatechlafiles <- function(datadir = getOption("default.datadir"), preferModis = TRUE) {

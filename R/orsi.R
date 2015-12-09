@@ -16,7 +16,7 @@ frontsmap <- function(map = c("orsi")) {
 
 .orsi <- function(layer = "orsi") {
   datapath <- getOption("default.datadir")
-  cachepath <- file.path(datapath, "cache")
+  cachepath <- file.path(datapath, "data_local", "vector_cache")
   f <- file.path(cachepath, grep(layer, list.files(cachepath), value = TRUE))
   load(f)
   return(get(layer))

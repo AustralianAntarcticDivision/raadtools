@@ -13,10 +13,12 @@
 ##' @export
 imagemap <- function(map = c("ibcso_background_hq"),
                      fact = 1L) {
-  datadir <- getOption("default.datadir")
+  ftx <- .allfilelist()
+  cfiles <- grep("www.ibcso.org", ftx, value = TRUE)
+  cfiles1 <- grep("ibcso_background_hq.tif$", cfiles, value = TRUE)
   map <- match.arg(map)
   fpath <- switch(map,
-                  ibcso_background_hq = file.path(datadir,  "bathymetry", "ibcso", "image", "ibcso_background_hq.tif")
+                  ibcso_background_hq = cfiles1
                   ## ant_and_sthn_ocean_13989 = file.path(datadir,  "maps", "ant_and_sthn_ocean_13989.tif"),
                   ## ant_sthn_ocean_ed9_13939 = file.path(datadir, "maps", "ant_sthn_ocean_ed9_13939.tif"),
                   ## kerguelen_to_antarctica_bathy_14033 = file.path(datadir, "maps",  "kerguelen_to_antarctica_bathy_14033.tif")

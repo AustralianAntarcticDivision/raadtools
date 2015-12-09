@@ -5,12 +5,14 @@
 \title{Chlorophyll-a}
 \usage{
 chlafiles(time.resolution = c("weekly", "monthly"), product = c("johnson",
-  "oceancolor"), ...)
+  "oceancolor"), platform = c("MODISA", "SeaWiFS"), ...)
 }
 \arguments{
 \item{time.resolution}{weekly (8day) or monthly}
 
-\item{product}{choice of sea ice product, see \code{readchla}}
+\item{product}{choice of chla product, see \code{readchla}}
+
+\item{platform}{(modis[a] or seawifs)}
 
 \item{...}{reserved for future use, currently ignored}
 }

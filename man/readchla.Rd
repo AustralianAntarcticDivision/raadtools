@@ -5,8 +5,9 @@
 \title{Read Chlorophyll-a for the Southern Ocean}
 \usage{
 readchla(date, time.resolution = c("weekly", "monthly"),
-  product = c("johnson", "oceancolor"), xylim = NULL, returnfiles = FALSE,
-  verbose = TRUE, ...)
+  product = c("johnson", "oceancolor"), platform = c("MODISA", "SeaWiFS"),
+  xylim = NULL, returnfiles = FALSE, latest = FALSE, verbose = TRUE,
+  ...)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -14,6 +15,8 @@ readchla(date, time.resolution = c("weekly", "monthly"),
 \item{time.resolution}{time resolution data to read, weekly or monthly}
 
 \item{product}{choice of product, see Details}
+
+\item{platform}{(modis[a] or seawifs)}
 
 \item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}}
 

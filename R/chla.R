@@ -11,6 +11,7 @@
 ##' @param date date or dates of data to read, see Details
 ##' @param time.resolution time resolution data to read, weekly or monthly
 ##' @param product choice of product, see Details
+##' @param platform (modis[a] or seawifs)
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param verbose print messages on progress etc.
@@ -33,20 +34,23 @@
 ##' @export
 readchla <- function(date, time.resolution = c("weekly", "monthly"),
                      product = c("johnson", "oceancolor"),
+                     platform = c("MODISA", "SeaWiFS"), 
                      xylim = NULL,
                      
                      ##lon180 = TRUE,
                      returnfiles = FALSE,
+                     latest = FALSE,
                      verbose = TRUE,
                      ...) {
   
-  warning("readchla is going to be deprecated, and may already not work")
+  warning("readchla is going to be deprecated, it only works with a static collection of data, no longer updated")
   time.resolution <- match.arg(time.resolution)
   product <- match.arg(product)
   files <- chlafiles(time.resolution = time.resolution, product = product)
   if (returnfiles) return(files)
   
   if (missing(date)) date <- min(files$date)
+  if (latest) date <- max(files$date)
   date <- timedateFrom(date)
   ## from this point one, we don't care about the input "date" - this is our index into all files and that's what we use
   ##findex <- .processDates(date, files$date, time.resolution)
@@ -80,7 +84,7 @@ readchla <- function(date, time.resolution = c("weekly", "monthly"),
   if (nfiles > 1)
     r <- brick(stack(r), ...)
   else r <- r[[1L]]
-  names(r) <- basename(files$file)
+  names(r) <- basename(files$fullname)
   if (is.na(projection(r))) projection(r) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
   
   r <- setZ(r, files$date)
@@ -92,72 +96,76 @@ readchla <- function(date, time.resolution = c("weekly", "monthly"),
 ##' This function generates a list of available chlorophyll-a files, including SeaWiFS and MODIS.
 ##' @title Chlorophyll-a
 ##' @param time.resolution weekly (8day) or monthly
-##' @param product choice of sea ice product, see \code{readchla}
+##' @param product choice of chla product, see \code{readchla}
+##' @param platform (modis[a] or seawifs)
 ##' @param ... reserved for future use, currently ignored
 ##' @return data.frame
 ##' @export
 chlafiles <- function(time.resolution = c("weekly", "monthly"),
-                      product = c("johnson", "oceancolor"), ...) {
-  datadir <- getOption("default.datadir")
+                      product = c("johnson", "oceancolor"),
+                      platform = c("MODISA", "SeaWiFS"), ...) {
+  ##datadir <- getOption("default.datadir")
   product <- match.arg(product)
+  platform <- match.arg(platform)
   time.resolution <- match.arg(time.resolution)
-  #ftx <- .allfilelis()
-  #cfiles0 <- grep("")
-  fromCache <- TRUE
-  if (fromCache) {
-    ## print(file.path(datadir, "cache", sprintf("%s_%s_chlafiles.Rdata", product, time.resolution)))
-    load(file.path(datadir, "cache", sprintf("%s_%s_chlafiles.Rdata", product, time.resolution)))
-    chlf$fullname <- file.path(datadir,  chlf$file)
-    return(chlf)
-  } 
+  time.resolution <- c(weekly = "8d", monthly = "monthly")[time.resolution]
+  ftx <- .allfilelist()
+  cfiles <- grep("data_local/chl", ftx, value = TRUE)
+  cfiles1 <- grep(product, cfiles, value = TRUE)
+  cfiles2 <- grep(tolower(gsub("A$", "", platform)), cfiles1, value = TRUE )
+  cfiles3 <- grep(time.resolution, cfiles2, value = TRUE)
+  dates <- timedateFrom(strptime(substr(basename(cfiles3), 2, 8), "%Y%j"))
+  
+  
+  chlf <- data.frame(fullname= cfiles3, date = dates,  stringsAsFactors = FALSE)[order(dates), ]
   
 }
 
-.updatechlafiles <- function(datadir = getOption("default.datadir"), preferModis = TRUE) {
-  tr <- c(monthly = "monthly", weekly = "8d")
-  
-  
-  ## first johnson
-  for (i in seq_along(tr)) {
-    dirpath <- file.path("chl", "johnson", c("modis", "seawifs"), tr[i])
-    
-    fs <- gsub(datadir, "", list.files(file.path(datadir, dirpath), full.names = TRUE))
-    fs <- gsub("^/", "", fs)
-    
-    if (!length(fs) > 0) {
-      warning(sprintf("no files fould for %s at %s", tr[i], dirpath))
-      next;
-    }
-    dates <- timedateFrom(strptime(substr(basename(fs), 2, 8), "%Y%j"))
-    
-    
-    chlf <- data.frame(file = fs, date = dates,  stringsAsFactors = FALSE)[order(dates), ]
-    ## implementing preferModis
-    dupes <- which(duplicated(chlf$date)) - !preferModis
-    if (length(dupes) > 0) chlf <- chlf[-dupes, ]
-    save(chlf, file = file.path(datadir, "cache", sprintf("johnson_%s_chlafiles.Rdata", names(tr[i]))))
-  }
-  ## now oceancolor
-  
-  for (i in seq_along(tr)) {
-    dirpath <- file.path("chl", "oceancolor", c("modis", "seawifs"), tr[i], "netcdf")
-    
-    fs <- list.files(file.path(datadir, dirpath), full.names = TRUE)
-    
-    if (!length(fs) > 0) {
-      warning(sprintf("no files fould for %s at %s", tr[i], dirpath))
-      next;
-    }
-    xfs <- .expandFileDateList(fs)
-    fs <- gsub(datadir, "", xfs$file)
-    fs <- gsub("^/", "", fs)
-    
-    dates <- xfs$date  ##timedateFrom(strptime(substr(basename(fs), 2, 8), "%Y%j"))
-    chlf <- data.frame(file = fs, date = dates,  band = xfs$band, stringsAsFactors = FALSE)[order(dates), ]
-    ## implementing preferModis
-    dupes <- which(duplicated(chlf$date)) - !preferModis
-    if (length(dupes) > 0) chlf <- chlf[-dupes, ]
-    save(chlf, file = file.path(datadir, "cache", sprintf("oceancolor_%s_chlafiles.Rdata", names(tr[i]))))
-  }
-  
-}
+# .updatechlafiles <- function(datadir = getOption("default.datadir"), preferModis = TRUE) {
+#   tr <- c(monthly = "monthly", weekly = "8d")
+#   
+#   
+#   ## first johnson
+#   for (i in seq_along(tr)) {
+#     dirpath <- file.path("chl", "johnson", c("modis", "seawifs"), tr[i])
+#     
+#     fs <- gsub(datadir, "", list.files(file.path(datadir, dirpath), full.names = TRUE))
+#     fs <- gsub("^/", "", fs)
+#     
+#     if (!length(fs) > 0) {
+#       warning(sprintf("no files fould for %s at %s", tr[i], dirpath))
+#       next;
+#     }
+#     dates <- timedateFrom(strptime(substr(basename(fs), 2, 8), "%Y%j"))
+#     
+#     
+#     chlf <- data.frame(file = fs, date = dates,  stringsAsFactors = FALSE)[order(dates), ]
+#     ## implementing preferModis
+#     dupes <- which(duplicated(chlf$date)) - !preferModis
+#     if (length(dupes) > 0) chlf <- chlf[-dupes, ]
+#     save(chlf, file = file.path(datadir, "cache", sprintf("johnson_%s_chlafiles.Rdata", names(tr[i]))))
+#   }
+#   ## now oceancolor
+#   
+#   for (i in seq_along(tr)) {
+#     dirpath <- file.path("chl", "oceancolor", c("modis", "seawifs"), tr[i], "netcdf")
+#     
+#     fs <- list.files(file.path(datadir, dirpath), full.names = TRUE)
+#     
+#     if (!length(fs) > 0) {
+#       warning(sprintf("no files fould for %s at %s", tr[i], dirpath))
+#       next;
+#     }
+#     xfs <- .expandFileDateList(fs)
+#     fs <- gsub(datadir, "", xfs$file)
+#     fs <- gsub("^/", "", fs)
+#     
+#     dates <- xfs$date  ##timedateFrom(strptime(substr(basename(fs), 2, 8), "%Y%j"))
+#     chlf <- data.frame(file = fs, date = dates,  band = xfs$band, stringsAsFactors = FALSE)[order(dates), ]
+#     ## implementing preferModis
+#     dupes <- which(duplicated(chlf$date)) - !preferModis
+#     if (length(dupes) > 0) chlf <- chlf[-dupes, ]
+#     save(chlf, file = file.path(datadir, "cache", sprintf("oceancolor_%s_chlafiles.Rdata", names(tr[i]))))
+#   }
+#   
+# }

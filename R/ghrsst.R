@@ -41,7 +41,6 @@ ghrsstfiles <- function() {
 #'
 #' @return RasterStack or RasterLayer
 #' @export
-#'
 readghrsst  <- function (date, time.resolution = c("daily"),
                          xylim = NULL, lon180 = TRUE,
                          varname = c("analysed_sst", "analysis_error", "mask", "sea_ice_fraction"),

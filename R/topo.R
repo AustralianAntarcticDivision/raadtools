@@ -156,7 +156,7 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
                      lon180 = TRUE,
                      ...) {
   
-  allfiles <- raadtools:::.allfilelist()
+  allfiles <- .allfilelist()
   
   datadir = getOption("default.datadir")
   topo <- match.arg(topo)

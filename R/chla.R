@@ -15,6 +15,7 @@
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param verbose print messages on progress etc.
+##' @param latest if TRUE return the most recent layer
 ##' @param ... passed to brick, for \code{filename}
 ##' @references  Johnson, R, PG Strutton, SW Wright, A McMinn, and KM
 ##' Meiners (2013) Three improved satellite chlorophyll algorithms for

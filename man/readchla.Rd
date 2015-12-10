@@ -22,6 +22,8 @@ readchla(date, time.resolution = c("weekly", "monthly"),
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 
+\item{latest}{if TRUE return the most recent layer}
+
 \item{verbose}{print messages on progress etc.}
 
 \item{...}{passed to brick, for \code{filename}}

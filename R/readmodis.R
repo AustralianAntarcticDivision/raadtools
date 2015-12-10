@@ -1,3 +1,4 @@
+#' @importFrom raster setExtent mask
 readmsst <- function(date, returnfiles = FALSE, latest  = FALSE, rescale = TRUE) {
   
   
@@ -10,7 +11,7 @@ readmsst <- function(date, returnfiles = FALSE, latest  = FALSE, rescale = TRUE)
   if (missing(date)) date <- min(files$date)
   date <- as.POSIXct(date, tz = "UTC")
   
-  files <- raadtools:::.processFiles( date, files, "monthly")
+  files <- .processFiles( date, files, "monthly")
   files$sds <- sprintf('HDF4_SDS:UNKNOWN:%s:0', files$fullname)
   
   x <-  setExtent(brick(stack(files$sds)),  extent(-180, 180, -90, 90))

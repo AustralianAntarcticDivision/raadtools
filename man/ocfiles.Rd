@@ -19,6 +19,8 @@ ocfiles(time.resolution = c("daily", "weekly"), product = c("MODISA",
 
 \item{bz2.rm}{ignore files that are compressed}
 
+\item{ext}{which extension, e.g. "nc" or "main"}
+
 \item{...}{reserved for future use, currently ignored}
 }
 \value{

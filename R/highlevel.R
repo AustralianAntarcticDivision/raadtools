@@ -1,6 +1,7 @@
 ## function to find intersections with lines at a given longitude
+#' @importFrom rgeos gIntersection
+#' @importFrom sp SpatialLines Lines Line coordinates
 longint <- function(lines, longitudes, latrange = c(-90, 90), fun = median) {
-  require(rgeos)
   latitudes <- rep(NA_real_, length(longitudes))
   for (i in seq_along(longitudes)) {
     line <- SpatialLines(list(Lines(list(Line(cbind(rep(longitudes[i], 2), latrange))), "1")), proj4string = CRS(projection(lines)))
@@ -22,6 +23,9 @@ keepOnlyMostComplexLine <- function(x) {
   x
 }
 
+#' @importFrom  raster projectExtent raster calc rasterToContour isLonLat
+#' @importFrom sp  spChFIDs
+#' @importFrom maptools spRbind
 monthlyIceContours <- function(month, years = NULL, fun = max, 
                                   llim = NULL, product = "nsidc", lev = 15, 
                                   longlat = TRUE) {

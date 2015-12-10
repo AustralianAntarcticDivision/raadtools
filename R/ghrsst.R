@@ -13,7 +13,7 @@ ghrsstfiles <- function() {
   cfiles1 <- grep("ghrsst", cfiles, value = TRUE)
   cfiles2 <- grep("L4", cfiles1, value = TRUE)
   cfiles3 <- grep("GLOB/JPL/MUR", cfiles2, value = TRUE)
-  cfiles4 <- grep("MUR.nc", cfiles3, value = TRUE)
+  cfiles4 <- grep("MUR.nc$", cfiles3, value = TRUE)
   
   files <- data.frame(fullname = cfiles4, stringsAsFactors = FALSE)
   files$date <- as.POSIXct(strptime(basename(cfiles4), "%Y%m%d"), tz = "GMT")
@@ -37,6 +37,8 @@ ghrsstfiles <- function() {
 #' @param setNA ignored
 #' @param latest return latest available data
 #' @param returnfiles return the files
+#' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
+#' @param lon180 currently ignored
 #' @param ... pass in filename to writeRaster
 #'
 #' @return RasterStack or RasterLayer

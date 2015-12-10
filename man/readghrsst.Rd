@@ -14,6 +14,10 @@ readghrsst(date, time.resolution = c("daily"), xylim = NULL,
 
 \item{time.resolution}{daily}
 
+\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}}
+
+\item{lon180}{currently ignored}
+
 \item{varname}{one of "analysed_sst", "analysis_error", "mask", "sea_ice_fraction"}
 
 \item{setNA}{ignored}

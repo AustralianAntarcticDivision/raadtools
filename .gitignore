@@ -26,4 +26,6 @@ auto/
 *.pdf
 .Rproj.user
 vignettes/cache*
-vignenettes/figure*
+vignettes/figure*
+currfixes.txt
+data_local.txt

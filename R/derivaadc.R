@@ -72,7 +72,7 @@ derivaadcproducts <- function() {
 ##'
 ##' This function loads the latest cache of stored files for
 ##' these products, which are available from \url{http://webdav.data.aad.gov.au/data/environmental/derived/antarctic/}
-##' @param product which derived product
+##' @param products which derived product
 ##' @param ... reserved for future use, currently ignored
 ##' @export
 ##' @return data.frame of \code{file} and \code{date}

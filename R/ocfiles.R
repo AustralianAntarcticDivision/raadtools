@@ -7,6 +7,7 @@
 ##' @param varname which variable (or set of variables)
 ##' @param type which level of data
 ##' @param bz2.rm ignore files that are compressed
+##' @param ext which extension, e.g. "nc" or "main"
 ##' @param ... reserved for future use, currently ignored
 ##' @export
 ##' @return data.frame of \code{file} and \code{date}
@@ -18,7 +19,7 @@ ocfiles <- function(time.resolution = c("daily", "weekly"),
                     ext = c("nc", "main"), 
                     ...) {
   datadir <- getOption("default.datadir")
-  ftx <- raadtools:::.allfilelist()
+  ftx <- .allfilelist()
   time.resolution <- match.arg(time.resolution)
   product <- match.arg(product)
   ext <- match.arg(ext)
@@ -40,7 +41,7 @@ ocfiles <- function(time.resolution = c("daily", "weekly"),
   cfiles1 <- grep(file.path("oceandata.sci.gsfc.nasa.gov", product), ftx, value = TRUE)
   cfiles2 <- grep(mtag, cfiles1, value = TRUE)
   cfiles <- if (bz2.rm)  grep(paste0(ext, "$"), cfiles2, value = TRUE) else cfiles2
-  tokens <- raadtools:::.filetok(basename(cfiles))
+  tokens <- .filetok(basename(cfiles))
   if (length(cfiles) < 1) stop("no files found for ", paste(product, varname, type, time.resolution, collapse = ", "))
   dates <- as.POSIXct(strptime(paste0(tokens$year, tokens$jday), "%Y%j", tz = "GMT"))
   cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), fullname = cfiles, 

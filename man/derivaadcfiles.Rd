@@ -7,9 +7,9 @@
 derivaadcfiles(products, ...)
 }
 \arguments{
-\item{...}{reserved for future use, currently ignored}
+\item{products}{which derived product}
 
-\item{product}{which derived product}
+\item{...}{reserved for future use, currently ignored}
 }
 \value{
 data.frame of \code{file} and \code{date}

@@ -1,3 +1,714 @@
+commit ff43d055e24828546433ea6eda7b45725fddfab6
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Thu Dec 10 16:40:11 2015 +1100
+
+    fixes from check
+
+commit 65f0cee13b2b41797b7611845c45999e18607064
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Wed Dec 9 16:32:04 2015 +1100
+
+    turned off oceancolor, needs work for multiband files
+
+commit 7e15734125a244459df1c08cc874e0431a4a2e29
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Wed Dec 9 16:25:45 2015 +1100
+
+    re-establish old chlorophyll
+
+commit 44a8884fe14b1e843ff291ca36c7185ba1a2bad2
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Wed Dec 9 16:09:26 2015 +1100
+
+    minor
+
+commit d9814c5fd00083b2537014c8787d084706086177
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Wed Dec 9 15:59:42 2015 +1100
+
+    GHRSST added
+
+commit 0695fb7ce64d669b9559f97096f27b201f235741
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Wed Dec 9 12:33:58 2015 +1100
+
+    restore for now
+
+commit 427bacb7cf18c38c3ae57e8275acc5ef81cd67cf
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Wed Dec 9 11:33:05 2015 +1100
+
+    restored ibcso background
+
+commit 20ea4f49e09e3bae511f44125645e50192307ee3
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Wed Dec 9 10:42:32 2015 +1100
+
+    new sources from GA macrie1100m, macrie2100m
+
+commit e94324b126781c33a1a6de7da9f30612fb545c97
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Wed Dec 9 10:32:26 2015 +1100
+
+    re-established old weekly files
+
+commit da789c0003d2f86782392037f775d55f9bf5f964
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Wed Dec 9 10:16:44 2015 +1100
+
+    update to data_local
+
+commit 5a48d9cb7987c855092b27e57ffd13117c8d77f8
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Wed Dec 9 09:59:50 2015 +1100
+
+    move to data_local
+
+commit cc9ded458f512114338369c4c0145113554532d4
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Wed Dec 9 01:08:00 2015 +1100
+
+    candidate fix for temp file problem
+
+commit 5902a248713c54d4c45eb0b24cd5c074b8d2036a
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Wed Dec 9 00:34:14 2015 +1100
+
+    build
+
+commit 230ec63cc740d936ec7f30875db43c3b7501e8c0
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 23:59:40 2015 +1100
+
+    tidy
+
+commit f8d22facea2776ef12a7b5dfe87cf57046c49014
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 23:45:26 2015 +1100
+
+    readfastic is now the 0-4 values, not the binary mask
+
+commit cf04b353c8c676df7fdab0f40a9d7f46a4b4fdb7
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 16:54:13 2015 +1100
+
+    build
+
+commit 9df430d5bfa2f05177c21b9a2db96ff9c31a61c9
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 16:54:02 2015 +1100
+
+    new location for fastice
+
+commit a083249f8313137b2a9a6d39dc81eb6e403e0495
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 16:46:41 2015 +1100
+
+    remove old behaviour
+
+commit dd3ba6dc327c7fe22ed8fcaa3c5181ca7de1a76a
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 16:46:28 2015 +1100
+
+    new file moved from raadtools.R
+
+commit 843ea0fdfd6d94207dfcae5aa3d30fc12ab82286
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 16:46:09 2015 +1100
+
+    cleanup
+
+commit 4174ad42bc32e3744f18f19c7dc6ac8ceda48428
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 16:42:25 2015 +1100
+
+    readmld nows looks in data_local
+
+commit 8f48be7661e2a7b4b16bd8e19624a61421d9b9d6
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 15:41:04 2015 +1100
+
+    new location for fast ice files, needs testing
+
+commit c87ee25ecc889c3f3b07dd4695faf2b6d1b42d7b
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 15:32:32 2015 +1100
+
+    cleanup
+
+commit 723374eec998f3c117d13533667bd389e00c04ac
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 15:32:00 2015 +1100
+
+    build
+
+commit 96306e53a113f534ede1038423ad56c9d0f0ade6
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 15:31:24 2015 +1100
+
+    new network location
+
+commit 6b423392468a9fac1ebac71e1fc86ab2f7646d08
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 15:30:55 2015 +1100
+
+    Orsi in its own file
+
+commit bc2fb689165a1fac1b0dfa92549893f3e6b0734a
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 14:14:51 2015 +1100
+
+    Gebco 2014
+
+commit 198c8abf36c9db94b23422a0435c349dfa83c941
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 12:19:33 2015 +1100
+
+    update file finders
+
+commit 3ed14e4b71344eb9b51284a9f269a2b2438eb083
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 10:13:18 2015 +1100
+
+    roll version
+
+commit a51f236716a9e5c237c74bbaca2aa4ff54226bf7
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 10:12:10 2015 +1100
+
+    tidy
+
+commit 6e0916497857ae2dcc8068f70178b2b27a6bf719
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 10:12:00 2015 +1100
+
+    cleanup
+
+commit 0ba90d2fbd6cca71ddf851523f4a275953bd0234
+Merge: af2e234 ad9d77b
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Tue Dec 8 10:10:28 2015 +1100
+
+    Merge branch 'master' of https://github.com/AustralianAntarcticDivision/raadtools
+
+commit ad9d77b70dff1a30633d7d3e9ed335a78fbf0f9b
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Dec 5 16:46:14 2015 +1100
+
+    Update amsr2.R
+    
+    fix stray char
+
+commit 3e4ce0939ff070487fc546d74d7c5a322f2fb2f0
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sat Dec 5 14:08:07 2015 +1100
+
+    amsr2 files
+
+commit 51c4d83530dc8cbfe05c7093975e0608d90af1fa
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Thu Dec 3 13:13:21 2015 +1100
+
+    Update chla.R
+    
+    remove grep stub (?)
+
+commit 51efc07e6d06208007b6ee85ff1985fb0ca0d6e7
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Thu Dec 3 13:09:21 2015 +1100
+
+    Update ocfiles.R
+    
+    new ocfiles
+
+commit 04ee59096c41f4e009e96f250ea2fd46491576b8
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Wed Nov 25 11:51:39 2015 +1100
+
+    Update ocfiles.R
+    
+    fixes for pattern matching (basically \\.main versus .*\\.nc")
+
+commit b83e495751c8d7685fe907bff4f30b0ac35a9491
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Wed Nov 25 11:25:24 2015 +1100
+
+    Update ocfiles.R
+    
+    default .nc rather than .main
+
+commit 5499dd1d129d9f0ce504520aa4bbf9c8ff182f1d
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Wed Nov 4 09:46:43 2015 +1100
+
+    Update readme.md
+    
+    update note about datadir path
+
+commit af2e2345c94ba6dc3cdb0da902d5cb63261e1594
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Mon Oct 26 14:02:07 2015 +1100
+
+    only read both if needed
+
+commit 70cd593bc530f4753fcb151daf02b0391142af96
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Mon Oct 26 13:46:55 2015 +1100
+
+    mean line
+
+commit ca00ab0e219129b0ebefd87f2fe062d499cbc36e
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Tue Sep 15 22:59:08 2015 +1000
+
+    Update readmodis.R
+
+commit c76a7b2b4d706c8e179eae23860a8f5afcdce492
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Tue Sep 15 22:58:45 2015 +1000
+
+    Update readmodis.R
+
+commit 26f6d73a2f98fc66a740260dd7d54c08f0c1bc25
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Tue Sep 15 15:26:54 2015 +1000
+
+    Update NAMESPACE
+
+commit 5c6b84d5c68caec7ce92ec011870642469cb6be7
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Sun Sep 13 14:02:00 2015 +1000
+
+    Update raadtools.R
+    
+    import overlay from raster, not sp
+
+commit a793f13b67109ea8f0237163fbd41dc64c0afada
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Tue Sep 1 16:24:09 2015 +1000
+
+    Update readmodis.R
+
+commit 9ad1b801719a49393f46ab346064500a536670cc
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Tue Sep 1 16:16:23 2015 +1000
+
+    Update readmodis.R
+
+commit 1ca91494ad66f921bcc0459e1ecbf689ca76c947
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Tue Aug 25 13:25:56 2015 +1000
+
+    Update NEWS
+
+commit 3ed862f21efde622ce51ee7087fd917329f6b720
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Tue Aug 25 13:21:25 2015 +1000
+
+    Update readmodis.R
+
+commit de53db33cc64345457b6c69b9ff2e0c00015910d
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Tue Aug 25 13:15:57 2015 +1000
+
+    Update readmodis.R
+
+commit e65e89f78377ac2e5f8ed094a0d574f628332cd4
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Tue Aug 25 13:09:58 2015 +1000
+
+    Create readmodis.R
+    
+    proto read function for general modis
+
+commit d5d7785e8af7fcc1771a6e6bb4b649d80445e02b
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Aug 19 14:23:09 2015 +1000
+
+    high level worker functions
+
+commit 1cca49bcd78990e408b8d920ec2180b528e903bf
+Merge: 7bebbe2 debb675
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Aug 19 14:21:02 2015 +1000
+
+    updates
+    
+    Merge branch 'master' of https://github.com/AustralianAntarcticDivision/raadtools
+    
+    Conflicts:
+    	tests/test-all.R
+    	tests/testthat/testthat_readwind.R
+
+commit 7bebbe2bf8d505e43e178bfeae1e0fb42fd81776
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Aug 19 14:13:03 2015 +1000
+
+    tests
+
+commit debb675cf6cfc6d610c06a249bf6e794e4b127da
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Thu Jul 30 08:19:11 2015 +1000
+
+    turn off chla tests for now
+
+commit 7ce439428cfe77dfe627d9b6fbce5ebcfefb03b0
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Thu Jul 30 08:13:49 2015 +1000
+
+    turn off broken tests
+
+commit afad6e5d3c22c73c180442194128c62752c86c86
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Thu Jul 30 07:56:46 2015 +1000
+
+    setNA
+
+commit ba13f735059f188eadf66862a3a08e42abfb0d55
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Thu Jul 30 07:56:38 2015 +1000
+
+    avoid zipped files
+
+commit c77608fd9e78567cb8f36910f186f021ee2174ed
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Thu Jul 30 07:18:00 2015 +1000
+
+    fix for readsst (monthly broke everything)
+
+commit e6079c502a292da443e68744f0c5162676e9e0bf
+Author: Michael Sumner <mdsumner@gmail.com.com>
+Date:   Thu Jul 30 07:17:38 2015 +1000
+
+    utils internal
+
+commit b66dea2b9f140fd40ae1184fd5b116cb7b25f64d
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 28 14:51:44 2015 +1000
+
+    Etopo1 and Etopo2 updated
+
+commit 70b923d1f4ed308f27795abd736665e322f84d85
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 28 10:47:18 2015 +1000
+
+    crop and rotate for monthly mask
+
+commit a68da033949d062afb1984bb3451a8b602d9a244
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 28 10:45:32 2015 +1000
+
+    apply mask to monthly sst
+
+commit 6442dd9b39ed57e843c7f63a4f38119264a2e86e
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 28 10:28:34 2015 +1000
+
+    fix bug in monthly sst
+
+commit f03964b50a2059768782430519eee5d48cb75214
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Tue Jul 21 14:47:58 2015 +1000
+
+    Update derivaadc.R
+    
+    undo the extent over ride
+
+commit 9e08a9793c657cfcb19c361a689acb12983eebfe
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 14:41:51 2015 +1000
+
+    cleanup
+
+commit b25f5354542a73ee65f6893955b7603346817dd5
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 14:37:54 2015 +1000
+
+    merge dev-derivaadc and include cell extent override (corners not centres)
+
+commit 0d9fe31002b662c8238e6fbe28d6487a51f6eefb
+Merge: 1ee98c0 45d402f
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 14:30:10 2015 +1000
+
+    Merge remote-tracking branch 'origin/dev-derivaadc'
+
+commit 1ee98c0a364e95c22c5b73396c26609afef1fa0b
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 14:28:36 2015 +1000
+
+    Stack always
+
+commit c5e0dc2de6b886ab72f255a50bf80f260f8f2283
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 14:28:27 2015 +1000
+
+    remove hard code from test
+
+commit cb1f6c31e607165ec17f3db0af44b6e6468119f0
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 14:28:10 2015 +1000
+
+    error message was wrong
+
+commit 45d402f86cb084a19741ad36d7a9cde92952202f
+Author: Ben Raymond <ben.raymond@aad.gov.au>
+Date:   Tue Jul 21 14:14:59 2015 +1000
+
+    initial function for reading AADC derived files
+
+commit dc509e8e42e1491b9fe3c1bcb2cbc8d189782dbb
+Merge: d7adbe5 11dcf63
+Author: Ben Raymond <ben.raymond@aad.gov.au>
+Date:   Tue Jul 21 14:10:18 2015 +1000
+
+    Merge branch 'master' of https://github.com/AustralianAntarcticDivision/raadtools
+
+commit d7adbe5b05d4ab2d0c68819d7fb352dd0db9cb6c
+Author: Ben Raymond <ben.raymond@aad.gov.au>
+Date:   Tue Jul 21 14:09:42 2015 +1000
+
+    help updated for monthly time resolution option
+
+commit 11dcf6361661f118d265de2ef43c8f7793a33296
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 13:40:00 2015 +1000
+
+    this time
+
+commit effd9a4fda700c44f9acd9dd59f98fa44e0e29df
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 13:30:23 2015 +1000
+
+    get the bands right . . .
+
+commit 3b094e67e438d2f90acb92a490ff51bc2a6929f5
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 13:27:34 2015 +1000
+
+    band not bands
+
+commit c88301a5fbaf72fa52f3a3515449a86dbcfb48db
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 13:24:55 2015 +1000
+
+    needed to apply the sst bands
+
+commit 632b476166fcb4ce72c58cd871751523a8a603f0
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 12:05:36 2015 +1000
+
+    remove broken examples
+
+commit ed0a7e86aded1c9e6f85a1325cb068e7c1463666
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 11:26:24 2015 +1000
+
+    turn off tests for prod and fastice
+
+commit 2d94f4940958793f7447591c92de4a893984eef5
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 10:56:00 2015 +1000
+
+    tidy
+
+commit 292083dfcb4fd439bd134cfde1be2f929f5e8fa3
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 10:55:43 2015 +1000
+
+    george terre adelie cannot be supported fully at the moment
+
+commit 212b58c0c641dbcdd3f27f9611c53ffe33be109b
+Author: Michael Sumner <Michael.Sumner@aad.gov.au>
+Date:   Tue Jul 21 10:52:36 2015 +1000
+
+    cleanup, restructure chla
+
+commit 30f09749702f4773c202a1c04eecb14f88dc508a
+Author: Ben Raymond <ben.raymond@aad.gov.au>
+Date:   Tue Jul 21 09:31:05 2015 +1000
+
+    monthly SST support added back in
+
+commit 20052afe0558b18967379ec99fb1c737230aa73b
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Fri Jun 12 21:40:56 2015 +1000
+
+    need to pass through ... for other args!
+
+commit cc8277f8a2b9965aeecbcaf09b7d4869ceafbe1c
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Fri Jun 12 21:40:28 2015 +1000
+
+    typo
+
+commit 72d06ec85ff60ebebf5ef838552dd6af6d2891a5
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Fri Jun 12 21:40:18 2015 +1000
+
+    restore AMSR2
+
+commit 57c824142811a524be54527d8fb6508f6c082701
+Merge: 7c73c3f 0470696
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Thu Jun 11 16:05:48 2015 +1000
+
+    Merge branch 'master' of https://github.com/AustralianAntarcticDivision/raadtools
+
+commit 7c73c3fc8831b321be927b452d1dd48329f67a5f
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Thu Jun 11 16:04:55 2015 +1000
+
+    bump dev version
+
+commit 3194e2aa20184d614165985867c267633f7afede
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Thu Jun 11 16:04:18 2015 +1000
+
+    warning for HDF4
+
+commit 4502c9d8026a5aa61ff48c96af18e9243fa0f969
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Thu Jun 11 16:01:15 2015 +1000
+
+    fix for AMSR2 data
+
+commit 04706969f6cbdd1202db6754509042e3e5e643bc
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Wed Jun 10 12:14:58 2015 +1000
+
+    Update extract.R
+    
+    fix for not passing in ... to x()
+
+commit 39144942396536fb0575bcf11b12d1f28d0e1670
+Author: Michael Sumner <mdsumner@gmail.com>
+Date:   Wed Jun 10 12:11:43 2015 +1000
+
+    Update ice.R
+    
+    turn off big stacker, which was failing to apply setNA/rescale
+
+commit 30a1a97796eb233f718b806133bc86314759a3f0
+Author: mdsumner <mdsumner@gmail.com>
+Date:   Thu Jun 4 11:38:19 2015 +1000
+
+    oops, thanks check
+
+commit c7744dd39725890873a6d249025217c3e917b37f
+Author: mdsumner <mdsumner@gmail.com>
+Date:   Wed Jun 3 21:28:29 2015 +1000
+
+    thanks again R CMD check
+
+commit 700c861ff13f84f3726fef8e6a3a42b50418c7e9
+Author: mdsumner <mdsumner@gmail.com>
+Date:   Wed Jun 3 21:26:49 2015 +1000
+
+    extremely obscure problem, found by R CMD check
+
+commit 629690ad05ce13e385514780534aeff89a73c774
+Author: mdsumner <mdsumner@gmail.com>
+Date:   Wed Jun 3 21:16:48 2015 +1000
+
+    un mangled!
+
+commit e8268fcd21a09b30c34b27c829bb770393e3053c
+Merge: 7d7c154 fb0b1b3
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Mon Jun 1 11:53:00 2015 -1000
+
+    merge
+
+commit 7d7c154cc4245f555994f2cd0d55487e6fda6a5c
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Mon Jun 1 11:40:35 2015 -1000
+
+    fix for set projection and date-time
+
+commit fb0b1b39db0f71b07b045e0a893e228334bf350a
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Mon Jun 1 11:40:35 2015 -1000
+
+    fix for set projection and date-time
+
+commit c2bcaf1ca6871ab4dd594c9297873a4d5f084b25
+Author: mdsumner <mdsumner@gmail.com>
+Date:   Sat May 16 07:36:24 2015 +1000
+
+    Update readme.md
+
+commit 894cacc1cdd877e1517ba7892ae43317d7a50145
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Apr 28 19:57:58 2015 -1000
+
+    update install docs rmd
+
+commit 7d06b8d14a6a7e73eab4a59c87107b215b107a73
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Apr 28 19:55:43 2015 -1000
+
+    update install docs
+
+commit 2735c3abe11c3dfbd22346fb36bba4a1bb0411b0
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Apr 28 19:50:56 2015 -1000
+
+    update roxygen docs
+
+commit 8933a00f553e805405d4de0c0e985fcf93caaca3
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Apr 28 19:49:48 2015 -1000
+
+    update author email
+
+commit 40f8116c56bd9fc3e3fcca822d7c06b1dc344665
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Apr 28 19:48:05 2015 -1000
+
+    update remote home readme
+
+commit 0c776f8b19f436657f91ce197c2223053d849f09
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Apr 28 19:07:38 2015 -1000
+
+    install details readme
+
+commit 36aceea17a5678a3a9e041ba7b1434e4b091c71f
+Merge: c97cc9c 5f3d3af
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Thu Mar 26 13:04:14 2015 -1000
+
+    Merge branch 'master' into dev
+
+commit 5f3d3afd8cb7ee377ac98dd19352bc4fef2558e0
+Author: mdsumner <mdsumner@gmail.com>
+Date:   Fri Mar 27 10:03:23 2015 +1100
+
+    Update readme.md
+
+commit c97cc9cacc2c99dbee6f3ad6662ab9c4810eec7d
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Mar 25 18:52:17 2015 -1000
+
+    no metadata til netcdf generalization
+
+commit 87b211621bb1395a4549451676de42f7a603075a
+Merge: c18097e 073d4f0
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Mar 25 18:49:07 2015 -1000
+
+    Merge branch 'metadata' into dev
+    
+    Conflicts:
+    	R/wind.R
+
+commit c18097eb6bdd82882acad980573854c56d956c3b
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Wed Mar 25 18:31:20 2015 -1000
+
+    new read derived ice produces
+
 commit 2c1a5c6df5871e5b072626c3106e39c7cdf75fab
 Merge: 55cfeea 22878ea
 Author: Mike Sumner <mdsumner@gmail.com>
@@ -46,6 +757,12 @@ Author: Mike Sumner <mdsumner@gmail.com>
 Date:   Wed Mar 25 03:58:33 2015 -1000
 
     prepare for release
+
+commit 073d4f0b67bad5a44c008c0e4a398caa85267c79
+Author: Mike Sumner <mdsumner@gmail.com>
+Date:   Tue Mar 24 02:04:27 2015 -1000
+
+    metadata attempt
 
 commit 2755aca1db71f3eabcb531d0e897f5481c78dc3b
 Author: Mike Sumner <mdsumner@gmail.com>

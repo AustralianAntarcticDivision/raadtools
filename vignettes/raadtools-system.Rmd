@@ -1,0 +1,27 @@
+---
+title: "The raadtools system"
+author: "Michael Sumner"
+date: "December 21, 2015"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R AAD Tools - the 'raadtools' package
+
+The 'raadtools' package is a system for obtaining and processing data from a wide variety of spatial and spatio-temporal data streams. It works with a local cache of each data set in its native format, as much as possible these files are left in their original source and all standardization is done either at read time or by augmenting the data sets with required metadata files. It is paired with a "synchronization" package 'raadsync' where data sets are registered with a simple configuration mechanism that is then installed to ensure the cache is kept up to date, to mirror the source data. 
+
+We have built this system to also work with a local collection that is customized something something
+
+## Examples of usage
+
+read by date
+
+extract values by points-in-time
+
+## Background R tools 
+
+raster, rgdal, ncdf4, rgeos, sp
+

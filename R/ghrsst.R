@@ -1,4 +1,11 @@
 
+# 
+# changes in 2015?
+# 
+# 286
+# 20151013-JPL-L4UHfnd-GLOB-v01-fv04-MUR.nc
+# 317
+# 20151113090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc
 
 
 #' GHRSST L4 files
@@ -13,10 +20,11 @@ ghrsstfiles <- function() {
   cfiles1 <- grep("ghrsst", cfiles, value = TRUE)
   cfiles2 <- grep("L4", cfiles1, value = TRUE)
   cfiles3 <- grep("GLOB/JPL/MUR", cfiles2, value = TRUE)
-  cfiles4 <- grep("MUR.nc$", cfiles3, value = TRUE)
-  
-  files <- data.frame(fullname = cfiles4, stringsAsFactors = FALSE)
-  files$date <- as.POSIXct(strptime(basename(cfiles4), "%Y%m%d"), tz = "GMT")
+  #cfiles4 <- grep("MUR.nc$", cfiles3, value = TRUE)
+  cfiles4 <- grep("GLOB-v0", cfiles3, value = TRUE)
+  cfiles5 <- grep("nc$", cfiles4, value = TRUE)
+  files <- data.frame(fullname = cfiles5, stringsAsFactors = FALSE)
+  files$date <- as.POSIXct(strptime(basename(cfiles5), "%Y%m%d"), tz = "GMT")
   
   ## remove dupes, prefer later versions
   
@@ -97,7 +105,10 @@ readghrsst  <- function (date, time.resolution = c("daily"),
     r0 <- writeRaster(r0, ...)
   }
   
-  if (nfiles == 1) r0 <- r0[[1L]]
+  if (nfiles == 1) {
+    r0 <- r0[[1L]]
+    r0 <- setZ(r0, files$date)
+  }
  
    r0
   

@@ -288,7 +288,7 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   nas <- is.na(dates)
   dates <- dates[!nas]
   cfiles <- cfiles[!nas]
-  
+
   cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = dates,
                     fullname = cfiles, stringsAsFactors = FALSE)[order(dates), ]
   
@@ -315,7 +315,9 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
            
   files <- files[order(files$date), ]  
   ## keep the last of the duplicates
-  files[!rev(duplicated(rev(files$date))), ]
+  #files[!rev(duplicated(rev(files$date))), ]
+  files[!duplicated(files$date), ]
+  
 }
 
 

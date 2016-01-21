@@ -191,22 +191,6 @@ setMethod("extract", signature(x = 'function', y = 'missing'),
           function(x, y, ctstime = FALSE, fact = NULL, verbose = TRUE, ...) {
             x(...)}
   )
-##' @aliases extract,function,POSIXt-method
-##' @name extract
-##' @export
-setMethod("extract", signature(x = 'function', y = 'POSIXt'), .read.generic)
-##' @aliases extract,function,Date-method
-##' @name extract
-##' @export
-setMethod("extract", signature(x = 'function', y = 'Date'), .read.generic)
-##' @name extract
-##' @export
-##' @aliases extract,function,character-method
-setMethod("extract", signature(x = 'function', y = 'character'), .read.generic)
-##' @name extract
-##' @export
-##' @aliases extract,function,data.frame-method
-setMethod("extract", signature(x = 'function', y = 'data.frame'), .big.extract)
 
 
 

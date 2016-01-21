@@ -184,15 +184,10 @@
 ##' extract(readsst, a, method = "bilinear")
 ##' a$time <-  sort(as.Date("2005-01-01") + sample(c(0, 0, 0, 8, 20, 50), nrow(a), replace = TRUE))
 ##' extract(readsst, a)
-##' @aliases extract,function,missing-method
 ##' @name extract
 ##' @export
-setMethod("extract", signature(x = 'function', y = 'missing'), 
-          function(x, y, ctstime = FALSE, fact = NULL, verbose = TRUE, ...) {
-            x(...)}
-  )
-
-
+##' @aliases extract,function,data.frame-method
+setMethod("extract", signature(x = 'function', y = 'data.frame'), .big.extract)
 
 
 

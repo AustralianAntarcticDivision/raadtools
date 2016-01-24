@@ -106,7 +106,7 @@ readghrsst  <- function (date, time.resolution = c("daily"),
   if (nfiles == 1) r0 <- r0[[1L]]
  
   #wtf
-  r0 <- setZ(r0, getZ(x) + ISOdatetime(1981, 1, 1, 0, 0, 0, tz = "GMT")) ##1981-01-01 00:00:00)
+  r0 <- setZ(r0, getZ(r0) + ISOdatetime(1981, 1, 1, 0, 0, 0, tz = "GMT")) ##1981-01-01 00:00:00)
    r0
   
 }

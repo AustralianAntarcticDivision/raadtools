@@ -23,7 +23,7 @@ ocfiles <- function(time.resolution = c("daily", "weekly"),
   time.resolution <- match.arg(time.resolution)
   product <- match.arg(product)
   ext <- match.arg(ext)
-  varname <- match.arg(varname)
+  #varname <- match.arg(varname)
   type <- match.arg(type)
   
   time <- switch(time.resolution, 

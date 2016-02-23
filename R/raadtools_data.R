@@ -2,6 +2,7 @@
 .possiblepaths <- function() {
   a <- list(default.datadir =  c(
     "/Volumes/files/data",
+    "//aad.gov.au/files/AADC/Scientific_Data/Data/gridded_new",
     "/mnt/raad"))
   a
 }

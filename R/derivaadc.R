@@ -12,6 +12,7 @@
 ##' @return \code{\link[raster]{raster}} object
 ##' @seealso \code{\link{derivaadcfiles}} for details on the repository of
 ##' data files, \code{\link[raster]{raster}} for the return value
+##' @references \link{http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=Polar_Environmental_Data}
 ##' @examples
 ##' \dontrun{
 ##' prods <- c("bathymetry","chl_summer_climatology")

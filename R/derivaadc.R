@@ -50,7 +50,7 @@ readderivaadc <- function(products,
 
   projection(r) <- prj
   ## no extent(r) <- extent(-180, 180, -80, -30)
-  names(r) <- basename(files$file)
+  names(r) <- gsub("\\.nc$","",basename(files$file)) ## drop .nc extension from names
   r
 }
 

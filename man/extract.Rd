@@ -3,22 +3,9 @@
 \docType{methods}
 \name{extract}
 \alias{extract}
-\alias{extract,function,Date-method}
-\alias{extract,function,POSIXt-method}
-\alias{extract,function,character-method}
 \alias{extract,function,data.frame-method}
-\alias{extract,function,missing-method}
 \title{extract}
 \usage{
-\S4method{extract}{`function`,missing}(x, y, ctstime = FALSE, fact = NULL,
-  verbose = TRUE, ...)
-
-\S4method{extract}{`function`,POSIXt}(x, y, ...)
-
-\S4method{extract}{`function`,Date}(x, y, ...)
-
-\S4method{extract}{`function`,character}(x, y, ...)
-
 \S4method{extract}{`function`,data.frame}(x, y, ctstime = FALSE,
   fact = NULL, verbose = TRUE, ...)
 }

@@ -25,4 +25,4 @@ Authors@R: c(
 Description: Tools for reading, plotting and manipulating spatial data,
     particularly from remote sensing and model output.
 License: GPL-3
-RoxygenNote: 5.0.0
+RoxygenNote: 5.0.1

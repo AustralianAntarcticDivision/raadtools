@@ -1,3 +1,6 @@
+context("fronts")
+
+
 require(testthat)
 require(raadtools)
 

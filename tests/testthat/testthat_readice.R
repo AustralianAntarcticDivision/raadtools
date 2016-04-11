@@ -1,3 +1,5 @@
+context("sea ice")
+
 require(testthat)
 require(raadtools)
 

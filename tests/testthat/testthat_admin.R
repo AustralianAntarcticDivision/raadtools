@@ -1,3 +1,5 @@
+
+#context("basic admin")
 # library(testthat)
 # library(raadtools)
 # 

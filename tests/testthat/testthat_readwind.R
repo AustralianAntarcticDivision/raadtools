@@ -1,3 +1,5 @@
+context("winds")
+
 require(testthat)
 require(raadtools)
 

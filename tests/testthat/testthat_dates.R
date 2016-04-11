@@ -1,5 +1,7 @@
-library(testthat)
-library(raadtools)
+
+#context("basic date")
+#library(testthat)
+#library(raadtools)
 
 ##dts <- c("2001-01-02", NA, "2009-10-01", "2000-01-01")
 

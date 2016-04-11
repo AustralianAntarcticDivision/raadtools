@@ -1,3 +1,5 @@
+context("basic oc")
+
 library(testthat)
 library(raadtools)
 

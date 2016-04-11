@@ -1,4 +1,4 @@
-
+context("surface currents")
 require(testthat)
 require(raadtools)
 require(ncdf)

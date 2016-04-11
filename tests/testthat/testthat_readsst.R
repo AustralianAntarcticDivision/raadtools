@@ -1,4 +1,4 @@
-
+context("sea surface temperature")
 
 require(testthat)
 require(raadtools)

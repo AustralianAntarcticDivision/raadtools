@@ -1,3 +1,5 @@
+context("topography")
+
 require(testthat)
 require(raadtools)
 test_that("all file options give existing files, with warnings where appropriate", {

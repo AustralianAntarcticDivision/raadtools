@@ -1,3 +1,5 @@
+context("file exist")
+
 require(testthat)
 
 require(raadtools)

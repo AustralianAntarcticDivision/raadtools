@@ -1,3 +1,5 @@
+context("basic extract")
+
 library(testthat)
 library(raadtools)
 

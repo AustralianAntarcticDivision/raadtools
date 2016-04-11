@@ -1,4 +1,4 @@
-
+context("sea surface height")
 
 require(testthat)
 require(raadtools)

@@ -79,16 +79,21 @@ sshfiles <- function(time.resolution = c("daily", "monthly", "monthly_clim", "se
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param verbose print messages on progress etc.
 ##' @param ... passed to brick, primarily for \code{filename}
+##' @param inputfiles input the files data base to speed up initialization
 ##' @export
 ##' @return data.frame
 readssh <- function (date, time.resolution = c("daily", "monthly", "monthly_clim", "seasonal_clim"),
                      xylim = NULL, lon180 = TRUE, ssha = FALSE,
                      latest = FALSE,
-                     returnfiles = FALSE, verbose = TRUE, ...)
+                     returnfiles = FALSE, verbose = TRUE, ..., inputfiles = NULL)
 {
   time.resolution <- match.arg(time.resolution)
+  if (is.null(inputfiles)) {
+    files <- sshfiles(time.resolution = time.resolution, ssha = ssha)
+  } else {
+    files <- inputfiles
+  }
   
-  files <- sshfiles(time.resolution = time.resolution, ssha = ssha)
   if (returnfiles)
     return(files)
   if (missing(date)) date <- min(files$date)

@@ -6,7 +6,7 @@ o added tests for inputfiles
 
 o enabled extract(function, ...) to accept inputfiles argument
 
-o add inputfiles to readcurr, readsst
+o add inputfiles to readcurr, readsst, readssh
 
 o add readmsst function 
 

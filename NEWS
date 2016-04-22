@@ -1,6 +1,10 @@
-- add readmsst function 
 
-CHANGES in raadtools DEV
+
+CHANGES in raadtools 0.3.2
+
+o add inputfiles to readcurr
+
+o add readmsst function 
 
 o bug fix for readsst
 

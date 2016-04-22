@@ -6,7 +6,8 @@
 \usage{
 readcurr(date, time.resolution = c("daily", "weekly"), xylim = NULL,
   lon180 = TRUE, magonly = FALSE, dironly = FALSE, uonly = FALSE,
-  vonly = FALSE, latest = FALSE, returnfiles = FALSE, ...)
+  vonly = FALSE, latest = FALSE, returnfiles = FALSE, ...,
+  inputfiles = NULL)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}

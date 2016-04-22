@@ -12,8 +12,8 @@
 ##' @export
 ##' @return data.frame of \code{file} and \code{date}
 ocfiles <- function(time.resolution = c("daily", "weekly"),
-                    product = c("MODISA", "SeaWiFS"), 
-                    varname = c("RRS", "CHL", "POC", "KD490", "PAR"), 
+                    product = c("MODISA", "SeaWiFS", "VIIRS"), 
+                    varname = c("RRS", "CHL", "POC", "KD490", "NPP_PAR"), 
                     type = c("L3b", "L3m"),
                     bz2.rm = TRUE, 
                     ext = c("nc", "main"), 
@@ -23,7 +23,7 @@ ocfiles <- function(time.resolution = c("daily", "weekly"),
   time.resolution <- match.arg(time.resolution)
   product <- match.arg(product)
   ext <- match.arg(ext)
-  varname <- match.arg(varname)
+  #varname <- match.arg(varname)
   type <- match.arg(type)
   
   time <- switch(time.resolution, 

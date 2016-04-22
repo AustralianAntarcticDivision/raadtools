@@ -27,6 +27,9 @@ prods <- c("bathymetry","chl_summer_climatology")
 x <- readderivaadc(prods)
 }
 }
+\references{
+\link{http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=Polar_Environmental_Data}
+}
 \seealso{
 \code{\link{derivaadcfiles}} for details on the repository of
 data files, \code{\link[raster]{raster}} for the return value

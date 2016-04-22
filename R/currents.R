@@ -140,7 +140,7 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
     cleanup <- c(cleanup, filename(vraster))
   }
   
-  varnm <- names(uraster)[1]
+  
   if (magonly) r0 <- sqrt(uraster * uraster + vraster * vraster)
   if (dironly) r0 <- overlay(uraster, vraster, fun = function(x, y) (90 - atan2(y, x) * 180/pi) %% 360)
   if (uonly) r0 <- uraster
@@ -163,6 +163,7 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
   cleanup <- c(cleanup, filename(r0))
   
   if (nlayers(r0) == nrow(files)) r0 <- setZ(r0, files$date)
+  varnm <- names(r0)[1]
   varnm <- gsub("\\.", " ", varnm)
   varnm <- paste(sapply(strsplit(varnm, " "), function(x) x[-length(x)]), collapse = " ")
   if (magonly) varnm <- "Absolute geostrophic velocity (Magnitude m/s)"

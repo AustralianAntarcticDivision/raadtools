@@ -98,17 +98,17 @@ readfronts <- function(date,
                        returnfiles = FALSE, RAT = TRUE, ...) {
   time.resolution <- match.arg(time.resolution)
   ftx <- .allfilelist()
-  if (missing(date)) date <- min(files$date)
-  
-  date <- timedateFrom(date)
-  cfiles <- grep("fronts", ftx, value = TRUE)
+ cfiles <- grep("fronts", ftx, value = TRUE)
   cfiles1 <- grep("ACCfronts.nc", cfiles, value = TRUE)
   product <- match.arg(product)
   wks <- seq(timedateFrom("1992-10-14"), by = "7 days", length = 854)
   ## get file names and dates and full path
   files <- data.frame(fullname = cfiles1,
                       date = wks, band = seq_along(wks), stringsAsFactors = FALSE)
+    if (missing(date)) date <- min(files$date)
   
+  date <- timedateFrom(date)
+ 
   ##frontname <- c("sBdy", "SACCF_S", "SACCF_N", "PF_S", "PF_M", "PF_N", "SAF_S",
   ##          "SAF_M", "SAF_N", "SAZ_S", "SAZ_M", "SAZ_N")
   

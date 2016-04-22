@@ -45,7 +45,7 @@ readchla <- function(date, time.resolution = c("weekly", "monthly"),
                      ...) {
   
   ## Note, fixing this can used the old updatechlafiles below
-  warning("readchla is going to be deprecated, it only works with a static collection of data, no longer updated")
+  warning("readchla only works with a static collection of data, no longer updated")
   time.resolution <- match.arg(time.resolution)
   product <- match.arg(product)
   files <- chlafiles(time.resolution = time.resolution, product = product)
@@ -107,7 +107,7 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
                       product = c("johnson", "oceancolor"),
                       platform = c("MODISA", "SeaWiFS"), ...) {
   
-  if (product == "oceancolor") stop('sorry MODISA not currently supported')
+  #if (product == "oceancolor") stop('sorry MODISA not currently supported')
   ##datadir <- getOption("default.datadir")
   product <- match.arg(product)
   platform <- match.arg(platform)
@@ -120,8 +120,15 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
   cfiles3 <- grep(time.resolution, cfiles2, value = TRUE)
   cfiles3 <- grep("nc$", cfiles3, value = TRUE)
   dates <- timedateFrom(strptime(substr(basename(cfiles3), 2, 8), "%Y%j"))
-  
-  
+  if (product == "oceancolor") {
+    return(cfiles3)
+    xfs <- .expandFileDateList(cfiles3)
+   # nc <- ncdf4::nc_open(cfiles3)
+  #  dates <- 
+   # dates <- timedateFrom(strptime(substr(basename(cfiles3), 2, 8), "%Y%j"))
+    dates <- xfs$date
+    cfiles3 <- xfs$fullname
+  }
   chlf <- data.frame(fullname= cfiles3, date = dates,  stringsAsFactors = FALSE)[order(dates), ]
   chlf
 }

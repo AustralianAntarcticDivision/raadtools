@@ -2,6 +2,7 @@
 .possiblepaths <- function() {
   a <- list(default.datadir =  c(
     "/Volumes/files/data",
+    "//aad.gov.au/files/AADC/Scientific_Data/Data/gridded_new",
     "/mnt/raad"))
   a
 }
@@ -25,7 +26,7 @@
   ## try RAAD_DIR, which may only be available to R CMD check from ~/.R/check.Renviron
   r <- getOption("repos")
   dd <- getOption("default.datadir")
-  print(Sys.getenv("RAAD_DIR"))
+ # print(Sys.getenv("RAAD_DIR"))
   if (is.null(dd["default.datadir"])) {
     dd["default.datadir"] <- Sys.getenv("RAAD_DIR");
     options(repos = r, default.datadir = dd); 

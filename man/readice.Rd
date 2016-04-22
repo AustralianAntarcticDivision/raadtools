@@ -7,7 +7,7 @@
 readice(date, time.resolution = c("daily", "monthly"), product = c("nsidc",
   "amsr", "ssmi"), hemisphere = c("south", "north"), xylim = NULL,
   setNA = TRUE, rescale = TRUE, latest = FALSE, returnfiles = FALSE,
-  ...)
+  inputfiles = NULL, ...)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}

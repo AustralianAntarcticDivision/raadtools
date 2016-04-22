@@ -25,7 +25,3 @@ amsr2files <- function(date, product = c("tif", "hdf", "nic", "visual"),
     cfs
     
 }
-  network_path <- function() {
-  file.path("Kerguelen2016_v3")
-  #file.path(getOption("default.datadir"), "Kerguelen2016_v3")
-}

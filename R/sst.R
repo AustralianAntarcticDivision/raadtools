@@ -31,7 +31,7 @@ sstfiles <- function(time.resolution = c("daily","monthly"), ...) {
                     fullname = cfiles, stringsAsFactors = FALSE)[order(dates), ]
       ## shouldn't be any, but no harm
       fs <- cfs[!duplicated(cfs$date), ]
-      if (nrow(fs) < nrow(cfs)) warning("Some duplicated files in OI-daily-V2 collection? Please report to maintainer. ")
+      #if (nrow(fs) < nrow(cfs)) warning("Some duplicated files in OI-daily-V2 collection? Please report to maintainer. ")
   } else {
       cfiles0 <- grep("ftp.cdc.noaa.gov/Datasets/noaa.oisst.v2/", ftx, value = TRUE)
       cfiles <- grep("sst.mnmean.nc$", cfiles0, value = TRUE)

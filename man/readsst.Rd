@@ -6,7 +6,8 @@
 \usage{
 readsst(date, time.resolution = c("daily", "monthly"), xylim = NULL,
   lon180 = TRUE, varname = c("sst", "anom", "err", "ice"), setNA = TRUE,
-  latest = FALSE, returnfiles = FALSE, readall = FALSE, ...)
+  latest = FALSE, returnfiles = FALSE, readall = FALSE, ...,
+  inputfiles = NULL)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -29,6 +30,8 @@ readsst(date, time.resolution = c("daily", "monthly"), xylim = NULL,
 \item{readall}{FALSE by default}
 
 \item{...}{passed in to brick, primarily for \code{filename}}
+
+\item{inputfiles}{input the files data base to speed up initialization}
 }
 \value{
 \code{\link[raster]{raster}} object

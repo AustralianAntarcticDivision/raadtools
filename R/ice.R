@@ -24,6 +24,7 @@
 ##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... passed to brick, primarily for \code{filename}
+##' @param inputfiles input the files data base to speed up initialization
 ##' @details For NSIDC data a \code{\link[raster]{ratify}}ied raster is returned if \code{setNA} and 
 ##' \code{rescale} are both set to \code{FALSE}.  Use \code{levels(x)} to return the data.frame of values 
 ##' and levels (there's no straight-through rule, all numeric values are explicit along with special
@@ -75,7 +76,7 @@ readice <- function(date,
                     xylim = NULL,
                     setNA = TRUE, rescale = TRUE, 
                     latest = FALSE,
-                    returnfiles = FALSE, inputfiles = NULL, ...) {
+                    returnfiles = FALSE,  ..., inputfiles = NULL) {
   
   time.resolution <- match.arg(time.resolution)
   product <- match.arg(product)

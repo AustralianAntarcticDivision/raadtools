@@ -94,3 +94,15 @@ test_that("ice projection is not missing", {
 })
 
 
+cf <- icefiles(time.resolution = "daily", product = "amsr")
+xyt <- data.frame(x = c(100, 120, 130, 145, 150), y = seq(-80, 20, length = 5),   
+                  dts = seq(as.Date("2011-01-03"), by = "1 month", length = 5)
+)
+test_that("read is ok with inputfiles", {
+  expect_that(readice("2015-01-01", product = "amsr", time.resolution = "daily", inputfiles = cf),
+            is_a("RasterStack"))
+  expect_that(extract(readice, xyt, product = "amsr", time.resolution = "daily"), is_a("numeric"))
+  expect_that(extract(readice, xyt, product = "amsr", time.resolution = "daily", inputfiles = cf), is_a("numeric"))
+})
+
+

@@ -7,7 +7,7 @@
 readice(date, time.resolution = c("daily", "monthly"), product = c("nsidc",
   "amsr", "ssmi"), hemisphere = c("south", "north"), xylim = NULL,
   setNA = TRUE, rescale = TRUE, latest = FALSE, returnfiles = FALSE,
-  inputfiles = NULL, ...)
+  ..., inputfiles = NULL)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -29,6 +29,8 @@ readice(date, time.resolution = c("daily", "monthly"), product = c("nsidc",
 \item{returnfiles}{ignore options and just return the file names and dates}
 
 \item{...}{passed to brick, primarily for \code{filename}}
+
+\item{inputfiles}{input the files data base to speed up initialization}
 }
 \value{
 \code{\link[raster]{raster}} object

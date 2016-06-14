@@ -65,6 +65,7 @@
     }
     ## TODO, will have to figure out how to do this
     args <- list(...)
+    
     if ("time.resolution" %in% names(args)) {
       files <- x(returnfiles = TRUE, time.resolution = args$time.resolution)
     } else {
@@ -91,7 +92,7 @@
     if (ctstime) {
       ## we need to store start and end values
       resm <- cbind(result, result)
-      thisx1 <- x(date[1L], verbose = FALSE)
+      thisx1 <- x(date[1L], verbose = FALSE, ...)  ## inputfiles via dots
       if(resize) thisx1 <- aggregate(thisx1, fact = fact, fun = "mean")
       for (i in seq_along(date)[-1]) {
         thisx2 <- x(date[i], verbose = FALSE)

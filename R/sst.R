@@ -124,6 +124,7 @@ sstfiles <- function(time.resolution = c("daily","monthly"), ...) {
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param readall FALSE by default
 ##' @param ... passed in to brick, primarily for \code{filename}
+##' @param inputfiles input the files data base to speed up initialization
 ##' @export
 ##' @return \code{\link[raster]{raster}} object
 ##' @seealso \code{\link{icefiles}} for details on the repository of
@@ -147,12 +148,19 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
                       varname = c("sst", "anom", "err", "ice"),
                       setNA = TRUE,
                       latest = FALSE,
-                      returnfiles = FALSE, readall = FALSE, ...) {
+                      returnfiles = FALSE, readall = FALSE, ..., inputfiles = NULL) {
   time.resolution <- match.arg(time.resolution)
   varname <- match.arg(varname)
   ## if (time.resolution == "monthly") stop("sorry, no monthly SST at the moment")
 
-  files <- sstfiles(time.resolution = time.resolution)
+  
+  if (is.null(inputfiles)) {
+    files <- sstfiles(time.resolution = time.resolution)
+    
+  } else {
+    files <- inputfiles
+  }
+  
   if (returnfiles)
     return(files)
 

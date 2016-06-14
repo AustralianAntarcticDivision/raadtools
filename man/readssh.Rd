@@ -6,7 +6,8 @@
 \usage{
 readssh(date, time.resolution = c("daily", "monthly", "monthly_clim",
   "seasonal_clim"), xylim = NULL, lon180 = TRUE, ssha = FALSE,
-  latest = FALSE, returnfiles = FALSE, verbose = TRUE, ...)
+  latest = FALSE, returnfiles = FALSE, verbose = TRUE, ...,
+  inputfiles = NULL)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -27,6 +28,8 @@ components, in degrees (0 north, 90 east, 180 south, 270 west)}
 \item{verbose}{print messages on progress etc.}
 
 \item{...}{passed to brick, primarily for \code{filename}}
+
+\item{inputfiles}{input the files data base to speed up initialization}
 }
 \value{
 data.frame

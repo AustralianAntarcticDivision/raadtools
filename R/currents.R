@@ -101,13 +101,20 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
                       uonly = FALSE,
                       vonly = FALSE,
                       latest = FALSE,
-                      returnfiles = FALSE, ...) {
+                      returnfiles = FALSE, ..., inputfiles = NULL) {
   time.resolution <- match.arg(time.resolution)
   if (time.resolution == "weekly") {
     return(.readcurr1(date, time.resolution = time.resolution, xylim = xylim, lon180 = lon180, magonly = magonly, dironly = dironly, 
              uonly = uonly, vonly = vonly, latest = latest, returnfiles = returnfiles, ...))
   }
-  files <- currentsfiles(time.resolution = time.resolution)
+  
+  if (is.null(inputfiles)) {
+    files <- currentsfiles(time.resolution = time.resolution)
+  } else {
+    files <- inputfiles
+  }
+  
+ 
   if (returnfiles)
     return(files)
   if (missing(date)) date <- min(files$date)
@@ -187,7 +194,7 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
 #  file.exists(filename(x))
   
   for (i in seq_along(cleanup)) {
-    print(cleanup[i])
+    #print(cleanup[i])
     if (file.exists(cleanup[i]) & (!cleanup[i] == filename(r0))) {
       unlink(cleanup[i])
       unlink(gsub("grd$", "gri", cleanup[i]))

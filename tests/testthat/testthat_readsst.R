@@ -59,6 +59,18 @@ test_that("daily is different from monthly", {
   expect_that(compareRaster(x1, x2), throws_error("different number or columns"))
 })
 
+
+
+cf <- sstfiles(time.resolution = "daily")
+xyt <- data.frame(x = c(100, 120, 130, 145, 150), y = seq(-80, 20, length = 5),   
+                  dts = seq(as.Date("2001-01-03"), by = "1 month", length = 5)
+)
+test_that("read is ok with inputfiles", {
+  expect_that(readsst("2015-01-01", time.resolution = "daily", inputfiles = cf), is_a("RasterStack"))
+  expect_that(extract(readsst, xyt,  time.resolution = "daily", inputfiles = cf), is_a("numeric"))
+})
+
+
 ## test_that("dates not available within 1.5 days give error", {
 ##     expect_that(readice("1978-10-18"), throws_error("no ice data file within"))
 ## })

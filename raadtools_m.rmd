@@ -1,0 +1,503 @@
+\documentclass{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\usepackage{url}
+
+\usepackage[unicode=true,pdfusetitle,bookmarks=true,bookmarksnumbered=true,
+bookmarksopen=true,bookmarksopenlevel=2,breaklinks=false,pdfborder={0 0 1},
+backref=false,colorlinks=true,urlcolor=blue]{hyperref}
+
+
+\hypersetup{pdfstartview={XYZ null null 1}}
+\usepackage{breakurl}
+
+
+% \VignetteIndexEntry{Using the raadtools package}
+% \VignetteEngine{knitr::knitr}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+
+
+
+\title{Using the {\tt raadtools} package}
+
+\author{Michael D. Sumner\footnote{Australian Antarctic Division, 203
+Channel Highway, Kingston, Tasmania 7050, Australia. {\tt michael.sumner@aad.gov.au}}}
+
+\maketitle
+\tableofcontents
+
+\section{Overview}
+
+The \textbf{raadtools} package provides a set of helper functions based on functionality in the \textbf{raster} package, to simplify fast and efficient use of time series environmental data including
+
+\begin{itemize}
+\item chlorophyll-a concentation
+\item colour images
+\item sea ice concentration
+\item sea surface current vectors
+\item sea surface height and height anomaly
+\item sea surface temperature 
+\item sea surface wind vectors. 
+\end{itemize}
+
+There is ongoing work to simplify extension of these tools to a wider range of data, but here we focus on the existing examples just to highlight the preferred ways of working with these data in \textbf{R}. 
+
+\section{Introduction}
+\label{sec:introduction}
+This document introduces the \textbf{raadtools} package. Some
+familiarity with \textbf{R} and the \textbf{raster} package is
+assumed.
+
+This package relies on the availability of a local file repository which must be present please contact the authors if you need assistance.
+
+
+
+The very first step is to load the package, which also triggers an attempt to connect to the file repository. 
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(raadtools)}
+\hlkwd{library}\hlstd{(raster)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+(If there's no message about trouble setting the repository then you
+are good to go.)
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{ice} \hlkwb{<-} \hlkwd{readice}\hlstd{()}
+\hlkwd{plot}\hlstd{(ice)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/minimal-read_ice-1} 
+
+}
+
+
+
+\end{knitrout}
+
+
+\section{Simple data read}
+\label{sec:simpleread}
+There are functions to read data based on a sequence of date-time
+values.
+
+
+At the simplest level, these functions may be run without setting any
+arguments and will return the first available time step for the
+default data source. This is handy for becoming familiar with the
+kinds of data before getting really specific. Plotting the resulting
+\textbf{ice} object provides a familiar polar view. These data are a
+single time slice from the daily passive microwave sea ice concentration, here the very first one that is available (from
+1978-10-26).
+
+Other read functions include \textbf{reachla}, \textbf{readcurr},
+\textbf{readsst}, \textbf{readwind} and \textbf{readtopo}. Each of
+these will read a default data set in a similar way to the ice
+example, see their respective help pages and explore the index page of
+\textbf{raadtools} to see an overview of functionality.
+
+Load up the package help index for an overview of all the help topics
+and functions.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(}\hlkwc{help} \hlstd{= raadtools)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+Read a simple example from each of the data types mentioned above and plot.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## chlorophyll-a is currently only patchily supported}
+\hlcom{##chla <- readchla("2009-10-01")}
+\hlstd{curr} \hlkwb{<-} \hlkwd{readcurr}\hlstd{(}\hlstr{"2012-01-09"}\hlstd{,} \hlkwc{magonly} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{lon180} \hlstd{=} \hlnum{FALSE}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required namespace: ncdf4}}\begin{alltt}
+\hlstd{sst} \hlkwb{<-} \hlkwd{readsst}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"2000-01-01"}\hlstd{,} \hlstr{"2009-06-08"}\hlstd{))}
+\hlstd{wind} \hlkwb{<-} \hlkwd{readwind}\hlstd{()}
+\hlcom{##topo <- readtopo("george_v_terre_adelie", xylim = extent(140, 141.5, -65, -64))}
+
+\hlstd{apal} \hlkwb{<-} \hlkwd{chl.pal}\hlstd{(}\hlkwc{palette} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlstd{op} \hlkwb{<-} \hlkwd{par}\hlstd{(}\hlkwc{mfcol} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{2}\hlstd{,} \hlnum{2}\hlstd{))}
+\hlcom{#plot(chla, col = chl.pal(apal$breaks), breaks = apal$breaks,}
+\hlcom{#     main = "Johnson chl-a", legend = FALSE)}
+\hlkwd{plot}\hlstd{(curr,} \hlkwc{main} \hlstd{=} \hlstr{"ocean surface current magnitude"}\hlstd{)}
+\hlkwd{plot}\hlstd{(sst[[}\hlnum{2}\hlstd{]],} \hlkwc{main} \hlstd{=} \hlstr{"SST"}\hlstd{)}
+\hlcom{#plot(topo, main = "George V Terre Adelie bathymetry",}
+\hlcom{#     col = topo.colors(68)[-c(40:68)])}
+\hlkwd{par}\hlstd{(op)}
+
+\hlkwd{plot}\hlstd{(wind,} \hlkwc{nr} \hlstd{=} \hlnum{2}\hlstd{)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/minimal-read-other-1} 
+\includegraphics[width=\maxwidth]{figure/minimal-read-other-2} 
+
+}
+
+
+
+\end{knitrout}
+
+The read calls above apply slightly different options in each case,
+with no arguments at all, with a vector of date-times, \textbf{xylim}
+to restrict the spatial extent and \textbf{lon180} to control the
+Atlantic vs. Pacific view for global data extending across the
+dateline.
+
+
+
+The \textbf{ice} object  is a RasterStack from the \textbf{raster}
+package.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{ice}
+\end{alltt}
+\begin{verbatim}
+## class       : RasterStack 
+## dimensions  : 332, 316, 104912, 1  (nrow, ncol, ncell, nlayers)
+## resolution  : 25000, 25000  (x, y)
+## extent      : -3950000, 3950000, -3950000, 4350000  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=stere +lat_0=-90 +lat_ts=-70 +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m +no_defs 
+## names       : nt_19781026_n07_v01_s.bin 
+## min values  :                         0 
+## max values  :                       100 
+## time        : 1978-10-26
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+This object is a \textbf{RasterLayer} which consists of just a single
+grid layer for the day listed at the beginning of the NSIDC data
+set. The dimensions of the grid are listed, (in the order Y then X)
+332, 316 and these refer to the number of cells seen
+vertically on the page (332) and those seen horizontally
+(316), and then the total number of cells (X * Y).
+
+
+\subsection{Short digression on R data support used by raadtools}
+\label{sec:assumedsupport}
+The \textbf{raster} package provides excellent facilities for working
+with raster data, including images, surfaces, DEMs and time series
+satellite data. From the \textbf{raster} package DESCRIPTION:
+
+\quote{Reading, writing, manipulating, analyzing and modeling of
+gridded spatial data. The package implements basic and high-level
+functions and processing of very large files is supported.}
+
+This package should be consulted for documentation on the use of
+Raster objects, and in particular the vignette \textbf{Raster} is a
+good place to start. Use the \textbf{library} function's \textbf{help}
+argument to get an overview of the available functions.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(raster)}
+\hlcom{## opens an index page to all of the package's functions}
+\hlkwd{library}\hlstd{(}\hlkwc{help} \hlstd{= raster)}
+\hlcom{## opens a PDF document with extended help and examples}
+\hlkwd{vignette}\hlstd{(}\hlstr{"Raster"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+See the Section~\ref{sec:assumedsupport} for more detail on the design
+choices made with \textbf{raster} and the other package dependenices
+used by \textbf{raadtools}
+
+
+\section{Read functions in raadtools}
+\label{sec:readrationale}
+
+This section discusses the details of individual read functions and
+some of the rationale behind each one. Different data sets are stored
+with different native coordinate systems, different pixel and temporal
+resolutions, different data units, and cover different spatial and temporal ranges. As well
+as all these options, the way data are stored varies tremendously
+depending on the provider and the data type. These read functions all
+return either a \textbf{Raster} object as defined by the
+\textbf{raster} package with as complete and standard metadata as
+possible.
+
+
+Some data sets are inherently multi-layered for a single time step,
+such as wind and current vectors and so these both have optional
+arguments \textbf{dironly} and \textbf{magonly} to convert the
+internal \textbf{U} and \textbf{V} vector components to directions or
+magnitudes only. The read operation may be combined with a spatial
+crop by using the argument \textbf{xylim} and there are other options
+specific for some data sets such as \textbf{lon180} to control the
+default orientation (these topics will be discussed in more detail in
+later sections, otherwise see the documentation for each function
+argument).
+
+\subsection{Read topographic or bathymetric data}
+\label{sec:readtopo}
+
+The \textbf{readtopo} (\textbf{readbathy} is a synonym) will return
+one of several available data sets. See the help
+page for the details and source of each one. As these data are not
+dynamic on short time scales they do not provide a \textbf{date}
+argument. The \textbf{ibcso} data set is optionally available on a
+polar or longitude/latitude grid, controlled by the \textbf{polar}
+argument. The Smith and Sandwell data set is returned in Pacific view
+on the Mercator projection by default. Use \textbf{lon180 = FALSE} to
+return Atlantic view.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{geb} \hlkwb{<-} \hlkwd{readtopo}\hlstd{(}\hlstr{"gebco_08"}\hlstd{,} \hlkwc{xylim} \hlstd{=} \hlkwd{extent}\hlstd{(}\hlnum{150}\hlstd{,} \hlnum{220}\hlstd{,} \hlopt{-}\hlnum{75}\hlstd{,} \hlopt{-}\hlnum{60}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+
+
+\section{Plot vector data}
+\label{sec:vectorplots}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## set up data in advance, to feed the plotting function}
+\hlstd{tst} \hlkwb{<-} \hlkwd{readcurr}\hlstd{()}
+\hlstd{xylim} \hlkwb{<-} \hlkwd{extent}\hlstd{(}\hlkwd{projectExtent}\hlstd{(}\hlkwd{raster}\hlstd{(}\hlkwd{extent}\hlstd{(}\hlnum{130}\hlstd{,} \hlnum{150}\hlstd{,} \hlopt{-}\hlnum{50}\hlstd{,} \hlopt{-}\hlnum{30}\hlstd{),} \hlkwc{crs} \hlstd{=} \hlstr{"+proj=longlat"}\hlstd{),} \hlkwd{projection}\hlstd{(tst)))}
+
+\hlstd{plotcurrents} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{date} \hlstd{=} \hlkwd{as.Date}\hlstd{(}\hlstr{"1999-11-24"}\hlstd{),} \hlkwc{ext} \hlstd{=} \hlkwa{NULL}\hlstd{,} \hlkwc{scale} \hlstd{=} \hlnum{2000}\hlstd{,} \hlkwc{...}\hlstd{) \{}
+  \hlstd{x} \hlkwb{<-} \hlkwd{readcurr}\hlstd{(date)}
+  \hlkwa{if} \hlstd{(}\hlopt{!}\hlkwd{is.null}\hlstd{(ext)) x} \hlkwb{<-} \hlkwd{crop}\hlstd{(x, ext)}
+  \hlstd{crds} \hlkwb{<-} \hlkwd{coordinates}\hlstd{(x)}
+  \hlkwd{plot}\hlstd{(}\hlkwd{sqrt}\hlstd{(x[[}\hlnum{1L}\hlstd{]]}\hlopt{^}\hlnum{2} \hlopt{+} \hlstd{x[[}\hlnum{2L}\hlstd{]]}\hlopt{^}\hlnum{2}\hlstd{), ...)}
+  \hlstd{x1} \hlkwb{<-} \hlstd{crds[,}\hlnum{1}\hlstd{]}
+  \hlstd{y1} \hlkwb{<-} \hlstd{crds[,}\hlnum{2}\hlstd{]}
+  \hlstd{x2} \hlkwb{<-} \hlstd{crds[,}\hlnum{1}\hlstd{]} \hlopt{+} \hlkwd{values}\hlstd{(x[[}\hlnum{1L}\hlstd{]])} \hlopt{*} \hlstd{scale}
+  \hlstd{y2} \hlkwb{<-} \hlstd{crds[,}\hlnum{2}\hlstd{]} \hlopt{+} \hlkwd{values}\hlstd{(x[[}\hlnum{2L}\hlstd{]])} \hlopt{*} \hlstd{scale}
+  \hlstd{op} \hlkwb{<-} \hlkwd{options}\hlstd{(}\hlkwc{warn} \hlstd{=} \hlopt{-}\hlnum{1}\hlstd{)}
+  \hlkwd{arrows}\hlstd{(x1, y1, x2, y2,} \hlkwc{length} \hlstd{=} \hlnum{0.03}\hlstd{)}
+  \hlkwd{options}\hlstd{(op)}
+  \hlkwd{invisible}\hlstd{(}\hlkwa{NULL}\hlstd{)}
+\hlstd{\}}
+
+\hlkwd{plotcurrents}\hlstd{(}\hlkwc{date} \hlstd{=} \hlkwd{as.Date}\hlstd{(}\hlstr{"2000-01-05"}\hlstd{),} \hlkwc{ext} \hlstd{= xylim,} \hlkwc{scale} \hlstd{=} \hlnum{2100}\hlstd{)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/minimal-wind-plot-1} 
+
+}
+
+
+
+\end{knitrout}
+
+Animate a series of current plots as above.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{dts} \hlkwb{<-} \hlkwd{seq}\hlstd{(}\hlkwd{as.Date}\hlstd{(}\hlstr{"2005-10-01"}\hlstd{),} \hlkwc{length} \hlstd{=} \hlnum{104}\hlstd{,} \hlkwc{by} \hlstd{=} \hlstr{"1 week"}\hlstd{)}
+\hlstd{pal} \hlkwb{<-} \hlkwd{sst.pal}\hlstd{(}\hlkwc{palette} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlstd{cols} \hlkwb{<-} \hlstd{pal}\hlopt{$}\hlstd{cols[}\hlkwd{seq}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwd{length}\hlstd{(pal}\hlopt{$}\hlstd{cols),} \hlkwc{length} \hlstd{=} \hlnum{16}\hlstd{)]}
+\hlstd{cols} \hlkwb{<-} \hlkwd{gsub}\hlstd{(}\hlstr{"ff$"}\hlstd{,} \hlstr{"99"}\hlstd{, cols)}
+\hlstd{brks} \hlkwb{<-} \hlstd{pal}\hlopt{$}\hlstd{breaks[}\hlkwd{seq}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwd{length}\hlstd{(pal}\hlopt{$}\hlstd{breaks),} \hlkwc{length} \hlstd{=} \hlnum{16}\hlstd{)]}
+
+\hlkwd{library}\hlstd{(animation)}
+\hlkwd{ani.start}\hlstd{()}
+\hlkwa{for} \hlstd{(i} \hlkwa{in} \hlkwd{seq_along}\hlstd{(dts))} \hlkwd{plotcurrents}\hlstd{(dts[i],} \hlkwc{ext} \hlstd{= xylim,} \hlkwc{scale} \hlstd{=} \hlnum{2500}\hlstd{,} \hlkwc{col} \hlstd{= cols,} \hlkwc{breaks} \hlstd{= brks)}
+\hlkwd{ani.stop}\hlstd{()}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+
+
+\section{Extract spatio-temporal data from read functions}
+\label{sec:extractfun}
+
+
+
+
+\subsection{Extract spatio-temporal data with spatial, temporal
+interpolation, and spatial aggregation}
+\label{sec:extractwithinterp}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{d1} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{lon} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{130}\hlstd{,} \hlnum{125}\hlstd{,} \hlnum{120}\hlstd{,} \hlopt{-}\hlnum{52.27}\hlstd{,} \hlnum{123.21}\hlstd{,} \hlopt{-}\hlnum{25.42}\hlstd{,} \hlnum{36.96}\hlstd{,} \hlopt{-}\hlnum{36.28}\hlstd{),}
+                 \hlkwc{lat} \hlstd{=} \hlkwd{c}\hlstd{(}\hlopt{-}\hlnum{50}\hlstd{,} \hlopt{-}\hlnum{52}\hlstd{,} \hlopt{-}\hlnum{55}\hlstd{,}\hlopt{-}\hlnum{66.31}\hlstd{,} \hlopt{-}\hlnum{74.55}\hlstd{,} \hlopt{-}\hlnum{69.66}\hlstd{,} \hlopt{-}\hlnum{71.85}\hlstd{,} \hlopt{-}\hlnum{68.56}\hlstd{),}
+                 \hlkwc{gmt} \hlstd{=} \hlkwd{as.POSIXct}\hlstd{(}\hlstr{"2006-02-08 00:00:00"}\hlstd{)} \hlopt{+} \hlnum{24} \hlopt{*}\hlnum{3600} \hlopt{*} \hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{3}\hlstd{,} \hlnum{106}\hlstd{,} \hlnum{118}\hlstd{,} \hlnum{118}\hlstd{,} \hlnum{190}\hlstd{))}
+
+\hlstd{llproj} \hlkwb{<-} \hlstr{"+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"}
+
+\hlkwd{library}\hlstd{(raadtools)}
+\hlkwd{library}\hlstd{(rgdal)}
+
+\hlcom{## test extract vs extractxyt}
+\hlstd{sst1} \hlkwb{<-} \hlkwd{extractxyt}\hlstd{(}\hlstr{"oisst"}\hlstd{, d1)}
+\hlstd{sst2} \hlkwb{<-} \hlkwd{extract}\hlstd{(readsst, d1)}
+
+\hlstd{mag1} \hlkwb{<-} \hlkwd{extractxyt}\hlstd{(}\hlstr{"aviso"}\hlstd{, d1,} \hlkwc{magonly} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlstd{mag2} \hlkwb{<-} \hlkwd{extract}\hlstd{(readcurr, d1,} \hlkwc{magonly} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+
+\hlstd{ice1} \hlkwb{<-} \hlkwd{extractxyt}\hlstd{(}\hlstr{"nsidc"}\hlstd{, d1)}
+\hlstd{ice2} \hlkwb{<-} \hlkwd{extract}\hlstd{(readice, d1)}
+
+\hlcom{## these diffs should be  zorro}
+\hlkwd{max}\hlstd{(}\hlkwd{abs}\hlstd{(sst1} \hlopt{-} \hlstd{sst2),} \hlkwc{na.rm} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlkwd{max}\hlstd{(}\hlkwd{abs}\hlstd{(mag1} \hlopt{-} \hlstd{mag2),} \hlkwc{na.rm} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlkwd{max}\hlstd{(}\hlkwd{abs}\hlstd{(ice1} \hlopt{-} \hlstd{ice2),} \hlkwc{na.rm} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+
+
+\hlcom{## now the goodstuff}
+\hlstd{sst3} \hlkwb{<-} \hlkwd{extract}\hlstd{(readsst, d1,} \hlkwc{method} \hlstd{=} \hlstr{"bilinear"}\hlstd{)}
+\hlstd{sst4} \hlkwb{<-} \hlkwd{extract}\hlstd{(readsst, d1,} \hlkwc{ctstime} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlstd{sst5} \hlkwb{<-} \hlkwd{extract}\hlstd{(readsst, d1,} \hlkwc{ctstime} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{method} \hlstd{=} \hlstr{"bilinear"}\hlstd{)}
+
+\hlkwd{data.frame}\hlstd{(}\hlkwc{sst} \hlstd{= sst2,} \hlkwc{sst_xyinterp} \hlstd{= sst3,} \hlkwc{sst_timeinterp} \hlstd{= sst4,} \hlkwc{sst_spacetimeinterp} \hlstd{= sst5)}
+
+\hlcom{## some time when we get chl-a}
+\hlstd{d2} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{x} \hlstd{=} \hlkwd{c}\hlstd{(}\hlopt{-}\hlnum{40}\hlstd{,} \hlopt{-}\hlnum{25}\hlstd{,} \hlopt{-}\hlnum{6}\hlstd{,} \hlnum{12}\hlstd{,} \hlnum{33}\hlstd{,} \hlnum{60}\hlstd{,} \hlnum{89}\hlstd{,} \hlnum{107}\hlstd{),}
+                 \hlkwc{y} \hlstd{=} \hlkwd{c}\hlstd{(}\hlopt{-}\hlnum{56}\hlstd{,} \hlopt{-}\hlnum{55}\hlstd{,} \hlopt{-}\hlnum{59}\hlstd{,} \hlopt{-}\hlnum{62}\hlstd{,} \hlopt{-}\hlnum{64}\hlstd{,} \hlopt{-}\hlnum{62}\hlstd{,} \hlopt{-}\hlnum{60}\hlstd{,} \hlopt{-}\hlnum{60}\hlstd{),}
+                 \hlkwc{time} \hlstd{=} \hlkwd{as.POSIXct}\hlstd{(}\hlstr{"2006-12-18 00:00:00"}\hlstd{)} \hlopt{+} \hlnum{24} \hlopt{*}\hlnum{3600} \hlopt{*} \hlnum{7} \hlopt{*} \hlkwd{seq_len}\hlstd{(}\hlnum{8}\hlstd{))}
+
+\hlcom{## resize by a factor in space so we get "more coverage"}
+\hlcom{# chla1 <- extract(readchla, d2)}
+\hlcom{# chla2 <- extract(readchla, d2, ctstime = TRUE, method = "bilinear")}
+\hlcom{# chla3 <- extract(readchla, d2, ctstime = TRUE, method = "bilinear", fact = 16)}
+\hlcom{# data.frame(chla = chla1, chla_spacetimeinterp = chla2, chla_resizespacetimeinterp = chla3)}
+\hlcom{# }
+\hlcom{# chl <- readchla(d2$time, xylim = extent(as.matrix(d2[,1:2])))}
+\hlcom{# chl2 <- aggregate(chl, fact = 16)}
+\hlcom{# pal <- chl.pal(palette = TRUE)}
+\hlcom{# }
+\hlcom{# ## compare the two plots, with and without spatial aggregation for "coverage"}
+\hlcom{# plot(chl, col = pal$col, breaks = pal$breaks, legend = FALSE, addfun = function() lines(d2[,1:2]))}
+\hlcom{# }
+\hlcom{# plot(chl2, col = pal$col, breaks = pal$breaks, legend = FALSE, addfun = function() lines(d2[,1:2]))}
+\hlcom{# }
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+\section{Data sets and the native projection}
+\label{sec:nativeproj}
+
+All data sets availalable in \textbf{raadtools} are provided in their \emph{native projection}. This means that a data set always has a \emph{coordinate reference system} explicitly and that the data must be used with this coordinate system. A good example is the passive microwave sea ice concentration data, which are provided on a polar stereographic grid for both poles. Another examples is the Smith and Sandwell bathymetry which is provided in a Mercator grid.   Many data sets are provided in \textbf{longitude/latitude} but note that this is still not enough information since angular longitude/latitude can only be defined with reference to a particular \emph{datum}. 
+
+R provides all of the tools required to work with these data. 
+
+Coordinate reprojection: raw coordinates and point, line, or polygon objects can be transformed between different map projections using the \textbf{rgdal} package. 
+
+Flexible extraction methods: the \textbf{raster} package provides extraction methods to do a huge range of \textbf{query-based extractions} from gridded data. These include: 
+
+\begin{itemize}
+\item extract values from grids by points
+\item extract values from grids by objects: SpatialPoints, SpatialLines, SpatialPolygons
+\item extraction with function-based aggregation (for queries where more than one pixel is returned for an object, i.e. lines and polygons)
+\item extraction by objects with different map projections to the grid data, where the extraction will apply reprojection to the grid automatically
+\item extraction for multi-dimensional grids, i.e. extract values for multiple times for each point/line/polygon
+\item interpolation relative to a points location in a cell
+\item extraction return weights for each pixel, allowing weighting of an object's coverage relative to a cell
+\item extraction more abstractly, returning the cell numbers rather than values allowing flexible repetitive-extraction
+\end{itemize}
+
+Together all of these features allow practically any required extraction task. 
+
+What is a datum:  the combination of an \emph{ellipsoid} and the orientation parameters used to align that ellipsoid relative to the Earth's form. An ellipsoid is simply an oblate spheroid defined by either an inverse flattening ratio or a pair of radiuses (these are equivalent ways to define the same thing).   Links:
+
+\url{http://www.geo.hunter.cuny.edu/~jochen/gtech201/lectures/lec6concepts/map%20coordinate%20systems/how%20to%20choose%20a%20projection.htm}
+
+\url{http://www.georeference.org/doc/guide_to_selecting_map_projections.htm}
+
+\url{http://msdn.microsoft.com/en-us/library/cc749633(v=sql.100).aspx}
+
+\section{Acknowledgements}
+\label{sec:ackk} The \textbf{raadtools} package was built with R
+\url{http://www.r-project.org}, Rtools
+\url{http://cran.r-project.org/bin/windows/Rtools/}, RStudio
+\url{http://www.r-studio.com}, and Git \url{http://git-scm.com}. This
+\TeX{} document was built with Sweave using knitr
+\url{http://yihui.name/knitr/}.
+
+\nocite{ncdf4}
+\nocite{R}
+\nocite{raster}
+\nocite{rgdal}
+\nocite{rgeos}
+\nocite{Rnews:Pebesma+Bivand:2005}
+\nocite{xie2013knitr}
+\bibliographystyle{apalike}
+\bibliography{raadtools}
+
+
+\end{document}

@@ -14,7 +14,8 @@ Suggests:
     ncdf4,
     rgdal,
     testthat,
-    rmarkdown
+    rmarkdown,
+    covr
 LazyData: yes
 VignetteBuilder: knitr
 Version: 0.3.2.9003

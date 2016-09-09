@@ -212,7 +212,7 @@ geb <- readtopo("gebco_08", xylim = extent(150, 220, -75, -60))
 tst <- readcurr()
 xylim <- extent(projectExtent(raster(extent(130, 150, -50, -30), crs = "+proj=longlat"), projection(tst)))
 
-plotcurrents <- function(date = as.Date("1999-11-24"), ext = NULL, scale = 2000, ...) {
+plotcurrents <- function(date = as.Date("1999-11-24"), ext = NULL, scale = 2, ...) {
   x <- readcurr(date)
   if (!is.null(ext)) x <- crop(x, ext)
   crds <- coordinates(x)
@@ -222,12 +222,12 @@ plotcurrents <- function(date = as.Date("1999-11-24"), ext = NULL, scale = 2000,
   x2 <- crds[,1] + values(x[[1L]]) * scale
   y2 <- crds[,2] + values(x[[2L]]) * scale
   op <- options(warn = -1)
-  arrows(x1, y1, x2, y2, length = 0.03)
+  arrows(x1, y1, x2, y2, length = 0.03, col = "#00000080")
   options(op)
   invisible(NULL)
 }
 
-plotcurrents(date = as.Date("2000-01-05"), ext = xylim, scale = 2100)
+plotcurrents(date = as.Date("2000-01-05"), ext = xylim, scale = .1, asp = NA)
 
 ```
 

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>readcurr. raadtools 0.3.2.9003</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">raadtools 0.3.2.9003</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Read AVISO ocean current data</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='readcurr.html'>readcurr</a></span><span class="keyword">(</span><span class="symbol">date</span><span class="keyword">,</span> <span class="argument">time.resolution</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"daily"</span><span class="keyword">,</span> <span class="string">"weekly"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">xylim</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span>
+  <span class="argument">lon180</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">magonly</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">dironly</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">uonly</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span>
+  <span class="argument">vonly</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">latest</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">returnfiles</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span>
+  <span class="argument">inputfiles</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>date</dt>
+      <dd>date or dates of data to read, see Details</dd>
+      <dt>time.resolution</dt>
+      <dd>time resolution to read</dd>
+      <dt>xylim</dt>
+      <dd>spatial extents to crop from source data, can be anything accepted by <code><a href='http://www.rdocumentation.org/packages/raster/topics/extent'>extent</a></code>, see Details</dd>
+      <dt>lon180</dt>
+      <dd>defaults to TRUE, to &quot;rotate&quot; Pacific view [0, 360] data to Atlantic view [-180, 180]</dd>
+      <dt>magonly</dt>
+      <dd>return just the magnitude from the U and V
+components</dd>
+      <dt>dironly</dt>
+      <dd>return just the direction from the U and V, in degrees N=0, E=90, S=180, W=270</dd>
+      <dt>uonly</dt>
+      <dd>return just the U component of velocity</dd>
+      <dt>vonly</dt>
+      <dd>return just the V component of velocity
+components, in degrees (0 north, 90 east, 180 south, 270 west)</dd>
+      <dt>latest</dt>
+      <dd>if TRUE return the latest time available, ignoring the &#39;date&#39; argument</dd>
+      <dt>returnfiles</dt>
+      <dd>ignore options and just return the file names and dates</dd>
+      <dt>...</dt>
+      <dd>passed to brick, primarily for <code>filename</code></dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+<code><a href='http://www.rdocumentation.org/packages/raster/topics/raster'>raster</a></code> object with the &quot;U&quot;
+(horizontal/X) and &quot;V&quot; (vertical/Y) components of velocity in
+cm/s. Setting either of the (mutually exclusive) <code>magonly</code>
+and <code>dironly</code> arguments returns the magnitude (in cm) or
+direction (in degrees relative to North) of the velocity vectors.
+</dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Current data is read from files managed by
+<code><a href='currentsfiles.html'>currentsfiles</a></code>. Dates are matched to file names by
+finding the nearest match in time within a short duration. By
+default only one time step is returned with both U and V
+components. Multiple dates can be returned for magnitude or
+direction, U or V only.</p>
+
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>This is the &quot;SSALTO/DUACS - DT Geostrophic Velocities - Up-to-date Global Processing&quot;. See References.</p>
+
+    </div>
+
+    <div class="Note">
+      <h2>Note</h2>
+
+      <p>These data for daily files are stored in longitude/latitude projection on the sphere between longitudes in the Pacific
+view \[0, 360\], the default behaviour is to reset this to Atlantic
+view \[-180, 180\] with <code>lon180</code>.</p>
+
+      <p>For weekly files, this source is no longer provided by Aviso but is cached by the raadtools system at AAD/ACE, for the period 1992 to 2014. 
+Note that the projection was Mercator for this earlier product.</p>
+
+    </div>
+
+    <div class="References">
+      <h2>References</h2>
+
+      <p><a href = 'http://www.aviso.oceanobs.com/en/data/products/sea-surface-height-products/global/index.html'>http://www.aviso.oceanobs.com/en/data/products/sea-surface-height-products/global/index.html</a></p>
+
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="comment">## Not run: ------------------------------------</span>
+<span class="comment"># ## read a single time slice, and plot the directions [0,360) as an image with arrows</span>
+<span class="comment"># x &lt;- readcurr(dironly = TRUE)</span>
+<span class="comment"># ## get a local extent for a zoom plot</span>
+<span class="comment"># e &lt;- extent(projectExtent(raster(extent(130, 150, -50, -30), crs = "+proj=longlat"), projection(x)))</span>
+<span class="comment"># x1 &lt;- crop(readcurr(), e)</span>
+<span class="comment"># crds &lt;- coordinates(x1)</span>
+<span class="comment"># scale &lt;- 2000</span>
+<span class="comment"># plot(crop(x, e))</span>
+<span class="comment"># x1 &lt;- crds[,1]</span>
+<span class="comment"># y1 &lt;- crds[,2]</span>
+<span class="comment"># x2 &lt;- crds[,1] + values(x1[["U"]]) * scale</span>
+<span class="comment"># y2 &lt;- crds[,2] + values(x1[["V"]]) * scale</span>
+<span class="comment"># arrows(x1, y1, x2, y2, length = 0.03)</span>
+<span class="comment">## ---------------------------------------------</span></div></pre>
+  </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>readcurr</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+    <h2>See also</h2>
+      <p><code><a href='icefiles.html'>icefiles</a></code> for details on the repository of
+data files, <code><a href='http://www.rdocumentation.org/packages/raster/topics/raster'>raster</a></code> for the return value</p>
+
+    
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

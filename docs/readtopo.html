@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>readtopo. raadtools 0.3.2.9003</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">raadtools 0.3.2.9003</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Topography data</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='readtopo.html'>readtopo</a></span><span class="keyword">(</span><span class="argument">topo</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"gebco_08"</span><span class="keyword">,</span> <span class="string">"ibcso"</span><span class="keyword">,</span> <span class="string">"etopo1"</span><span class="keyword">,</span> <span class="string">"etopo2"</span><span class="keyword">,</span> <span class="string">"kerguelen"</span><span class="keyword">,</span>
+  <span class="string">"george_v_terre_adelie"</span><span class="keyword">,</span> <span class="string">"smith_sandwell"</span><span class="keyword">,</span> <span class="string">"gebco_14"</span><span class="keyword">,</span> <span class="string">"macrie1100m"</span><span class="keyword">,</span>
+  <span class="string">"macrie2100m"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">polar</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">lon180</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">xylim</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span>
+  <span class="argument">returnfiles</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='readtopo.html'>readbathy</a></span><span class="keyword">(</span><span class="argument">topo</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"gebco_08"</span><span class="keyword">,</span> <span class="string">"ibcso"</span><span class="keyword">,</span> <span class="string">"etopo1"</span><span class="keyword">,</span> <span class="string">"etopo2"</span><span class="keyword">,</span> <span class="string">"kerguelen"</span><span class="keyword">,</span>
+  <span class="string">"george_v_terre_adelie"</span><span class="keyword">,</span> <span class="string">"smith_sandwell"</span><span class="keyword">,</span> <span class="string">"gebco_14"</span><span class="keyword">,</span> <span class="string">"macrie1100m"</span><span class="keyword">,</span>
+  <span class="string">"macrie2100m"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">polar</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">lon180</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">xylim</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span>
+  <span class="argument">returnfiles</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='readtopo.html'>topofile</a></span><span class="keyword">(</span><span class="argument">topo</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"gebco_08"</span><span class="keyword">,</span> <span class="string">"ibcso"</span><span class="keyword">,</span> <span class="string">"etopo1"</span><span class="keyword">,</span> <span class="string">"etopo2"</span><span class="keyword">,</span> <span class="string">"kerguelen"</span><span class="keyword">,</span>
+  <span class="string">"george_v_terre_adelie"</span><span class="keyword">,</span> <span class="string">"smith_sandwell"</span><span class="keyword">,</span> <span class="string">"gebco_14"</span><span class="keyword">,</span> <span class="string">"macrie1100m"</span><span class="keyword">,</span>
+  <span class="string">"macrie2100m"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">polar</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">lon180</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">TRUE</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>topo</dt>
+      <dd>Data source, see Details.</dd>
+      <dt>polar</dt>
+      <dd>Flag for returning the polar version of the IBCSO data.</dd>
+      <dt>lon180</dt>
+      <dd>Flag for returning data in Atlantic [-180, 180] rather than Pacific [0, 360] view.</dd>
+      <dt>xylim</dt>
+      <dd>spatial extents to crop from source data, can be anything accepted by <code><a href='http://www.rdocumentation.org/packages/raster/topics/extent'>extent</a></code>, see Details</dd>
+      <dt>returnfiles</dt>
+      <dd>Return just the relevant file name</dd>
+      <dt>...</dt>
+      <dd>reserved for future use, ignored currently</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+<dl>
+<dt></dt><dd><code>topofile</code> returns a character string of the full path to a file name</dd></p>
+
+      <p><dt></dt><dd><code>readtopo</code> and <code>readbathy</code> return the requested data as a RasterLayer (these are aliases)</dd></p>
+
+      <p></dl></p>
+
+      <p></dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Functions to provide topographic (bathymetry and/or topography) data.</p>
+
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>Use <code>readtopo</code> (or its alias <code>readbathy</code>) to read data
+from the chosen data set. The function <code>topofile</code> is used to
+find the full file name.
+<code>xylim</code> is expected to be consistent with <code>lon180</code>
+The following data sets are available using the argument <code>topo</code>.
+<dl>
+<dt>gebco_08</dt><dd>The GEBCO_08 Grid, a global 30 arc-second grid largely generated by combining quality-controlled ship depth soundings with interpolation between sounding points guided by satellite-derived gravity data. <a href = 'http://www.gebco.net/data_and_products/gridded_bathymetry_data/'>http://www.gebco.net/data_and_products/gridded_bathymetry_data/</a></dd></p>
+
+      <p><dt>ibcso</dt><dd>IBCSO bathymetry data, resolution 1min, use argument <code>polar = TRUE</code> to return the projected version (polar stereographic with true scale at 71S, WGS84), 500m resolution. <a href = 'http://www.ibcso.org/data.html'>http://www.ibcso.org/data.html</a></dd></p>
+
+      <p><dt>etopo1</dt><dd>ETOPO1 is a 1 arc-minute global relief model of Earth&#39;s surface that integrates land topography and ocean bathymetry. <a href = 'http://www.ngdc.noaa.gov/mgg/global/global.html'>http://www.ngdc.noaa.gov/mgg/global/global.html</a></dd></p>
+
+      <p><dt>etopo2</dt><dd>Historic and deprecated prior version of ETOPO1. <a href = 'http://www.ngdc.noaa.gov/mgg/global/etopo2.html'>http://www.ngdc.noaa.gov/mgg/global/etopo2.html</a></dd></p>
+
+      <p><dt>kerguelen</dt><dd>Kerguelen Plateau Bathymetric Grid, GeoScience Australia</dd></p>
+
+      <p><dt>george_v_terre_adelie</dt><dd>A bathymetric Digital Elevation Model (DEM) of the George V and Terre Adelie continental shelf and margin - 100, 250, and 500 metre resolution. <a href = 'http://data.aad.gov.au/aadc/metadata/metadata_redirect.cfm?md=AMD/AU/GVdem_2008'>http://data.aad.gov.au/aadc/metadata/metadata_redirect.cfm?md=AMD/AU/GVdem_2008</a></dd></p>
+
+      <p><dt>smith_sandwell</dt><dd>Global seafloor topography from satellite altimetry and ship depth soundings. <a href = 'http://topex.ucsd.edu/WWW_html/mar_topo.html'>http://topex.ucsd.edu/WWW_html/mar_topo.html</a></dd></p>
+
+      <p></dl></p>
+
+      <p></p>
+
+    </div>
+      </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>readbathy</li><li>readtopo</li><li>topofile</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

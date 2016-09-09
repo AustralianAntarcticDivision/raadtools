@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>readfastice. raadtools 0.3.2.9003</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">raadtools 0.3.2.9003</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Fast ice data</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='readfastice.html'>readfastice</a></span><span class="keyword">(</span><span class="symbol">date</span><span class="keyword">,</span> <span class="argument">time.resolution</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="string">"weekly3"</span><span class="keyword">,</span> <span class="argument">xylim</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span>
+  <span class="argument">returnfiles</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>date</dt>
+      <dd>date or dates to read (can be character, POSIXt, or Date)</dd>
+      <dt>time.resolution</dt>
+      <dd>fixed at roughly &quot;3 weekly&quot;</dd>
+      <dt>xylim</dt>
+      <dd>extent in native space of the grid</dd>
+      <dt>returnfiles</dt>
+      <dd>return the file details only</dd>
+      <dt>...</dt>
+      <dd>reserved for future use, currently ignored</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+RasterBrick with 
+0: Southern Ocean, pack ice or icebergs, corresponding to light blue in the PNG files.
+1: Antarctic continent (including ice shelves), as defined using the Mosaic of Antarctica product, corresponding to white in the PNG files.
+2: Fast ice, as classified from a single 20-day MODIS composite image, corresponding to dark blue in the PNG files
+3: Fast ice, as classified using a single 20-day AMSR-E composite image, corresponding to yellow in the PNG files
+4: Fast ice, as classified using the previous or next 20-day MODIS composite images, corresponding to red in the PNG files
+</dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Read fast ice data, optionally with a mask</p>
+
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>Fast ice data on original Equal Area Cylindrical grid</p>
+
+    </div>
+
+    <div class="References">
+      <h2>References</h2>
+
+      <p><a href = 'http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=modis_20day_fast_ice'>http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=modis_20day_fast_ice</a></p>
+
+    </div>
+      </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>readfastice</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

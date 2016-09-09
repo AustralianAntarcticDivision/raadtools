@@ -1,6 +1,5 @@
 #################
 ## R packages
-#################
 
 *.Rproj
 *.Rdata
@@ -29,3 +28,4 @@ vignettes/cache*
 vignettes/figure*
 currfixes.txt
 data_local.txt
+inst/doc

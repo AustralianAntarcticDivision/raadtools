@@ -24,6 +24,7 @@
 ##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... passed to brick, primarily for \code{filename}
+##' @param extension default for product "amsr" is "hdf" but can be "tif" , extension = "hdf"
 ##' @param inputfiles input the files data base to speed up initialization
 ##' @details For NSIDC data a \code{\link[raster]{ratify}}ied raster is returned if \code{setNA} and 
 ##' \code{rescale} are both set to \code{FALSE}.  Use \code{levels(x)} to return the data.frame of values 
@@ -226,6 +227,7 @@ readice <- function(date,
 ##' @param product choice of sea ice product, see \code{\link{readice}}
 ##' @param hemisphere north or south
 ##' @param ... reserved for future use, currently ignored
+##' @param extension default for product "amsr" is "hdf" but can be "tif" , extension = "hdf"
 ##' @export
 ##' @examples
 ##' \dontrun{
@@ -234,7 +236,7 @@ readice <- function(date,
 ##' }
 ##' @return data.frame of \code{file} and \code{date}
 icefiles <- function(time.resolution = c("daily", "monthly"), 
-                     product = c("nsidc", "amsr"), hemisphere =c("south", "north"), ...) {
+                     product = c("nsidc", "amsr"), hemisphere =c("south", "north"), ..., extension = "hdf") {
   
   datadir <- getOption("default.datadir")
   
@@ -255,7 +257,7 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   
   ftx <- .allfilelist()
   ## just shortcut here for AMSR (need to review code below)
-  if (product == "amsr") return(.amsr625files(ftx))
+  if (product == "amsr") return(.amsr625files(ftx, ext = extension))
   ppat <- switch(product, 
                  nsidc = "sidads.colorado.edu",
                  ## need to use the + for some reason
@@ -267,7 +269,7 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   epat <- switch(product, 
                  nsidc = ".bin$", 
                  
-                 amsr = ".hdf$")
+                 amsr = ".hdf$")  ## this is ignored
   if (product == "amsr" & hemisphere != "south") stop("no north hemisphere for amsr")
   cfiles0 <- grep(ppat, ftx, value = TRUE)
   cfiles1 <- if(product == "nsidc") {
@@ -303,14 +305,14 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   cfs
 }
 
-.amsr625files <- function(allfiles) {
+.amsr625files <- function(allfiles, ext) {
   ## 2002:2011
   f1 <- "ftp-projects.zmaw.de/seaice/AMSR-E_ASI_IceConc/no_landmask/hdf/s6250/"
   ## 2012:2015+
   f2 <- "www.iup.uni-bremen.de\\+8084/amsr2data/asi_daygrid_swath/s6250"
   datadir <- getOption("default.datadir")
   f3 <- allfiles[c(grep(f1, allfiles), grep(f2, allfiles))]
-  f4 <- grep("hdf$", f3, value = TRUE)
+  f4 <- grep(sprintf("%s", ext),  f3, value = TRUE)
   ## que?
   f5 <- f4[-grep("s12500", f4)]
   files <- data.frame(fullname = f5, 

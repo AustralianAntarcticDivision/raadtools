@@ -31,6 +31,8 @@ readice(date, time.resolution = c("daily", "monthly"), product = c("nsidc",
 \item{...}{passed to brick, primarily for \code{filename}}
 
 \item{inputfiles}{input the files data base to speed up initialization}
+
+\item{extension}{default for product "amsr" is "hdf" but can be "tif" , extension = "hdf"}
 }
 \value{
 \code{\link[raster]{raster}} object

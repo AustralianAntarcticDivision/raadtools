@@ -1,5 +1,9 @@
 DEV
 
+o some improvement to the time resolution detection
+
+o extract(function, data.frame) is now tibble friendly
+
 o added AMPS data functions amps_d1files and readamps_d1wind
 
 o converted main vignette from Sweave to RMarkdown

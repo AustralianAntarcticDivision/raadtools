@@ -12,15 +12,20 @@
 .determine.time.resolution <- function(x, ...) {
   rng <- range(difftime(x[-1L], x[-length(x)], units = "days"))
   a <- round(min(rng))
-  if (a == 1) {
-    return("daily")
+  if (a == 0) {
+    a <- round(24 * as.numeric(min(rng)))
+    return(sprintf("%shourly", a))
   }
-  if (a %in% 5:9) {
-    val = "weekly"
-  } else {
-    val = "monthly"
-  }
+   if (a == 1) {
+     return("daily")
+   }
+   if (a %in% 5:9) {
+     val = "weekly"
+   } else {
+     val = "monthly"
+   }
   val
+  
 }
 
 
@@ -57,7 +62,8 @@
       if (resize) thisx1 <- aggregate(thisx1, fact = fact, fun = 'mean')
       return(extract(thisx1, y1, ...))
     }
-    times <- try(timedateFrom(y[,3]))
+    
+    times <- try(timedateFrom(y[[3L]]))
     y <- y1
     ## chuck a
     if (inherits(times, "try-error") | any(is.na(times))) {

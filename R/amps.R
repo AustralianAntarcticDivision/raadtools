@@ -98,7 +98,7 @@ readamps_d1wind <- function(date, time.resolution = "4hourly", xylim = NULL,
   if ((magonly + dironly + uonly + vonly) > 1) stop("only one of magonly, dironly, uonly or vonly may be used, exiting")
   
   if (is.null(inputfiles)) {
-    files <- ampsfiles(time.resolution = time.resolution)
+    files <- amps_d1files(time.resolution = time.resolution)
   } else {
     files <- inputfiles
   }

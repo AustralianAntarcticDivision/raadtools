@@ -1,0 +1,53 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+[![Travis-CI Build Status](https://travis-ci.org/AustralianAntarcticDivision/raadtools.svg?branch=master)](https://travis-ci.org/AustralianAntarcticDivision/raadtools) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/AustralianAntarcticDivision/raadtools?branch=master&svg=true)](https://ci.appveyor.com/project/AustralianAntarcticDivision/raadtools) [![Coverage Status](https://img.shields.io/codecov/c/github/AustralianAntarcticDivision/raadtools/master.svg)](https://codecov.io/github/AustralianAntarcticDivision/raadtools?branch=master)
+
+R tools for spatial data at the Australian Antarctic Division (AAD)
+===================================================================
+
+Tools for reading, plotting and manipulating spatial data used at the Australian Antarctic Division (AAD).
+
+There are two main ways to use it.
+
+1. RStudio raadtools server
+---------------------------
+
+If you have access to a "raadtools-RStudio-server" then you need only load the package to get started:
+
+``` r
+library(raadtools)
+```
+
+2. Local computer, within the AAD network
+-----------------------------------------
+
+If it's not installed, trying installing with
+
+``` r
+devtools::install_github("AustralianAntarcticDivision/raadtools")
+library(raadtools)
+```
+
+If neither of 1 or 2 work for you you, see your local administrator.
+
+Development
+-----------
+
+raadsync keeps it up to date:
+
+<https://github.com/AustralianAntarcticDataCentre/raadsync>
+
+A configuration like this is required for the tools to work:
+
+<https://github.com/mdsumner/nectar/blob/master/r-spatial.sh>
+
+Related, or similar, projects
+-----------------------------
+
+<https://github.com/mdsumner/roc> - read ocean colour files catalogued by raadtools::ocfiles()
+
+<https://github.com/ropensci/rerddap>
+
+<https://ropensci.org/tutorials/rnoaa_tutorial.html>
+
+<https://github.com/rmendels/xtractomatic>

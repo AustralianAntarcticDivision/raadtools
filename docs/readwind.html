@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>readwind. raadtools 0.3.2.9003</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">raadtools 0.3.2.9003</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>readwind</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='readwind.html'>readwind</a></span><span class="keyword">(</span><span class="symbol">date</span><span class="keyword">,</span> <span class="argument">time.resolution</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"6hourly"</span><span class="keyword">,</span> <span class="string">"daily"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">xylim</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span>
+  <span class="argument">lon180</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">magonly</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">dironly</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">uonly</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span>
+  <span class="argument">vonly</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">latest</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">returnfiles</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span>
+  <span class="argument">inputfiles</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>date</dt>
+      <dd>date or dates of data to read, see Details</dd>
+      <dt>time.resolution</dt>
+      <dd>time resolution to read</dd>
+      <dt>xylim</dt>
+      <dd>crop</dd>
+      <dt>lon180</dt>
+      <dd>Pacific or Atlantic</dd>
+      <dt>magonly</dt>
+      <dd>return just the magnitude from the U and V
+components</dd>
+      <dt>dironly</dt>
+      <dd>return just the direction from the U and V, in degrees N=0, E=90, S=180, W=270</dd>
+      <dt>uonly</dt>
+      <dd>return just the horizontal component of velocity, U</dd>
+      <dt>vonly</dt>
+      <dd>return just the vertical component of velocity, V</dd>
+      <dt>latest</dt>
+      <dd>if TRUE return the latest time available, ignoring the &#39;date&#39; argument</dd>
+      <dt>returnfiles</dt>
+      <dd>ignore options and just return the file names and dates</dd>
+      <dt>...</dt>
+      <dd>arguments passed to <code><a href='http://www.rdocumentation.org/packages/raster/topics/brick'>brick</a></code>, i.e. <code>filename</code></dd>
+      <dt>inputfiles</dt>
+      <dd>input the files data base to speed up initialization</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+raster object
+</dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Read wind</p>
+
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>Read wind data</p>
+
+      <p>The <code>inputfiles</code> argument may be used to speed up individual reads, see the examples. Note that 
+this must then ignore the <code>time.resolution</code> argument, which is also set by <code>windfiles</code> - and no
+warning is given.  If using this argument you must give the same <code>time.resolution</code> as was used to create the files
+<code>data.frame</code>.</p>
+
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="comment"># Speed up individual read calls. </span>
+<span class="symbol">ff</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='windfiles.html'>windfiles</a></span><span class="keyword">(</span><span class="argument">time.resolution</span> <span class="argument">=</span> <span class="string">"6hourly"</span><span class="keyword">)</span>
+<span class="symbol">t1</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/system.time'>system.time</a></span><span class="keyword">(</span><span class="keyword">{</span><span class="functioncall"><a href='readwind.html'>readwind</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/Extremes'>max</a></span><span class="keyword">(</span><span class="symbol">ff</span><span class="keyword">$</span><span class="symbol">date</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">}</span><span class="keyword">)</span>
+<span class="symbol">t2</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/system.time'>system.time</a></span><span class="keyword">(</span><span class="keyword">{</span><span class="functioncall"><a href='readwind.html'>readwind</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/Extremes'>max</a></span><span class="keyword">(</span><span class="symbol">ff</span><span class="keyword">$</span><span class="symbol">date</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">inputfiles</span> <span class="argument">=</span> <span class="symbol">ff</span><span class="keyword">)</span><span class="keyword">}</span><span class="keyword">)</span>
+<span class="comment">## Not run: ------------------------------------</span>
+<span class="comment">#  dts &lt;- seq(as.Date("2000-01-01"), by = "1 days", length = 350)</span>
+<span class="comment">#  library(animation)</span>
+<span class="comment">#  ani.start(ani.width = 800, ani.height = 800)</span>
+<span class="comment">#  for (i in seq_along(dts)) {</span>
+<span class="comment">#     x &lt;- readwind(dts[i]);</span>
+<span class="comment">#     if (i == 1L) crds &lt;- coordinates(x[[1]])</span>
+<span class="comment">#     plot(sqrt(x[[1]]^2 + x[[2]]^2), xlim = c(40, 180), ylim = c(-90, -20));</span>
+<span class="comment"># x1 &lt;- crds[,1]</span>
+<span class="comment"># y1 &lt;- crds[,2]</span>
+<span class="comment"># x2 &lt;- crds[,1] + values(x[[1]])/4</span>
+<span class="comment"># y2 &lt;- crds[,2] + values(x[[2]])/4</span>
+<span class="comment">#     arrows(x1, y1, x2, y2, length = 0.06);</span>
+<span class="comment">#     plot(m, add = TRUE)</span>
+<span class="comment"># }</span>
+<span class="comment"># ani.stop()</span>
+<span class="comment"># </span>
+<span class="comment"># </span>
+<span class="comment">## ---------------------------------------------</span></div></pre>
+  </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>readwind</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -3,6 +3,8 @@
 
 # Installing the raadtools package, Michael Sumner
 
+NOTE: this is out of date, and currently in review. MDS 2016-09-10
+
 This document is currently relevant to working on Windows, much of the
 same stuff will work on Linux but no care has been taken to point out
 the differences here.

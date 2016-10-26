@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>extract. raadtools 0.3.2.9003</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">raadtools 0.3.2.9003</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>extract</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="comment"># S4 method for `function`,data.frame</span>
+<span class="functioncall"><a href='extract.html'>extract</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">y</span><span class="keyword">,</span> <span class="argument">ctstime</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span>
+  <span class="argument">fact</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">verbose</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">TRUE</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>x</dt>
+      <dd>A raadtools read function.</dd>
+      <dt>y</dt>
+      <dd>Object to use for querying from the raadtools read functions, such as a vector of character, Date, or POSIXt values,  data.frame, trip, etc.</dd>
+      <dt>ctstime</dt>
+      <dd>specify whether to find the nearest value in time (<code>FALSE</code>), or interpolate between slices (<code>TRUE</code>)</dd>
+      <dt>fact</dt>
+      <dd>integer. Aggregation factor expressed as number of cells in each direction (horizontally and vertically). Or two integers (horizontal and vertical aggregation factor). See Details in <code><a href='http://www.rdocumentation.org/packages/raster/topics/aggregate'>aggregate</a></code></dd>
+      <dt>verbose</dt>
+      <dd>report on progress or keep quiet</dd>
+      <dt>...</dt>
+      <dd>Additional arguments passed to the read function.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+data values extracted by the read functions
+</dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Extract methods for raadtools read functions</p>
+
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>Extract data from read functions in various ways.</p>
+
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="symbol">x</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='extract.html'>extract</a></span><span class="keyword">(</span><span class="symbol">readsst</span><span class="keyword">)</span></div>
+<strong class='error'>Error in (function (classes, fdef, mtable) {    methods &lt;- .findInheritedMethods(classes, fdef, mtable)    if (length(methods) == 1L)         return(methods[[1L]])    else if (length(methods) == 0L) {        cnames &lt;- paste0(&quot;\&quot;&quot;, vapply(classes, as.character,             &quot;&quot;), &quot;\&quot;&quot;, collapse = &quot;, &quot;)        stop(gettextf(&quot;unable to find an inherited method for function %s for signature %s&quot;,             sQuote(fdef@generic), sQuote(cnames)), domain = NA)    }    else stop(&quot;Internal error in finding inherited methods; didn&#39;t return a unique method&quot;,         domain = NA)})(list(&quot;function&quot;, structure(&quot;missing&quot;, package = &quot;methods&quot;)),     structure(function (x, y, ...)     standardGeneric(&quot;extract&quot;), generic = structure(&quot;extract&quot;, package = &quot;raster&quot;), package = &quot;raster&quot;, group = list(), valueClass = character(0), signature = c(&quot;x&quot;,     &quot;y&quot;), default = `\001NULL\001`, skeleton = (function (x,         y, ...)     stop(&quot;invalid call in method dispatch to &#39;extract&#39; (no default method)&quot;,         domain = NA))(x, y, ...), class = structure(&quot;standardGeneric&quot;, package = &quot;methods&quot;)),     &lt;environment&gt;): unable to find an inherited method for function ‘extract’ for signature ‘&quot;function&quot;, &quot;missing&quot;’</strong>
+<div class='input'><span class="symbol">a</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/structure'>structure</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/list'>list</a></span><span class="keyword">(</span><span class="argument">x</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="number">174</span><span class="keyword">,</span> <span class="number">168</span><span class="keyword">,</span> <span class="number">156</span><span class="keyword">,</span> <span class="number">111</span><span class="keyword">,</span> <span class="number">99</span><span class="keyword">,</span> <span class="number">64</span><span class="keyword">,</span> <span class="number">52</span><span class="keyword">,</span> <span class="number">46</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">4</span><span class="keyword">,</span>
+<span class="keyword">-</span><span class="number">15</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">30</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">38</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">47</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">62</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">87</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">127</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">145</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">160</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">161</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="keyword">-</span><span class="number">72</span><span class="keyword">,</span>
+<span class="keyword">-</span><span class="number">39</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">50</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">58</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">35</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">38</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">48</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">60</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">48</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">35</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">37</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">51</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">68</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">72</span><span class="keyword">,</span>
+<span class="keyword">-</span><span class="number">69</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">54</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">40</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">49</span><span class="keyword">,</span> <span class="keyword">-</span><span class="number">54</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">.Names</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"x"</span><span class="keyword">,</span> <span class="string">"y"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">row.names</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="number">NA</span><span class="keyword">,</span>
+<span class="keyword">-</span><span class="number">19L</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">class</span> <span class="argument">=</span> <span class="string">"data.frame"</span><span class="keyword">)</span>
+
+<span class="symbol">a</span><span class="keyword">$</span><span class="symbol">time</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/structure'>structure</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="number">5479</span><span class="keyword">,</span> <span class="number">5479</span><span class="keyword">,</span> <span class="number">5479</span><span class="keyword">,</span> <span class="number">5479</span><span class="keyword">,</span> <span class="number">5479</span><span class="keyword">,</span> <span class="number">5479</span><span class="keyword">,</span> <span class="number">5479</span><span class="keyword">,</span> <span class="number">5479</span><span class="keyword">,</span> <span class="number">5479</span><span class="keyword">,</span>
+<span class="number">5479</span><span class="keyword">,</span> <span class="number">5479</span><span class="keyword">,</span> <span class="number">5489</span><span class="keyword">,</span> <span class="number">5529</span><span class="keyword">,</span> <span class="number">5529</span><span class="keyword">,</span> <span class="number">5529</span><span class="keyword">,</span> <span class="number">5579</span><span class="keyword">,</span> <span class="number">5579</span><span class="keyword">,</span> <span class="number">5579</span><span class="keyword">,</span> <span class="number">5579</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">class</span> <span class="argument">=</span> <span class="string">"Date"</span><span class="keyword">)</span>
+<span class="functioncall"><a href='extract.html'>extract</a></span><span class="keyword">(</span><span class="symbol">readsst</span><span class="keyword">,</span> <span class="symbol">a</span><span class="keyword">)</span></div>
+<div class='output'>daily file 1 of 5daily file 2 of 5daily file 3 of 5daily file 4 of 5daily file 5 of 5
+</div>
+<div class='output'> [1] -0.99 18.49 10.93  1.85 15.59 16.11  5.51  0.56  5.90 17.60 16.80  3.17 -0.36
+[14]    NA  0.43  6.27 15.55 11.56  7.73
+</div>
+<div class='input'><span class="functioncall"><a href='extract.html'>extract</a></span><span class="keyword">(</span><span class="symbol">readsst</span><span class="keyword">,</span> <span class="symbol">a</span><span class="keyword">,</span> <span class="argument">method</span> <span class="argument">=</span> <span class="string">"bilinear"</span><span class="keyword">)</span></div>
+<div class='output'>daily file 1 of 5daily file 2 of 5daily file 3 of 5daily file 4 of 5daily file 5 of 5
+</div>
+<div class='output'> [1] -1.0700 18.4375 10.9700  1.9925 15.6750 16.2825  5.5925  0.6100  5.9325
+[10] 17.7225 16.7800  3.6350 -0.3575 -0.9200  0.5025  6.2700 15.5300 11.5550
+[19]  7.8575
+</div>
+<div class='input'><span class="symbol">a</span><span class="keyword">$</span><span class="symbol">time</span> <span class="assignement">&lt;-</span>  <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span><span class="keyword">(</span><span class="string">"2005-01-01"</span><span class="keyword">)</span> <span class="keyword">+</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="number">0</span><span class="keyword">,</span> <span class="number">0</span><span class="keyword">,</span> <span class="number">0</span><span class="keyword">,</span> <span class="number">8</span><span class="keyword">,</span> <span class="number">20</span><span class="keyword">,</span> <span class="number">50</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/raster/topics/ncell'>nrow</a></span><span class="keyword">(</span><span class="symbol">a</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">replace</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span><span class="keyword">)</span>
+<span class="functioncall"><a href='extract.html'>extract</a></span><span class="keyword">(</span><span class="symbol">readsst</span><span class="keyword">,</span> <span class="symbol">a</span><span class="keyword">)</span></div>
+<div class='output'>daily file 1 of 5daily file 2 of 5daily file 3 of 5daily file 4 of 5daily file 5 of 5
+</div>
+<div class='output'> [1] -0.16 16.22 10.71  3.13 16.71 17.32  4.60  0.04  4.16 17.45 16.63  3.96 -1.68
+[14]    NA -1.02  8.00 17.03 13.61  8.26
+</div></pre>
+  </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>extract</li><li>extract,function,data.frame-method</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+    <h2>See also</h2>
+      <p><code><a href='readsst.html'>readsst</a></code> and <code><a href='extract.html'>extract</a></code></p>
+
+    
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

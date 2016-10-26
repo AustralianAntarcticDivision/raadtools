@@ -1,3 +1,9 @@
+    DEV
+
+o converted main vignette from Sweave to RMarkdown
+
+o package scaffolding
+
 
 
 CHANGES in raadtools 0.3.2

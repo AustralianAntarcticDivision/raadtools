@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>readderivice. raadtools 0.3.2.9003</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">raadtools 0.3.2.9003</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Read data from derived sea ice data products.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='readderivice.html'>readderivice</a></span><span class="keyword">(</span><span class="symbol">date</span><span class="keyword">,</span> <span class="argument">time.resolution</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"daily"</span><span class="keyword">)</span><span class="keyword">,</span>
+  <span class="argument">product</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/c'>c</a></span><span class="keyword">(</span><span class="string">"time_since_melt"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">xylim</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="argument">latest</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span>
+  <span class="argument">returnfiles</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="number">FALSE</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>date</dt>
+      <dd>date or dates of data to read, see Details</dd>
+      <dt>time.resolution</dt>
+      <dd>time resoution data to read, daily or monthly</dd>
+      <dt>product</dt>
+      <dd>choice of sea ice product, see Details</dd>
+      <dt>xylim</dt>
+      <dd>spatial extents to crop from source data, can be anything accepted by <code><a href='http://www.rdocumentation.org/packages/raster/topics/extent'>extent</a></code></dd>
+      <dt>latest</dt>
+      <dd>if TRUE return the latest time available, ignoring the &#39;date&#39; argument</dd>
+      <dt>returnfiles</dt>
+      <dd>ignore options and just return the file names and dates</dd>
+      <dt>...</dt>
+      <dd>passed to brick, primarily for <code>filename</code></dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+<code><a href='http://www.rdocumentation.org/packages/raster/topics/raster'>raster</a></code> object
+</dl></p>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Derived sea ice data is read from files managed by <code><a href='derivicefiles.html'>derivicefiles</a></code>.</p>
+
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>Currently available products are</p>
+
+      <p><dl>
+</dl></p>
+
+      <p>Dates are matched to file names by finding the nearest match in
+time within a short duration. If <code>date</code> is greater than
+length 1 then the sorted set of unique matches is returned.</p>
+
+      <p>time_since_melt</p>
+
+      <p>32767 (treated as missing data)</p>
+
+      <p>32766 = land</p>
+
+      <p>32765 = open-ocean zone</p>
+
+      <p>-32768 = ice that hasn&#39;t melted during the data period</p>
+
+      <p>In terms of missing data 32767,  in the nc file, so should be NA once read into R): these are 
+either open water in the sea ice zone that hasn&#39;t re-frozen during the data period, or missing sea ice data that 
+couldn&#39;t be interpolated.</p>
+
+    </div>
+      </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>readderivice</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+    <h2>See also</h2>
+      <p><code><a href='derivicefiles.html'>derivicefiles</a></code> for details on the repository of
+data files, <code><a href='http://www.rdocumentation.org/packages/raster/topics/raster'>raster</a></code> for the return value</p>
+
+    
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

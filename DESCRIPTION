@@ -18,7 +18,7 @@ Suggests:
     covr
 LazyData: yes
 VignetteBuilder: knitr
-Version: 0.3.2.9003
+Version: 0.3.2.9004
 Authors@R: c(
    person("Michael D.","Sumner", role = c("aut", "cre"), email = "michael.sumner@aad.gov.au"), 
    person("Ben", "Raymond", role = "ctb", email = "ben.raymond@aad.gov.au")

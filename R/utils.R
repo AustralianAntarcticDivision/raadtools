@@ -154,7 +154,8 @@ yrange <- function(x) c(ymin(x), ymax(x))
   findex <- dedupedates$index
   date <- dedupedates$date
   
-  .matchFiles(date, fdate[findex], findex, daytest = switch(timeres, "6hourly" = 0.25, daily = 1.5, weekly = 4, monthly = 15, weekly3 = 26))
+  .matchFiles(date, fdate[findex], findex, 
+              daytest = switch(timeres, "4hourly" = 1/6, "6hourly" = 0.25, daily = 1.5, weekly = 4, monthly = 15, weekly3 = 26))
 }
 
 

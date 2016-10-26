@@ -1,4 +1,6 @@
-    DEV
+DEV
+
+o added AMPS data functions amps_d1files and readamps_d1wind
 
 o converted main vignette from Sweave to RMarkdown
 

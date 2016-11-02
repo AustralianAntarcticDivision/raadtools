@@ -11,7 +11,7 @@
 ##' @param ... reserved for future use, currently ignored
 ##' @export
 ##' @return data.frame of \code{file} and \code{date}
-ocfiles <- function(time.resolution = c("daily", "weekly"),
+ocfiles <- function(time.resolution = c("daily", "weekly", "monthly"),
                     product = c("MODISA", "SeaWiFS", "VIIRS"), 
                     varname = c("RRS", "CHL", "POC", "KD490", "NPP_PAR"), 
                     type = c("L3b", "L3m"),
@@ -28,7 +28,8 @@ ocfiles <- function(time.resolution = c("daily", "weekly"),
   
   time <- switch(time.resolution, 
                  daily = "DAY", 
-                 weekly = "8D")
+                 weekly = "8D", 
+                 monthly = "MO")
   
   ## don't forget those ST93c files!  
   ## see here: http://oceancolor.gsfc.nasa.gov/DOCS/FormatChange.html

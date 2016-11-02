@@ -83,5 +83,14 @@ af <- amps_d1files()
 w <- readamps_d1wind(latest = TRUE, inputfiles = af)
 vlen <- function(a, b) sqrt(a * a + b * b)
 plot(vlen(w[[1]], w[[2]]))
+
+## arrow jigger
+arr <- function(x, sub = seq(ncell(x[[1]])), scale = 1) {
+ cr <- coordinates(x[[1]]); cr1 <- cr; 
+ cr1[,1] <- cr[,1] + values(x[[1]])*scale; 
+ cr1[,2] <- cr1[,2] + values(x[[2]]*scale); 
+ segments(cr[sub,1], cr[sub,2], cr1[sub,1], cr1[sub,2])
+}
+arr(w, sample(ncell(w), 10000), scale = 30000)
 }
 

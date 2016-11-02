@@ -16,4 +16,7 @@ amps_d1files(data.source = "", time.resolution = "4hourly", ...)
 \description{
 AMPS files
 }
+\section{gdalinfo}{
+
+}
 

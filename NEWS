@@ -1,5 +1,7 @@
 DEV
 
+o new function readchl32 for rolling 32-day weekly files
+
 o some improvement to the time resolution detection
 
 o extract(function, data.frame) is now tibble friendly

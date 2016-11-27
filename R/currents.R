@@ -9,7 +9,6 @@
 ##' @return data.frame of file names and dates
 ##' @export
 ##' @importFrom raster filename 
-##' @importFrom dplyr distinct
 currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
   datadir <- getOption("default.datadir")
   ## ftp.aviso.altimetry.fr/global/delayed-time/grids/madt/all-sat-merged/uv/1993/dt_global_allsat_madt_uv_19930101_20140106.nc

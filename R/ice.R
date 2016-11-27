@@ -318,7 +318,7 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   f4 <- grep(sprintf("%s", ext),  f3, value = TRUE)
   ## que?
   f5 <- f4[-grep("s12500", f4)]
-  files <- data.frame(fullname = f5, 
+  files <- data.frame(fullname = file.path(datadir, f5), 
              #file = gsub(paste0(datadir, "/data/"), "", f5), 
              file = f5,
              date = as.POSIXct(strptime(sapply(strsplit(basename(f5), "-"), "[", 4), "%Y%m%d"), tz = "UTC"), 

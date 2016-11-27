@@ -9,6 +9,7 @@
 ##' @return data.frame of file names and dates
 ##' @export
 ##' @importFrom raster filename 
+##' @importFrom dplyr distinct
 currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
   datadir <- getOption("default.datadir")
   ## ftp.aviso.altimetry.fr/global/delayed-time/grids/madt/all-sat-merged/uv/1993/dt_global_allsat_madt_uv_19930101_20140106.nc
@@ -16,7 +17,7 @@ currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
   
   time.resolution <- match.arg(time.resolution)
   if (time.resolution == "weekly") stop("weekly currents no longer supported")
-  ftx <- .allfilelist()
+  ftx <- .allfilelist(rda = TRUE, fullname = FALSE)
   cfiles0 <- grep("ftp.aviso.altimetry.fr", ftx, value = TRUE)
   cfiles1 <- grep("uv", cfiles0, value = TRUE)
   cfiles <- grep(".nc$", cfiles1, value = TRUE)
@@ -29,8 +30,10 @@ currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
   ## just the last one
   nas <- is.na(dates[length(dates)])
   if (nas) dates[length(dates)] <- max(dates, na.rm = TRUE) + 24 * 3600
-  cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = dates,
-                    fullname = cfiles, stringsAsFactors = FALSE)[order(dates), ]
+  #cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = dates,
+  #                  fullname = cfiles, stringsAsFactors = FALSE)[order(dates), ]
+  cfs <- data.frame(file = cfiles, date = dates,
+                    fullname = file.path(datadir, cfiles), stringsAsFactors = FALSE)[order(dates), ]
   ## drop any duplicated, this occurs with the delayed/near-real time update
   cfs[!duplicated(cfs$date), ]  
 }

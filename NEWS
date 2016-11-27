@@ -1,6 +1,8 @@
 DEV
 
-o improvements for readcurr 
+o big speedups for wind and currents file database loading
+
+o improvements for readcurr in performance, and file handling
 
 o new function readchl32 for rolling 32-day weekly files
 

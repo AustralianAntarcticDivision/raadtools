@@ -8,7 +8,10 @@ allfiles <- function(...) {
 	data.frame(fullname = .allfilelist(), stringsAsFactors = FALSE)
 }
 
-.allfilelist <- function(rda = TRUE) {
+
+## DEVELOPERS if fullname is TRUE, it's slow because the entire list is prepended
+## only currentsfiles() uses fullname = FALSE
+.allfilelist <- function(rda = TRUE, fullname = TRUE) {
   datadir <- getOption("default.datadir")
   if (rda) {
     fs <- NULL
@@ -18,5 +21,7 @@ allfiles <- function(...) {
    fs <- readLines(file.path(datadir, "admin", "filelist", "allfiles2.txt"))
   }
   
-  return(file.path(datadir, fs))
+  if (fullname) fs <- file.path(datadir, fs)
+  
+  fs
 }

@@ -16,7 +16,7 @@ windfiles <-
     ##      fromCache <- TRUE
     
     trestok <- c("6hourly" = "ncep.reanalysis2/gaussian_grid", daily = "ncep.reanalysis2.dailyavgs/gaussian_grid")[time.resolution]
-    allfiles <- .allfilelist()
+    allfiles <- .allfilelist(rda = TRUE, fullname = FALSE)
     cfiles1 <- grep("ftp.cdc.noaa.gov/Datasets/", allfiles, value = TRUE)
     cfiles2 <- grep(trestok, cfiles1, value = TRUE)
     cfiles3 <- grep("uwnd|vwnd", cfiles2, value = TRUE)
@@ -29,14 +29,22 @@ windfiles <-
     dates$mon <- 0
     dates <- as.POSIXct(dates, tz = "UTC")
     wf <- data.frame(ufullname = ufiles, vfullname = vfiles, date = dates, stringsAsFactors = FALSE)
-    wfU <- .expandFileDateList(wf$ufullname)
+    ## wind is different to curr, because the path expansion is done here
+    ## and so has to be un-done below
+    wfU <- .expandFileDateList(file.path(datadir, wf$ufullname))
     ##wfV <- .expandFileDateList( wf$vfullname, fastNC = TRUE, varname = "time")
     
-    wf <- data.frame(ufile = gsub("^/", "", gsub(datadir, "", wfU$file)), 
-                     vfile = gsub("uwnd", "vwnd", gsub("^/", "", gsub(datadir, "", wfU$file))), 
-                     ufullname = wfU$file, 
-                     vfullname = gsub("uwnd", "vwnd", wfU$file), 
-                     date = wfU$date, band = wfU$band, stringsAsFactors = FALSE)
+     wf <- data.frame(ufile = gsub("^/", "", gsub(datadir, "", wfU$file)), 
+                      vfile = gsub("uwnd", "vwnd", gsub("^/", "", gsub(datadir, "", wfU$file))), 
+                      ufullname = wfU$file, 
+                      vfullname = gsub("uwnd", "vwnd", wfU$file), 
+                      date = wfU$date, band = wfU$band, stringsAsFactors = FALSE)
+     
+    #wf <- data.frame(ufile = wfU$file, 
+    #                 vfile = gsub("uwnd", "vwnd", wfU$file), 
+    #                 ufullname = file.path(datadir, wfU$file), 
+    #                 vfullname = file.path(datadir, gsub("uwnd", "vwnd", wfU$file)), 
+    #                 date = wfU$date, band = wfU$band, stringsAsFactors = FALSE)
     ## "hours since 1800-1-1 00:00:0.0" 
 wf 
   }

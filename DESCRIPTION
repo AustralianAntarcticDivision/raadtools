@@ -5,6 +5,7 @@ Depends:
     raster (>= 2.3-12),
     R (>= 3.1.2)
 Imports:
+    dplyr,
     maptools,
     methods,
     rgeos,

@@ -15,7 +15,7 @@ currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
   ## ftp.aviso.altimetry.fr/global/delayed-time/grids/madt/all-sat-merged/uv/1993/dt_global_allsat_madt_uv_19930102_20140106.nc" 
   
   time.resolution <- match.arg(time.resolution)
-  
+  if (time.resolution == "weekly") stop("weekly currents no longer supported")
   ftx <- .allfilelist()
   cfiles0 <- grep("ftp.aviso.altimetry.fr", ftx, value = TRUE)
   cfiles1 <- grep("uv", cfiles0, value = TRUE)
@@ -103,18 +103,49 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
                       latest = FALSE,
                       returnfiles = FALSE, ..., inputfiles = NULL) {
   time.resolution <- match.arg(time.resolution)
-  if (time.resolution == "weekly") {
-    return(.readcurr1(date, time.resolution = time.resolution, xylim = xylim, lon180 = lon180, magonly = magonly, dironly = dironly, 
-             uonly = uonly, vonly = vonly, latest = latest, returnfiles = returnfiles, ...))
-  }
-  
+
   if (is.null(inputfiles)) {
     files <- currentsfiles(time.resolution = time.resolution)
   } else {
     files <- inputfiles
   }
   
- 
+  read_i_u <- function(file, xylim = NULL, lon180 = FALSE) {
+    x <- raster(file, varname = "u")
+    if (lon180) x <- raadtools:::.rotate(x)
+    if (!is.null(xylim)) x <- crop(x, xylim)
+
+    x
+  }
+  read_i_v <- function(file, xylim = NULL, lon180 = FALSE) {
+    x <- raster(file, varname = "v")
+    if (lon180) x <- raadtools:::.rotate(x)
+    if (!is.null(xylim)) x <- crop(x, xylim)
+   
+    x
+  }
+  read_uv <- function(file, xylim = NULL, lon180 = FALSE) {
+    stack(read_i_u(file, xylim = xylim, lon180 = lon180), 
+          read_i_v(file, xylim = xylim, lon180 = lon180))
+  }
+  read_i_dir <- function(file, xylim = NULL, lon180 = FALSE) {
+    x <- read_uv(file, xylim = xylim, lon180 = lon180)
+    overlay(x[[1]], x[[2]], fun = function(x, y) (90 - atan2(y, x) * 180/pi) %% 360)
+  }
+  vlen <- function(x, y) sqrt(x * x + y * y)
+  read_i_mag <- function(file, xylim = NULL, lon180 = FALSE) {
+    x <- read_uv(file, xylim = xylim, lon180 = lon180)
+    vlen(x[[1]], x[[2]])
+  }
+
+  thefun <- read_uv  
+  if (magonly) thefun <- read_i_mag
+  if (dironly) thefun <- read_i_dir
+  if (uonly ) thefun <- read_i_u
+  if (vonly) thefun <- read_i_v
+  
+  
+
   if (returnfiles)
     return(files)
   if (missing(date)) date <- min(files$date)
@@ -122,20 +153,56 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
   date <- timedateFrom(date)
   files <- .processFiles(date, files, time.resolution)
   
-  cropit <- FALSE
-  if (!is.null(xylim)) {
-    cropit <- TRUE
-    cropext <- extent(xylim)
-  }
-  
-  if ((magonly + dironly + uonly + vonly) > 1) stop("only one of 'magonly', 'dironly', 'uonly' or 'vonly' may be TRUE")
   nfiles <- nrow(files)
+  
   ## prevent reading more than one unless mag/dironly
   if (nfiles > 1L & !magonly & !dironly & !uonly & !vonly) {
     files <- files[1L,]
     nfiles <- 1L
     warning("only one time step can be read at once unless one of 'magonly', 'dironly', 'uonly' or 'vonly' is TRUE")
   }
+  if ((magonly + dironly + uonly + vonly) > 1) stop("only one of 'magonly', 'dironly', 'uonly' or 'vonly' may be TRUE")
+
+  
+  dots <- list(...)
+
+  
+  
+  op <- options(warn = -1)
+  on.exit(options(op))
+  r0 <- stack(lapply(files$fullname, thefun, xylim = xylim, lon180 = lon180), filename = filename)
+  if (nlayers(r0) == nrow(files)) {
+    r0 <- setZ(r0, files$date)
+  } else {
+    if (nlayers(r0) == 2 & nrow(files) == 1) {
+      r0 <- setZ(r0, rep(files$date, 2))
+    }
+  }
+  
+  if ("filename" %in% names(dots)) {
+    
+     r0 <- writeRaster(r0, filename = dots[["filename"]])
+    
+  }
+  
+  projection(r0) <- "+proj=longlat +a=6371000 +b=6371000 +no_defs"
+  
+  ## need to determine if "filename" was passed in
+  # dots <- list(...)
+  # if ("filename" %in% names(dots)) {
+  #   r0 <- writeRaster(r0, ...)
+  # }
+  # 
+  return(r0)
+  
+  
+  cropit <- FALSE
+  if (!is.null(xylim)) {
+    cropit <- TRUE
+    cropext <- extent(xylim)
+  }
+  
+
   
   cleanup <- NULL
   if (!vonly) {

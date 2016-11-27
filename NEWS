@@ -1,5 +1,7 @@
 DEV
 
+o improvements for readcurr 
+
 o new function readchl32 for rolling 32-day weekly files
 
 o some improvement to the time resolution detection

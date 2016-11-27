@@ -255,7 +255,7 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   
   if (time.resolution != "daily" & product == "amsr") stop("product=\"AMSR\" is only compatible with daily time resolution")
   
-  ftx <- .allfilelist()
+  ftx <- .allfilelist(rda = TRUE, fullname = FALSE)
   ## just shortcut here for AMSR (need to review code below)
   if (product == "amsr") return(.amsr625files(ftx, ext = extension))
   ppat <- switch(product, 
@@ -297,8 +297,11 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   dates <- dates[!nas]
   cfiles <- cfiles[!nas]
 
-  cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = dates,
-                    fullname = cfiles, stringsAsFactors = FALSE)[order(dates), ]
+  cfs <- data.frame(file = cfiles,
+    #file = gsub(paste(datadir, "/", sep = ""), "", cfiles), 
+                    date = dates,
+                    fullname = file.path(datadir, cfiles), 
+    stringsAsFactors = FALSE)[order(dates), ]
   
   cfs <- cfs[!duplicated(cfs$date), ]
   
@@ -316,7 +319,8 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   ## que?
   f5 <- f4[-grep("s12500", f4)]
   files <- data.frame(fullname = f5, 
-             file = gsub(paste0(datadir, "/data/"), "", f5), 
+             #file = gsub(paste0(datadir, "/data/"), "", f5), 
+             file = f5,
              date = as.POSIXct(strptime(sapply(strsplit(basename(f5), "-"), "[", 4), "%Y%m%d"), tz = "UTC"), 
              stringsAsFactors = FALSE)
   

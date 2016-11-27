@@ -187,88 +187,9 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
   
   projection(r0) <- "+proj=longlat +a=6371000 +b=6371000 +no_defs"
   
-  ## need to determine if "filename" was passed in
-  # dots <- list(...)
-  # if ("filename" %in% names(dots)) {
-  #   r0 <- writeRaster(r0, ...)
-  # }
-  # 
-  return(r0)
-  
-  
-  cropit <- FALSE
-  if (!is.null(xylim)) {
-    cropit <- TRUE
-    cropext <- extent(xylim)
-  }
-  
-
-  
-  cleanup <- NULL
-  if (!vonly) {
-    uraster <- suppressWarnings(stack(files$fullname, varname = "u", quick = TRUE))
-    cleanup <- c(cleanup, filename(uraster))
-  }
-  if (!uonly) {
-    vraster <- suppressWarnings(stack(files$fullname, varname = "v", quick = TRUE))
-    cleanup <- c(cleanup, filename(vraster))
-  }
-  
-  
-  if (magonly) r0 <- sqrt(uraster * uraster + vraster * vraster)
-  if (dironly) r0 <- overlay(uraster, vraster, fun = function(x, y) (90 - atan2(y, x) * 180/pi) %% 360)
-  if (uonly) r0 <- uraster
-  if (vonly) r0 <- vraster
-  
-  if ((magonly + dironly + uonly + vonly) == 0) {
-    r0 <- stack(uraster, vraster)
-    names(r0) <-  sprintf("%scurr_%s", c("U", "V"), format(files$date, "%Y%m%d"))
-    r0 <- setZ(r0, rep(files$date, 2L))
-  }
-  
-  ##if (nlayers(r0) == 1) r0 <- raster(r0)
-  
-  ## note that here the object gets turned into a brick, 
-  ## presumably with a tempfile backing - that's something to think about more
-  ## in terms of passing in "filename"
-  if (lon180) r0 <- rotate(r0)
-  cleanup <- c(cleanup, filename(r0))
-  if (cropit) r0 <- crop(r0, cropext)
-  cleanup <- c(cleanup, filename(r0))
-  
-  if (nlayers(r0) == nrow(files)) r0 <- setZ(r0, files$date)
-  varnm <- names(r0)[1]
-  varnm <- gsub("\\.", " ", varnm)
-  varnm <- paste(sapply(strsplit(varnm, " "), function(x) x[-length(x)]), collapse = " ")
-  if (magonly) varnm <- "Absolute geostrophic velocity (Magnitude m/s)"
-  if (dironly) varnm <- "Absolute geostrophic velocity (Direction - degrees 0 - North, 90 - East, 270 - West)"
-  if (uonly) varnm <- "Absolute geostrophic velocity meridional component (m/s)"
-  if (vonly) varnm <- "Absolute geostrophic velocity zonal component (m/s)"
-  r0@title <- varnm
-  names(r0) <- sprintf("X%i", 1:nlayers(r0))
-  
-  projection(r0) <- "+proj=longlat +a=6371000 +b=6371000 +no_defs"
-  
-  ## need to determine if "filename" was passed in
-  dots <- list(...)
-  if ("filename" %in% names(dots)) {
-    r0 <- writeRaster(r0, ...)
-  }
-  
-  cleanup <- unique(cleanup)
- #stop("better check this is working")
-  #x <- readcurr(seq(as.Date("2000-01-01"), length = 250, by = "1 day"), uonly = TRUE)
-#  file.exists(filename(x))
-  
-  for (i in seq_along(cleanup)) {
-    #print(cleanup[i])
-    if (file.exists(cleanup[i]) & (!cleanup[i] == filename(r0))) {
-      unlink(cleanup[i])
-      unlink(gsub("grd$", "gri", cleanup[i]))
-    }
-  }
-  
 r0
+  
+  
 }
 
 # dimensions:

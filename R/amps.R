@@ -30,10 +30,14 @@ readwrf0 <- function(x, band = 1) {
 #' @section gdalinfo
 #' 
 amps_d1files <- function(data.source = "", time.resolution = "4hourly", ...) {
-  allfiles <- raadtools:::.allfilelist()
+  datadir <- getOption("default.datadir")
+  allfiles <- raadtools:::.allfilelist(rda = TRUE, fullname = FALSE)
   files1 <- grep("www2.mmm.ucar.edu", allfiles, value = TRUE)
   files2 <- grep("wrf_grib", files1, value = TRUE)
-  files <- tibble::tibble(fullname = grep("grb$", files2, value = TRUE)) %>% filter(grepl("d1", fullname))
+  files3 <- grep("grb$", files2, value = TRUE)
+  #files <- tibble::tibble(fullname = grep("grb$", files2, value = TRUE)) %>% filter(grepl("d1", fullname))
+  files <- tibble::tibble(file = files3) %>% filter(grepl("d1", file))
+  files$fullname <- file.path(datadir, files$file)
   files$date <- as.POSIXct(strptime(basename(files$fullname), "%Y%m%d"), tz = "UTC") + 
      (as.integer(factor(as.integer(substr(basename(files$fullname), 20, 22)))) - 1) * 4 * 3600
   files <- files %>% arrange(date) 
@@ -178,7 +182,7 @@ readamps_d1wind <- function(date, time.resolution = "4hourly", xylim = NULL,
   extent(r) <- extent(c(xmin(r) + res(r)[1]/2, xmax(r) + res(r)[1]/2,
                         ymin(r), ymax(r)))
   
-  if (is.na(projection(r))) projection(r) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
+  ##if (is.na(projection(r))) projection(r) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
   
   ## need to determine if "filename" was passed in
   dots <- list(...)
@@ -189,3 +193,4 @@ readamps_d1wind <- function(date, time.resolution = "4hourly", xylim = NULL,
   
   r
 }
+

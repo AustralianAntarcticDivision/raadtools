@@ -92,16 +92,17 @@
     if (max(times) == max(files$date[findex])) findex <- c(findex, max(findex) + 1)
     findex <- findex[findex <= nrow(files)]
     date <- files$date[findex]
-    
+    l <- list(...)
+    if ("inputfiles" %in% names(l)) warning("using inputfiles explicitly is deprecated, please don't do it")
     mess1 <- ""
     ## interpolate in time?
     if (ctstime) {
       ## we need to store start and end values
       resm <- cbind(result, result)
-      thisx1 <- x(date[1L], verbose = FALSE, ...)  ## inputfiles via dots
+      thisx1 <- x(date[1L], verbose = FALSE, inputfiles = files, ...)  ## inputfiles direct
       if(resize) thisx1 <- aggregate(thisx1, fact = fact, fun = "mean")
       for (i in seq_along(date)[-1]) {
-        thisx2 <- x(date[i], verbose = FALSE)
+        thisx2 <- x(date[i], verbose = FALSE, inputfiles = files, ...)
         ## TODO check do we have to store the time-value BEFORE aggregating
         ##t2 <- getZ(thisx2)
         if(resize) thisx2 <- aggregate(thisx2, fact = fact, fun = "mean")
@@ -136,7 +137,7 @@
     } else {
       ## TODO, fix up the if/else here with an exception for the first/last for ctstime
       for (i in seq_along(date)) {
-        thisx <- x(date[i], verbose = FALSE, ...)
+        thisx <- x(date[i], verbose = FALSE, inputfiles = files, ...)
         if(resize) thisx <- aggregate(thisx, fact = fact, fun = "mean")
         asub <- windex == findex[i]
         ## no interpolation in time, controlled by "method" for xy

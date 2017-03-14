@@ -1,5 +1,9 @@
 DEV
 
+o level for amps files
+
+o use inputfiles for extract, always
+
 o big speedups for wind and currents file database loading
 
 o improvements for readcurr in performance, and file handling

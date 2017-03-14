@@ -107,7 +107,7 @@ amps_d1files <- function(data.source = "", time.resolution = "4hourly", ...) {
 #' arr(w, sample(ncell(w), 10000), scale = 30000)
 readamps_d1wind <- function(date, time.resolution = "4hourly", xylim = NULL, 
                 magonly = FALSE, dironly = FALSE, uonly = FALSE, vonly = FALSE,
-                latest = FALSE, returnfiles = FALSE, ..., inputfiles = NULL) {
+                latest = FALSE, returnfiles = FALSE, level = 1, ..., inputfiles = NULL) {
   
   time.resolution <- match.arg(time.resolution)
   if ((magonly + dironly + uonly + vonly) > 1) stop("only one of magonly, dironly, uonly or vonly may be used, exiting")
@@ -158,9 +158,11 @@ readamps_d1wind <- function(date, time.resolution = "4hourly", xylim = NULL,
   }
   
   r <- vector("list", nfiles)
+  
+  bands <- c(5, 27) + level - 1
   for (ifile in seq_len(nfiles)) {
-    r1 <- readwrf0(files$fullname[ifile], band = 5) #raster(files$ufullname[ifile], band = files$band[ifile])
-    r2 <- readwrf0(files$fullname[ifile], band = 27) #raster(files$vfullname[ifile], band = files$band[ifile])
+    r1 <- readwrf0(files$fullname[ifile], band = bands[1L]) #raster(files$ufullname[ifile], band = files$band[ifile])
+    r2 <- readwrf0(files$fullname[ifile], band = bands[2L]) #raster(files$vfullname[ifile], band = files$band[ifile])
     r0 <- rasterfun(r1, r2)
     #if (lon180)     r0 <- suppressWarnings(.rotate(r0))
     if (cropit) r0 <- crop(r0, cropext)

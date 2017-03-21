@@ -73,9 +73,9 @@
     args <- list(...)
     
     if ("time.resolution" %in% names(args)) {
-      files <- x(returnfiles = TRUE, time.resolution = args$time.resolution)
+      files <- x(returnfiles = TRUE, time.resolution = args$time.resolution, ...)
     } else {
-      files <- x(returnfiles = TRUE)
+      files <- x(returnfiles = TRUE, ...)
     }
     ## TODO, this is awful need a fix
     time.resolution <- .determine.time.resolution(files$date)
@@ -138,6 +138,7 @@
       ## TODO, fix up the if/else here with an exception for the first/last for ctstime
       for (i in seq_along(date)) {
         thisx <- x(date[i], verbose = FALSE, inputfiles = files, ...)
+       
         if(resize) thisx <- aggregate(thisx, fact = fact, fun = "mean")
         asub <- windex == findex[i]
         ## no interpolation in time, controlled by "method" for xy

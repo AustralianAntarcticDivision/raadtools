@@ -12,6 +12,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+
+```{r,include=FALSE}
+## included only to make the vignette work (temporary hack)
+options(default.datadir = "/rdsi/PRIVATE")
+```
 ```{r,setup, include=FALSE}
 library(knitr)
 # set global chunk options
@@ -149,14 +154,13 @@ Raster objects, and in particular the vignette `Raster` is a
 good place to start. Use the `library` function's `help`
 argument to get an overview of the available functions.
 
-<<raster-vig,eval=FALSE>>=
+```{r,eval=FALSE}
 library(raster)
 ## opens an index page to all of the package's functions
 library(help = raster)
 ## opens a PDF document with extended help and examples
 vignette("Raster")
-@
-}
+```
 See the Section sec:assumedsupport for more detail on the design
 choices made with `raster` and the other package dependencies
 used by `raadtools`. 
@@ -199,9 +203,9 @@ argument. The Smith and Sandwell data set is returned in Pacific view
 on the Mercator projection by default. Use `lon180 = FALSE` to
 return Atlantic view.
 
-<<read-topo,eval=FALSE>>=
+```{r}
 geb <- readtopo("gebco_08", xylim = extent(150, 220, -75, -60))
-@
+```
 
 
 

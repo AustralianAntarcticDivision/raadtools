@@ -15,7 +15,7 @@ vignette: >
 
 ```{r,include=FALSE}
 ## included only to make the vignette work (temporary hack)
-options(default.datadir = "/rdsi/PRIVATE/raad")
+options(default.datadir = "/rdsi/PRIVATE")
 ```
 The `raadtools` package contains a number of `read[something]` functions, mostly for gridded time-series remote sensing data. 
 

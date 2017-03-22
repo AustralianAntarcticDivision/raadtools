@@ -17,6 +17,7 @@ The `raadtools` package contains a number of `read[something]` functions, mostly
 All of the read functions have an "xylim" argument, which will take a `raster::extent(xmin, xmax, ymin, ymax)`. E.g. 
 
 ```{r}
+
 library(raadtools)
 readsst("2010-01-01", xylim = extent(100, 160, -50, -40))
 ```

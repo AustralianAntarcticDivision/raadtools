@@ -12,6 +12,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+
+```{r,include=FALSE}
+## included only to make the vignette work (temporary hack)
+options(default.datadir = "/rdsi/PRIVATE/raad")
+```
 The `raadtools` package contains a number of `read[something]` functions, mostly for gridded time-series remote sensing data. 
 
 All of the read functions have an "xylim" argument, which will take a `raster::extent(xmin, xmax, ymin, ymax)`. E.g. 

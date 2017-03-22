@@ -11,6 +11,7 @@ Imports:
     rgeos,
     sp
 Suggests:
+    graticule,
     knitr,
     ncdf4,
     rgdal,

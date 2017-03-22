@@ -84,4 +84,3 @@ arrows(x1, y1, x2, y2, length = 0.03)
 \code{\link{icefiles}} for details on the repository of
 data files, \code{\link[raster]{raster}} for the return value
 }
-

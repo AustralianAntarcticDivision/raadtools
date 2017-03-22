@@ -25,4 +25,3 @@ ibcso_background: The IBCSO RGB-map rasterlayer in high resolution
 \references{
 \url{http://www.ibcso.org/data.html}
 }
-

@@ -49,4 +49,3 @@ extract(readsst, a)
 \seealso{
 \code{\link{readsst}} and \code{\link{extract}}
 }
-

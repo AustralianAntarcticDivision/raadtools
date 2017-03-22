@@ -34,4 +34,3 @@ x <- readderivaadc(prods)
 \code{\link{derivaadcfiles}} for details on the repository of
 data files, \code{\link[raster]{raster}} for the return value
 }
-

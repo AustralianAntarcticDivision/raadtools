@@ -27,4 +27,3 @@ rf <- rapid_responsefiles()
 range(rf$date)
 }
 }
-

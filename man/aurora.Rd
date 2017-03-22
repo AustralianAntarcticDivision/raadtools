@@ -38,4 +38,3 @@ save(aurora, file = "aurora.rda")
 \url{http://gcmd.nasa.gov/KeywordSearch/Metadata.do?Portal=amd_au&MetadataView=Full&MetadataType=0&KeywordPath=&OrigMetadataNode=AADC&EntryId=201213030}
 }
 \keyword{data}
-

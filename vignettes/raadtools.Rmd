@@ -17,6 +17,7 @@ library(knitr)
 # set global chunk options
 opts_chunk$set(fig.path='figure/minimal-', fig.align='center', fig.show='hold', cache = TRUE)
 options(replace.assign=TRUE,width=90)
+knitr::knit_exit()
 ```
 
 # Overview 

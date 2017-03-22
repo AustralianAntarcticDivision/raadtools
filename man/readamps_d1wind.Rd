@@ -6,7 +6,8 @@
 \usage{
 readamps_d1wind(date, time.resolution = "4hourly", xylim = NULL,
   magonly = FALSE, dironly = FALSE, uonly = FALSE, vonly = FALSE,
-  latest = FALSE, returnfiles = FALSE, ..., inputfiles = NULL)
+  latest = FALSE, returnfiles = FALSE, level = 1, ...,
+  inputfiles = NULL)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -93,4 +94,3 @@ arr <- function(x, sub = seq(ncell(x[[1]])), scale = 1) {
 }
 arr(w, sample(ncell(w), 10000), scale = 30000)
 }
-

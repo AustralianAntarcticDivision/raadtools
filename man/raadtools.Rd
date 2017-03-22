@@ -15,4 +15,3 @@ Michael D. Sumner \email{michael.sumner@aad.gov.au}
 Maintainer: Michael D. Sumner \email{michael.sumner@aad.gov.au}
 }
 \keyword{package}
-

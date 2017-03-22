@@ -40,4 +40,3 @@ Sea surface height/anomaly
 \details{
 Details
 }
-

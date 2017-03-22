@@ -31,4 +31,3 @@ data.frame of \code{file} and \code{date}
 This function loads the latest cache of stored files for
 NASA ocean colour products.
 }
-

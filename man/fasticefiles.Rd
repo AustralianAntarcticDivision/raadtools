@@ -22,4 +22,3 @@ Data frame of all available fast ice files.
 \details{
 A data frame with file, date, fullname
 }
-

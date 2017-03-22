@@ -30,4 +30,3 @@ readchl32(date, time.resolution = c("weekly32"), product = c("oceancolor"),
 \description{
 Read R32 VIIRS files
 }
-

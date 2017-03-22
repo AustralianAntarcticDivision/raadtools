@@ -98,4 +98,3 @@ The values used are documented here \url{http://nsidc.org/data/docs/daac/nsidc00
 \code{\link{icefiles}} for details on the repository of
 data files, \code{\link[raster]{raster}} for the return value
 }
-

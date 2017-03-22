@@ -58,4 +58,3 @@ couldn't be interpolated.
 \code{\link{derivicefiles}} for details on the repository of
 data files, \code{\link[raster]{raster}} for the return value
 }
-

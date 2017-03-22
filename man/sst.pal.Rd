@@ -22,4 +22,3 @@ SST colours
 \references{
 Derived from \url{"http://oceancolor.gsfc.nasa.gov/DOCS/palette_sst.txt}.
 }
-

@@ -15,4 +15,3 @@ List all derived data products available through \code{\link{readderivaadc}}
 \seealso{
 \code{\link{readderivaadc}}
 }
-

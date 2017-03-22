@@ -20,4 +20,3 @@ Load file names and dates of OISST sea surface temperature data
 \details{
 A data frame of file names and datres
 }
-

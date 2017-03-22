@@ -21,4 +21,3 @@ Load file names and dates of Arrigo production data.
 These are 8 day estimates from MODIS and SeaWiFS satellite data,
 original NASA algorithm.
 }
-

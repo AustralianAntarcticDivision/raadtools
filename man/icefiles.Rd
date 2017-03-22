@@ -31,4 +31,3 @@ icf <- icefiles(time.resolution = "monthly")
 icf[which.min((as.Date("1995-01-01") + runif(1, -4000, 4000)) - as.Date(icf$date), ]
 }
 }
-

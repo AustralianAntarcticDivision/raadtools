@@ -25,4 +25,3 @@ Chlorophyll-a for the Southern Ocean
 \details{
 This function generates a list of available chlorophyll-a files, including SeaWiFS and MODIS.
 }
-

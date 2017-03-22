@@ -35,4 +35,3 @@ Fast ice data on original Equal Area Cylindrical grid
 \references{
 \url{http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=modis_20day_fast_ice}
 }
-

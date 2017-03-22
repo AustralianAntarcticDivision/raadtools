@@ -18,4 +18,3 @@ the vector \code{x} converted (if necessary) to \code{POSIXct}
 Conversion to POSIXct ensuring no local time zone applied. Currently supported is character, Date and
 anything understood by \code{\link[base]{as.POSIXct}}.
 }
-

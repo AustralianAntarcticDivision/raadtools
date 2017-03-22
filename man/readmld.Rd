@@ -25,4 +25,3 @@ Read the \enc{Sall?e}{Sallee} Mixed layer depth climatology.
 \details{
 http://soki.aad.gov.au/display/Data/Mixed+layer+depth
 }
-

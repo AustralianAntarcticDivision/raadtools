@@ -22,4 +22,3 @@ NCEP2 wind files
 \details{
 Files containing NCEP2 wind vector data
 }
-

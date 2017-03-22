@@ -18,4 +18,3 @@ data.frame of \code{file} and \code{date}
 This function loads the latest cache of stored files for
 these products, which are available from \url{http://webdav.data.aad.gov.au/data/environmental/derived/antarctic/}
 }
-

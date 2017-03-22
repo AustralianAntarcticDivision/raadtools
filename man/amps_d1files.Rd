@@ -17,6 +17,6 @@ amps_d1files(data.source = "", time.resolution = "4hourly", ...)
 AMPS files
 }
 \section{gdalinfo}{
-
+NA
 }
 

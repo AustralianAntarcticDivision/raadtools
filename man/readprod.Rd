@@ -27,4 +27,3 @@ Read Arrigo production data.
 \details{
 Arrigo production on Stereographic grid.
 }
-

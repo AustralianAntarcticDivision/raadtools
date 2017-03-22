@@ -58,4 +58,3 @@ doi:10.1002/jgrc.20270
 \code{\link{chlafiles}} for details on the repository of
 data files, \code{\link[raster]{raster}} for the return value
 }
-

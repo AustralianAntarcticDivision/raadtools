@@ -12,6 +12,7 @@ Each element can be looked up by name, see Examples
 This should be use only for a convenient reference to look up the projection strings commonly in use. There's
 no guarantee that this would be appropriate and you should seek cartographic expertise.
 }
+
 \examples{
 names(commonprojections)
 commonprojections[["polar"]]
@@ -23,4 +24,3 @@ commonprojections[["polar"]]
 \code{\link[raster]{projection}}, \code{\link[sp]{CRS}}, \code{\link[sp]{proj4string}}
 }
 \keyword{data}
-

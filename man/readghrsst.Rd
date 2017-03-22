@@ -34,4 +34,3 @@ RasterStack or RasterLayer
 \description{
 Read GHRSST
 }
-

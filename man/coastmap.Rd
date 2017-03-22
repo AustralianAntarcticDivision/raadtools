@@ -40,4 +40,3 @@ w360 <- coastmap("world360")
 cst01 <- coastmap("ant_coast10")
 }
 }
-

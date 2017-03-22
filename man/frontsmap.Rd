@@ -24,4 +24,3 @@ WOCE Atlas, see References
 \references{
 \url{http://woceatlas.tamu.edu/Sites/html/atlas/SOA_DATABASE_DOWNLOAD.html}
 }
-

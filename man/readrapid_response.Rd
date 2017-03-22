@@ -21,4 +21,3 @@ Read MODIS Rapid Response RGB images
 \details{
 MODIS Rapid Response, Antarctica
 }
-

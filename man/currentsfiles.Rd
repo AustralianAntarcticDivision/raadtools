@@ -23,4 +23,3 @@ A data.frame of file names and dates
 \seealso{
 \code{\link{readcurr}}
 }
-

@@ -84,14 +84,8 @@ devtools::install_github("AustralianAntarcticDivision/raadtools")
 ```
 
 ## Development of raadtools
-In order to contribute to the development of raadtools, the following options are available. 
 
-- Complain, report, plead, compel the package author/s. Polite emails
-  are recommended and hardware store vouchers welcome, but do what you must to get the message through.
-- Get hold of the source, make your changes and send patches to the author/s. See previous option. 
-- Check out the source with Git, and push your changes through to the source repository. 
 
-The following section expands on the Git option. 
 
 ## Process of committing changes to the Git source of raadtools
 

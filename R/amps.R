@@ -27,7 +27,7 @@ prj <- "+proj=stere +lat_0=-90 +lat_ts=-60 +lon_0=180 +x_0=0 +y_0=0 +a=6367470 +
 rex <- c(xmin = -4724338, xmax = 4724338,
 ymin = -5979038, ymax = 6518408)
 #dat <- setExtent(stack(x, quick = TRUE)[[band]], rex)
-dat <- suppressWarnings(rgdal::readGDAL(x, band = band))
+dat <- suppressWarnings(rgdal::readGDAL(x, band = band, silent = TRUE))
 dat <- setExtent(stack(dat), rex)
 projection(dat) <- prj
 dat

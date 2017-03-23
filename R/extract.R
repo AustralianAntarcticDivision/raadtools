@@ -198,7 +198,19 @@
 ##' @aliases extract,function,data.frame-method
 setMethod("extract", signature(x = 'function', y = 'data.frame'), .big.extract)
 
-
+longlat_coords <- function(x) {
+  x <- as(x, "SpatialPoints")
+  if (!raster::couldBeLonLat(x)) {
+    x <- sp::spTransform(x, sp::CRS("+init=epsg:4326"))
+  }
+  as.data.frame(coordinates(x))
+}
+.trip.extract <- function(x, y, ...) {
+  xyt <- longlat_coords(y)
+  xyt[["time"]] <- y[[y@TOR.columns[1L]]]
+  extract(x, xyt, ...)
+}
+setMethod("extract", signature(x = 'function', y = 'trip'), .trip.extract)
 
 
 

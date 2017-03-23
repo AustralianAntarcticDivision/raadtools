@@ -1,5 +1,7 @@
 DEV
 
+o add extract method for trip objects
+
 o level for amps files
 
 o use inputfiles for extract, always

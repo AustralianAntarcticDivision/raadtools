@@ -11,15 +11,27 @@ readwrfV <- function(date, ..., returnfiles = FALSE, inputfiles = NULL) {
 }
 
 readwrf0 <- function(x, band = 1) {
-  ## band 5 is first u
-  ## band 27 is first v
-  prj <- "+proj=stere +lat_0=-90 +lat_ts=-60 +lon_0=180 +x_0=0 +y_0=0 +a=6367470 +b=6367470 +units=m +no_defs"
-  rex <- c(xmin = -4724338, xmax = 4724338, 
-           ymin = -5979038, ymax = 6518408)
-  dat <- setExtent(stack(x, quick = TRUE)[[band]], rex)
-  projection(dat) <- prj
-  dat
+## band 5 is first u
+## band 27 is first v
+prj <- "+proj=stere +lat_0=-90 +lat_ts=-60 +lon_0=180 +x_0=0 +y_0=0 +a=6367470 +b=6367470 +units=m +no_defs"
+rex <- c(xmin = -4724338, xmax = 4724338,
+ymin = -5979038, ymax = 6518408)
+dat <- setExtent(stack(x, quick = TRUE)[[band]], rex)
+projection(dat) <- prj
+dat
 }
+readwrf1 <- function(x, band = 1) {
+## band 5 is first u
+## band 27 is first v
+prj <- "+proj=stere +lat_0=-90 +lat_ts=-60 +lon_0=180 +x_0=0 +y_0=0 +a=6367470 +b=6367470 +units=m +no_defs"
+rex <- c(xmin = -4724338, xmax = 4724338,
+ymin = -5979038, ymax = 6518408)
+#dat <- setExtent(stack(x, quick = TRUE)[[band]], rex)
+dat <- setExtent(raster(rgdal::readGDAL(x, band = band)), rex)
+projection(dat) <- prj
+dat
+}
+
 
 #' AMPS files
 #' 

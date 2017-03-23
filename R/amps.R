@@ -28,7 +28,7 @@ rex <- c(xmin = -4724338, xmax = 4724338,
 ymin = -5979038, ymax = 6518408)
 #dat <- setExtent(stack(x, quick = TRUE)[[band]], rex)
 dat <- suppressWarnings(rgdal::readGDAL(x, band = band, silent = TRUE))
-dat <- setExtent(stack(raster(dat)), rex)
+dat <- setExtent(raster(dat), rex)
 projection(dat) <- prj
 dat
 }

@@ -2,12 +2,17 @@
 % Please edit documentation in R/amps.R
 \name{readamps_d1wind}
 \alias{readamps_d1wind}
-\title{read AMPS wind}
+\alias{readamps_d1wind}
+\alias{readamps}
+\title{read AMPS data}
 \usage{
 readamps_d1wind(date, time.resolution = "4hourly", xylim = NULL,
   magonly = FALSE, dironly = FALSE, uonly = FALSE, vonly = FALSE,
   latest = FALSE, returnfiles = FALSE, level = 1, ...,
   inputfiles = NULL)
+
+readamps(date, time.resolution = "4hourly", xylim = NULL, band = 1,
+  latest = FALSE, returnfiles = FALSE, ..., inputfiles = NULL)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -37,9 +42,15 @@ components}
 Raster
 }
 \description{
-Read "d1" surface winds from 	The Antarctic Mesoscale Prediction System (AMPS) files
+Read from 	The Antarctic Mesoscale Prediction System (AMPS) files.
 }
 \details{
+\code{readamps_d1wind} reads the "d1" \code{level} wind (defaults to 1).
+
+\code{readamps} reads the  \code{band} (defaults to 1).
+
+See \code{\link{amps_metadata}} for a description of the bands.
+
 Data  http://www2.mmm.ucar.edu/rt/amps/wrf_grib/, and contain gridded forecast data from the AMPS-WRF model. 
 The ‘d1’ (domain 1) files are on a 30km grid, while the ‘d2’ (domain 2) files are on a 10km grid. 
 The grid domains are shown at  http://polarmet.osu.edu/AMPS/ - d2 extends out to southern Australia and the tip of South America, and 

@@ -9,7 +9,8 @@ Imports:
     maptools,
     methods,
     rgeos,
-    sp
+    sp, 
+    tibble
 Suggests:
     graticule,
     knitr,

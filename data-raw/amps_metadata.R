@@ -4,4 +4,8 @@ x <- system(sprintf("gdalinfo %s ", af$fullname[1]), intern = TRUE)
 # Warning 1: Unable to perform coordinate transformations, so the correct
 # projected geotransform could not be deduced from the lat/long
 # control points.  Defaulting to ungeoreferenced.
-writeLines(x, "inst/amps/ampsfile_gdalinfo.txt")
+writeLines(x, "inst/extdata/amps/ampsfile_gdalinfo.txt")
+
+devtools::load_all()
+amps_metadata <- parse_amps_meta()
+devtools::use_data(amps_metadata)

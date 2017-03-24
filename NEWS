@@ -1,5 +1,7 @@
 DEV
 
+o add metadata for AMPS data, and new general readamps function
+
 o add extract method for trip objects
 
 o level for amps files

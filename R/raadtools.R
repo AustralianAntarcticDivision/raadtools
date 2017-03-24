@@ -117,7 +117,27 @@ commonprojections <- list(longlat = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no
 
 
 
-
+#' GRIB format metadata from the Antarctic Mesoscale Prediction System (AMPS) files. 
+#' @name amps_metadata
+#' @docType data
+#' @title AMPS GRIB file metadata
+##' @format \code{amps_metadata} A data frame with 8 columns.  The columns
+##' represent
+##' \tabular{rl}{
+#' \code{Band} \tab the band number \cr
+#' \code{GRIB_COMMENT} \tab the data measured \cr
+#' \code{GRIB_ELEMENT} \tab the data name \cr
+#' \code{GRIB_FORECAST_SECONDS} \tab forecast seconds  \cr
+#' \code{GRIB_REF_TIME} \tab text reference time \cr
+#' \code{GRIB_SHORT_NAME} \tab short name  \cr
+#' \code{GRIB_UNIT} \tab  text unit \cr
+#' \code{GRIB_VALID_TIME} \tab text valid time \cr 
+#' }
+#' @keywords data
+#' @examples 
+#' print(amps_metadata)
+#' u_wind_at_900 <- read
+NULL
 
 
 

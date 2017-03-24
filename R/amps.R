@@ -9,30 +9,28 @@ readwrfV <- function(date, ..., returnfiles = FALSE, inputfiles = NULL) {
   ff <- inputfiles$fullname[findInterval(date, inputfiles$date)  ]
   readwrf0(ff, band = 27)
 }
-
-readwrf0raster <- function(x, band = 1) {
-## band 5 is first u
-## band 27 is first v
-prj <- "+proj=stere +lat_0=-90 +lat_ts=-60 +lon_0=180 +x_0=0 +y_0=0 +a=6367470 +b=6367470 +units=m +no_defs"
-rex <- c(xmin = -4724338, xmax = 4724338,
-ymin = -5979038, ymax = 6518408)
-dat <- setExtent(stack(x, quick = TRUE)[[band]], rex)
-projection(dat) <- prj
-dat
+readwrf0 <- function(x, band = 1) {
+  ## band 5 is first u
+  ## band 27 is first v
+  prj <- "+proj=stere +lat_0=-90 +lat_ts=-60 +lon_0=180 +x_0=0 +y_0=0 +a=6367470 +b=6367470 +units=m +no_defs"
+  rex <- c(xmin = -4724338, xmax = 4724338, 
+           ymin = -5979038, ymax = 6518408)
+  dat <- setExtent(stack(x, quick = TRUE)[[band]], rex)
+  projection(dat) <- prj
+  dat
 }
 readwrf0 <- function(x, band = 1) {
-## band 5 is first u
-## band 27 is first v
-prj <- "+proj=stere +lat_0=-90 +lat_ts=-60 +lon_0=180 +x_0=0 +y_0=0 +a=6367470 +b=6367470 +units=m +no_defs"
-rex <- c(xmin = -4724338, xmax = 4724338,
-ymin = -5979038, ymax = 6518408)
-#dat <- setExtent(stack(x, quick = TRUE)[[band]], rex)
-dat <- suppressWarnings(rgdal::readGDAL(x, band = band, silent = TRUE))
-dat <- setExtent(raster(dat), rex)
-projection(dat) <- prj
-dat
+  ## band 5 is first u
+  ## band 27 is first v
+  prj <- "+proj=stere +lat_0=-90 +lat_ts=-60 +lon_0=180 +x_0=0 +y_0=0 +a=6367470 +b=6367470 +units=m +no_defs"
+  rex <- c(xmin = -4724338, xmax = 4724338, 
+           ymin = -5979038, ymax = 6518408)
+  #dat <- setExtent(stack(x, quick = TRUE)[[band]], rex)
+  dat <- suppressWarnings(rgdal::readGDAL(x, band = band))
+  dat <- setExtent(raster(dat), rex)
+  projection(dat) <- prj
+  setNames(dat, sprintf("%s_%s", amps_metadata$GRIB_ELEMENT[band], amps_metadata$GRIB_SHORT_NAME[band]))
 }
-
 
 #' AMPS files
 #' 
@@ -58,9 +56,16 @@ amps_d1files <- function(data.source = "", time.resolution = "4hourly", ...) {
   files
 }
 
-#' read AMPS wind
+#' read AMPS data
 #' 
-#' Read "d1" surface winds from 	The Antarctic Mesoscale Prediction System (AMPS) files
+#' Read from 	The Antarctic Mesoscale Prediction System (AMPS) files. 
+#' 
+#' \code{readamps_d1wind} reads the "d1" \code{level} wind (defaults to 1). 
+#' 
+#' \code{readamps} reads the  \code{band} (defaults to 1). 
+#' 
+#' See \code{\link{amps_metadata}} for a description of the bands. 
+#' 
 #'
 #' Data  http://www2.mmm.ucar.edu/rt/amps/wrf_grib/, and contain gridded forecast data from the AMPS-WRF model. 
 #' The ‘d1’ (domain 1) files are on a 30km grid, while the ‘d2’ (domain 2) files are on a 10km grid. 
@@ -209,3 +214,72 @@ readamps_d1wind <- function(date, time.resolution = "4hourly", xylim = NULL,
   r
 }
 
+#' @export
+#' @name readamps_d1wind
+readamps <- function(date, time.resolution = "4hourly", xylim = NULL, 
+                            band = 1, 
+                            latest = FALSE, returnfiles = FALSE, ..., inputfiles = NULL) {
+  
+  time.resolution <- match.arg(time.resolution)
+
+  if (is.null(inputfiles)) {
+    files <- amps_d1files(time.resolution = time.resolution)
+  } else {
+    files <- inputfiles
+  }
+  if (returnfiles) return(files)
+  
+  if (missing(date)) date <- min(files$date)
+  if (latest) date <- max(files$date)
+  date <- timedateFrom(date)
+  ## findex <- .processDates(date, files$date, time.resolution)
+  files <- .processFiles(date, files, time.resolution)
+  
+  
+  nfiles <- nrow(files)
+
+  
+  cropit <- FALSE
+  if (!is.null(xylim)) {
+    cropit <- TRUE
+    cropext <- extent(xylim)
+  }
+  
+  r <- vector("list", nfiles)
+  
+
+  for (ifile in seq_len(nfiles)) {
+    r0 <- readwrf0(files$fullname[ifile], band = band) #raster(files$ufullname[ifile], band = files$band[ifile])
+    if (cropit) r0 <- crop(r0, cropext)
+    r[[ifile]] <- r0
+    
+  }
+  r <- stack(r)
+    r <- setZ(r, files$date)
+  
+  
+  
+  ## get alignment right (put this in raster?)
+  extent(r) <- extent(c(xmin(r) + res(r)[1]/2, xmax(r) + res(r)[1]/2,
+                        ymin(r), ymax(r)))
+  
+
+  ## need to determine if "filename" was passed in
+  dots <- list(...)
+  if ("filename" %in% names(dots)) {
+    r <- writeRaster(r, ...)
+  }
+  
+  
+  r
+}
+parse_amps_meta <- function(){
+  tx <- readLines(system.file("extdata/amps/ampsfile_gdalinfo.txt", package= "raadtools"))
+  idx <- grep("Description", tx)
+  description <- gsub("Description = ", "", tx[idx])
+  l <- lapply(idx, function(x) gsub("\\s+", "", tx[x + 1 + 1:7]))
+  nms <- unlist(lapply(strsplit(l[[1]], "="), "[", 1))
+  d <- bind_rows(lapply(l, function(x) tibble::as_tibble(setNames(lapply(strsplit(x, "="), "[", 2), nms))), .id = "Band")
+  d$Band <- as.integer(d$Band)
+  d
+}

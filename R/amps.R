@@ -26,9 +26,7 @@ readwrf0 <- function(x, band = 1) {
   rex <- c(xmin = -4724338, xmax = 4724338, 
            ymin = -5979038, ymax = 6518408)
   #dat <- setExtent(stack(x, quick = TRUE)[[band]], rex)
-#print(band)
-#print(x)
-  dat <- suppressWarnings(rgdal::readGDAL(x, band = band, silent = TRUE))
+dat <- suppressWarnings(rgdal::readGDAL(x, band = band, silent = TRUE))
   dat <- setExtent(raster(dat), rex)
   projection(dat) <- prj
 
@@ -53,7 +51,6 @@ amps_d1files <- function(data.source = "", time.resolution = "4hourly", ...) {
   
 }
 
-
 amps_model_files <- function(data.source = "", time.resolution = "4hourly", ...) {
   datadir <- getOption("default.datadir")
   allfiles <- raadtools:::.allfilelist(rda = TRUE, fullname = FALSE)
@@ -70,7 +67,6 @@ amps_model_files <- function(data.source = "", time.resolution = "4hourly", ...)
   
   
 }
-
 amps_d1_icefiles <- function(data.source = "", time.resolution = "12hourly", ...) {
   files <- amps_model_files(data.source = data.source, time.resolution = time.resolution, ...)
   ## TODO normalize file set

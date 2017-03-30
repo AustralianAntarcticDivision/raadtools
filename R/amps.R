@@ -9,16 +9,16 @@ readwrfV <- function(date, ..., returnfiles = FALSE, inputfiles = NULL) {
   ff <- inputfiles$fullname[findInterval(date, inputfiles$date)  ]
   readwrf0(ff, band = 27)
 }
-readwrf0 <- function(x, band = 1) {
-  ## band 5 is first u
-  ## band 27 is first v
-  prj <- "+proj=stere +lat_0=-90 +lat_ts=-60 +lon_0=180 +x_0=0 +y_0=0 +a=6367470 +b=6367470 +units=m +no_defs"
-  rex <- c(xmin = -4724338, xmax = 4724338, 
-           ymin = -5979038, ymax = 6518408)
-  dat <- setExtent(stack(x, quick = TRUE)[[band]], rex)
-  projection(dat) <- prj
-  dat
-}
+# readwrf0 <- function(x, band = 1) {
+#   ## band 5 is first u
+#   ## band 27 is first v
+#   prj <- "+proj=stere +lat_0=-90 +lat_ts=-60 +lon_0=180 +x_0=0 +y_0=0 +a=6367470 +b=6367470 +units=m +no_defs"
+#   rex <- c(xmin = -4724338, xmax = 4724338, 
+#            ymin = -5979038, ymax = 6518408)
+#   dat <- setExtent(stack(x, quick = TRUE)[[band]], rex)
+#   projection(dat) <- prj
+#   dat
+# }
 readwrf0 <- function(x, band = 1) {
   ## band 5 is first u
   ## band 27 is first v
@@ -26,9 +26,12 @@ readwrf0 <- function(x, band = 1) {
   rex <- c(xmin = -4724338, xmax = 4724338, 
            ymin = -5979038, ymax = 6518408)
   #dat <- setExtent(stack(x, quick = TRUE)[[band]], rex)
-  dat <- suppressWarnings(rgdal::readGDAL(x, band = band))
+print(band)
+print(x)
+  dat <- suppressWarnings(rgdal::readGDAL(x, band = band, silent = TRUE))
   dat <- setExtent(raster(dat), rex)
   projection(dat) <- prj
+
   setNames(dat, sprintf("%s_%s", amps_metadata$GRIB_ELEMENT[band], amps_metadata$GRIB_SHORT_NAME[band]))
 }
 
@@ -41,6 +44,16 @@ readwrf0 <- function(x, band = 1) {
 #' @section gdalinfo
 #' 
 amps_d1files <- function(data.source = "", time.resolution = "4hourly", ...) {
+  files <- amps_model_files(data.source = data.source, time.resolution = time.resolution, ...)
+  ## TODO normalize file set
+  ## we want the most files with the highest preference
+  mutate(files, prefer = as.integer(hour) > 12, h = as.integer(hour))  %>% 
+    arrange(desc(prefer), h)   %>% mutate(dupe = duplicated(date)) %>% filter(!dupe) %>% 
+    arrange(date) %>% select(file, date, fullname)
+  
+}
+
+amps_model_files <- function(data.source = "", time.resolution = "4hourly", ...) {
   datadir <- getOption("default.datadir")
   allfiles <- raadtools:::.allfilelist(rda = TRUE, fullname = FALSE)
   files1 <- grep("www2.mmm.ucar.edu", allfiles, value = TRUE)
@@ -49,13 +62,13 @@ amps_d1files <- function(data.source = "", time.resolution = "4hourly", ...) {
   #files <- tibble::tibble(fullname = grep("grb$", files2, value = TRUE)) %>% filter(grepl("d1", fullname))
   files <- tibble::tibble(file = files3) %>% filter(grepl("d1", file))
   files$fullname <- file.path(datadir, files$file)
-  files$date <- as.POSIXct(strptime(basename(files$fullname), "%Y%m%d"), tz = "UTC") + 
-     (as.integer(factor(as.integer(substr(basename(files$fullname), 20, 22)))) - 1) * 4 * 3600
-  files <- files %>% arrange(date) 
-  files <- files[!duplicated(files[, "date", drop = FALSE]), ]
-  files
+    mutate(files, hour = substr(basename(fullname), 20, 22),
+           model = substr(basename(fullname), 9, 10),
+           date = as.POSIXct(strptime(basename(files$fullname), "%Y%m%d%H"), tz = "GMT") + 
+             as.integer(hour) * 3600) 
+  
+  
 }
-
 #' read AMPS data
 #' 
 #' Read from 	The Antarctic Mesoscale Prediction System (AMPS) files. 
@@ -177,10 +190,11 @@ readamps_d1wind <- function(date, time.resolution = "4hourly", xylim = NULL,
   
   r <- vector("list", nfiles)
   
-  bands <- c(5, 27) + level - 1
+  is_first_hour <- grepl("f000", basename(files$fullname))
+  bands <- c(1, 23) + level - 1
   for (ifile in seq_len(nfiles)) {
-    r1 <- readwrf0(files$fullname[ifile], band = bands[1L]) #raster(files$ufullname[ifile], band = files$band[ifile])
-    r2 <- readwrf0(files$fullname[ifile], band = bands[2L]) #raster(files$vfullname[ifile], band = files$band[ifile])
+    r1 <- readwrf0(files$fullname[ifile], band = bands[1L] + is_first_hour[ifile] * 4) #raster(files$ufullname[ifile], band = files$band[ifile])
+    r2 <- readwrf0(files$fullname[ifile], band = bands[2L] + is_first_hour[ifile] * 4) #raster(files$vfullname[ifile], band = files$band[ifile])
     r0 <- rasterfun(r1, r2)
     #if (lon180)     r0 <- suppressWarnings(.rotate(r0))
     if (cropit) r0 <- crop(r0, cropext)
@@ -270,7 +284,8 @@ readamps <- function(date, time.resolution = "4hourly", xylim = NULL,
     r <- writeRaster(r, ...)
   }
   
-  
+ # print(sprintf("band: %i\n", band))
+ # print(sprintf("min: %f\n", cellStats(r, min)))
   r
 }
 parse_amps_meta <- function(){

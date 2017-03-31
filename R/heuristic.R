@@ -52,8 +52,8 @@ read_sst_heuristic <- function (date, time.resolution = c("daily", "monthly"), x
   } else {
     files <- inputfiles
   }
-  relative_vibe <- c(easily = 2e6, `no sweat` = 20e6, `sitting down` = 40e6, `in the time it takes to get a coffee ... Nescafe from the kitchenette!` = 60e6, 
-                     `in the time it takes to get a coffee ... (real coffee, if you need pumpkin spice soy decaf latte I'll slow down a little)` = 100e6,
+  relative_vibe <- c(` easily` = 2e6, ` no sweat` = 10e6, ` sitting down` = 20e6, `in the time it takes to get a coffee ... Nescafe from the kitchenette!` = 50e6, 
+                     `in the time it takes to get a coffee ... (real coffee, if you need pumpkin spice soy decaf latte I'll slow down a little)` = 80e6,
                      `, but give me some room to think here` = 2e9 -1)
   time.resolution <- match.arg(time.resolution)
   if (missing(date)) {
@@ -69,7 +69,7 @@ read_sst_heuristic <- function (date, time.resolution = c("daily", "monthly"), x
   ## really big
   really_big <- 3e8
   message(sprintf("limit number of cells: %s", format(really_big, sci = TRUE)))
-  message(sprintf("dimension requested: [%s] = %i = %iMb", paste(dims, collapse = ","), prod(dims), as.integer(prod(dims) * 8) / 1e6))
+  message(sprintf("dimension requested: [%s] = %i = %iMb", paste(dims, collapse = ","), as.integer(prod(dims)), as.integer(prod(dims) * 8 / 1e6)))
   message(sprintf("%f %% of the file-back limit", (prod(dims)/really_big) * 100))
  # glob_count_readsst_heuristic <- 0L
 

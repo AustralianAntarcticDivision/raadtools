@@ -37,7 +37,7 @@ dat <- suppressWarnings(rgdal::readGDAL(x, band = band, silent = TRUE))
 #' 
 #' @inheritParams windfiles
 #' @importFrom tibble tibble
-#' @importFrom dplyr %>% arrange filter
+#' @importFrom dplyr %>% arrange filter mutate
 #' @export
 #' @section gdalinfo
 #' 
@@ -45,9 +45,9 @@ amps_d1files <- function(data.source = "", time.resolution = "4hourly", ...) {
   files <- amps_model_files(data.source = data.source, time.resolution = time.resolution, ...)
   ## TODO normalize file set
   ## we want the most files with the highest preference
-  mutate(files, prefer = as.integer(hour) > 12, h = as.integer(hour))  %>% 
-    arrange(desc(prefer), h)   %>% mutate(dupe = duplicated(date)) %>% filter(!dupe) %>% 
-    arrange(date) %>% select(file, date, fullname)
+  dplyr::mutate(files, prefer = as.integer(hour) > 12, h = as.integer(hour))  %>% 
+    arrange(desc(prefer), h)   %>% dplyr::mutate(dupe = duplicated(date)) %>% filter(!dupe) %>% 
+    arrange(date) %>% dplyr::select(file, date, fullname)
   
 }
 

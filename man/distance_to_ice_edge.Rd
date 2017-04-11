@@ -29,7 +29,7 @@ raster layer with distances to this date's sea ice edge
 \description{
 Calculate the shortest distance (metres) to a threshold sea ice contour.  If in
 doubt use `distance_to_ice_edge`, the definition of the edge is not straightforward, especially so for
-the higher resolution prducts and near the coast. 
+the higher resolution products and near the coast. 
 `distance_to_ice_edge` computes a single "main" edge at continental scale
 `distance_to_ice` computes all distances to any ice at threshold concentration
 }

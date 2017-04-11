@@ -1,23 +1,9 @@
- 
-keepOnlyMostComplexLine <- function(x) {
-  for (iObj in seq_len(nrow(x))) {
-    if (inherits(x, "SpatialLinesDataFrame")) {
-      wmax <- which.max(sapply(x[iObj, ]@lines[[1]]@Lines, function(x) nrow(x@coords)))
-      x@lines[[iObj]]@Lines <- x@lines[[iObj]]@Lines[wmax]
-    }
-    if (inherits(x, "SpatialPolygonsDataFrame")) {
-      wmax <- which.max(sapply(x[iLine, ]@lines[[1]]@Lines, function(x) nrow(x@coords)))
-      x@lines[[iLine]]@Lines <- x@lines[[iLine]]@Lines[wmax]
-    }
-  }
-  x
-}
 
 #' Distance to a sea ice 'edge'. 
 #' 
 #' Calculate the shortest distance (metres) to a threshold sea ice contour.  If in
 #' doubt use `distance_to_ice_edge`, the definition of the edge is not straightforward, especially so for
-#' the higher resolution prducts and near the coast. 
+#' the higher resolution products and near the coast. 
 #' `distance_to_ice_edge` computes a single "main" edge at continental scale
 #' `distance_to_ice` computes all distances to any ice at threshold concentration
 #' 

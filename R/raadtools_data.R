@@ -36,6 +36,12 @@
   
   success
 }
+.onLoad <- function(libname, pkgname) {
+  pathwasset <- .trysetpath()
+
+}
+
+
 .onAttach <- function(libname, pkgname) {
   pathwasset <- .trysetpath()
   if (!pathwasset) {

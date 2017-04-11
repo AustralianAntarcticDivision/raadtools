@@ -105,7 +105,7 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
                       latest = FALSE,
                       returnfiles = FALSE, ..., inputfiles = NULL) {
   time.resolution <- match.arg(time.resolution)
-
+  
   if (is.null(inputfiles)) {
     files <- currentsfiles(time.resolution = time.resolution)
   } else {
@@ -116,14 +116,14 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
     x <- raster(file, varname = "u")
     if (lon180) x <- raadtools:::.rotate(x)
     if (!is.null(xylim)) x <- crop(x, xylim)
-
+    
     x
   }
   read_i_v <- function(file, xylim = NULL, lon180 = FALSE) {
     x <- raster(file, varname = "v")
     if (lon180) x <- raadtools:::.rotate(x)
     if (!is.null(xylim)) x <- crop(x, xylim)
-   
+    
     x
   }
   read_uv <- function(file, xylim = NULL, lon180 = FALSE) {
@@ -139,7 +139,7 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
     x <- read_uv(file, xylim = xylim, lon180 = lon180)
     vlen(x[[1]], x[[2]])
   }
-
+  
   thefun <- read_uv  
   if (magonly) thefun <- read_i_mag
   if (dironly) thefun <- read_i_dir

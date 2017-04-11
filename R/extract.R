@@ -16,14 +16,14 @@
     a <- round(24 * as.numeric(min(rng)))
     return(sprintf("%shourly", a))
   }
-   if (a == 1) {
-     return("daily")
-   }
-   if (a %in% 5:9) {
-     val = "weekly"
-   } else {
-     val = "monthly"
-   }
+  if (a == 1) {
+    return("daily")
+  }
+  if (a %in% 5:9) {
+    val = "weekly"
+  } else {
+    val = "monthly"
+  }
   val
   
 }

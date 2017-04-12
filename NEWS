@@ -1,5 +1,7 @@
 DEV
 
+o change approach for readsst, to err on side of memory use
+
 o add dstance to ice 
 
 o add metadata for AMPS data, and new general readamps function

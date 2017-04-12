@@ -148,7 +148,7 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
                       varname = c("sst", "anom", "err", "ice"),
                       setNA = TRUE,
                       latest = FALSE,
-                      returnfiles = FALSE, readall = FALSE, ..., inputfiles = NULL) {
+                      returnfiles = FALSE,  ..., inputfiles = NULL) {
   time.resolution <- match.arg(time.resolution)
   varname <- match.arg(varname)
   ## if (time.resolution == "monthly") stop("sorry, no monthly SST at the moment")
@@ -169,11 +169,6 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
   if (latest) date <- max(files$date)
   date <- timedateFrom(date)
   files <- .processFiles(date, files, time.resolution)
-  if (readall) {
-    files <- sstfiles(time.resolution = time.resolution)
-    lon180 <- FALSE
-    xylim <- NULL
-  }
 
   cropit <- FALSE
   if (!is.null(xylim)) {
@@ -191,23 +186,7 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
   } else {
     r0 <- suppressWarnings(stack(files$fullname, quick = TRUE, varname = varname))
   }
-#   if (nfiles > 1) {
-#     r0 <- suppressWarnings(stack(files$fullname, quick = TRUE, varname = varname))
-#   } else {
-#     bands <- files$band
-#     if (is.null(bands)) {
-#       r0 <- suppressWarnings(raster(files$fullname, varname = varname))
-#     } else {
-#       r0 <- suppressWarnings(stack(files$fullname[1], bands = bands))
-#       if (setNA) {
-#         mm <- raster(file.path(files$fullname[1], "lsmask.nc"))
-#         mm[mm < 1] <- NA_real_
-#         ##r0 <- mask(r0, mm)
-#       }
-#     }
-#   }
-  
-  
+ 
   ## note that here the object gets turned into a brick,
   ## presumably with a tempfile backing - that's something to think about more
   ## in terms of passing in "filename"

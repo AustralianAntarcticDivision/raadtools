@@ -15,6 +15,24 @@
 #' @export
 ghrsstfiles <- function() {
   ftx <- .allfilelist()
+  ##ftp://podaac-ftp.jpl.nasa.gov/allData/ghrsst/data/GDS2/L4/GLOB/JPL/MUR/v4.1/
+  cfiles <- grep("podaac-ftp.jpl.nasa.gov", ftx, value = TRUE)
+  cfiles1 <- grep("ghrsst", cfiles, value = TRUE)
+  cfiles2 <- grep("L4", cfiles1, value = TRUE)
+  cfiles3 <- grep("GLOB/JPL/MUR", cfiles2, value = TRUE)
+  cfiles4 <- grep("v4.1", cfiles3, value = TRUE)
+  cfiles5 <- grep("nc$", cfiles4, value = TRUE)
+  files <- data.frame(fullname = cfiles5, stringsAsFactors = FALSE)
+  files$date <- as.POSIXct(strptime(basename(cfiles5), "%Y%m%d"), tz = "GMT")
+  files <- files[order(files$date), ]
+  
+  files <- files[!rev(duplicated(files[rev(seq(nrow(files))), ]$date)), ]
+
+  files
+}
+
+nodc_ghrsstfiles <- function() {
+  ftx <- .allfilelist()
   ##ftp.nodc.noaa.gov/pub/data.nodc/ghrsst/L4/GLOB/JPL/MUR/
   cfiles <- grep("ftp.nodc.noaa.gov", ftx, value = TRUE)
   cfiles1 <- grep("ghrsst", cfiles, value = TRUE)
@@ -83,31 +101,18 @@ readghrsst  <- function (date, time.resolution = c("daily"),
   files <- .processFiles(date, files, time.resolution)
 
   
-  cropit <- FALSE
-  if (!is.null(xylim)) {
-    cropit <- TRUE
-    cropext <- extent(xylim)
-  
-    }
+
   nfiles <- nrow(files)
   
-  r0 <- stack(lapply(files$fullname, raster, varname = varname, stopIfNotEqualSpaced = FALSE), quick = TRUE)
- ## r0 <- suppressWarnings(stack(files$fullname, quick = TRUE, varname = varname, stopIfNotEqualSpaced = FALSE))
-
-#  library(RNetCDF)
-# nc <- open.nc("20150101-JPL-L4UHfnd-GLOB-v01-fv04-MUR.nc")
-#   print.nc(nc)
-#   lon <- var.get.nc(nc, "lon")
-#   lat <- var.get.nc(nc, "lat")
-#   abs(mean(diff(lon)) - range(diff(lon)))
-#   [1] 9.918511e-04 4.383922e-05
-#   
-#   
-  if (cropit) {
-    r0 <- crop(r0, cropext, snap = "out")
-   
-  
-    }
+  pb <- progress::progress_bar$new(
+    format = "  extracting [:bar] :percent in :elapsed",
+    total = nfiles, clear = FALSE, width= 60)
+  pb$tick(0)
+  read_fun <- function(xfile, ext, varname = "", band = 1) {
+    pb$tick()
+    crop_if_needed(setExtent(raster(xfile, varname = varname), extent(-180, 180, -90, 90)), ext)
+  }
+   r0 <- stack(lapply(seq_len(nfiles), function(xi) read_fun(files$fullname[xi], ext = xylim, varname = varname)))
   if (is.na(projection(r0))) projection(r0) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
   r0 <- setZ(r0, files$date)
   

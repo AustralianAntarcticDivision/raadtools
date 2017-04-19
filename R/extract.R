@@ -100,14 +100,14 @@
       ## we need to store start and end values
       resm <- cbind(result, result)
       thisx1 <- x(date[1L], verbose = FALSE, inputfiles = files, ...)  ## inputfiles direct
-      print("first read")
-      print(thisx1)
+      #print("first read")
+      #print(thisx1)
       if(resize) thisx1 <- aggregate(thisx1, fact = fact, fun = "mean")
       for (i in seq_along(date)[-1]) {
         
         thisx2 <- x(date[i], verbose = FALSE, inputfiles = files, ...)
-        print("reading later files")
-        print(thisx2)
+        #print("reading later files")
+        #print(thisx2)
         ## TODO check do we have to store the time-value BEFORE aggregating
         ##t2 <- getZ(thisx2)
         if(resize) thisx2 <- aggregate(thisx2, fact = fact, fun = "mean")

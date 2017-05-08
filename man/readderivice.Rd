@@ -6,7 +6,7 @@
 \usage{
 readderivice(date, time.resolution = c("daily"),
   product = c("time_since_melt"), xylim = NULL, latest = FALSE,
-  returnfiles = FALSE, ...)
+  returnfiles = FALSE, ..., inputfiles = NULL)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -22,6 +22,8 @@ readderivice(date, time.resolution = c("daily"),
 \item{returnfiles}{ignore options and just return the file names and dates}
 
 \item{...}{passed to brick, primarily for \code{filename}}
+
+\item{inputfiles}{input the file set to avoid rescanning that (for extract point-in-time)}
 }
 \value{
 \code{\link[raster]{raster}} object

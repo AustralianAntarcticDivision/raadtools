@@ -17,7 +17,7 @@ distance_to_ice(date, threshold = 15, ..., returnfiles = FALSE,
 
 \item{threshold}{the sea ice concentration threshold to contour at}
 
-\item{...}{passed to `readice`}
+\item{...}{passed to `readice`, e.g. `hemisphere`}
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 
@@ -43,10 +43,14 @@ Future work may generalize this to other data sources.
 beware that any queried location outside of this layer's range will be 
 undetermined, and the external boundary of this layer is not constant with 
 respect to the pole, and that in general a location may be closer to ice in the 
-opposite hemisphere.
+opposite hemisphere. 
+
+The argument `hemisphere` may be north or south (default is south), but this will only work if your locations
+are on the actual map, so it's not possible to request the distance to both poles for any point.
 }
 \examples{
 plot(distance_to_ice(latest = TRUE))
 plot(distance_to_ice_edge(latest = TRUE))
 a = extract(distance_to_ice, aurora[17:25, ])
+extract(distance_to_ice, aurora[17:25, ], hemisphere = "south")
 }

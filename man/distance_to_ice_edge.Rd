@@ -46,11 +46,13 @@ respect to the pole, and that in general a location may be closer to ice in the
 opposite hemisphere. 
 
 The argument `hemisphere` may be north or south (default is south), but this will only work if your locations
-are on the actual map, so it's not possible to request the distance to both poles for any point.
+are on the actual map, so it's not possible to request the distance to ice in both poles for any point.
 }
 \examples{
 plot(distance_to_ice(latest = TRUE))
 plot(distance_to_ice_edge(latest = TRUE))
 a = extract(distance_to_ice, aurora[17:25, ])
 extract(distance_to_ice, aurora[17:25, ], hemisphere = "south")
+# library(trip)
+# extract(distance_to_ice_edge, walrus818[seq(50, 400, by = 20), ], hemisphere = "north")
 }

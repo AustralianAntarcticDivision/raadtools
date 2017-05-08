@@ -136,7 +136,7 @@ commonprojections <- list(longlat = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no
 #' @keywords data
 #' @examples 
 #' print(amps_metadata)
-#' u_wind_at_900 <- read
+#' ## u_wind_at_900 <- read  ## unfinished
 NULL
 
 

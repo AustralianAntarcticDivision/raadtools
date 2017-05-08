@@ -21,6 +21,6 @@ GRIB format metadata from the Antarctic Mesoscale Prediction System (AMPS) files
 }
 \examples{
 print(amps_metadata)
-u_wind_at_900 <- read
+## u_wind_at_900 <- read  ## unfinished
 }
 \keyword{data}

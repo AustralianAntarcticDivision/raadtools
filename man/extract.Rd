@@ -32,7 +32,7 @@ Extract methods for raadtools read functions
 Extract data from read functions in various ways.
 }
 \examples{
-x <- extract(readsst)
+
 a <- structure(list(x = c(174, 168, 156, 111, 99, 64, 52, 46, -4,
 -15, -30, -38, -47, -62, -87, -127, -145, -160, -161), y = c(-72,
 -39, -50, -58, -35, -38, -48, -60, -48, -35, -37, -51, -68, -72,

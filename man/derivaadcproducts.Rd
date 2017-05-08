@@ -13,5 +13,5 @@ character vector of product names
 List all derived data products available through \code{\link{readderivaadc}}
 }
 \seealso{
-\code{\link{readderivaadc}}
+\code{\link{readderivaadc}} and \code{\link{derivaadcfiles}}
 }

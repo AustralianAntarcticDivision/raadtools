@@ -5,7 +5,8 @@
 \title{Read Johnson L3 bins}
 \usage{
 readchla_johnson(date, time.resolution = c("daily"), xylim = NULL,
-  latest = FALSE, returnfiles = FALSE, ..., inputfiles = NULL)
+  product = "MODISA", latest = FALSE, returnfiles = FALSE, ...,
+  inputfiles = NULL)
 }
 \arguments{
 \item{date}{date/s to read}

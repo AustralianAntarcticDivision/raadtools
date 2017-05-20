@@ -15,10 +15,11 @@
 #'  x <- readchla_johnson(date = "2012-01-01")
 #'  ##plot(roc::bin2lonlat(x$bin_num, 4320), col = palr::chlPal(x$chla_johnson), pch = ".")
 readchla_johnson <- function(date, time.resolution = c("daily"), xylim = NULL, 
-                              
+                              product = "MODISA", 
                              latest = FALSE, returnfiles = FALSE, ..., inputfiles = NULL) {
+  time.resolution <- match.arg(time.resolution)
   if (is.null(inputfiles)) {
-  files <- chla_johnsonfiles()
+  files <- chla_johnsonfiles(product = product)
   }
   if (missing(date)) date <- min(files$date)
   date <- timedateFrom(date)
@@ -37,13 +38,17 @@ readchla_johnson <- function(date, time.resolution = c("daily"), xylim = NULL,
 #'
 #' @return data frame
 #' @export
-#'
-chla_johnsonfiles <- function(time.resolution = c("daily"), product = "MODISA") {
-    if (!product == "MODISA") stop("only MODISA supported currently")
-    fs <- data.frame(fullname = list.files(pattern = "^modis_.*.rds$", file.path(getOption("default.datadir"), "data_local/acecrc.org.au/ocean_colour/modis_daily"), full.names = TRUE, recursive = TRUE), 
+#' @importFrom tibble as_tibble
+chla_johnsonfiles <- function(time.resolution = c("daily"), product = c("MODISA", "SeaWiFS")) {
+    #if (!product == "MODISA") stop("only MODISA supported currently")
+  product <- match.arg(product)
+  pat <- sprintf("^%s_.*.rds$", c(MODISA = "modis", SeaWiFS = "seawifs")[product])
+    fs <- data.frame(fullname = list.files(pattern = pat, file.path(getOption("default.datadir"), 
+sprintf("data_local/acecrc.org.au/ocean_colour/%s_daily", c(MODISA = "modis", SeaWiFS = "seawifs")[product])), full.names = TRUE, recursive = TRUE), 
                      stringsAsFactors = FALSE)
-    fs$date <- as.POSIXct(strptime(basename(fs$fullname), "modis_%Y%j"), tz = "GMT")
+    fs$date <- as.POSIXct(strptime(basename(fs$fullname), 
+                                   sprintf("%s_%s", c(MODISA = "modis", SeaWiFS = "seawifs")[product], "%Y%j"), tz = "GMT"))
     fs$file <- gsub(sprintf("%s/", getOption("default.datadir")), "", fs$fullname)
-    fs
+    tibble::as_tibble(fs)
   }
   

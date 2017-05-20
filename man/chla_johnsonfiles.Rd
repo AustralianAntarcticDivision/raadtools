@@ -4,7 +4,8 @@
 \alias{chla_johnsonfiles}
 \title{Derived ocean colour files}
 \usage{
-chla_johnsonfiles(time.resolution = c("daily"), product = "MODISA")
+chla_johnsonfiles(time.resolution = c("daily"), product = c("MODISA",
+  "SeaWiFS"))
 }
 \arguments{
 \item{time.resolution}{temporal resolution (base is daily)}

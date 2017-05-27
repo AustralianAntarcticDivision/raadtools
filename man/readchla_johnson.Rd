@@ -13,7 +13,7 @@ readchla_johnson(date, time.resolution = c("daily"), xylim = NULL,
 
 \item{time.resolution}{daily for now}
 
-\item{xylim}{ignored}
+\item{xylim}{extent in longitude latitude using 'raster::extent'}
 
 \item{latest}{return only the latest day}
 

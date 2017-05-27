@@ -3,7 +3,7 @@
 #' @details relies on processing done here 'file.path(getOption("default.datadir"), "data_local/acecrc.org.au/ocean_colour")'
 #' @param date date/s to read
 #' @param time.resolution daily for now
-#' @param xylim ignored
+#' @param xylim extent in longitude latitude using 'raster::extent'
 #' @param latest return only the latest day
 #' @param returnfiles give the files instead of the data 
 #' @param ... ignored

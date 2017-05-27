@@ -26,9 +26,22 @@ readchla_johnson <- function(date, time.resolution = c("daily"), xylim = NULL,
   files <- files[findInterval(date, files$date), ]
   if (latest) files <- tail(files, 1L)
   if (returnfiles) return(files)
-  dplyr::bind_rows(lapply(files$fullname, readRDS))
+  dplyr::bind_rows(lapply(files$fullname, readchla_johnsonday, xylim = xylim, nrows = product2nrows(product)))
 }
   
+product2nrows <- function(x) {
+  c(MODISA = 4320, SeaWiFS = 2160)[x]
+}
+readchla_johnsonday <- function(file, xylim = NULL, nrows = NULL) {
+  d <- readRDS(file)
+  if (!is.null(xylim)) {
+    xy <- do.call(cbind, roc::bin2lonlat(d$bin_num, nrows))
+    asub <- xy[, 1] >= raster::xmin(xylim) & xy[, 1] <= raster::xmax(xylim) & 
+      xy[, 2] >= raster::ymin(xylim) & xy[, 2] <= raster::ymax(xylim)
+   d <- d[asub, ]  
+  }
+  d
+}
   
 #' Derived ocean colour files
 #'

@@ -317,7 +317,7 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   f3 <- allfiles[c(grep(f1, allfiles), grep(f2, allfiles))]
   f4 <- grep(sprintf("%s", ext),  f3, value = TRUE)
   ## que?
-  f5 <- f4[-grep("s12500", f4)]
+  f5 <- f4[!grepl("s12500", f4)]
   files <- data.frame(fullname = file.path(datadir, f5), 
              #file = gsub(paste0(datadir, "/data/"), "", f5), 
              file = f5,

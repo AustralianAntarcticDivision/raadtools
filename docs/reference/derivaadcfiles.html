@@ -103,7 +103,149 @@ these products, which are available from <a href = 'http://webdav.data.aad.gov.a
 
     <p>data.frame of <code>file</code> and <code>date</code></p>
     
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
+    <p><code><a href='readderivaadc.html'>readderivaadc</a></code> and <code><a href='derivaadcproducts.html'>derivaadcproducts</a></code></p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>(<span class='no'>prods</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='derivaadcproducts.html'>derivaadcproducts</a></span>())</div><div class='output co'>#&gt;   [1] "bathymetry"                                       
+#&gt;   [2] "bathymetry_slope"                                 
+#&gt;   [3] "benthic_regionalisation"                          
+#&gt;   [4] "caisom_floor_current_speed"                       
+#&gt;   [5] "caisom_floor_salinity"                            
+#&gt;   [6] "caisom_floor_temperature"                         
+#&gt;   [7] "caisom_floor_vertical_velocity"                   
+#&gt;   [8] "caisom_surface_current_speed"                     
+#&gt;   [9] "chl_summer_climatology"                           
+#&gt;  [10] "distance_antarctica"                              
+#&gt;  [11] "distance_colony"                                  
+#&gt;  [12] "distance_max_ice_edge"                            
+#&gt;  [13] "distance_shelf"                                   
+#&gt;  [14] "distance_subantarctic_islands"                    
+#&gt;  [15] "distance_to_canyon"                               
+#&gt;  [16] "distance_to_fast_ice"                             
+#&gt;  [17] "distance_to_polynya"                              
+#&gt;  [18] "distance_upper_slope"                             
+#&gt;  [19] "fast_ice"                                         
+#&gt;  [20] "floor_nitrate_cars2009a_mean"                     
+#&gt;  [21] "floor_oxygen_cars2009a_mean"                      
+#&gt;  [22] "floor_phosphate_cars2009a_mean"                   
+#&gt;  [23] "floor_salinity_cars2009a_mean"                    
+#&gt;  [24] "floor_silicate_cars2009a_mean"                    
+#&gt;  [25] "floor_temperature_cars2009a_mean"                 
+#&gt;  [26] "floor_temperature_interpolated"                   
+#&gt;  [27] "floor_temperature"                                
+#&gt;  [28] "geomorphology"                                    
+#&gt;  [29] "gridcell_area"                                    
+#&gt;  [30] "light_budget"                                     
+#&gt;  [31] "mixed_layer_depth_summer_climatology_interpolated"
+#&gt;  [32] "mixed_layer_depth_summer_climatology"             
+#&gt;  [33] "nox_0_interpolated_summer_climatology"            
+#&gt;  [34] "nox_0_interpolated_winter_climatology"            
+#&gt;  [35] "nox_0_summer_climatology"                         
+#&gt;  [36] "nox_0_winter_climatology"                         
+#&gt;  [37] "nox_200_interpolated_summer_climatology"          
+#&gt;  [38] "nox_200_interpolated_winter_climatology"          
+#&gt;  [39] "nox_200_summer_climatology"                       
+#&gt;  [40] "nox_200_winter_climatology"                       
+#&gt;  [41] "nox_500_interpolated_summer_climatology"          
+#&gt;  [42] "nox_500_interpolated_winter_climatology"          
+#&gt;  [43] "nox_500_summer_climatology"                       
+#&gt;  [44] "nox_500_winter_climatology"                       
+#&gt;  [45] "nox_50_interpolated_summer_climatology"           
+#&gt;  [46] "nox_50_interpolated_winter_climatology"           
+#&gt;  [47] "nox_50_summer_climatology"                        
+#&gt;  [48] "nox_50_winter_climatology"                        
+#&gt;  [49] "oxygen_0_interpolated_summer_climatology"         
+#&gt;  [50] "oxygen_0_interpolated_winter_climatology"         
+#&gt;  [51] "oxygen_0_summer_climatology"                      
+#&gt;  [52] "oxygen_0_winter_climatology"                      
+#&gt;  [53] "oxygen_200_interpolated_summer_climatology"       
+#&gt;  [54] "oxygen_200_interpolated_winter_climatology"       
+#&gt;  [55] "oxygen_200_summer_climatology"                    
+#&gt;  [56] "oxygen_200_winter_climatology"                    
+#&gt;  [57] "oxygen_500_interpolated_summer_climatology"       
+#&gt;  [58] "oxygen_500_interpolated_winter_climatology"       
+#&gt;  [59] "oxygen_500_summer_climatology"                    
+#&gt;  [60] "oxygen_500_winter_climatology"                    
+#&gt;  [61] "oxygen_50_interpolated_summer_climatology"        
+#&gt;  [62] "oxygen_50_interpolated_winter_climatology"        
+#&gt;  [63] "oxygen_50_summer_climatology"                     
+#&gt;  [64] "oxygen_50_winter_climatology"                     
+#&gt;  [65] "pelagic_regionalisation"                          
+#&gt;  [66] "salinity_0_interpolated_summer_climatology"       
+#&gt;  [67] "salinity_0_interpolated_winter_climatology"       
+#&gt;  [68] "salinity_0_summer_climatology"                    
+#&gt;  [69] "salinity_0_winter_climatology"                    
+#&gt;  [70] "salinity_200_interpolated_summer_climatology"     
+#&gt;  [71] "salinity_200_interpolated_winter_climatology"     
+#&gt;  [72] "salinity_200_summer_climatology"                  
+#&gt;  [73] "salinity_200_winter_climatology"                  
+#&gt;  [74] "salinity_500_interpolated_summer_climatology"     
+#&gt;  [75] "salinity_500_interpolated_winter_climatology"     
+#&gt;  [76] "salinity_500_summer_climatology"                  
+#&gt;  [77] "salinity_500_winter_climatology"                  
+#&gt;  [78] "salinity_50_interpolated_summer_climatology"      
+#&gt;  [79] "salinity_50_interpolated_winter_climatology"      
+#&gt;  [80] "salinity_50_summer_climatology"                   
+#&gt;  [81] "salinity_50_winter_climatology"                   
+#&gt;  [82] "seaice_gt85_mean_cv_ratio"                        
+#&gt;  [83] "seaice_gt85"                                      
+#&gt;  [84] "si_0_interpolated_summer_climatology"             
+#&gt;  [85] "si_0_interpolated_winter_climatology"             
+#&gt;  [86] "si_0_summer_climatology"                          
+#&gt;  [87] "si_0_winter_climatology"                          
+#&gt;  [88] "si_200_interpolated_summer_climatology"           
+#&gt;  [89] "si_200_interpolated_winter_climatology"           
+#&gt;  [90] "si_200_summer_climatology"                        
+#&gt;  [91] "si_200_winter_climatology"                        
+#&gt;  [92] "si_500_interpolated_summer_climatology"           
+#&gt;  [93] "si_500_interpolated_winter_climatology"           
+#&gt;  [94] "si_500_summer_climatology"                        
+#&gt;  [95] "si_500_winter_climatology"                        
+#&gt;  [96] "si_50_interpolated_summer_climatology"            
+#&gt;  [97] "si_50_interpolated_winter_climatology"            
+#&gt;  [98] "si_50_summer_climatology"                         
+#&gt;  [99] "si_50_winter_climatology"                         
+#&gt; [100] "ssha_variability"                                 
+#&gt; [101] "ssh"                                              
+#&gt; [102] "ssh_spatial_gradient"                             
+#&gt; [103] "sst_spatial_gradient"                             
+#&gt; [104] "sst_summer_climatology"                           
+#&gt; [105] "surface_meridional_wind_annual"                   
+#&gt; [106] "surface_meridional_wind_summer"                   
+#&gt; [107] "surface_meridional_wind_winter"                   
+#&gt; [108] "surface_wind_annual"                              
+#&gt; [109] "surface_zonal_wind_annual"                        
+#&gt; [110] "surface_zonal_wind_summer"                        
+#&gt; [111] "surface_zonal_wind_winter"                        
+#&gt; [112] "t_0_interpolated_summer_climatology"              
+#&gt; [113] "t_0_interpolated_winter_climatology"              
+#&gt; [114] "t_0_summer_climatology"                           
+#&gt; [115] "t_0_winter_climatology"                           
+#&gt; [116] "t_200_interpolated_summer_climatology"            
+#&gt; [117] "t_200_interpolated_winter_climatology"            
+#&gt; [118] "t_200_summer_climatology"                         
+#&gt; [119] "t_200_winter_climatology"                         
+#&gt; [120] "t_500_interpolated_summer_climatology"            
+#&gt; [121] "t_500_interpolated_winter_climatology"            
+#&gt; [122] "t_500_summer_climatology"                         
+#&gt; [123] "t_500_winter_climatology"                         
+#&gt; [124] "t_50_interpolated_summer_climatology"             
+#&gt; [125] "t_50_interpolated_winter_climatology"             
+#&gt; [126] "t_50_summer_climatology"                          
+#&gt; [127] "t_50_winter_climatology"                          
+#&gt; [128] "vertical_velocity_250"                            
+#&gt; [129] "vertical_velocity_500"                            </div><div class='input'><span class='fu'><a href='readderivaadc.html'>readderivaadc</a></span>(<span class='fu'>sample</span>(<span class='no'>prods</span>, <span class='fl'>1L</span>))</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: ncdf4</span></div><div class='output co'>#&gt; class       : RasterLayer 
+#&gt; dimensions  : 501, 3601, 1804101  (nrow, ncol, ncell)
+#&gt; resolution  : 0.1, 0.1  (x, y)
+#&gt; extent      : -180.05, 180.05, -80.05, -29.95  (xmin, xmax, ymin, ymax)
+#&gt; coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+#&gt; data source : /rdsi/PRIVATE/raad/data/webdav.data.aad.gov.au/data/environmental/derived/antarctic/netcdf/distance_colony.nc 
+#&gt; names       : distance_colony 
+#&gt; zvar        : distance 
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -111,7 +253,11 @@ these products, which are available from <a href = 'http://webdav.data.aad.gov.a
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>read AMPS wind — readamps_d1wind • raadtools</title>
+<title>read AMPS data — readamps_d1wind • raadtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -76,15 +76,19 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>read AMPS wind</h1>
+    <h1>read AMPS data</h1>
     </div>
 
     
-    <p>Read "d1" surface winds from 	The Antarctic Mesoscale Prediction System (AMPS) files</p>
+    <p>Read from 	The Antarctic Mesoscale Prediction System (AMPS) files.</p>
     
 
     <pre><span class='fu'>readamps_d1wind</span>(<span class='no'>date</span>, <span class='kw'>time.resolution</span> <span class='kw'>=</span> <span class='st'>"4hourly"</span>, <span class='kw'>xylim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>magonly</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>dironly</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>uonly</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>vonly</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>latest</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>returnfiles</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>...</span>,
+  <span class='kw'>inputfiles</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+
+<span class='fu'>readamps</span>(<span class='no'>date</span>, <span class='kw'>time.resolution</span> <span class='kw'>=</span> <span class='st'>"4hourly"</span>, <span class='kw'>xylim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>band</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>latest</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>returnfiles</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>, <span class='kw'>inputfiles</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -143,7 +147,10 @@ components</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Data  http://www2.mmm.ucar.edu/rt/amps/wrf_grib/, and contain gridded forecast data from the AMPS-WRF model. 
+    <p><code>readamps_d1wind</code> reads the "d1" <code>level</code> wind (defaults to 1).
+    <code>readamps</code> reads the  <code>band</code> (defaults to 1).</p>
+<p>See <code><a href='amps_metadata.html'>amps_metadata</a></code> for a description of the bands.</p>
+<p>Data  http://www2.mmm.ucar.edu/rt/amps/wrf_grib/, and contain gridded forecast data from the AMPS-WRF model. 
 The ‘d1’ (domain 1) files are on a 30km grid, while the ‘d2’ (domain 2) files are on a 10km grid. 
 The grid domains are shown at  http://polarmet.osu.edu/AMPS/ - d2 extends out to southern Australia and the tip of South America, and 
 d1 covers just Antarctica (including Davis) and parts of the Southern Ocean.

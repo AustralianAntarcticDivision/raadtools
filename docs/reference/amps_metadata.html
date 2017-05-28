@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load metadata and location of files of ocean colour data products. — ocfiles • raadtools</title>
+<title>AMPS GRIB file metadata — amps_metadata • raadtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -76,65 +76,69 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load metadata and location of files of ocean colour data products.</h1>
+    <h1>AMPS GRIB file metadata</h1>
     </div>
 
     
-    <p>This function loads the latest cache of stored files for
-NASA ocean colour products.</p>
+    <p>GRIB format metadata from the Antarctic Mesoscale Prediction System (AMPS) files.</p>
     
 
-    <pre><span class='fu'>ocfiles</span>(<span class='kw'>time.resolution</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"daily"</span>, <span class='st'>"weekly"</span>, <span class='st'>"monthly"</span>, <span class='st'>"weekly32"</span>),
-  <span class='kw'>product</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"MODISA"</span>, <span class='st'>"SeaWiFS"</span>, <span class='st'>"VIIRS"</span>), <span class='kw'>varname</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"RRS"</span>, <span class='st'>"CHL"</span>,
-  <span class='st'>"POC"</span>, <span class='st'>"KD490"</span>, <span class='st'>"NPP_PAR"</span>, <span class='st'>"SNPP_CHL"</span>, <span class='st'>"SNPP_RRS"</span>), <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"L3b"</span>, <span class='st'>"L3m"</span>),
-  <span class='kw'>bz2.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ext</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"nc"</span>, <span class='st'>"main"</span>), <span class='no'>...</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>time.resolution</th>
-      <td><p>daily or monthly files?</p></td>
-    </tr>
-    <tr>
-      <th>product</th>
-      <td><p>choice of ocean colour sensor</p></td>
-    </tr>
-    <tr>
-      <th>varname</th>
-      <td><p>which variable (or set of variables)</p></td>
-    </tr>
-    <tr>
-      <th>type</th>
-      <td><p>which level of data</p></td>
-    </tr>
-    <tr>
-      <th>bz2.rm</th>
-      <td><p>ignore files that are compressed</p></td>
-    </tr>
-    <tr>
-      <th>ext</th>
-      <td><p>which extension, e.g. "nc" or "main"</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>reserved for future use, currently ignored</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+        
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>data.frame of <code>file</code> and <code>date</code></p>
+    <p><code>amps_metadata</code> A data frame with 8 columns.  The columns
+represent</p><table><tr><td>
+<code>Band</code> </td>
+</tr><tr><td> the band number </td>
+</tr><tr><td>
+<code>GRIB_COMMENT</code> </td>
+</tr><tr><td> the data measured </td>
+</tr><tr><td>
+<code>GRIB_ELEMENT</code> </td>
+</tr><tr><td> the data name </td>
+</tr><tr><td>
+<code>GRIB_FORECAST_SECONDS</code> </td>
+</tr><tr><td> forecast seconds  </td>
+</tr><tr><td>
+<code>GRIB_REF_TIME</code> </td>
+</tr><tr><td> text reference time </td>
+</tr><tr><td>
+<code>GRIB_SHORT_NAME</code> </td>
+</tr><tr><td> short name  </td>
+</tr><tr><td>
+<code>GRIB_UNIT</code> </td>
+</tr><tr><td>  text unit </td>
+</tr><tr><td>
+<code>GRIB_VALID_TIME</code> </td>
+</tr><tr><td> text valid time </td>
+</tr></table>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>print</span>(<span class='no'>amps_metadata</span>)</div><div class='output co'>#&gt; # A tibble: 254 x 8
+#&gt;     Band           GRIB_COMMENT GRIB_ELEMENT GRIB_FORECAST_SECONDS
+#&gt;    &lt;chr&gt;                  &lt;chr&gt;        &lt;chr&gt;                 &lt;chr&gt;
+#&gt;  1     1           undefined[-]       var176                  0sec
+#&gt;  2     2           undefined[-]       var177                  0sec
+#&gt;  3     3           Icecover(ice         ICEC                  0sec
+#&gt;  4     4         Landcover(land         LAND                  0sec
+#&gt;  5     5 u-componentofwind[m/s]         UGRD                  0sec
+#&gt;  6     6 u-componentofwind[m/s]         UGRD                  0sec
+#&gt;  7     7 u-componentofwind[m/s]         UGRD                  0sec
+#&gt;  8     8 u-componentofwind[m/s]         UGRD                  0sec
+#&gt;  9     9 u-componentofwind[m/s]         UGRD                  0sec
+#&gt; 10    10 u-componentofwind[m/s]         UGRD                  0sec
+#&gt; # ... with 244 more rows, and 4 more variables: GRIB_REF_TIME &lt;chr&gt;,
+#&gt; #   GRIB_SHORT_NAME &lt;chr&gt;, GRIB_UNIT &lt;chr&gt;, GRIB_VALID_TIME &lt;chr&gt;</div><div class='input'><span class='co'>## u_wind_at_900 &lt;- read  ## unfinished</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
-          </ul>
+      <li><a href="#format">Format</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

@@ -308,6 +308,27 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   cfs
 }
 
+## system.time(icf <- icefiles(hemisphere = "south"))
+#user  system elapsed 
+#3.060   0.028   3.138
+# unique(dirname(dirname(icf$fullname)))
+# [1] "/rdsi/PRIVATE/raad/data/sidads.colorado.edu/pub/DATASETS/nsidc0051_gsfc_nasateam_seaice/final-gsfc/south/daily"
+# [2] "/rdsi/PRIVATE/raad/data/sidads.colorado.edu/pub/DATASETS/nsidc0081_nrt_nasateam_seaice"                        
+# [3] "/rdsi/PRIVATE/raad/data/sidads.colorado.edu/pub/DATASETS/nsidc0081_nrt_nasateam_seaice/F18_uncalibrated"    
+
+## system.time(icf2 <- .nsidc_south_daily_dbfiles())
+.nsidc_south_daily_dbfiles <- function() {
+  datadir <- getOption("default.datadir")
+  db <- dplyr::src_sqlite(file.path(datadir, "admin", "filelist", "allfiles.sqlite"))
+  tab <- dplyr::tbl(db, "file_list") %>% ## split the string search into two simpler parts makes it faster
+    filter(fullname %like% "%s.bin") %>% 
+    filter(fullname %like% "%nasateam_seaice%") %>% 
+    collect() %>% filter(!grepl("monthly", fullname)) %>% 
+    #filter(grepl("nrt_s.bin", fullname) | grepl("v1.1_s.bin", fullname)) %>% 
+    mutate(file = fullname, fullname = file.path(datadir, file)) %>% 
+    mutate(date = as.POSIXct(strptime(basename(fullname), "nt_%Y%m%d"), tz = "GMT"))
+ tab %>% arrange(date) %>% distinct(date, .keep_all = TRUE)
+}
 .amsr625files <- function(allfiles, ext) {
   ## 2002:2011
   f1 <- "ftp-projects.zmaw.de/seaice/AMSR-E_ASI_IceConc/no_landmask/hdf/s6250/"
@@ -338,11 +359,12 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
 # user  system elapsed 
 # 0.476   0.240   1.713
 
+#' @importFrom dplyr %>% filter collect mutate arrange distinct
 .amsr625_dbfiles <- function() {
   datadir <- getOption("default.datadir")
   db <- dplyr::src_sqlite(file.path(datadir, "admin", "filelist", "allfiles.sqlite"))
   tab <- dplyr::tbl(db, "file_list") %>% ## split the string search into two simpler parts makes it faster
-    filter(fullname %like% "%hdf") %>% 
+    dplyr::filter(fullname %like% "%hdf") %>% 
     filter(fullname %like% "%s6250%") %>% collect() %>% filter(!grepl("LongitudeLatitude", fullname)) %>% mutate(file = fullname, fullname = file.path(datadir, file)) 
   # f1 <- "ftp-projects.zmaw.de/seaice/AMSR-E_ASI_IceConc/no_landmask/hdf/s6250/"
   # f2 <- "www.iup.uni-bremen.de\\+8084/amsr2data/asi_daygrid_swath/s6250"

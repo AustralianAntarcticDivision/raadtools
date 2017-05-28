@@ -69,7 +69,7 @@ nodc_ghrsstfiles <- function() {
 
 #' Read GHRSST
 #'
-#' SST in Celsius
+#' SST in Kelvin
 #' @param date datetime
 #' @param time.resolution daily
 #' @param varname one of "analysed_sst", "analysis_error", "mask", "sea_ice_fraction"
@@ -130,7 +130,7 @@ readghrsst  <- function (date, time.resolution = c("daily"),
  
   #wtf
  # r0 <- setZ(r0, getZ(r0) + ISOdatetime(1981, 1, 1, 0, 0, 0, tz = "GMT")) ##1981-01-01 00:00:00)
-  ## Kelvin to Celsius
-   r0 - 273.15
+  ## Kelvin
+   r0 
   
 }

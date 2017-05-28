@@ -34,5 +34,5 @@ readghrsst(date, time.resolution = c("daily"), xylim = NULL,
 RasterStack or RasterLayer
 }
 \description{
-SST in Celsius
+SST in Kelvin
 }

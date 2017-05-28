@@ -1,6 +1,6 @@
 DEV
 
-o ghrsst now returns Celsius (from Kelvin)
+
 o ghrsst gains inputfiles, and is now useably fast for track extraction
 
 o AMSR2 is back (per readice(product = "amsr")) and the file listing now relies on RSQLite

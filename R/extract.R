@@ -55,10 +55,9 @@
     ## we assume y is lon,lat,time
     y1 <- SpatialPoints(as.matrix(y[,1:2]), CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"))
     
-    
     if (notime) {
       ## assume we want topo/bathy values
-      thisx1 <- x()
+      thisx1 <- x(xylim = xylim)
       if (resize) thisx1 <- aggregate(thisx1, fact = fact, fun = 'mean')
       return(extract(thisx1, y1, ...))
     }
@@ -71,12 +70,22 @@
     }
     ## TODO, will have to figure out how to do this
     args <- list(...)
-    
+    if ("xylim" %in% names(args)) {
+      warning("xylim argument ignored (determined automatically from the input data)")
+      args$xylim <- NULL
+    }
     if ("time.resolution" %in% names(args)) {
       files <- x(returnfiles = TRUE, time.resolution = args$time.resolution, ...)
     } else {
       files <- x(returnfiles = TRUE, ...)
     }
+    dummy <- x(inputfiles = files)
+    yp <- spTransform(y1, projection(dummy))
+    xylim <- extent(yp)
+    dx <- xmax(xylim)-xmin(xylim)
+    dy <- ymax(xylim)-ymin(xylim)
+    xylim <- xylim + c(dx, dy) / 10
+    
     ## TODO, this is awful need a fix
     time.resolution <- .determine.time.resolution(files$date)
     ## TODO somehow manage climatology exceptions
@@ -99,13 +108,13 @@
     if (ctstime) {
       ## we need to store start and end values
       resm <- cbind(result, result)
-      thisx1 <- x(date[1L], verbose = FALSE, inputfiles = files, ...)  ## inputfiles direct
+      thisx1 <- x(date[1L], verbose = FALSE, inputfiles = files, xylim = xylim, ...)  ## inputfiles direct
       #print("first read")
       #print(thisx1)
       if(resize) thisx1 <- aggregate(thisx1, fact = fact, fun = "mean")
       for (i in seq_along(date)[-1]) {
         
-        thisx2 <- x(date[i], verbose = FALSE, inputfiles = files, ...)
+        thisx2 <- x(date[i], verbose = FALSE, inputfiles = files, xylim = xylim,  ...)
         #print("reading later files")
         #print(thisx2)
         ## TODO check do we have to store the time-value BEFORE aggregating
@@ -142,7 +151,7 @@
     } else {
       ## TODO, fix up the if/else here with an exception for the first/last for ctstime
       for (i in seq_along(date)) {
-        thisx <- x(date[i], verbose = FALSE, inputfiles = files, ...)
+        thisx <- x(date[i], verbose = FALSE, inputfiles = files, xylim = xylim,  ...)
        
         if(resize) thisx <- aggregate(thisx, fact = fact, fun = "mean")
         asub <- windex == findex[i]
@@ -216,170 +225,4 @@ longlat_coords <- function(x) {
   extract(x, xyt, ...)
 }
 setMethod("extract", signature(x = 'function', y = 'trip'), .trip.extract)
-
-
-
-## ## multi-function extract method
-## exportMethod extract
-## setMethod("extract", signature(x = 'list', y = 'data.frame'),
-##           function(x, y, ...) {
-##            .local <- function (x, y,  ctstime = FALSE, fact = NULL, ...) {
-
-##                vals <- vector("list", length(x))
-##                ## the idea is to loop over a list of read functions ...
-##             for (i in seq_along(x)) {
-
-
-##                 vals[[i]] <- extract(x[[i]], y, ctstime = ctstime, fact = fact, ...)
-##             }
-
-##                names(vals) <- sapply(x, function(x1) as.character(substitute(x1)))
-##             as.data.frame(vals)
-##            }
-##            .local(x, y, ...)
-##        }
-
-
-
-##           )
-
-## @exportMethod extract
-## setMethod("extract", signature(x = 'function', y = 'SpatialPolygons'),
-##           function(x, y, ...) {
-##            .local <- function (x, y, datetimelim, ...) {
-##                ## we need some kind of time limit
-##                if (missing(datetimelim)) {
-
-##                    res <- extract(x(), y, ...)
-##                } else {
-
-##                ## how to differentiate the dots arguments for the read function and extract?
-##                ## will need to process explicitly
-
-##                }
-
-##                res
-##            }
-##        }
-##           )
-
-
-## useful scenarios for y
-## data.frame of xyt (assume longlat with subtle test)
-## SPointsDF with time
-## SLinesDF
-## SPolyDF
-## trip
-##
-
-
-## super simple nn cases
-##setMethod("extract", signature(x = "function", y = "SpatialPoints"),
-##          function(x, y, ...) {
-
-
-##        }
-##        )
-
-
-
-## all points-based scenarios can be either nn or bilinear
-## all line/poly-based scenarios need somehow to provide a time span??
-
-## possible other scenarios for y
-##  matrix of xy
-##  matrix of xyt
-##  dataframe or list of xy
-## list of xyt
-
-
-## ## @exportMethod extract
-## setMethod("extract", signature(x = 'function', y = 'Spatial'),
-##           function(x, y, ...) {
-##               .local <- function (x, y,  ctstime = FALSE, fact = NULL, daterange = NULL, verbose = TRUE, ...) {
-##                   result <- rep(as.numeric(NA), nrow(y))
-
-
-##                   ## if daterange is null just give the end points
-##                   files <- x(returnfiles = TRUE)
-##                   if (is.null(daterange)) dates <- timedateFrom(daterange)
-
-
-##                   ## args <- list(...)
-##                   ## if ("time.resolution" %in% names(args)) {
-##                   ##     files <- x(returnfiles = TRUE, time.resolution = args$time.resolution)
-##                   ## } else {
-##                   ##     files <- x(returnfiles = TRUE)
-##                   ## }
-##                   ## TODO, this is awful need a fix
-##                   time.resolution <- .determine.time.resolution(files$date)
-##                   ## TODO somehow manage climatology exceptions
-##                   ## unique indexes
-##                   findex <- suppressWarnings(.processDates(times, files$date, timeres = time.resolution))
-##                   ## all indexes (need to integrate in general processing setup with above)
-##                   windex <- integer(length(times))
-##                   for (i in seq_along(times)) {
-##                       windex[i] <- which.min(abs(times[i] - files$date))
-##                   }
-##                   ## this won't always work, need to zap anything out of range . . .
-##                   if (max(times) >= max(files$date[findex])) findex <- c(findex, max(findex) + 1)
-##                   date <- files$date[findex]
-##                   resize <- FALSE
-##                   ## TODO careful checks that resizing makes a difference
-##                   if (!is.null(fact)) resize <- TRUE
-##                   mess1 <- ""
-##                   ## interpolate in time?
-##                   if (ctstime) {
-##                       ## we need to store start and end values
-##                       resm <- cbind(result, result)
-##                       thisx1 <- x(date[1L], verbose = FALSE)
-##                       if(resize) thisx1 <- aggregate(thisx1, fact = fact, fun = "mean")
-##                       for (i in seq_along(date)[-1]) {
-##                           thisx2 <- x(date[i], verbose = FALSE)
-##                           ## TODO check do we have to store the time-value BEFORE aggregating
-##                           ##t2 <- getZ(thisx2)
-##                           if(resize) thisx2 <- aggregate(thisx2, fact = fact, fun = "mean")
-##                           ## findInterval is too hard to use reliably (for this black duck)
-##                           ## asub <- findInterval(times, date) == (i - 1)
-##                           asub <- windex == findex[i]
-
-##                           ## interpolation in time, controlled in space by "method" for xy
-##                           if (any(asub)) {resm[asub, ] <- suppressWarnings(extract(stack(thisx1, thisx2), y[asub, ], ...))}
-##                           ## use date since agggregate smashes the Z
-##                           result[asub] <- .interp(resm[asub,1], resm[asub,2], .calcProportion(date[i-1L], date[i], times[asub]))
-##                           ## setup to do the next loop
-##                           thisx1 <- thisx2
-##                           ## report happy times
-##                           if (interactive() & verbose) {
-##                               message(paste(rep("\b", nchar(mess1)), collapse = ""), appendLF = FALSE)
-##                               mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
-##                               message(mess1, appendLF = FALSE)
-##                               flush.console()
-##                           }
-##                       }
-##                       message("", appendLF = TRUE)
-##                   } else {
-##                       ## TODO, fix up the if/else here with an exception for the first/last for ctstime
-##                       for (i in seq_along(date)) {
-##                           thisx <- x(date[i], verbose = FALSE, ...)
-##                           if(resize) thisx <- aggregate(thisx, fact = fact, fun = "mean")
-##                           asub <- windex == findex[i]
-##                           ## no interpolation in time, controlled by "method" for xy
-##                           if (any(asub)) {result[asub] <- suppressWarnings(extract(thisx, y[asub, ], ...))}
-
-##                             if (interactive() & verbose) {
-##                               message(paste(rep("\b", nchar(mess1)), collapse = ""), appendLF = FALSE)
-##                               mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
-##                               message(mess1, appendLF = FALSE)
-##                               flush.console()
-##                           }
-##                       }
-##                       message("", appendLF = TRUE)
-
-##                   }
-##                   result
-##               }
-##               .local(x, y, ...)
-##           }
-##           )
 

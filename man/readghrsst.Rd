@@ -7,7 +7,7 @@
 readghrsst(date, time.resolution = c("daily"), xylim = NULL,
   lon180 = TRUE, varname = c("analysed_sst", "analysis_error", "mask",
   "sea_ice_fraction"), setNA = TRUE, latest = FALSE, returnfiles = FALSE,
-  ...)
+  ..., inputfiles = NULL)
 }
 \arguments{
 \item{date}{datetime}
@@ -27,10 +27,12 @@ readghrsst(date, time.resolution = c("daily"), xylim = NULL,
 \item{returnfiles}{return the files}
 
 \item{...}{pass in filename to writeRaster}
+
+\item{inputfiles}{input the file set}
 }
 \value{
 RasterStack or RasterLayer
 }
 \description{
-Read GHRSST
+SST in Celsius
 }

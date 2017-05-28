@@ -69,6 +69,7 @@ nodc_ghrsstfiles <- function() {
 
 #' Read GHRSST
 #'
+#' SST in Celsius
 #' @param date datetime
 #' @param time.resolution daily
 #' @param varname one of "analysed_sst", "analysis_error", "mask", "sea_ice_fraction"
@@ -78,7 +79,7 @@ nodc_ghrsstfiles <- function() {
 #' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
 #' @param lon180 currently ignored
 #' @param ... pass in filename to writeRaster
-#'
+#' @param inputfiles input the file set
 #' @return RasterStack or RasterLayer
 #' @export
 readghrsst  <- function (date, time.resolution = c("daily"),
@@ -86,12 +87,12 @@ readghrsst  <- function (date, time.resolution = c("daily"),
                          varname = c("analysed_sst", "analysis_error", "mask", "sea_ice_fraction"),
                          setNA = TRUE,
                          latest = FALSE,
-                         returnfiles = FALSE, ...) {
+                         returnfiles = FALSE, ..., inputfiles = NULL) {
   if (!lon180) stop("only lon180 is supported")
   time.resolution <- match.arg(time.resolution)
   varname <- match.arg(varname)
 
-  files <- ghrsstfiles()
+  files <- if (is.null(inputfiles))  ghrsstfiles() else inputfiles
   if (returnfiles)  return(files)
   
   
@@ -129,6 +130,7 @@ readghrsst  <- function (date, time.resolution = c("daily"),
  
   #wtf
  # r0 <- setZ(r0, getZ(r0) + ISOdatetime(1981, 1, 1, 0, 0, 0, tz = "GMT")) ##1981-01-01 00:00:00)
-   r0
+  ## Kelvin to Celsius
+   r0 - 273.15
   
 }

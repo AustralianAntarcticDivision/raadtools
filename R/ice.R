@@ -257,7 +257,7 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   
   ftx <- .allfilelist(rda = TRUE, fullname = FALSE)
   ## just shortcut here for AMSR (need to review code below)
-  if (product == "amsr") return(.amsr625files(ftx, ext = extension))
+  if (product == "amsr") return(.amsr625_dbfiles())
   ppat <- switch(product, 
                  nsidc = "sidads.colorado.edu",
                  ## need to use the + for some reason
@@ -331,153 +331,28 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   files[!duplicated(files$date), ]
   
 }
+# system.time(af <- .amsr625files(.allfilelist(), "hdf"))
+# user  system elapsed 
+# 7.296   0.080   7.379 
+# system.time(af2 <- .amsr625_dbfiles())
+# user  system elapsed 
+# 0.476   0.240   1.713
 
-
-
-.icefiles1 <- function(time.resolution = c("daily", "monthly"), product = c("nsidc", "ssmi"), ...) {
-  time.resolution <- match.arg(time.resolution)
-  product <- match.arg(product)
+.amsr625_dbfiles <- function() {
   datadir <- getOption("default.datadir")
-  ## TODO, need a system of tokens . . .
-  if (product == "nsidc") id_token <- time.resolution else id_token <- product
-  files <- NULL
-  load(file.path(datadir, "cache", sprintf("%s_icefiles.Rdata", id_token)))
-  files$fullname <- file.path(datadir, files$file)
-  files
+  db <- dplyr::src_sqlite(file.path(datadir, "admin", "filelist", "allfiles.sqlite"))
+  tab <- dplyr::tbl(db, "file_list") %>% ## split the string search into two simpler parts makes it faster
+    filter(fullname %like% "%hdf") %>% 
+    filter(fullname %like% "%s6250%") %>% collect() %>% filter(!grepl("LongitudeLatitude", fullname)) %>% mutate(file = fullname, fullname = file.path(datadir, file)) 
+  # f1 <- "ftp-projects.zmaw.de/seaice/AMSR-E_ASI_IceConc/no_landmask/hdf/s6250/"
+  # f2 <- "www.iup.uni-bremen.de\\+8084/amsr2data/asi_daygrid_swath/s6250"
+  # tab <- tab[c(grep(f1, tab$fullname), grep(f2, tab$fullname)), ]
+  # 
+  tab$date <- as.POSIXct(strptime(unlist(lapply(strsplit(basename(tab$fullname), "-"), "[", 4)), "%Y%m%d"), tz = "UTC")
+  #tab <- tab[order(tab$date), ]
+  #tab$file <- gsub(paste0(getOption("default.datadir"), "/"), "", tab$fullname)
+  #tab[!duplicated(tab$date), ]
+  tab %>% arrange(date) %>% distinct(date, .keep_all = TRUE)
 }
 
 
-.updateicefiles <- function(datadir = getOption("default.datadir")) {
-  
-  if (!file.exists(datadir)) stop(sprintf("data repository not found at %s", datadir))
-  
-  for (time.resolution in c("daily", "monthly")) {
-    subpath <- file.path("seaice", "smmr_ssmi_nasateam", time.resolution)
-    fpath <- file.path(datadir, subpath)
-    fs <- list.files(fpath , recursive = TRUE, pattern = "s.bin$", full.names = FALSE)
-    
-    if (!length(fs) > 0) {
-      warning(sprintf("no files found for %s at %s", time.resolution, fpath))
-      next;
-    }
-    datepart <- sapply(strsplit(basename(fs), "_"), "[", 2)
-    if(time.resolution == "monthly") datepart <- paste0(datepart, "01")
-    
-    icdates <- as.POSIXct(strptime(datepart, "%Y%m%d"), tz = "GMT")
-    
-    files <- data.frame(file = file.path(subpath, fs), date = icdates, stringsAsFactors = FALSE)
-    
-    ## take the "last" duplicated   (should be lexicographically f0n > f0m)
-    bad <- rev(duplicated(rev(icdates)))
-    
-    files <- files[!bad, ]
-    files <- files[order(files$date), ]
-    
-    fpath <- file.path(getOption("default.datadir"),"cache", sprintf("%s_icefiles.Rdata", time.resolution))
-    save(files, file = fpath)
-    print(sprintf("saved %s", fpath))
-  }
-  
-  ## ssmi
-  dataproduct <- "ssmi"
-  subpath <- file.path("seaice", "ssmi", "ifremer", "antarctic", "daily")
-  fs <- list.files(file.path(datadir, subpath), recursive = TRUE, pattern = ".nc$", full.names = FALSE)
-  datepart <- gsub(".nc$", "", basename(fs))
-  icdates <- as.POSIXct(strptime(datepart, "%Y%m%d"), tz = "GMT")
-  files <- data.frame(file = file.path(subpath, fs), date = icdates, stringsAsFactors = FALSE)
-  files <- files[order(icdates), ]
-  fpath <- file.path(datadir, "cache", sprintf("%s_icefiles.Rdata", dataproduct))
-  save(files, file = fpath)
-  print(sprintf("saved %s", fpath))
-}
-
-
-
-.readice1 <- function(date,
-                      time.resolution = c("daily", "monthly"),
-                      product = c("nsidc", "ssmi"),
-                      xylim = NULL,
-                      setNA = TRUE, rescale = TRUE,
-                      
-                      debug = FALSE,
-                      verbose = TRUE,
-                      returnfiles = FALSE, ...) {
-  
-  time.resolution <- match.arg(time.resolution)
-  product <- match.arg(product)
-  ## get file names and dates and full path
-  files <- icefiles(product, time.resolution = time.resolution)
-  ##files$fullname <- file.path(datadir, files$file)
-  if (returnfiles) return(files)
-  if (missing(date)) date <- min(files$date)
-  date <- timedateFrom(date)
-  files <- .processFiles(date, files, time.resolution)
-  
-  ## check that files are available
-  
-  
-  ## NSIDC projection and grid size for the Southern Hemisphere
-  stersouth <-  "+proj=stere +lat_0=-90 +lat_ts=-70 +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m +no_defs "
-  ## modify based on dataproduct
-  dims <- switch(product,
-                 nsidc = c(316L, 332L),
-                 ssmi = c(632L, 664L))
-  res <-  switch(product,
-                 nsidc = c(25000, 25000),
-                 ssmi = c(12500, 12500))
-  rtemplate <- raster(GridTopology(c(-3937500, -3937500), res, dims))
-  ## process xylim
-  cropit <- FALSE
-  if (!is.null(xylim)) {
-    cropit <- TRUE
-    cropext <- extent(xylim)
-  }
-  
-  nfiles <- nrow(files)
-  r <- vector("list", nfiles)
-  ## note that this can be replaced by a direct raster(file) once the package
-  ## gets updated (post raster_2.1-49, October 2013)
-  .readNSIDC <- function(fname) {
-    con <- file(fname, open = "rb")
-    trash <- readBin(con, "integer", size = 1, n = 300)
-    dat <- readBin(con, "integer", size = 1, n = prod(dims), endian = "little", signed = FALSE)
-    close(con)
-    r100 <- dat > 250
-    r0 <- dat < 1
-    if (rescale) {
-      dat <- dat/2.5  ## rescale back to 100
-    }
-    if (setNA) {
-      dat[r100] <- NA
-      dat[r0] <- NA
-    }
-    raster(t(matrix(dat, dims[1])), template = rtemplate)
-  }
-  .readSSMI <- function(fname) {
-    x <- raster(fname, varname = "concentration")
-    x <- flip(x, "y")
-    if (!setNA) {
-      x[is.na(x)] <- -127
-    } else {
-      x[x > 100 | x < 1] <- NA
-    }
-    extent(x) <- extent(rtemplate)
-    x
-  }
-  
-  ## loop over file indices
-  for (ifile in seq_len(nfiles)) {
-    r0 <- switch(product,
-                 nsidc = .readNSIDC(files$fullname[ifile]),
-                 ssmi = .readSSMI(files$fullname[ifile]))
-    
-    if (cropit) r0 <- crop(r0, cropext)
-    r[[ifile]] <- r0
-  }
-  ## TODO need filename for the singleton case
-  if (nfiles > 1) r <- brick(stack(r), ...) else r <- r[[1L]]
-  
-  projection(r) <- stersouth
-  names(r) <- basename(files$file)
-  setZ(r, files$date)
-}

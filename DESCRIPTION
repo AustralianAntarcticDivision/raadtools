@@ -17,6 +17,7 @@ Suggests:
     knitr,
     ncdf4,
     rgdal,
+    RSQLite,
     testthat,
     rmarkdown,
     covr

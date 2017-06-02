@@ -89,3 +89,8 @@ test_that("we get values", {
 test_that("another example works", {
   expect_that(extract(readsst, aurora[c(1, 5, 10, 11, 15), ]), is_a("numeric"))
 })
+
+
+test_that("expected arrangement of file data frame", 
+          expect_that(names(sstfiles()), equals(c("file", "date", "fullname")))
+          )

@@ -13,7 +13,9 @@ sstfiles <- function(time.resolution = c("daily","monthly"), ...) {
   
   
   if (time.resolution == "daily") {
-    return(raadfiles::oisst_daily_files())
+    ## maintain the traditional raad order
+    files <- raadfiles::oisst_daily_files()[, c("file", "date", "fullname")]
+    return(files)
   } else {
     ftx <- .allfilelist()
     cfiles0 <- grep("ftp.cdc.noaa.gov/Datasets/noaa.oisst.v2/", ftx, value = TRUE)

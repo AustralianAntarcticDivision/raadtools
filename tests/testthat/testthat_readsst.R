@@ -74,10 +74,10 @@ test_that("read is ok with inputfiles", {
 
 
 
-context("basic extract")
 
 library(testthat)
 library(raadtools)
+context("basic extract")
 
 data(aurora)
 aurora$DATE_TIME_UTC <- aurora$DATE_TIME_UTC - 720 * 24 * 3600
@@ -91,6 +91,9 @@ test_that("another example works", {
 })
 
 
-test_that("expected arrangement of file data frame", 
-          expect_that(names(sstfiles()), equals(c("file", "date", "fullname")))
-          )
+test_that("expected arrangement of file data frame", { 
+          expect_that(names(sstfiles()), equals(c("file", "date", "fullname"))) 
+          expect_that(names(sstfiles(time.resolution = "monthly")), 
+                      equals(c("file", "date", "fullname", "band")))
+          
+  })

@@ -10,28 +10,13 @@
 sstfiles <- function(time.resolution = c("daily","monthly"), ...) {
   datadir <- getOption("default.datadir")
   time.resolution <- match.arg(time.resolution)
-  
-  
   if (time.resolution == "daily") {
     ## maintain the traditional raad order
     files <- raadfiles::oisst_daily_files()[, c("file", "date", "fullname")]
-    return(files)
   } else {
-    ftx <- .allfilelist()
-    cfiles0 <- grep("ftp.cdc.noaa.gov/Datasets/noaa.oisst.v2/", ftx, value = TRUE)
-    cfiles <- grep("sst.mnmean.nc$", cfiles0, value = TRUE)
-    
-    if (length(cfiles) < 1) stop("no files found")
-    if (length(cfiles) > 1) stop("only expecting one file for monthly OIv2 SST, but found ",length(cfiles))
-    
-    r <- stack(cfiles, quick = TRUE)
-    fs <- rep(cfiles, nlayers(r))
-    
-    dates <- timedateFrom(strptime(names(r), "X%Y.%m.%d"))
-    fs <- data.frame(file = gsub("^/", "", gsub(datadir, "", fs)), date = dates, fullname = cfiles, stringsAsFactors = FALSE)[order(dates),]
-    fs$band <- seq_len(nlayers(r))
+    files <- raadfiles::oisst_monthly_files()[, c("file", "date", "fullname", "band")]
   }
-  fs
+  files
 }
 
 

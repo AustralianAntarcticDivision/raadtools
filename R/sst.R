@@ -9,42 +9,25 @@
 ##' @export
 sstfiles <- function(time.resolution = c("daily","monthly"), ...) {
   datadir <- getOption("default.datadir")
-
-  ## data/eclipse.ncdc.noaa.gov/pub/OI-daily-v2/NetCDF/1981/AVHRR
-  ## "avhrr-only-v2.19810901.nc"
-
   time.resolution <- match.arg(time.resolution)
-
-  ftx <- .allfilelist()
+  
+  
   if (time.resolution == "daily") {
-      cfiles0 <- grep("eclipse.ncdc.noaa.gov", ftx, value = TRUE)
-      cfiles1 <- grep("OI-daily-v2", cfiles0, value = TRUE)
-      cfiles <- grep(".nc$", cfiles1, value = TRUE)
-      if (length(cfiles) < 1) stop("no files found")
-
-      doffs <-  1
-      datepart <- sapply(strsplit(basename(cfiles), "\\."), function(x) x[length(x) - doffs])
-
-      dates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d", tz = "GMT")))
-
-      cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = dates,
-                    fullname = cfiles, stringsAsFactors = FALSE)[order(dates), ]
-      ## shouldn't be any, but no harm
-      fs <- cfs[!duplicated(cfs$date), ]
-      #if (nrow(fs) < nrow(cfs)) warning("Some duplicated files in OI-daily-V2 collection? Please report to maintainer. ")
+    return(raadfiles::oisst_daily_files())
   } else {
-      cfiles0 <- grep("ftp.cdc.noaa.gov/Datasets/noaa.oisst.v2/", ftx, value = TRUE)
-      cfiles <- grep("sst.mnmean.nc$", cfiles0, value = TRUE)
-
-      if (length(cfiles) < 1) stop("no files found")
-      if (length(cfiles) > 1) stop("only expecting one file for monthly OIv2 SST, but found ",length(cfiles))
-
-      r <- stack(cfiles, quick = TRUE)
-      fs <- rep(cfiles, nlayers(r))
-
-      dates <- timedateFrom(strptime(names(r), "X%Y.%m.%d"))
-      fs <- data.frame(file = gsub("^/", "", gsub(datadir, "", fs)), date = dates, fullname = cfiles, stringsAsFactors = FALSE)[order(dates),]
-      fs$band <- seq_len(nlayers(r))
+    ftx <- .allfilelist()
+    cfiles0 <- grep("ftp.cdc.noaa.gov/Datasets/noaa.oisst.v2/", ftx, value = TRUE)
+    cfiles <- grep("sst.mnmean.nc$", cfiles0, value = TRUE)
+    
+    if (length(cfiles) < 1) stop("no files found")
+    if (length(cfiles) > 1) stop("only expecting one file for monthly OIv2 SST, but found ",length(cfiles))
+    
+    r <- stack(cfiles, quick = TRUE)
+    fs <- rep(cfiles, nlayers(r))
+    
+    dates <- timedateFrom(strptime(names(r), "X%Y.%m.%d"))
+    fs <- data.frame(file = gsub("^/", "", gsub(datadir, "", fs)), date = dates, fullname = cfiles, stringsAsFactors = FALSE)[order(dates),]
+    fs$band <- seq_len(nlayers(r))
   }
   fs
 }
@@ -116,10 +99,10 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
     total = nfiles, clear = FALSE, width= 60)
   pb$tick(0)
   read_fun <- function(xfile, ext, msk, rot, varname = "", band = 1) {
-                   pb$tick()
-                      mask_if_needed(crop_if_needed(rotate_if_needed(raster(xfile, varname = varname, band = band), rot), ext), msk)
-                    }
-
+    pb$tick()
+    mask_if_needed(crop_if_needed(rotate_if_needed(raster(xfile, varname = varname, band = band), rot), ext), msk)
+  }
+  
   ## TODO determine if we need to rotate, or just shift, or not anything
   rot <- lon180
   msk <- NULL
@@ -130,19 +113,19 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
     }
     #r0 <- stack(files$fullname[1], bands = files$band)
   } 
-
-
+  
+  
   if (is.null(files$band)) files$band <- 1
   
-
-     r0 <- brick(stack(lapply(seq_len(nrow(files)), function(xi) read_fun(files$fullname[xi], ext = xylim, msk = msk, rot = rot, varname = varname, band = files$band[xi]))),
-                ...)
+  
+  r0 <- brick(stack(lapply(seq_len(nrow(files)), function(xi) read_fun(files$fullname[xi], ext = xylim, msk = msk, rot = rot, varname = varname, band = files$band[xi]))),
+              ...)
   if (is.na(projection(r0))) projection(r0) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
   r0 <- setZ(r0, files$date)
-
+  
   if (nfiles == 1) r0 <- r0[[1L]]
   r0
-
+  
 }
 
 

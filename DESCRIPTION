@@ -2,13 +2,14 @@ Package: raadtools
 Type: Package
 Title: Tools for Synoptic Environmental Spatial Data
 Depends:
-    raster (>= 2.3-12),
-    R (>= 3.1.2)
+    raster,
+    R (>= 3.4.0)
 Imports:
     dplyr,
     maptools,
     methods,
     progress,
+    raadfiles,
     rgeos,
     sp, 
     tibble
@@ -34,3 +35,4 @@ Description: Tools for reading, plotting and manipulating spatial data,
     particularly from remote sensing and model output.
 License: GPL-3
 RoxygenNote: 6.0.1
+Remotes: AustralianAntarcticDivision/raadfiles

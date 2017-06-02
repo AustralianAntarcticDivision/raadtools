@@ -1,5 +1,6 @@
 DEV
 
+o raadtools now imports raadfiles, for OISST files
 
 o ghrsst gains inputfiles, and is now useably fast for track extraction
 

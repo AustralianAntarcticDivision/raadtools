@@ -1,7 +1,9 @@
+library(testthat)
+library(raadtools)
+
 context("sea surface temperature")
 
-require(testthat)
-require(raadtools)
+
 test_that("sst data is returned as a raster object", {
           expect_that(readsst("2000-01-01"), is_a("RasterLayer"))
       })

@@ -17,42 +17,6 @@ ghrsstfiles <- function() {
   files <- raadfiles::ghrsst_daily_files()[, c("file", "date", "fullname")]
 }
 
-nodc_ghrsstfiles <- function() {
-  ftx <- .allfilelist()
-  ##ftp.nodc.noaa.gov/pub/data.nodc/ghrsst/L4/GLOB/JPL/MUR/
-  cfiles <- grep("ftp.nodc.noaa.gov", ftx, value = TRUE)
-  cfiles1 <- grep("ghrsst", cfiles, value = TRUE)
-  cfiles2 <- grep("L4", cfiles1, value = TRUE)
-  cfiles3 <- grep("GLOB/JPL/MUR", cfiles2, value = TRUE)
-#cfiles4 <- grep("MUR.nc$", cfiles3, value = TRUE)
-  cfiles4 <- grep("GLOB-v0", cfiles3, value = TRUE)
-  cfiles5 <- grep("nc$", cfiles4, value = TRUE)
-  files <- data.frame(fullname = cfiles5, stringsAsFactors = FALSE)
-  files$date <- as.POSIXct(strptime(basename(cfiles5), "%Y%m%d"), tz = "GMT")
-  
- # cfiles4 <- grep("MUR.nc$", cfiles3, value = TRUE)
- #  ##http://podaac-w10n.jpl.nasa.gov/w10n/allData/ghrsst/data/L4/GLOB/UKMO/OSTIA/2016
- #  cfiles <- grep("podaac-w10n.jpl.nasa.gov", ftx, value = TRUE)
- #  cfiles1 <- grep("ghrsst", cfiles, value = TRUE)
- #  cfiles2 <- grep("L4", cfiles1, value = TRUE)
- #  cfiles3 <- grep("GLOB/UKMO/OSTIA", cfiles2, value = TRUE)
- #  cfiles5 <- grep("OSTIA.nc$", cfiles3, value = TRUE)
- #  files <- data.frame(fullname = c(cfiles4, cfiles5), stringsAsFactors = FALSE)
- #  files$date <- as.POSIXct(strptime(basename(files$fullname), "%Y%m%d"), tz = "GMT")
- #  
-  files <- files[order(files$date), ]
-
-  ## remove dupes, prefer later versions
-  
-  files <- files[!rev(duplicated(files[rev(seq(nrow(files))), ]$date)), ]
-
-  
-  files
-  
-  
-}
-  
-
 #' Read GHRSST
 #'
 #' SST in Kelvin

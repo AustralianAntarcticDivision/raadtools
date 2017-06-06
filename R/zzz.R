@@ -29,7 +29,6 @@
   ## try RAAD_DIR, which may only be available to R CMD check from ~/.R/check.Renviron
   r <- getOption("repos")
   dd <- getOption("default.datadir")
-   print(Sys.getenv("RAAD_DIR"))
   if (is.null(dd["default.datadir"])) {
     dd["default.datadir"] <- Sys.getenv("RAAD_DIR");
     options(repos = r, default.datadir = dd); 
@@ -40,7 +39,11 @@
 }
 .onLoad <- function(libname, pkgname) {
   pathwasset <- .trysetpath()
-
+  base::loadNamespace("raadfiles")
+  oldway <- getOption("default.datadir")
+  newway <- getOption("raadfiles.default.data.directory")
+  print(sprintf("Old way: %s", oldway))
+  print(sprintf("New way: %s", newway))
 }
 
 

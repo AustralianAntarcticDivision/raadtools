@@ -5,7 +5,7 @@ Depends:
     raster,
     R (>= 3.4.0)
 Imports:
-    dplyr,
+    dplyr (> 0.5.0),
     maptools,
     methods,
     progress,
@@ -35,4 +35,4 @@ Description: Tools for reading, plotting and manipulating spatial data,
     particularly from remote sensing and model output.
 License: GPL-3
 RoxygenNote: 6.0.1
-Remotes: AustralianAntarcticDivision/raadfiles
+Remotes: AustralianAntarcticDivision/raadfiles, tidyverse/dplyr

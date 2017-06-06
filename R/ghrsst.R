@@ -14,21 +14,7 @@
 #' @return data.frame
 #' @export
 ghrsstfiles <- function() {
-  ftx <- .allfilelist()
-  ##ftp://podaac-ftp.jpl.nasa.gov/allData/ghrsst/data/GDS2/L4/GLOB/JPL/MUR/v4.1/
-  cfiles <- grep("podaac-ftp.jpl.nasa.gov", ftx, value = TRUE)
-  cfiles1 <- grep("ghrsst", cfiles, value = TRUE)
-  cfiles2 <- grep("L4", cfiles1, value = TRUE)
-  cfiles3 <- grep("GLOB/JPL/MUR", cfiles2, value = TRUE)
-  cfiles4 <- grep("v4.1", cfiles3, value = TRUE)
-  cfiles5 <- grep("nc$", cfiles4, value = TRUE)
-  files <- data.frame(fullname = cfiles5, stringsAsFactors = FALSE)
-  files$date <- as.POSIXct(strptime(basename(cfiles5), "%Y%m%d"), tz = "GMT")
-  files <- files[order(files$date), ]
-  
-  files <- files[!rev(duplicated(files[rev(seq(nrow(files))), ]$date)), ]
-
-  files
+  files <- raadfiles::ghrsst_daily_files()[, c("file", "date", "fullname")]
 }
 
 nodc_ghrsstfiles <- function() {

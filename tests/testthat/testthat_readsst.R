@@ -97,3 +97,5 @@ test_that("expected arrangement of file data frame", {
                       equals(c("file", "date", "fullname", "band")))
           
   })
+
+

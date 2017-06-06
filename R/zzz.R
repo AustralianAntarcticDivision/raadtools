@@ -29,7 +29,7 @@
   ## try RAAD_DIR, which may only be available to R CMD check from ~/.R/check.Renviron
   r <- getOption("repos")
   dd <- getOption("default.datadir")
-   print(Sys.getenv("RAAD_DIR"))
+ #  print(Sys.getenv("RAAD_DIR"))
   if (is.null(dd["default.datadir"])) {
     dd["default.datadir"] <- Sys.getenv("RAAD_DIR");
     options(repos = r, default.datadir = dd); 

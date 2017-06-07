@@ -1,5 +1,7 @@
 # raadtools 0.3.2.9005
 
+* now imports orsifronts rather than using old bespoke copies
+
 * raadtools now imports raadfiles, for OISST and GHRSST files
 
 * ghrsst gains inputfiles, and is now useably fast for track extraction

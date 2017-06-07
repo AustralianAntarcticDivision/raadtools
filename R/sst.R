@@ -102,7 +102,7 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
   } 
   
   
-  if (is.null(files$band)) files$band <- 1
+  if (!"band" %in% names(files)) files$band <- 1
   
   
   r0 <- brick(stack(lapply(seq_len(nrow(files)), function(xi) read_fun(files$fullname[xi], ext = xylim, msk = msk, rot = rot, varname = varname, band = files$band[xi]))),

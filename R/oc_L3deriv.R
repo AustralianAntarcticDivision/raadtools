@@ -21,10 +21,12 @@ readchla_johnson <- function(date, time.resolution = c("daily"), xylim = NULL,
   if (is.null(inputfiles)) {
   files <- chla_johnsonfiles(product = product)
   }
+  if (latest) date <- max(files$date)
+
   if (missing(date)) date <- min(files$date)
   date <- timedateFrom(date)
   files <- files[findInterval(date, files$date), ]
-  if (latest) files <- tail(files, 1L)
+ 
   if (returnfiles) return(files)
   dplyr::bind_rows(lapply(files$fullname, readchla_johnsonday, xylim = xylim, nrows = product2nrows(product)))
 }

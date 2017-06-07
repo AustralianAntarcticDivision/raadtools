@@ -1,7 +1,10 @@
 .onLoad <- function(libname, pkgname) {
-  #pathwasset <- .trysetpath()
   base::loadNamespace("ncdf4")
-
+  base::loadNamespace("raster")
+  mm <- getOption("rasterMaxMemory")
+  if (is.null(mm)){
+    raster::rasterOptions(maxmemory = 4e9)
+  }
 }
 
 

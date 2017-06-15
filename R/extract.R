@@ -43,8 +43,8 @@
     result <- rep(as.numeric(NA), nrow(y))
     ## progress
     pb <- progress::progress_bar$new(
-      format = "  getting ready [:bar] :percent in :elapsed",
-      total = 10, clear = FALSE, width= 60)
+      format = "getting ready                  [:bar] :percent in :elapsed",
+      total = 10, clear = FALSE, width= 80)
     pb$tick(0) ## ---------------------------------------------
     
     resize <- FALSE
@@ -118,7 +118,7 @@
     pb$tick() ## ---------------------------------------------
     ## progress
     pb <- progress::progress_bar$new(
-      format = "  extracting :what file :ith of :nn [:bar] :percent in :elapsed",
+      format = "extracting :what file :ith of :nn [:bar] :percent in :elapsed",
       total = length(date), clear = FALSE, width= 60)
     pb$tick(0, tokens = list(what = time.resolution, ith = 1, nn = length(date)))
     

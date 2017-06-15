@@ -119,7 +119,7 @@
     ## progress
     pb <- progress::progress_bar$new(
       format = "extracting :what file :ith of :nn [:bar] :percent in :elapsed",
-      total = length(date), clear = FALSE, width= 60)
+      total = length(date), clear = FALSE, width= 80)
     pb$tick(0, tokens = list(what = time.resolution, ith = 1, nn = length(date)))
     
     

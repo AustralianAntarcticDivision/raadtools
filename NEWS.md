@@ -1,3 +1,7 @@
+# raadtools dev
+
+* speed up for `extract(function, xyt)`
+
 # raadtools 0.4.0
 
 * a sensible value (4e9) for raster maxmemory is set on startup which

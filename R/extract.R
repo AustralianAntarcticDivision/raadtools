@@ -50,7 +50,7 @@
     if (length(x(returnfiles = TRUE)) == 1L) {
       notime <- TRUE
     }
-    
+    print("building sp points")
     ## data.frame input has  assumed structure
     ## we assume y is lon,lat,time
     y1 <- SpatialPoints(as.matrix(y[,1:2]), CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"))
@@ -68,6 +68,7 @@
     if (inherits(times, "try-error") | any(is.na(times))) {
       ##.standard.assumeXYT.TimeError()
     }
+  print("enter args proc")
     ## TODO, will have to figure out how to do this
     args <- list(...)
     if ("xylim" %in% names(args)) {
@@ -149,6 +150,7 @@
       ##                      message("", appendLF = TRUE)
       if (interactive() & verbose) cat("\n")
     } else {
+      print("enter extract loop")
       ## TODO, fix up the if/else here with an exception for the first/last for ctstime
       for (i in seq_along(date)) {
         thisx <- x(date[i], verbose = FALSE, inputfiles = files, xylim = xylim,  ...)

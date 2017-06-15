@@ -100,9 +100,11 @@
     ##files <- .processFiles(times, files, timeres = time.resolution)
     ## all indexes (need to integrate in general processing setup with above)
     windex <- integer(length(times))
+  print("enter dt loop")
     for (i in seq_along(times)) {
       windex[i] <- which.min(abs(times[i] - files$date))
     }
+  print("zenter 
     ## this won't always work, need to zap anything out of range . . .
     if (max(times) == max(files$date[findex])) findex <- c(findex, max(findex) + 1)
     findex <- findex[findex <= nrow(files)]

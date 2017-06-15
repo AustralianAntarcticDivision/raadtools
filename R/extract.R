@@ -90,11 +90,12 @@
     dx <- xmax(xylim)-xmin(xylim)
     dy <- ymax(xylim)-ymin(xylim)
     xylim <- xylim + c(dx, dy) / 10
-    
+    print("enter time reso proc")
     ## TODO, this is awful need a fix
     time.resolution <- .determine.time.resolution(files$date)
     ## TODO somehow manage climatology exceptions
     ## unique indexes
+  print("enter proc dates")
     findex <- suppressWarnings(.processDates(times, files$date, timeres = time.resolution))
     ##files <- .processFiles(times, files, timeres = time.resolution)
     ## all indexes (need to integrate in general processing setup with above)

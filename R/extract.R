@@ -50,7 +50,7 @@
     if (length(x(returnfiles = TRUE)) == 1L) {
       notime <- TRUE
     }
-    
+    print("building sp points")
     ## data.frame input has  assumed structure
     ## we assume y is lon,lat,time
     y1 <- SpatialPoints(as.matrix(y[,1:2]), CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"))
@@ -68,35 +68,43 @@
     if (inherits(times, "try-error") | any(is.na(times))) {
       ##.standard.assumeXYT.TimeError()
     }
+  print("enter args proc")
     ## TODO, will have to figure out how to do this
     args <- list(...)
     if ("xylim" %in% names(args)) {
       warning("xylim argument ignored (determined automatically from the input data)")
       args$xylim <- NULL
     }
+  print("enter files return")
     if ("time.resolution" %in% names(args)) {
       files <- x(returnfiles = TRUE, time.resolution = args$time.resolution, ...)
     } else {
       files <- x(returnfiles = TRUE, ...)
     }
+  print("enter dummy read")
     dummy <- x(inputfiles = files)
+  print("enter transform")
     yp <- spTransform(y1, projection(dummy))
+  print("enter extent proc")
     xylim <- extent(yp)
     dx <- xmax(xylim)-xmin(xylim)
     dy <- ymax(xylim)-ymin(xylim)
     xylim <- xylim + c(dx, dy) / 10
-    
+    print("enter time reso proc")
     ## TODO, this is awful need a fix
     time.resolution <- .determine.time.resolution(files$date)
     ## TODO somehow manage climatology exceptions
     ## unique indexes
+  print("enter proc dates")
     findex <- suppressWarnings(.processDates(times, files$date, timeres = time.resolution))
     ##files <- .processFiles(times, files, timeres = time.resolution)
     ## all indexes (need to integrate in general processing setup with above)
     windex <- integer(length(times))
+  print("enter dt loop")
     for (i in seq_along(times)) {
       windex[i] <- which.min(abs(times[i] - files$date))
     }
+  print("zenter 
     ## this won't always work, need to zap anything out of range . . .
     if (max(times) == max(files$date[findex])) findex <- c(findex, max(findex) + 1)
     findex <- findex[findex <= nrow(files)]
@@ -149,6 +157,7 @@
       ##                      message("", appendLF = TRUE)
       if (interactive() & verbose) cat("\n")
     } else {
+      print("enter extract loop")
       ## TODO, fix up the if/else here with an exception for the first/last for ctstime
       for (i in seq_along(date)) {
         thisx <- x(date[i], verbose = FALSE, inputfiles = files, xylim = xylim,  ...)

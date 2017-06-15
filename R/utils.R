@@ -108,13 +108,14 @@ yrange <- function(x) c(ymin(x), ymax(x))
 
 
 .indexDates <- function(xdate, filedate) {
-  windex <- integer(length(xdate))
-  for (i in seq_along(xdate)) {
-    windex[i] <- which.min(abs(xdate[i] - filedate))
-  }
-  
-  
-  windex
+#   windex <- integer(length(xdate))
+#   for (i in seq_along(xdate)) {
+ #    windex[i] <- which.min(abs(xdate[i] - filedate))
+#   }
+   windex <- findInterval(xdate, filedate)
+   windex[windex < 1] <- 1
+   windex[windex > length(filedate)] <- length(filedate)
+   windex
 }
 
 .dedupe <- function(index, date, removeDupes = TRUE) {

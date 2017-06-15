@@ -41,62 +41,73 @@
 
 .big.extract <-  function (x, y,  ctstime = FALSE, fact = NULL, verbose = TRUE, ...) {
     result <- rep(as.numeric(NA), nrow(y))
-    
+    ## progress
+    pb <- progress::progress_bar$new(
+      format = "  getting ready [:bar] :percent in :elapsed",
+      total = 10, clear = FALSE, width= 60)
+    pb$tick(0) ## ---------------------------------------------
     
     resize <- FALSE
     
     if (!is.null(fact)) resize <- TRUE
     notime <- FALSE
-    if (length(x(returnfiles = TRUE)) == 1L) {
-      notime <- TRUE
-    }
-    
-    ## data.frame input has  assumed structure
-    ## we assume y is lon,lat,time
-    y1 <- SpatialPoints(as.matrix(y[,1:2]), CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"))
-    
-    if (notime) {
-      ## assume we want topo/bathy values
-      thisx1 <- x(xylim = xylim)
-      if (resize) thisx1 <- aggregate(thisx1, fact = fact, fun = 'mean')
-      return(extract(thisx1, y1, ...))
-    }
-    
-    times <- try(timedateFrom(y[[3L]]))
-    y <- y1
-    ## chuck a
-    if (inherits(times, "try-error") | any(is.na(times))) {
-      ##.standard.assumeXYT.TimeError()
-    }
+    pb$tick() ## ---------------------------------------------
     ## TODO, will have to figure out how to do this
     args <- list(...)
     if ("xylim" %in% names(args)) {
       warning("xylim argument ignored (determined automatically from the input data)")
       args$xylim <- NULL
     }
+    pb$tick() ## ---------------------------------------------
     if ("time.resolution" %in% names(args)) {
       files <- x(returnfiles = TRUE, time.resolution = args$time.resolution, ...)
     } else {
       files <- x(returnfiles = TRUE, ...)
     }
+    if (length(files) == 1L) {
+      notime <- TRUE
+    }
+    pb$tick() ## ---------------------------------------------
+    ## data.frame input has  assumed structure
+    ## we assume y is lon,lat,time
+    y1 <- SpatialPoints(as.matrix(y[,1:2]), CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"))
+    pb$tick() ## ---------------------------------------------
+    if (notime) {
+      ## assume we want topo/bathy values
+      thisx1 <- x(xylim = xylim)
+      if (resize) thisx1 <- aggregate(thisx1, fact = fact, fun = 'mean')
+      return(extract(thisx1, y1, ...))
+    }
+    pb$tick() ## ---------------------------------------------
+    times <- try(timedateFrom(y[[3L]]))
+    y <- y1
+    ## chuck a
+    if (inherits(times, "try-error") | any(is.na(times))) {
+      ##.standard.assumeXYT.TimeError()
+    }
+  
+    
+    
+    
+    pb$tick() ## ---------------------------------------------
+
     dummy <- x(inputfiles = files)
     yp <- spTransform(y1, projection(dummy))
+    pb$tick() ## ---------------------------------------------
     xylim <- extent(yp)
     dx <- xmax(xylim)-xmin(xylim)
     dy <- ymax(xylim)-ymin(xylim)
     xylim <- xylim + c(dx, dy) / 10
+    pb$tick() ## ---------------------------------------------
     
     ## TODO, this is awful need a fix
     time.resolution <- .determine.time.resolution(files$date)
     ## TODO somehow manage climatology exceptions
     ## unique indexes
+    pb$tick() ## ---------------------------------------------
     findex <- suppressWarnings(.processDates(times, files$date, timeres = time.resolution))
-    ##files <- .processFiles(times, files, timeres = time.resolution)
-    ## all indexes (need to integrate in general processing setup with above)
-    windex <- integer(length(times))
-    for (i in seq_along(times)) {
-      windex[i] <- which.min(abs(times[i] - files$date))
-    }
+    windex <- .indexDates(times, files$date)
+    pb$tick() ## ---------------------------------------------
     ## this won't always work, need to zap anything out of range . . .
     if (max(times) == max(files$date[findex])) findex <- c(findex, max(findex) + 1)
     findex <- findex[findex <= nrow(files)]
@@ -104,6 +115,14 @@
     l <- list(...)
     if ("inputfiles" %in% names(l)) warning("using inputfiles explicitly is deprecated, please don't do it")
     mess1 <- ""
+    pb$tick() ## ---------------------------------------------
+    ## progress
+    pb <- progress::progress_bar$new(
+      format = "  extracting :what file :ith of :nn [:bar] :percent in :elapsed",
+      total = length(date), clear = FALSE, width= 60)
+    pb$tick(0, tokens = list(what = time.resolution, ith = 1, nn = length(date)))
+    
+    
     ## interpolate in time?
     if (ctstime) {
       ## we need to store start and end values
@@ -132,23 +151,15 @@
         thisx1 <- thisx2
         ## report happy times
         if (interactive() & verbose) {
+          pb$tick(tokens = list(what = time.resolution, ith = i, nn = length(date)))
           
-          cat(.makeMessage(paste(rep("\b", nchar(mess1)), collapse = ""), domain=NA, appendLF = FALSE))
-          mess1 <- sprintf("file %i of %i",  i, length(date))
-          cat(.makeMessage(mess1, domain=NA, appendLF = (i == length(date))))
-          
-          ##                          message(paste(rep("\b", nchar(mess1)), collapse = ""), appendLF = FALSE)
-          ##  cat(paste(rep("\b", nchar(mess1)), collapse = ""))
-          ## mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
-          ##                            message(mess1, appendLF = FALSE)
-          ##   cat(mess1)
-          
-          flush.console()
+
         }
       }
       ##                      message("", appendLF = TRUE)
-      if (interactive() & verbose) cat("\n")
+     # if (interactive() & verbose) cat("\n")
     } else {
+
       ## TODO, fix up the if/else here with an exception for the first/last for ctstime
       for (i in seq_along(date)) {
         thisx <- x(date[i], verbose = FALSE, inputfiles = files, xylim = xylim,  ...)
@@ -159,16 +170,8 @@
         if (any(asub)) {result[asub] <- suppressWarnings(extract(thisx, y[asub, ], ...))}
         
         if (interactive() & verbose) {
-          cat(.makeMessage(paste(rep("\b", nchar(mess1)), collapse = ""), domain=NA, appendLF = FALSE))
-          mess1 <- sprintf("%s file %i of %i", time.resolution, i, length(date))
-          cat(.makeMessage(mess1, domain=NA, appendLF = (i == length(date))))
+          pb$tick(tokens = list(what = time.resolution, ith = i, nn = length(date)))
           
-          ##                              message(paste(rep("\b", nchar(mess1)), collapse = ""), appendLF = FALSE)
-          ##cat(paste(rep("\b", nchar(mess1)), collapse = ""))
-          
-          ##message(mess1, appendLF = FALSE)
-          ## cat(mess1)
-          flush.console()
         }
       }
       ##message("", appendLF = TRUE)

@@ -75,13 +75,17 @@
       warning("xylim argument ignored (determined automatically from the input data)")
       args$xylim <- NULL
     }
+  print("enter files return")
     if ("time.resolution" %in% names(args)) {
       files <- x(returnfiles = TRUE, time.resolution = args$time.resolution, ...)
     } else {
       files <- x(returnfiles = TRUE, ...)
     }
+  print("enter dummy read")
     dummy <- x(inputfiles = files)
+  print("enter transform")
     yp <- spTransform(y1, projection(dummy))
+  print("enter extent proc")
     xylim <- extent(yp)
     dx <- xmax(xylim)-xmin(xylim)
     dy <- ymax(xylim)-ymin(xylim)

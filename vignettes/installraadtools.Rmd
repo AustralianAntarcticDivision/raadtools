@@ -1,6 +1,6 @@
 ---
-title: "Environmental data from an extent with raadtools"
-author: "Michael Sumner and Jaimie Cleeland"
+title: "raadtools installation"
+author: "Michael Sumner"
 date: "`r Sys.Date()`"
 output:
   rmarkdown::html_vignette:
@@ -8,7 +8,7 @@ output:
     fig_height: 9
 vignette: >
   %\VignetteEngine{knitr::knitr}
-  %\VignetteIndexEntry{Installing and maintaining raadtools}
+  %\VignetteIndexEntry{raadtools installation}
   %\VignetteEncoding{UTF-8}
 ---
 

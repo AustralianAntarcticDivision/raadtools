@@ -23,9 +23,10 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -56,6 +57,9 @@
 <li>
   <a href="../articles/index.html">Articles</a>
 </li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -84,7 +88,7 @@
 ice products.</p>
     
 
-    <pre><span class='fu'>icefiles</span>(<span class='kw'>time.resolution</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"daily"</span>, <span class='st'>"monthly"</span>), <span class='kw'>product</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"nsidc"</span>,
+    <pre class="usage"><span class='fu'>icefiles</span>(<span class='kw'>time.resolution</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"daily"</span>, <span class='st'>"monthly"</span>), <span class='kw'>product</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"nsidc"</span>,
   <span class='st'>"amsr"</span>), <span class='kw'>hemisphere</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"south"</span>, <span class='st'>"north"</span>), <span class='no'>...</span>, <span class='kw'>extension</span> <span class='kw'>=</span> <span class='st'>"hdf"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -118,10 +122,14 @@ ice products.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## Not run: ------------------------------------</span>
-<span class='co'># icf &lt;- icefiles(time.resolution = "monthly")</span>
-<span class='co'># icf[which.min((as.Date("1995-01-01") + runif(1, -4000, 4000)) - as.Date(icf$date), ]</span>
-<span class='co'>## ---------------------------------------------</span></div></pre>
+    <pre class="examples"><div class='input'>not_run({
+  icf <- icefiles(time.resolution = "monthly")
+  icf[which.min((as.Date("1995-01-01") + runif(1, -4000, 4000)) - as.Date(icf$date), ]
+})
+</div><div class='output co'>#&gt; <span class='error'>Error: &lt;text&gt;:3:86: unexpected ']'</span>
+#&gt; <span class='error'>2:   icf &lt;- icefiles(time.resolution = "monthly")</span>
+#&gt; <span class='error'>3:   icf[which.min((as.Date("1995-01-01") + runif(1, -4000, 4000)) - as.Date(icf$date), ]</span>
+#&gt; <span class='error'>                                                                                        ^</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

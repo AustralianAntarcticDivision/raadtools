@@ -23,9 +23,10 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -56,6 +57,9 @@
 <li>
   <a href="../articles/index.html">Articles</a>
 </li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -83,7 +87,7 @@
     <p>Read R32 VIIRS files</p>
     
 
-    <pre><span class='fu'>readchl32</span>(<span class='no'>date</span>, <span class='kw'>time.resolution</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"weekly32"</span>), <span class='kw'>product</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"oceancolor"</span>),
+    <pre class="usage"><span class='fu'>readchl32</span>(<span class='no'>date</span>, <span class='kw'>time.resolution</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"weekly32"</span>), <span class='kw'>product</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"oceancolor"</span>),
   <span class='kw'>platform</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"VIIRS"</span>), <span class='kw'>xylim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>returnfiles</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>latest</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     

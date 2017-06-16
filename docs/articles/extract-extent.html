@@ -60,7 +60,7 @@
       <h1>Environmental data from an extent with raadtools</h1>
                         <h4 class="author">Michael Sumner and Jaimie Cleeland</h4>
             
-            <h4 class="date">2017-06-16</h4>
+            <h4 class="date">2017-06-17</h4>
           </div>
 
     
@@ -70,8 +70,10 @@
 <p>All of the read functions have an “xylim” argument, which will take a <code>raster::extent(xmin, xmax, ymin, ymax)</code>. E.g.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(raadtools)</code></pre></div>
 <pre><code>## Loading required package: raster</code></pre>
+<pre><code>## Loading required package: methods</code></pre>
 <pre><code>## Loading required package: sp</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/readsst.html">readsst</a></span>(<span class="st">"2010-01-01"</span>, <span class="dt">xylim =</span> <span class="kw">extent</span>(<span class="dv">100</span>, <span class="dv">160</span>, -<span class="dv">50</span>, -<span class="dv">40</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(raadfiles)
+<span class="kw"><a href="../reference/readsst.html">readsst</a></span>(<span class="st">"2010-01-01"</span>, <span class="dt">xylim =</span> <span class="kw">extent</span>(<span class="dv">100</span>, <span class="dv">160</span>, -<span class="dv">50</span>, -<span class="dv">40</span>))</code></pre></div>
 <pre><code>## class       : RasterLayer 
 ## dimensions  : 40, 240, 9600  (nrow, ncol, ncell)
 ## resolution  : 0.25, 0.25  (x, y)
@@ -83,7 +85,9 @@
 <p>That extent must make sense for the data set though, so see what this returns first (it will be a longlat-grid in [-180, 180, -90, 90].</p>
 <p>Note that we ran the function above <em>without saving the result anywhere</em>, so we just saw a print-out summary of the result but it is now discarded.</p>
 <p>That is a useful technique to see what a function does, since it will return a layer by default. This can be plotted or used by other functions, and so is the best way to learn about the data source.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/readsst.html">readsst</a></span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(raadtools)
+<span class="kw">library</span>(raadfiles)
+<span class="kw"><a href="../reference/readsst.html">readsst</a></span>()</code></pre></div>
 <pre><code>## class       : RasterLayer 
 ## dimensions  : 720, 1440, 1036800  (nrow, ncol, ncell)
 ## resolution  : 0.25, 0.25  (x, y)
@@ -114,7 +118,9 @@ my_extent</code></pre></div>
 ## ymin        : -45 
 ## ymax        : -15</code></pre>
 <p>otherwise there are functions <code>projectExtent</code> and some others to do it more automatically. It’s not that straightforward because of the polar aspect.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ice &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readice.html">readice</a></span>() 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(raadtools)
+<span class="kw">library</span>(raadfiles)
+ice &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readice.html">readice</a></span>() 
 rex &lt;-<span class="st"> </span><span class="kw">raster</span>( <span class="kw">extent</span>(<span class="dv">100</span>, <span class="dv">160</span>, -<span class="dv">70</span>, -<span class="dv">50</span>), <span class="dt">crs =</span> <span class="st">"+proj=longlat +datum=WGS84"</span>)
 pex &lt;-<span class="st"> </span><span class="kw">projectExtent</span>(rex, <span class="kw">projection</span>(ice))
 
@@ -125,7 +131,9 @@ ice_ex &lt;-<span class="st"> </span><span class="kw"><a href="../reference/read
 <span class="kw">plot</span>(ice_ex, <span class="dt">col =</span> <span class="kw">grey</span>(<span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length =</span> <span class="dv">100</span>)), <span class="dt">zlim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">100</span>))</code></pre></div>
 <p><img src="extract-extent_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
 <p>Please note that the <code>xylim</code> argument just applies <code>crop</code>, so you can avoid it altogether and do it after the fact.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">crop</span>(<span class="kw"><a href="../reference/readsst.html">readsst</a></span>(),  <span class="kw">extent</span>(<span class="dv">100</span>, <span class="dv">160</span>, -<span class="dv">50</span>, -<span class="dv">40</span>), <span class="dt">snap =</span> <span class="st">"out"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(raadtools)
+<span class="kw">library</span>(raadfiles)
+<span class="kw">crop</span>(<span class="kw"><a href="../reference/readsst.html">readsst</a></span>(),  <span class="kw">extent</span>(<span class="dv">100</span>, <span class="dv">160</span>, -<span class="dv">50</span>, -<span class="dv">40</span>), <span class="dt">snap =</span> <span class="st">"out"</span>)</code></pre></div>
 <pre><code>## class       : RasterLayer 
 ## dimensions  : 40, 240, 9600  (nrow, ncol, ncell)
 ## resolution  : 0.25, 0.25  (x, y)
@@ -143,7 +151,9 @@ ice_ex &lt;-<span class="st"> </span><span class="kw"><a href="../reference/read
 <a href="#extending-maps" class="anchor"></a>Extending maps</h2>
 <p>With two examples from above.</p>
 <p>Plot the projected data with a graticule, and add a “transect”.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ice &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readice.html">readice</a></span>() 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(raadtools)
+<span class="kw">library</span>(raadfiles)
+ice &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readice.html">readice</a></span>() 
 rex &lt;-<span class="st"> </span><span class="kw">raster</span>( <span class="kw">extent</span>(<span class="dv">100</span>, <span class="dv">160</span>, -<span class="dv">70</span>, -<span class="dv">50</span>), <span class="dt">crs =</span> <span class="st">"+proj=longlat +datum=WGS84"</span>)
 pex &lt;-<span class="st"> </span><span class="kw">projectExtent</span>(rex, <span class="kw">projection</span>(ice))
 
@@ -166,11 +176,15 @@ transect &lt;-<span class="st"> </span>rgdal::<span class="kw">project</span>(<s
 <span class="kw">points</span>(transect, <span class="dt">cex =</span> <span class="fl">0.5</span>, <span class="dt">pch =</span> <span class="dv">19</span>, <span class="dt">col =</span> <span class="st">"dodgerblue"</span>)</code></pre></div>
 <p><img src="extract-extent_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
 <p>Extract values at specific points.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iceconc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/extract.html">extract</a></span>(ice_ex, transect, <span class="dt">method =</span> <span class="st">"bilinear"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(raadtools)
+<span class="kw">library</span>(raadfiles)
+iceconc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/extract.html">extract</a></span>(ice_ex, transect, <span class="dt">method =</span> <span class="st">"bilinear"</span>)
 <span class="kw">plot</span>(lons, iceconc, <span class="dt">main =</span> <span class="st">"ice concentration at latitude -65 between 100E and 160E"</span>)</code></pre></div>
 <p><img src="extract-extent_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
 <p>Plot mean SST and contour.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dates &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">as.Date</span>(<span class="st">"2016-01-01"</span>), <span class="dt">length =</span> <span class="dv">31</span>, <span class="dt">by =</span> <span class="st">"1 day"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(raadtools)
+<span class="kw">library</span>(raadfiles)
+dates &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">as.Date</span>(<span class="st">"2016-01-01"</span>), <span class="dt">length =</span> <span class="dv">31</span>, <span class="dt">by =</span> <span class="st">"1 day"</span>)
 sst &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readsst.html">readsst</a></span>(dates,  <span class="dt">xylim =</span> <span class="kw">extent</span>(<span class="dv">100</span>, <span class="dv">160</span>, -<span class="dv">50</span>, -<span class="dv">40</span>))
 msst &lt;-<span class="st"> </span><span class="kw">calc</span>(sst, mean)
 sdsst &lt;-<span class="st"> </span><span class="kw">calc</span>(sst, sd)
@@ -182,7 +196,8 @@ sdsst &lt;-<span class="st"> </span><span class="kw">calc</span>(sst, sd)
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
         <div id="tocnav">
-      <h2>Contents</h2>
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#extending-maps">Extending maps</a></li>
       </ul>

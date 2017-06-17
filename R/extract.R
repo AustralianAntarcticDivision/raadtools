@@ -74,7 +74,7 @@
     pb$tick() ## ---------------------------------------------
     if (notime) {
       ## assume we want topo/bathy values
-      thisx1 <- x(xylim = xylim)
+      thisx1 <- x(xylim = xylim, ...)
       if (resize) thisx1 <- aggregate(thisx1, fact = fact, fun = 'mean')
       return(extract(thisx1, y1, ...))
     }
@@ -91,7 +91,7 @@
     
     pb$tick() ## ---------------------------------------------
 
-    dummy <- x(inputfiles = files)
+    dummy <- x(inputfiles = files, ...)
     yp <- spTransform(y1, projection(dummy))
     pb$tick() ## ---------------------------------------------
     xylim <- extent(yp)

@@ -1,5 +1,9 @@
 # raadtools dev
 
+* new Copernicus source for altimetry products from ftp.sltac.cls.fr/Core/ provided by new 
+ functions `read_ugosa_daily`,`read_adt_daily`, `read_ugos_daily`, `read_sla_daily`, 
+ `read_vgos_daily`, `read_vgosa_daily`, `read_err_daily`
+ 
 * speed up for `extract(function, xyt)`
 
 # raadtools 0.4.0

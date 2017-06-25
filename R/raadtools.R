@@ -5,8 +5,7 @@
 ##' @author Michael D. Sumner \email{michael.sumner@@aad.gov.au}
 ##'
 ##' Maintainer: Michael D. Sumner \email{michael.sumner@@aad.gov.au}
-##'
-##' @name raadtools
+##' @name raadtools-package
 ##' @docType package
 ##' @keywords package
 ##' @import methods
@@ -14,9 +13,26 @@
 ##' @importFrom sp as.image.SpatialGridDataFrame bbox CRS GridTopology  proj4string<- SpatialPoints SpatialPointsDataFrame spChFIDs spTransform 
 ##' @importFrom maptools ContourLines2SLDF spRbind
 ##' @importFrom raster brick crop deratify extent<- extract getZ nlayers projection projection<- raster res resample rotate setZ stack writeRaster xmax xmin ymax ymin
-
+#' @details
+#'    read functions like \code{\link{readsst}} will read a data set by date-time vector, with a 
+#'  set of shared arguments that work the same and documented against this dummy function. 
 NULL
 
+##' raadtools
+##' 
+##' Dummy function
+##' @param date date or dates of data to read, 
+##' @param time.resolution time resoution data to read, daily or monthly
+##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
+##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
+##' @param setNA mask out land values (only applies to monthly time.resolution)
+##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
+##' @param returnfiles ignore options and just return the file names and dates
+##' @param ... passed in to brick, primarily for \code{filename}
+##' @param inputfiles input the files data base to speed up initialization
+raadtools <- function(date, time.resolution = "daily", lon180 = TRUE, setNA = TRUE, latest = FALSE, returnfiles = FALSE, ...) {
+  stop("I don't do anything")
+}
 
 
 

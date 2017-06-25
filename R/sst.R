@@ -27,20 +27,13 @@ sstfiles <- function(time.resolution = c("daily","monthly"), ...) {
 ##' the nearest match in time within a short duration. If \code{date}
 ##' is greater than length 1 then the sorted set of unique matches is
 ##' returned.
-##' 
-##' 
-##' @param date date or dates of data to read, see Details
-##' @param time.resolution time resoution data to read, daily or monthly
-##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
-##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
+##' see Details in raadtools 
+##' @inheritParams raadtools
+#' @inheritDotParams raadtools
 ##' @param varname variable to return from the data files, default is
 ##' "sst" or "anom", "err", "ice"
-##' @param setNA mask out land values (only applies to monthly time.resolution)
-##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
-##' @param returnfiles ignore options and just return the file names and dates
+
 ##' @param readall FALSE by default
-##' @param ... passed in to brick, primarily for \code{filename}
-##' @param inputfiles input the files data base to speed up initialization
 ##' @export
 ##' @return \code{\link[raster]{raster}} object
 ##' @seealso \code{\link{icefiles}} for details on the repository of
@@ -117,21 +110,6 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
 
 
 
-crop_if_needed <- function(x, ext = NULL) {
-  if (!is.null(ext)) {
-    crop(x, ext, snap = "out") 
-  } else {
-    x
-  }
-}
-mask_if_needed <- function(x, msk = NULL) {
-  if (!is.null(msk)) {
-    x <- mask(x, msk)
-  } 
-  x
-}
-rotate_if_needed <- function(x, rot = FALSE) {
-  if (rot) .rotate(x) else x
-}
+
 
 

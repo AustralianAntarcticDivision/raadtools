@@ -257,7 +257,7 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   
   ftx <- .allfilelist(rda = TRUE, fullname = FALSE)
   ## just shortcut here for AMSR (need to review code below)
-  if (product == "amsr") return(.amsr625_dbfiles())
+  if (product == "amsr") return(.amsr625files(ftx, "hdf"))
   ppat <- switch(product, 
                  nsidc = "sidads.colorado.edu",
                  ## need to use the + for some reason
@@ -330,8 +330,11 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
  tab %>% arrange(date) %>% distinct(date, .keep_all = TRUE)
 }
 .amsr625files <- function(allfiles, ext) {
+  
   ## 2002:2011
-  f1 <- "ftp-projects.zmaw.de/seaice/AMSR-E_ASI_IceConc/no_landmask/hdf/s6250/"
+  #  f1 <- "ftp-projects.zmaw.de/seaice/AMSR-E_ASI_IceConc/no_landmask/hdf/s6250/"
+  ## modified from zmaw.de 2017-06-27 https://github.com/AustralianAntarcticDivision/raadtools/issues/52
+  f1 <- "ftp-projects.cen.uni-hamburg.de/seaice/AMSR-E_ASI_IceConc/no_landmask/hdf/s6250/"
   ## 2012:2015+
   f2 <- "www.iup.uni-bremen.de\\+8084/amsr2data/asi_daygrid_swath/s6250"
   datadir <- getOption("default.datadir")
@@ -365,8 +368,15 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   db <- dplyr::src_sqlite(file.path(datadir, "admin", "filelist", "allfiles.sqlite"))
   tab <- dplyr::tbl(db, "file_list") %>% ## split the string search into two simpler parts makes it faster
     dplyr::filter(fullname %like% "%hdf") %>% 
-    filter(fullname %like% "%s6250%") %>% dplyr::collect() %>% filter(!grepl("LongitudeLatitude", fullname)) %>% mutate(file = fullname, fullname = file.path(datadir, file)) 
-  # f1 <- "ftp-projects.zmaw.de/seaice/AMSR-E_ASI_IceConc/no_landmask/hdf/s6250/"
+    filter(fullname %like% "%s6250%") %>% dplyr::collect() %>% 
+    filter(!grepl("LongitudeLatitude", fullname)) %>% 
+    filter(grepl("ftp-projects.cen.uni-hamburg.de", fullname) | 
+             grepl("www.iup.uni-bremen.de", fullname)) %>% 
+    mutate(file = fullname, fullname = file.path(datadir, file)) 
+  ## modified from zmaw.de 2017-06-27 https://github.com/AustralianAntarcticDivision/raadtools/issues/52
+  #f1 <- "ftp-projects.cen.uni-hamburg.de/seaice/AMSR-E_ASI_IceConc/no_landmask/hdf/s6250/"
+  
+   # f1 <- "ftp-projects.zmaw.de/seaice/AMSR-E_ASI_IceConc/no_landmask/hdf/s6250/"
   # f2 <- "www.iup.uni-bremen.de\\+8084/amsr2data/asi_daygrid_swath/s6250"
   # tab <- tab[c(grep(f1, tab$fullname), grep(f2, tab$fullname)), ]
   # 

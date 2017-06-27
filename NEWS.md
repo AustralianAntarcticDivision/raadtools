@@ -1,5 +1,7 @@
 # raadtools dev
 
+* modified AMSR-E Artist sea ice data location as per https://github.com/AustralianAntarcticDivision/raadtools/issues/52
+
 * new Copernicus source for altimetry products from ftp.sltac.cls.fr/Core/ provided by new 
  functions `read_ugosa_daily`,`read_adt_daily`, `read_ugos_daily`, `read_sla_daily`, 
  `read_vgos_daily`, `read_vgosa_daily`, `read_err_daily`

@@ -229,6 +229,7 @@ readice <- function(date,
 ##' @param ... reserved for future use, currently ignored
 ##' @param extension default for product "amsr" is "hdf" but can be "tif" , extension = "hdf"
 ##' @export
+##' @importFrom raadfiles nsidc_south_monthly_files nsidc_north_monthly_files 
 ##' @examples
 ##' \dontrun{
 ##' icf <- icefiles(time.resolution = "monthly")
@@ -255,6 +256,11 @@ icefiles <- function(time.resolution = c("daily", "monthly"),
   
   if (time.resolution != "daily" & product == "amsr") stop("product=\"AMSR\" is only compatible with daily time resolution")
   
+  if (time.resolution == "monthly" & product == "nsidc") {
+    
+    if (hemisphere == "south") return(raadfiles::nsidc_south_monthly_files())
+    if (hemisphere == "north") return(raadfiles::nsidc_north_monthly_files())
+  }
   ftx <- .allfilelist(rda = TRUE, fullname = FALSE)
   ## just shortcut here for AMSR (need to review code below)
   if (product == "amsr") return(.amsr625files(ftx, "hdf"))

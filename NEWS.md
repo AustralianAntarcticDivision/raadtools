@@ -1,5 +1,7 @@
 # raadtools dev
 
+* now import from raadfiles for NSIDC monthly files, fixes bug https://github.com/AustralianAntarcticDivision/raadtools/issues/54
+
 * modified AMSR-E Artist sea ice data location as per https://github.com/AustralianAntarcticDivision/raadtools/issues/52
 
 * new Copernicus source for altimetry products from ftp.sltac.cls.fr/Core/ provided by new 

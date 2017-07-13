@@ -1,0 +1,628 @@
+---
+title: "R eco tools"
+author: "Michael Sumner"
+date: "4/14/2015"
+output: html_document
+---
+
+# Abstract
+
+Researchers face technical challenges when dealing
+with data access, formats, extraction, analysis and aggregation and can benefit from tools that simplify the "desktop-components" of a study. Here we outline a developing
+system for building a repository of synoptic environmental data with tools for extraction and analysis. The system
+is freely available, has a small administrative overhead for installation, and works with a wide range of existing data
+streams from a variety of formats. 
+
+## Strategy in the AAD/ACE context
+
+The overall strategy for SOEC was originally here: http://soki.aq/display/Data/ACE+SOEC+Data+Management+Strategy
+
+## Features of the system
+
+* Read and write access to the wide variety of file formats and database schemas
+* Tools to "couple" different structures (transfer data values) by copying, interpolating, or sampling based on shared dimensions. This in particular needs to be flexible, with high-level convenient tools for simple cases but also the ability to specify more complex and nuanced transfers
+* Access to robust metadata standards and conversion libraries for interpretation, conversion and correct representation of units, coordinate systems and sources/references. This is helpful when the system is automatic but also needs to be flexible for correcting errors, misinterpretations and manual changes
+* Access to general programming tools for general implementation, customization, extension.
+* Strong, flexible and accessible visualization and publishing tools for exploring ideas and presenting results
+
+## Examples 
+
+
+
+## Installation of the system
+
+Standard usage is via RStudio Server, but this is not a requirement - any R installation with the tools below can be used. 
+
+**NetCDF4 and HDF4 is a bit of a spanner on all systems, needs fleshing out the details**
+
+### Prerequisites
+
+The following tools are required as prerequisites for the full current functionality. The system as a whole is not dependent having everything available, just some components won't be available (need to flesh this out). 
+
+* NetCDF4 (v4 requirement is complex, see specifics??)
+* HDF4 (this inclusion can be combined with NetCDF4)
+* PROJ.4
+* GDAL (linked to all previous libraries)
+* R with ncdf/ncdf4, rgdal (linked to system GDAL and prereqs), rgeos, sp, raster
+* system tools wget ??
+
+A specific system pre-installation script is here for Ubuntu 14.04: https://github.com/mdsumner/nectar/blob/master/r-spatial.sh
+
+### Tools installation
+
+The system is composed of three packages, that are all publicly available: 
+
+* **raadtools** the work horse package with a suite of **read_x** functions for specific data sets
+* ** raadsync** a companion configuration and synchronization package that builds and maintains the data repository 
+* **roc** R tool-chain package to access a specific format of ocean colour data (L3BIN, NASA)
+
+https://github.com/mdsumner/raadtools
+https://github.com/AustralianAntarcticDataCentre/raadsync
+https://github.com/mdsumner/roc
+
+
+
+## Data sets and format specifics
+
+Sea ice - NSIDC, AMSR, ...
+
+Ocean colour - 
+  L2 with raster/rgdal
+  L3Bin with roc
+  db delivery of raw L2
+  
+SST - 
+  standard mapped NetCDF files
+
+Altimetry products - standard mapped NetCDF files
+ SSH/SSHA 
+ surface currents
+
+NCEP blended / model products - standard mapped NetCDF files
+
+Misc
+  bathymetry / topography
+  Arrigo prod
+  rapid response
+  GEM
+  derived layers from AAD
+  mld
+  fronts
+  
+OpenDAP sources
+
+Custom - templates required for tooling up
+   date/file catalog
+   thin wrapper for raster()
+  
+  
+## Typical usage session
+
+
+The **raadtools} package provides a set of helper functions based on functionality in the raster} package, to simplify fast and efficient use of time series environmental data including
+
+
+* chlorophyll-a concentation
+* colour images
+* sea ice concentration
+* sea surface current vectors
+* sea surface height and height anomaly
+* sea surface temperature 
+* sea surface wind vectors. 
+
+There is ongoing work to simplify extension of these tools to a wider range of data, but here we focus on the existing examples just to highlight the preferred ways of working with these data in **R**. 
+
+This document introduces the **raadtools** package. Some
+familiarity with **R** and the **raster** package is
+assumed.
+
+This package relies on the availability of a local file repository which must be present please contact the authors if you need assistance.
+
+
+
+The very first step is to load the package, which also triggers an attempt to connect to the file repository. 
+
+```{r}
+library(raadtools)
+library(raster)
+```
+
+
+(If there's no message about trouble setting the repository then you
+are good to go.)
+
+```{r}
+ice <- readice()
+plot(ice)
+```
+
+
+\section{Simple data read}
+\label{sec:simpleread}
+There are functions to read data based on a sequence of date-time
+values.
+
+
+At the simplest level, these functions may be run without setting any
+arguments and will return the first available time step for the
+default data source. This is handy for becoming familiar with the
+kinds of data before getting really specific. Plotting the resulting
+**ice** object provides a familiar polar view. These data are a
+single time slice from the daily passive microwave sea ice concentration, here the very first one that is available (from
+`r getZ(ice)`).
+
+Other read functions include **reachla**, **readcurr**,
+**readsst**, **readwind** and **readtopo**. Each of
+these will read a default data set in a similar way to the ice
+example, see their respective help pages and explore the index page of
+**raadtools** to see an overview of functionality.
+
+Load up the package help index for an overview of all the help topics
+and functions.
+
+```{r,eval=FALSE}
+library(help = raadtools)
+```
+
+Read a simple example from each of the data types mentioned above and plot.
+```{r}
+
+chla <- readchla("2009-10-01")
+curr <- readcurr("2012-01-09", magonly = TRUE, lon180 = FALSE)
+sst <- readsst(c("2000-01-01", "2009-06-08"))
+wind <- readwind()
+topo <- readtopo("george_v_terre_adelie", xylim = extent(140, 141.5, -65, -64))
+
+apal <- chl.pal(palette = TRUE)
+op <- par(mfcol = c(2, 2))
+plot(chla, col = chl.pal(apal$breaks), breaks = apal$breaks,
+     main = "Johnson chl-a", legend = FALSE)
+plot(curr, main = "ocean surface current magnitude")
+plot(sst[[2]], main = "SST")
+plot(topo, main = "George V Terre Adelie bathymetry",
+     col = topo.colors(68)[-c(40:68)])
+par(op)
+
+plot(wind, nr = 2)
+```
+
+The read calls above apply slightly different options in each case,
+with no arguments at all, with a vector of date-times, **xylim}
+to restrict the spatial extent and **lon180} to control the
+Atlantic vs. Pacific view for global data extending across the
+dateline.
+
+
+
+The **ic** object  is a `r class(ice)` from the **raster**
+package.
+```{r}
+ice
+```
+This object is a **RasterLayer** which consists of just a single
+grid layer for the day listed at the beginning of the NSIDC data
+set. The dimensions of the grid are listed, (in the order Y then X)
+`r dim(ice)[1:2]` and these refer to the number of cells seen
+vertically on the page (`r nrow(ice)`) and those seen horizontally
+(`r ncol(ice)`), and then the total number of cells (X * Y).
+
+
+
+
+The **raster** package provides excellent facilities for working
+with raster data, including images, surfaces, DEMs and time series
+satellite data. From the **raster** package DESCRIPTION:
+
+"Reading, writing, manipulating, analyzing and modeling of
+gridded spatial data. The package implements basic and high-level
+functions and processing of very large files is supported.""
+
+This package should be consulted for documentation on the use of
+Raster objects, and in particular the vignette **Raster} is a
+good place to start. Use the **library** function's **help**
+argument to get an overview of the available functions.
+
+```{r,eval=FALSE}
+library(raster)
+## opens an index page to all of the package's functions
+library(help = raster)
+## opens a PDF document with extended help and examples
+vignette("Raster")
+```
+
+See the Section~\ref{sec:assumedsupport} for more detail on the design
+choices made with **raster** and the other package dependenices
+used by **raadtools**
+
+
+
+
+### Read functions in raadtools
+##\label{sec:readrationale}
+
+This section discusses the details of individual read functions and
+some of the rationale behind each one. Different data sets are stored
+with different native coordinate systems, different pixel and temporal
+resolutions, different data units, and cover different spatial and temporal ranges. As well
+as all these options, the way data are stored varies tremendously
+depending on the provider and the data type. These read functions all
+return either a **Raster** object as defined by the
+**raster** package with as complete and standard metadata as
+possible.
+
+
+Some data sets are inherently multi-layered for a single time step,
+such as wind and current vectors and so these both have optional
+arguments **dironly} and **magonly} to convert the
+internal **U} and **V** vector components to directions or
+magnitudes only. The read operation may be combined with a spatial
+crop by using the argument **xylim} and there are other options
+specific for some data sets such as **lon180} to control the
+default orientation (these topics will be discussed in more detail in
+later sections, otherwise see the documentation for each function
+argument).
+
+### Read topographic or bathymetric data
+##\label{sec:readtopo}
+
+The **readtopo** (**readbathy**} is a synonym) will return
+one of several available data sets. See the help
+page for the details and source of each one. As these data are not
+dynamic on short time scales they do not provide a **date**
+argument. The **ibcso** data set is optionally available on a
+polar or longitude/latitude grid, controlled by the **polar**
+argument. The Smith and Sandwell data set is returned in Pacific view
+on the Mercator projection by default. Use **lon180 = FALSE** to
+return Atlantic view.
+
+```{r}
+geb <- readtopo("gebco_08", xylim = extent(150, 220, -75, -60))
+```
+
+
+
+## Plot vector data
+##\label{sec:vectorplots}
+
+```{r}
+## set up data in advance, to feed the plotting function
+tst <- readcurr()
+xylim <- extent(projectExtent(raster(extent(130, 150, -50, -30), crs = "+proj=longlat"), projection(tst)))
+
+plotcurrents <- function(date = as.Date("1999-11-24"), ext = NULL, scale = 2000, ...) {
+  x <- readcurr(date)
+  if (!is.null(ext)) x <- crop(x, ext)
+  crds <- coordinates(x)
+  plot(sqrt(x[[1L]]^2 + x[[2L]]^2), ...)
+  x1 <- crds[,1]
+  y1 <- crds[,2]
+  x2 <- crds[,1] + values(x[[1L]]) * scale
+  y2 <- crds[,2] + values(x[[2L]]) * scale
+  op <- options(warn = -1)
+  arrows(x1, y1, x2, y2, length = 0.03)
+  options(op)
+  invisible(NULL)
+}
+
+plotcurrents(date = as.Date("2000-01-05"), ext = xylim, scale = 2100)
+
+
+```
+
+Animate a series of current plots as above.
+
+```{r, eval = FALSE}
+dts <- seq(as.Date("2005-10-01"), length = 104, by = "1 week")
+pal <- sst.pal(palette = TRUE)
+cols <- pal$cols[seq(1, length(pal$cols), length = 16)]
+cols <- gsub("ff$", "99", cols)
+brks <- pal$breaks[seq(1, length(pal$breaks), length = 16)]
+
+library(animation)
+ani.start()
+for (i in seq_along(dts)) plotcurrents(dts[i], ext = xylim, scale = 2500, col = cols, breaks = brks)
+ani.stop()
+
+
+```
+
+
+
+
+
+## Extract spatio-temporal data from read functions
+##\label{sec:extractfun}
+
+```{r}
+library(raadtools)
+
+
+a <- structure(list(x = c(174, 168, 156, 111, 99, 64, 52, 46, -4,
+                          -15, -30, -38, -47, -62, -87, -127, -145, -160, -161), y = c(-72,
+                                                                                       -39, -50, -58, -35, -38, -48, -60, -48, -35, -37, -51, -68, -72,
+                                                                                       -69, -54, -40, -49, -54)), .Names = c("x", "y"), row.names = c(NA,
+                                                                                                                                                      -19L), class = "data.frame")
+
+a$time <-  sort(as.Date("2005-01-01") + sample(c(0, 0, 0, 8, 20, 50), nrow(a), replace = TRUE))
+
+extract(readssh, a)
+extract(readssh, a, ssha = TRUE)
+extract(readcurr, a, magonly = TRUE)
+extract(readice, a)
+
+extract(readchla, time.resolution = "weekly")
+extract(readchla, a, time.resolution = "weekly")
+
+
+
+##extract(readwind, a)
+extract(readwind)
+readwind(dironly = TRUE)
+
+
+
+a$time <- sort(as.Date("1985-01-01") + sample(c(0, 0, 0, 10, 100, 50), nrow(a), replace = TRUE))
+
+
+##x <- extract(readsst)
+##extract(readsst, a)
+
+
+##extract(readsst)
+##extract(readsst, time.resolution = "daily")
+
+
+##extract(readsst, a)
+
+
+```
+
+```{r,eval=FALSE}
+data(aurora)
+
+aurora$sst <- extract(readsst, aurora)
+aurora$chla <- extract(readchla, aurora)
+
+## nothing for 2013 yet
+##aurora$windmag <- extract(readwind, aurora[,1:3], magonly = TRUE)
+##aurora$winddir <- extract(readwind, aurora[,1:3], dironly = TRUE)
+
+##aurora$currmag <- extract(readcurr, aurora[,1:3], magonly = TRUE)
+##aurora$currdir<- extract(readcurr, aurora[,1:3], dironly = TRUE)
+
+##aurora$ssh <- extract(readssh, aurora[,1:3])
+##aurora$ssha <- extract(readssh, aurora[,1:3], ssha = TRUE)
+
+##aurora$ice <- extract(readice, aurora[,1:3])
+
+
+## note this is slightly different, since there's no point in generalizing out time
+##aurora$bathy <- extract(readbathy(), aurora[,1:2])
+
+```
+
+
+
+
+
+### Data sets and the native projection
+##\label{sec:nativeproj}
+
+All data sets availalable in **raadtools** are provided in their *native projection*. This means that a data set always has a *coordinate reference system** explicitly and that the data must be used with this coordinate system. A good example is the passive microwave sea ice concentration data, which are provided on a polar stereographic grid for both poles. Another examples is the Smith and Sandwell bathymetry which is provided in a Mercator grid.   Many data sets are provided in **longitude/latitude** but note that this is still not enough information since angular longitude/latitude can only be defined with reference to a particular *datum*. 
+
+R provides all of the tools required to work with these data. 
+
+Coordinate reprojection: raw coordinates and point, line, or polygon objects can be transformed between different map projections using the **rgdal} package. 
+
+Flexible extraction methods: the **raster** package provides extraction methods to do a huge range of **query-based extractions** from gridded data. These include: 
+
+
+* extract values from grids by points
+* extract values from grids by objects: SpatialPoints, SpatialLines, SpatialPolygons
+* extraction with function-based aggregation (for queries where more than one pixel is returned for an object, i.e. lines and polygons)
+* extraction by objects with different map projections to the grid data, where the extraction will apply reprojection to the grid automatically
+* extraction for multi-dimensional grids, i.e. extract values for multiple times for each point/line/polygon
+* interpolation relative to a points location in a cell
+* extraction return weights for each pixel, allowing weighting of an object's coverage relative to a cell
+* extraction more abstractly, returning the cell numbers rather than values allowing flexible repetitive-extraction
+
+
+Together all of these features allow practically any required extraction task. 
+
+
+
+
+## Acknowledgements
+The **raadtools** package was built with 
+
+R http://www.r-project.org}
+
+Rtools http://cran.r-project.org/bin/windows/Rtools/
+
+RStudio Server http://www.r-studio.com
+
+Git http://git-scm.com
+
+This document was built with RMarkdown using knitr http://yihui.name/knitr/.
+
+
+## Appendix 
+
+## Extract spatio-temporal data with spatial, temporal interpolation, and spatial aggregation
+##\label{sec:extractwithinterp}
+```{r,eval=FALSE}
+d1 <- data.frame(lon = c(130, 125, 120, -52.27, 123.21, -25.42, 36.96, -36.28),
+                 lat = c(-50, -52, -55,-66.31, -74.55, -69.66, -71.85, -68.56),
+                 gmt = as.POSIXct("2006-02-08 00:00:00") + 24 *3600 * c(0, 1, 2, 3, 106, 118, 118, 190))
+
+llproj <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
+
+library(raadtools)
+library(rgdal)
+
+## test extract vs extractxyt
+sst1 <- extractxyt("oisst", d1)
+sst2 <- extract(readsst, d1)
+
+mag1 <- extractxyt("aviso", d1, magonly = TRUE)
+mag2 <- extract(readcurr, d1, magonly = TRUE)
+
+ice1 <- extractxyt("nsidc", d1)
+ice2 <- extract(readice, d1)
+
+## these diffs should be  zorro
+max(abs(sst1 - sst2), na.rm = TRUE)
+max(abs(mag1 - mag2), na.rm = TRUE)
+max(abs(ice1 - ice2), na.rm = TRUE)
+
+
+## now the goodstuff
+sst3 <- extract(readsst, d1, method = "bilinear")
+sst4 <- extract(readsst, d1, ctstime = TRUE)
+sst5 <- extract(readsst, d1, ctstime = TRUE, method = "bilinear")
+
+data.frame(sst = sst2, sst_xyinterp = sst3, sst_timeinterp = sst4, sst_spacetimeinterp = sst5)
+
+## some time when we get chl-a
+d2 <- data.frame(x = c(-40, -25, -6, 12, 33, 60, 89, 107),
+                 y = c(-56, -55, -59, -62, -64, -62, -60, -60),
+                 time = as.POSIXct("2006-12-18 00:00:00") + 24 *3600 * 7 * seq_len(8))
+
+## resize by a factor in space so we get "more coverage"
+chla1 <- extract(readchla, d2)
+chla2 <- extract(readchla, d2, ctstime = TRUE, method = "bilinear")
+chla3 <- extract(readchla, d2, ctstime = TRUE, method = "bilinear", fact = 16)
+data.frame(chla = chla1, chla_spacetimeinterp = chla2, chla_resizespacetimeinterp = chla3)
+
+chl <- readchla(d2$time, xylim = extent(as.matrix(d2[,1:2])))
+chl2 <- aggregate(chl, fact = 16)
+pal <- chl.pal(palette = TRUE)
+
+## compare the two plots, with and without spatial aggregation for "coverage"
+plot(chl, col = pal$col, breaks = pal$breaks, legend = FALSE, addfun = function() lines(d2[,1:2]))
+
+plot(chl2, col = pal$col, breaks = pal$breaks, legend = FALSE, addfun = function() lines(d2[,1:2]))
+
+
+```
+
+
+
+
+The **raadtools* package provides easy read and extraction tools for remote sensing data. These 
+include: 
+
+- sea surface temperature
+- sea ice concentration
+- altimetry sea surface height and surface currents
+- bathymetry / topography
+- sea surface winds
+- chlorophyll-a (some aspects are still in-development)
+
+Other sources can be added to the collection. Each data set we have is available on a TPAC (RDSI) server, and these are also synchronized back to Kingston. Data sets are registered in a configuration on the **raadsync** server. For details and to add new data sets talk to Mike Sumner or Ben Raymond. The system can be installed independently elsewhere, but consider that each data set is composed of Gigabytes of files in the default set up.
+
+# Configuration
+
+One thing needs to be configured before loading the package, this is the R environment variable "default.datadir". 
+
+For example, we can use
+
+```{r, eval=FALSE}
+options(default.datadir = "/path/to/big/data")
+library(raadtools)
+```
+
+# Usage
+
+There are three main ways to use the **read** functions in **raadtools**. 
+
+Read single layers for a given date, the object returned is a "RasterLayer" as defined by the **raster** package. This description includes all the required metadata in order to use this object, which under the hood is ultimately a matrix of percentage values. 
+
+```{r}
+library(raadtools)
+date <- as.Date("2014-01-01")
+
+ice <- readice(date)
+ice
+```
+
+Read multiple layers for a set of dates. This returns a 12-layer object, with 12 months of data. The underlying default data for **readcurr** is daily, and these are then just the daily data from the first of each month of 2014 (not monthly averages). 
+
+```{r}
+library(raadtools)
+date <- seq(as.Date("2014-01-01"), by = "1 month", length = 12)
+
+mag <- readcurr(date, magonly = TRUE)
+mag
+```
+
+Extract values for points in space-time. Because the **read** functions return an object with a known coordinate system and position in time we can build a general **extract** method to query values at specific points in space-time. 
+
+```{r}
+## aurora is a built-in data set with columns "long", "lat", "time"
+track <- aurora
+head(track)
+track$sst <- extract(readsst, track[,1:3], ctstime = TRUE, method = "bilinear")
+```
+
+## Introduction to raster
+
+file sets from raadtools
+
+stack and brick and raster
+
+
+
+## High level functions for multi-layer rasters
+
+mean
+calc
+animate
+library(help = raster)
+
+## High level functions for single layer rasters
+cellStats
+
+terrain
+
+Boolean tests
+
+## Reading big stacks, write to file
+
+The function **brick()** or **stack()** are normally used in **raster** to work with large objects. The read functions in **raadtools** hide this detail, and augment some of the missing features in **raster** that don't understand some formats. 
+
+We can use the **filename** argument for brick with the **raadtools** functions:
+
+```{r,eval=FALSE}
+dates <- seq(as.Date("2014-01-01"), length = 24, by = "2 weeks")
+sst <- readsst(dates, filename = "twoweeklysst.grd", xylim = extent(100, 160, -65, -30))
+sst
+```
+
+```{r,echo=FALSE}
+sst <- brick("twoweeklysst.grd")
+sst
+
+```
+
+
+These objects are now inherently bound to a file on disk. This may be the case implicitly since **raster** makes its own decision about whether memory on disk is required or not. 
+
+
+Replace the filename extension for other formats, see **?writeRaster** for more details. 
+
+```{r,eval=FALSE}
+sst <- readsst(dates, filename = "twoweeklysst.nc")
+
+sst <- readsst(dates, filename = "twoweeklysst.tif")
+```
+
+## Datasets with multiple attributes
+
+The functions **readcurr()** and **readwind()** naturally return data with two attributes, U and V components of velocity. There's no "4D" raster type, and raster inherently mixes up dimensions and attributes so we can obtain multiple time-steps only by choosing one of **magonly** or **dironly**. 
+
+
+
+
+
+

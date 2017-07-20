@@ -9,7 +9,7 @@ amps_d1files(data.source = "", time.resolution = "4hourly", ...)
 \arguments{
 \item{data.source}{ignored, reserved for future use}
 
-\item{time.resolution}{time resolution data to read, daily only for now}
+\item{time.resolution}{time resolution data to read, 6hourly only for now}
 
 \item{...}{reserved for future use, currently ignored}
 }

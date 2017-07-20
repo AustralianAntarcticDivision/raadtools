@@ -5,7 +5,7 @@
 ##' Files containing NCEP2 wind vector data
 ##' @title Files containing NCEP2 wind vector data
 ##' @param data.source ignored, reserved for future use
-##' @param time.resolution  time resolution data to read, daily only for now
+##' @param time.resolution  time resolution data to read, 6hourly only for now
 ##' @param ... reserved for future use, currently ignored
 ##' @return \code{data.frame} of file names and dates
 ##' @export
@@ -97,7 +97,7 @@ wf
 ##'
 ##' }
 ##' @export
-readwind <- function(date, time.resolution = c("6hourly", "daily"), xylim = NULL, lon180 = TRUE,
+readwind <- function(date, time.resolution = c("6hourly"), xylim = NULL, lon180 = TRUE,
                      magonly = FALSE, dironly = FALSE,
                      uonly = FALSE,
                      vonly = FALSE,
@@ -107,21 +107,56 @@ readwind <- function(date, time.resolution = c("6hourly", "daily"), xylim = NULL
   
   time.resolution <- match.arg(time.resolution)
   if ((magonly + dironly + uonly + vonly) > 1) stop("only one of magonly, dironly, uonly or vonly may be used, exiting")
-  
+  datadir <- getOption("default.datadir")
+
   if (is.null(inputfiles)) {
-    files <- windfiles(time.resolution = time.resolution)
+    #files <- windfiles(time.resoluti= time.resolution)
+    wf <- raadfiles::ncep2_uwnd_6hr_files() %>% dplyr::rename(ufullname = fullname) 
+    afiles <- raadfiles::ncep2_vwnd_6hr_files()
+    wf$vfullname <- afiles$fullname
+    first <- FALSE
+    if (missing(date) && !latest) {
+      wf <- head(wf, 1)
+      wf <- .expandFileDateList( wf$ufullname)
+      wf <- head(wf, 1)
+      date <- min(wf$date)
+      first <- TRUE
+    }
+    if (latest) {
+      ## getting kludgey now
+      wf <- tail(wf, 1)
+      wf <- .expandFileDateList( wf$ufullname)
+      wf <- tail(wf, 1)
+      date <- wf$date
+    }
+ 
+    if (!(latest | first)) {
+     date <- timedateFrom(date)
+     wf <- wf[wf$date >= min(date)- 366 * 24 * 3600 & wf$date <= max(date) + 366 * 24 * 3600, ]
+     wf <- .expandFileDateList( wf$ufullname)
+    }
+    ##wfV <- .expandFileDateList( wf$vfullname, fastNC = TRUE, varname = "time")
+    
+    files <- data.frame(ufile = gsub("^/", "", gsub(datadir, "", wf$file)), 
+                     vfile = gsub("uwnd", "vwnd", gsub("^/", "", gsub(datadir, "", wf$file))), 
+                     ufullname = wf$file, 
+                     vfullname = gsub("uwnd", "vwnd", wf$file), 
+                     date = wf$date, band = wf$band, stringsAsFactors = FALSE)
+    
     } else {
       files <- inputfiles
     }
+
   if (returnfiles) return(files)
-  
-  if (missing(date)) date <- min(files$date)
-  if (latest) date <- max(files$date)
-  date <- timedateFrom(date)
-  ## findex <- .processDates(date, files$date, time.resolution)
+#  if (missing(date)) date <- min(files$date)
+#  if (latest) date <- max(files$date)
+#  date <- timedateFrom(date)
+
+ ## findex <- .processDates(date, files$date, time.resolution)
+  date <- files$date
   files <- .processFiles(date, files, time.resolution)
   
-  
+
   nfiles <- nrow(files)
   if (nfiles > 1L & !magonly & !dironly & !uonly & !vonly) {
     warning("only one time index can be read at once unless 'magonly', 'dironly', 'uonly' or 'vonly' is TRUE")

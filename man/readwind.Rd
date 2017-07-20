@@ -4,7 +4,7 @@
 \alias{readwind}
 \title{readwind}
 \usage{
-readwind(date, time.resolution = c("6hourly", "daily"), xylim = NULL,
+readwind(date, time.resolution = c("6hourly"), xylim = NULL,
   lon180 = TRUE, magonly = FALSE, dironly = FALSE, uonly = FALSE,
   vonly = FALSE, latest = FALSE, returnfiles = FALSE, ...,
   inputfiles = NULL)

@@ -1,5 +1,7 @@
 # raadtools dev
 
+* import from raadfiles for NCEP2 wind 6hourly files, removed the daily option for now
+
 * now import from raadfiles for NSIDC monthly files, fixes bug https://github.com/AustralianAntarcticDivision/raadtools/issues/54
 
 * modified AMSR-E Artist sea ice data location as per https://github.com/AustralianAntarcticDivision/raadtools/issues/52

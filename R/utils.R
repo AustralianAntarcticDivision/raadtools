@@ -83,6 +83,21 @@ yrange <- function(x) c(ymin(x), ymax(x))
 }
 
 
+.expandFileDateList_FAST <- function(x) {
+  #vl <- vector("list", length(x))
+  
+  do_fun <- function(xi) {
+    con <- RNetCDF::open.nc(xi)
+    time <- RNetCDF::var.get.nc(con, "time")
+    utime <- RNetCDF::att.get.nc(con, "time", 0)
+    ctime <- RNetCDF::utcal.nc(utime, time, type = "c")
+    RNetCDF::close.nc(con)
+    tibble::tibble(file = xi, date = ctime, band = seq_along(ctime))
+  }
+  d  <- dplyr::bind_rows(lapply(x, do_fun))
+ d
+}
+
 .valiDates <- function(x, allOK = TRUE) {
   xs <- timedateFrom(x)
   bad <- is.na(xs)

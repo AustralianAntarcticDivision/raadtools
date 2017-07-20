@@ -10,42 +10,18 @@
 ##' @return \code{data.frame} of file names and dates
 ##' @export
 windfiles <-
-  function(data.source = "", time.resolution = c("6hourly", "daily"),  ...) {
+  function(data.source = "", time.resolution = c("6hourly"),  ...) {
     datadir <- getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
-    ##      fromCache <- TRUE
-    
-    trestok <- c("6hourly" = "ncep.reanalysis2/gaussian_grid", daily = "ncep.reanalysis2.dailyavgs/gaussian_grid")[time.resolution]
-    allfiles <- .allfilelist(rda = TRUE, fullname = FALSE)
-    cfiles1 <- grep("ftp.cdc.noaa.gov/Datasets/", allfiles, value = TRUE)
-    cfiles2 <- grep(trestok, cfiles1, value = TRUE)
-    cfiles3 <- grep("uwnd|vwnd", cfiles2, value = TRUE)
-    ufiles <- grep("uwnd", cfiles3, value = TRUE)
-    vfiles <- grep("vwnd", cfiles3, value = TRUE)
-    
-    ##datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x)-1])
-    dates <- as.POSIXlt(as.Date(basename(ufiles), "uwnd.10m.gauss.%Y"))
-    dates$mday <- 1
-    dates$mon <- 0
-    dates <- as.POSIXct(dates, tz = "UTC")
-    wf <- data.frame(ufullname = ufiles, vfullname = vfiles, date = dates, stringsAsFactors = FALSE)
-    ## wind is different to curr, because the path expansion is done here
-    ## and so has to be un-done below
-    wfU <- .expandFileDateList(file.path(datadir, wf$ufullname))
-    ##wfV <- .expandFileDateList( wf$vfullname, fastNC = TRUE, varname = "time")
-    
-     wf <- data.frame(ufile = gsub("^/", "", gsub(datadir, "", wfU$file)), 
+    wf <- raadfiles::ncep2_uwnd_6hr_files() %>% dplyr::rename(ufullname = fullname)
+    wfU <- .expandFileDateList_FAST(wf$ufullname)
+
+     wf <- tibble::tibble(ufile = gsub("^/", "", gsub(datadir, "", wfU$file)), 
                       vfile = gsub("uwnd", "vwnd", gsub("^/", "", gsub(datadir, "", wfU$file))), 
                       ufullname = wfU$file, 
                       vfullname = gsub("uwnd", "vwnd", wfU$file), 
-                      date = wfU$date, band = wfU$band, stringsAsFactors = FALSE)
+                      date = wfU$date, band = wfU$band)
      
-    #wf <- data.frame(ufile = wfU$file, 
-    #                 vfile = gsub("uwnd", "vwnd", wfU$file), 
-    #                 ufullname = file.path(datadir, wfU$file), 
-    #                 vfullname = file.path(datadir, gsub("uwnd", "vwnd", wfU$file)), 
-    #                 date = wfU$date, band = wfU$band, stringsAsFactors = FALSE)
-    ## "hours since 1800-1-1 00:00:0.0" 
 wf 
   }
 
@@ -111,49 +87,22 @@ readwind <- function(date, time.resolution = c("6hourly"), xylim = NULL, lon180 
 
   if (is.null(inputfiles)) {
     #files <- windfiles(time.resoluti= time.resolution)
-    wf <- raadfiles::ncep2_uwnd_6hr_files() %>% dplyr::rename(ufullname = fullname) 
-    afiles <- raadfiles::ncep2_vwnd_6hr_files()
-    wf$vfullname <- afiles$fullname
-    first <- FALSE
-    if (missing(date) && !latest) {
-      wf <- head(wf, 1)
-      wf <- .expandFileDateList( wf$ufullname)
-      wf <- head(wf, 1)
-      date <- min(wf$date)
-      first <- TRUE
-    }
+    wf <- windfiles()
     if (latest) {
-      ## getting kludgey now
-      wf <- tail(wf, 1)
-      wf <- .expandFileDateList( wf$ufullname)
-      wf <- tail(wf, 1)
-      date <- wf$date
+      date <- max(wf$date)
     }
- 
-    if (!(latest | first)) {
-     date <- timedateFrom(date)
-     wf <- wf[wf$date >= min(date)- 366 * 24 * 3600 & wf$date <= max(date) + 366 * 24 * 3600, ]
-     wf <- .expandFileDateList( wf$ufullname)
+    if (missing(date)) {
+      date <- min(wf$date)
     }
-    ##wfV <- .expandFileDateList( wf$vfullname, fastNC = TRUE, varname = "time")
-    
-    files <- data.frame(ufile = gsub("^/", "", gsub(datadir, "", wf$file)), 
-                     vfile = gsub("uwnd", "vwnd", gsub("^/", "", gsub(datadir, "", wf$file))), 
-                     ufullname = wf$file, 
-                     vfullname = gsub("uwnd", "vwnd", wf$file), 
-                     date = wf$date, band = wf$band, stringsAsFactors = FALSE)
-    
-    } else {
+  
+    files <- wf
+  } else {
       files <- inputfiles
+      if (missing(date))  date <- min(files$date)
     }
 
   if (returnfiles) return(files)
-#  if (missing(date)) date <- min(files$date)
-#  if (latest) date <- max(files$date)
-#  date <- timedateFrom(date)
 
- ## findex <- .processDates(date, files$date, time.resolution)
-  date <- files$date
   files <- .processFiles(date, files, time.resolution)
   
 

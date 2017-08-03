@@ -67,16 +67,18 @@ https://oceancolor.gsfc.nasa.gov/
 
 In very broad terms and in that order their availability is
 
-instrument / platform        | sensor type                  | temporal range  | key physical variable    | exemplar data set 
------------------------------|------------------------------|-------------------------|-----------------------------------------------
+instrument, platform         | sensor type                  | temporal range  | key physical variable    | exemplar data set 
+-----------------------------|------------------------------|-----------------|--------------------------|--------------------
 SMMR,  Seasat and Nimbus 7   | passive microwave radiometry | 1979 - 1987     |  sea ice coverage        | NSIDC daily concentration
 SSM/I, Block 5D-2            | passive microwave radiometry | 1987 -          | sea ice coverage         | NSIDC daily concentration 
 NOAA / POES                  | thermal radiometry           | 1981 -          | sea surface temperature  | OISST and GHRSST daily SST
 NASA/CNES TOPEX/Poseidon     | radar altimetry              | 1992 - 2005     | ocean surface topography | Copernicus daily sea surface height, geostrophic velocity
-NASA/CNES Jason-1            |radar altimetry               | 2001 - 2013     | ocean surface topography | Copernicus daily sea surface height, geostrophic velocity
+NASA/CNES Jason-1            | radar altimetry              | 2001 - 2013     | ocean surface topography | Copernicus daily sea surface height, geostrophic velocity
 OSTM / Jason-2               | radar altimetry              | 2008 -          | ocean surface topography | Copernicus daily sea surface height, geostrophic velocity
-SeaWiFS                      | optical wavelengths          | 1997 - 2010     | ocean colour             | SeaWIFS chlorophyll-a
-MODISA                       | optima                       | 2002 -          | 
+SeaWiFS                      | optical wavelengths          | 1997 - 2010     | ocean colour             | SeaWIFS L3bin RRS (for chlorophyll-a)
+MODISA                       | optical wavelengths          | 2002 -          | ocean colour             | MODISA L3bin RRS (for chlorophyll-a)
+
+
 https://en.wikipedia.org/wiki/Ocean_Surface_Topography_Mission
 
 

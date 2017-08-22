@@ -8,7 +8,7 @@
 ##' @return data.frame of file names and dates
 ##' @export
 sstfiles <- function(time.resolution = c("daily","monthly"), ...) {
-  datadir <- getOption("default.datadir")
+ # datadir <- getOption("default.datadir")
   time.resolution <- match.arg(time.resolution)
   if (time.resolution == "daily") {
     ## maintain the traditional raad order
@@ -101,9 +101,10 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
   r0 <- brick(stack(lapply(seq_len(nrow(files)), function(xi) read_fun(files$fullname[xi], ext = xylim, msk = msk, rot = rot, varname = varname, band = files$band[xi]))),
               ...)
   if (is.na(projection(r0))) projection(r0) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
-  r0 <- setZ(r0, files$date)
   
   if (nfiles == 1) r0 <- r0[[1L]]
+  r0 <- setZ(r0, files$date)
+  
   r0
   
 }

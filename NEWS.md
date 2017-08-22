@@ -1,5 +1,9 @@
 # raadtools dev
 
+* readice/icefiles now limited to daily NSIDC and using raadfiles
+
+* readsst/sstfiles now uses raadfiles mechanism
+
 * import from raadfiles for NCEP2 wind 6hourly files, removed the daily option for now
 
 * now import from raadfiles for NSIDC monthly files, fixes bug https://github.com/AustralianAntarcticDivision/raadtools/issues/54

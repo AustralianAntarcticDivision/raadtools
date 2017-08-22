@@ -1,5 +1,7 @@
 # raadtools dev
 
+* readcurr/currentsfiles now uses new Copernicus source
+
 * readice/icefiles now limited to daily NSIDC and using raadfiles
 
 * readsst/sstfiles now uses raadfiles mechanism

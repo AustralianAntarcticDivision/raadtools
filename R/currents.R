@@ -15,26 +15,27 @@ currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
   ## ftp.aviso.altimetry.fr/global/delayed-time/grids/madt/all-sat-merged/uv/1993/dt_global_allsat_madt_uv_19930102_20140106.nc" 
   
   time.resolution <- match.arg(time.resolution)
-  if (time.resolution == "weekly") stop("weekly currents no longer supported")
-  ftx <- .allfilelist(rda = TRUE, fullname = FALSE)
-  cfiles0 <- grep("ftp.aviso.altimetry.fr", ftx, value = TRUE)
-  cfiles1 <- grep("uv", cfiles0, value = TRUE)
-  cfiles <- grep(".nc$", cfiles1, value = TRUE)
-  if (length(cfiles) < 1) stop("no files found")
-  
-  doffs <- 1
-  datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x) - doffs])
-  
-  dates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
-  ## just the last one
-  nas <- is.na(dates[length(dates)])
-  if (nas) dates[length(dates)] <- max(dates, na.rm = TRUE) + 24 * 3600
-  #cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = dates,
-  #                  fullname = cfiles, stringsAsFactors = FALSE)[order(dates), ]
-  cfs <- data.frame(file = cfiles, date = dates,
-                    fullname = file.path(datadir, cfiles), stringsAsFactors = FALSE)[order(dates), ]
-  ## drop any duplicated, this occurs with the delayed/near-real time update
-  cfs[!duplicated(cfs$date), ]  
+  # if (time.resolution == "weekly") stop("weekly currents no longer supported")
+  # ftx <- .allfilelist(rda = TRUE, fullname = FALSE)
+  # cfiles0 <- grep("ftp.aviso.altimetry.fr", ftx, value = TRUE)
+  # cfiles1 <- grep("uv", cfiles0, value = TRUE)
+  # cfiles <- grep(".nc$", cfiles1, value = TRUE)
+  # if (length(cfiles) < 1) stop("no files found")
+  # 
+  # doffs <- 1
+  # datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x) - doffs])
+  # 
+  # dates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
+  # ## just the last one
+  # nas <- is.na(dates[length(dates)])
+  # if (nas) dates[length(dates)] <- max(dates, na.rm = TRUE) + 24 * 3600
+  # #cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = dates,
+  # #                  fullname = cfiles, stringsAsFactors = FALSE)[order(dates), ]
+  # cfs <- data.frame(file = cfiles, date = dates,
+  #                   fullname = file.path(datadir, cfiles), stringsAsFactors = FALSE)[order(dates), ]
+  # ## drop any duplicated, this occurs with the delayed/near-real time update
+  # cfs[!duplicated(cfs$date), ]  
+  raadfiles::altimetry_daily_files()
 }
 
 
@@ -113,14 +114,14 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
   }
   
   read_i_u <- function(file, xylim = NULL, lon180 = FALSE) {
-    x <- raster(file, varname = "u")
+    x <- raster(file, varname = "ugos")
     if (lon180) x <- raadtools:::.rotate(x)
     if (!is.null(xylim)) x <- crop(x, xylim)
     
     x
   }
   read_i_v <- function(file, xylim = NULL, lon180 = FALSE) {
-    x <- raster(file, varname = "v")
+    x <- raster(file, varname = "vgos")
     if (lon180) x <- raadtools:::.rotate(x)
     if (!is.null(xylim)) x <- crop(x, xylim)
     

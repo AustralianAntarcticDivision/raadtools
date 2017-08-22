@@ -1,5 +1,7 @@
 # raadtools dev
 
+* new function `read_amsr_ice` to read the 6.25km southern hemisphere product
+
 * readcurr/currentsfiles now uses new Copernicus source
 
 * readice/icefiles now limited to daily NSIDC and using raadfiles

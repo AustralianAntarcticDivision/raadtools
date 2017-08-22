@@ -4,9 +4,8 @@
 \alias{readssh}
 \title{read SSH/A}
 \usage{
-readssh(date, time.resolution = c("daily", "monthly", "monthly_clim",
-  "seasonal_clim"), xylim = NULL, lon180 = TRUE, ssha = FALSE,
-  latest = FALSE, returnfiles = FALSE, verbose = TRUE, ...,
+readssh(date, time.resolution = c("daily"), xylim = NULL, lon180 = TRUE,
+  ssha = FALSE, latest = TRUE, returnfiles = FALSE, verbose = TRUE, ...,
   inputfiles = NULL)
 }
 \arguments{

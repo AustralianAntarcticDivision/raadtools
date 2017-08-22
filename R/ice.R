@@ -118,7 +118,7 @@ readice <- function(date,
                     returnfiles = FALSE,  ..., inputfiles = NULL) {
   
 #  time.resolution <- match.arg(time.resolution)
-  #product <- match.arg(product)
+ product <- match.arg(product)
  hemisphere <- match.arg(hemisphere)
   
   if (!is.null(inputfiles)) {

@@ -4,7 +4,7 @@
 \alias{windfiles}
 \title{Files containing NCEP2 wind vector data}
 \usage{
-windfiles(data.source = "", time.resolution = c("6hourly", "daily"), ...)
+windfiles(data.source = "", time.resolution = c("6hourly"), ...)
 }
 \arguments{
 \item{data.source}{ignored, reserved for future use}

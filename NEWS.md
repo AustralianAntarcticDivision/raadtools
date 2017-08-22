@@ -1,5 +1,7 @@
 # raadtools dev
 
+* removed prod files
+
 * read rapid response is not fixable in place, but now uses the raadfiles-like approach
 
 * read functions now default to `latest = TRUE` rather than returning the first available time

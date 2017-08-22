@@ -1,5 +1,11 @@
 # raadtools dev
 
+* read rapid response is not fixable in place, but now uses the raadfiles-like approach
+
+* read functions now default to `latest = TRUE` rather than returning the first available time
+
+* `readssh` and `sshfiles` are now only daily, using the Copernicus sources
+
 * new function `read_amsr_ice` to read the 6.25km southern hemisphere product
 
 * readcurr/currentsfiles now uses new Copernicus source

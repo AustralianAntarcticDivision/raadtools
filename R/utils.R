@@ -94,7 +94,7 @@ yrange <- function(x) c(ymin(x), ymax(x))
     RNetCDF::close.nc(con)
     tibble::tibble(file = xi, date = ctime, band = seq_along(ctime))
   }
-  d  <- dplyr::bind_rows(lapply(x, do_fun))
+  d  <- purrr::map_df(x, do_fun)
  d
 }
 

@@ -11,6 +11,7 @@ Imports:
     orsifronts,
     ncdf4,
     progress,
+    purrr,
     raadfiles,
     rgeos,
     sp, 

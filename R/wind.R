@@ -83,7 +83,6 @@ readwind <- function(date, time.resolution = c("6hourly"), xylim = NULL, lon180 
   
   time.resolution <- match.arg(time.resolution)
   if ((magonly + dironly + uonly + vonly) > 1) stop("only one of magonly, dironly, uonly or vonly may be used, exiting")
-  datadir <- getOption("default.datadir")
 
   if (is.null(inputfiles)) {
     #files <- windfiles(time.resoluti= time.resolution)

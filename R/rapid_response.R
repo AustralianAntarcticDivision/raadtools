@@ -14,15 +14,19 @@
 ##' }
 ##' @return data.frame of \code{file} and \code{date}
 ##' @export
-rapid_responsefiles <- function(...) {
-  datadir <- getOption("default.datadir")
-  ftx <- .allfilelist()
-  cfiles1 <- grep("lance-modis.eosdis.nasa.gov", ftx, value = TRUE)
-  cfiles2 <- grep("Antarctica", cfiles1, value = TRUE)
-  cfiles <- grep("tif$", cfiles2, value = TRUE)
-  data.frame(file = gsub(datadir, "", cfiles), date = timedateFrom(strptime(basename(cfiles), "Antarctica.%Y%j")),
-             fullname = cfiles, stringsAsFactors = FALSE)
+rapid_responsefiles <- function(product = c("aqua", "terra"), ...) {
+
+  product <- match.arg(product)
+  ## this should be in raadfiles, but see what happens with https://github.com/AustralianAntarcticDivision/bowerbird/issues/1
+  files <- raadfiles:::get_raw_raad_filenames()
+  files <- files %>% 
+    dplyr::filter(stringr::str_detect(.data$file, "lance-modis.eosdis.nasa.gov")) %>% 
+    dplyr::filter(stringr::str_detect(.data$file, "Antarctica")) %>% 
+    dplyr::filter(stringr::str_detect(.data$file, product)) %>% 
+    dplyr::filter(stringr::str_detect(.data$file, "tif$"))
   
+ files %>% transmute(date = as.POSIXct(as.Date(stringr::str_extract(.data$file, "[0-9]{7}"), "%Y%j"), tz = "GMT"), 
+                     fullname = file.path(.data$root, .data$file))
 }
 
 ##' Read MODIS Rapid Response RGB images
@@ -35,41 +39,21 @@ rapid_responsefiles <- function(...) {
 ##' @param returnfiles return just the list of files
 ##' @param ... other arguments for \code{\link[raster]{brick}}
 ##' @export
-readrapid_response <- function(date, latest = FALSE, returnfiles = FALSE, ...) {
-  files <- rapid_responsefiles()
+readrapid_response <- function(date, product = c("aqua", "terra"), latest = FALSE, returnfiles = FALSE, ...) {
+  product <- match.arg(product)
+  files <- rapid_responsefiles(product = product)
+  ## something's wrong with the files
   if (returnfiles) return(files)
   
-  if (missing(date)) date <- min(files$date)
-  if (latest) date <- max(files$date)
+  if (missing(date)){
+    date <-  if (latest)  max(files$date) else min(files$date)
+  }
   files <- .processFiles(date, files, "daily")
   
   nfiles <- nrow(files)
   if (nfiles > 1L) {
     warning("only one time-step can be read, for now")
-    ## use pct = TRUE to return a palette image time series")
-    
-    
     files <- files[1L,]
   }
   return(brick(files$fullname[1L], ...))
-  
-  
-  # this won't work until raster has plot(Brick, legend)
-  # ## otherwise we build a single-band palette, somehow
-  # r <- vector("list", nfiles)
-  # for (i in seq_along(r)) {
-  #     x <- brick(files$fullname[i])
-  #     if (i == 1L) {
-  #         ## this is not actually very efficient
-  #         vals <- values(x) / 256
-  #         col <- rgb(vals[,1], vals[,2], vals[,3])
-  #         f <- factor(col)
-  #     }
-  #     r[[i]] <- setValues(raster(x), as.integer(unclass(f)))
-  
-  # }
-  
-  # r <- brick(stack(r, quick = TRUE), ...)
-  # r@legend@colortable <- levels(f)
-  # x
 }

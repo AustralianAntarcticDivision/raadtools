@@ -4,7 +4,7 @@
 \alias{read_oc_sochla}
 \title{Southern Ocean Chlorophyll-a}
 \usage{
-read_oc_sochla(date, time.resolution = c("daily"), xylim = NULL,
+read_oc_sochla(date, time.resolution = c("daily"), bins = NULL,
   product = c("MODISA", "SeaWiFS"), latest = TRUE, returnfiles = FALSE,
   ..., inputfiles = NULL)
 }
@@ -13,8 +13,6 @@ read_oc_sochla(date, time.resolution = c("daily"), xylim = NULL,
 
 \item{time.resolution}{daily for now}
 
-\item{xylim}{extent in longitude latitude using 'raster::extent'}
-
 \item{latest}{return only the latest day}
 
 \item{returnfiles}{give the files instead of the data}
@@ -22,6 +20,8 @@ read_oc_sochla(date, time.resolution = c("daily"), xylim = NULL,
 \item{...}{ignored}
 
 \item{inputfiles}{speed up the read by inputting the files}
+
+\item{xylim}{extent in longitude latitude using 'raster::extent'}
 }
 \value{
 tibble of the values in L3 bin form

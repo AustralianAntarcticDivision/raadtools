@@ -12,19 +12,8 @@ readchla(date, product = c("MODISA", "SeaWiFS"), xylim = NULL,
 
 \item{product}{choice of product, see Details}
 
-\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}}
-
-\item{time.resolution}{time resolution data to read, weekly or monthly}
-
-\item{platform}{(modis[a] or seawifs)}
-
-\item{returnfiles}{ignore options and just return the file names and dates}
-
-\item{verbose}{print messages on progress etc.}
-
-\item{latest}{if TRUE return the most recent layer}
-
-\item{...}{passed to brick, for \code{filename}}
+\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
+@param algorithm johnson or nasa}
 }
 \value{
 \code{\link[raster]{raster}} object

@@ -1,5 +1,9 @@
 # raadtools dev
 
+* `readchla` returns, now providing MODISA/SeaWiFS at native mapped 
+ resolution for a given set of input dates (the mean is calculated from
+ the daily L3 bins) for either 'nasa' or 'johnson' algorithm
+ 
 * removed prod files
 
 * read rapid response is not fixable in place, but now uses the raadfiles-like approach

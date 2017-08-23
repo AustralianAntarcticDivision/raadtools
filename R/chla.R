@@ -9,14 +9,9 @@
 ##' length 1 then the sorted set of unique matches is returned.
 ##'
 ##' @param date date or dates of data to read, see Details
-##' @param time.resolution time resolution data to read, weekly or monthly
 ##' @param product choice of product, see Details
-##' @param platform (modis[a] or seawifs)
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
-##' @param returnfiles ignore options and just return the file names and dates
-##' @param verbose print messages on progress etc.
-##' @param latest if TRUE return the most recent layer
-##' @param ... passed to brick, for \code{filename}
+#'  @param algorithm johnson or nasa
 ##' @references  Johnson, R, PG Strutton, SW Wright, A McMinn, and KM
 ##' Meiners (2013) Three improved satellite chlorophyll algorithms for
 ##' the Southern Ocean, J. Geophys. Res. Oceans, 118,
@@ -36,9 +31,30 @@
 readchla <- function(date, product = c("MODISA", "SeaWiFS"),
                      xylim = NULL,
                      algorithm = c("johnson", "nasa")) {
-  "blah!"
+  product <- match.arg(product)
+  d <- readchla_mean(date, product = product, xylim = xylim)
+
+  algorithm <- match.arg(algorithm)  
+  thename <- sprintf("chla_%s", algorithm)
+  d <- d[, c("bin_num", thename)]
+  names(d) <- c("bin_num", "value")
+  NROWS <- product2nrows(product)
+  gridmap <- raster::raster(raster::extent(-180, 180, -90, 0), ncol = NROWS * 2, nrow = NROWS, crs = "+init=epsg:4326")
+  if (!is.null(xylim)) gridmap <- crop(gridmap, xylim)
+  bin_chl(d$bin_num, d$value, NROWS, gridmap)
 
 }
+
+bin_chl <- function(bins, value, NROWS, gridmap) {
+  bins <- tibble(bin_num = bins, value = value)
+  ll <- coordinates(gridmap)
+  bins <- tibble(bin_num = roc::lonlat2bin(ll[,1], ll[, 2], NUMROWS = 4320), gridcell = seq(ncell(gridmap))) %>% 
+    dplyr::inner_join(bins, "bin_num")
+  gridmap[bins$gridcell] <- bins$value
+  trim(gridmap)
+}
+
+
 #' @export
 readchla_mean <- function(date,
 #                     algorithm = c("johnson", "oceancolor"),
@@ -53,11 +69,17 @@ readchla_mean <- function(date,
       files <- oc_sochla_files(product = product)
       date <- if (latest) max(files$date) else min(files$date)
   }  
+  
+  ## here read_oc_sochla should take the bins it needs
+  init <- roc::initbin(product2nrows(product))
+  bin_sub <- tibble::tibble(bin_num = roc::crop_init(init, xylim))
   if ("time.resolution" %in% names(largs)) stop("time.resolution is not supported, enter the dates directly - underlying temporal resolution is daily")
-  bins <- purrr::map_df(date, read_oc_sochla, xylim = xylim, product = product) %>% 
+ # bins <- purrr::map_df(date, read_oc_sochla, bins = bin_sub, product = product) %>% 
+  
+   bins <- read_oc_sochla(date, bins = bin_sub, product = product) %>% 
     dplyr::select(-date) %>% 
     dplyr::group_by(bin_num) %>% 
-    dplyr::mutate_all(mean)
+    dplyr::summarize_all(mean)
   
   bins
   

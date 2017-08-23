@@ -17,7 +17,7 @@
 #' @examples 
 #'  x <- readchla_johnson(date = "2012-01-01")
 #'  ##plot(roc::bin2lonlat(x$bin_num, 4320), col = palr::chlPal(x$chla_johnson), pch = ".")
-read_oc_sochla <- function(date, time.resolution = c("daily"), xylim = NULL, 
+read_oc_sochla <- function(date, time.resolution = c("daily"), bins = NULL, 
                               product = c("MODISA", "SeaWiFS"), 
                              latest = TRUE, returnfiles = FALSE, ..., inputfiles = NULL) {
   time.resolution <- match.arg(time.resolution)
@@ -32,19 +32,16 @@ read_oc_sochla <- function(date, time.resolution = c("daily"), xylim = NULL,
   files <- files[findInterval(date, files$date), ]
  
   if (returnfiles) return(files)
-  dplyr::bind_rows(lapply(files$fullname, read_oc_sochla_day, xylim = xylim, nrows = product2nrows(product)))
+  purrr::map_df(files$fullname, read_oc_sochla_day, bins = bins)
 }
   
 product2nrows <- function(x) {
   c(MODISA = 4320, SeaWiFS = 2160)[x]
 }
-read_oc_sochla_day <- function(file, xylim = NULL, nrows = NULL) {
+read_oc_sochla_day <- function(file, bins = NULL) {
   d <- readRDS(file)
-  if (!is.null(xylim)) {
-    xy <- do.call(cbind, roc::bin2lonlat(d$bin_num, nrows))
-    asub <- xy[, 1] >= raster::xmin(xylim) & xy[, 1] <= raster::xmax(xylim) & 
-      xy[, 2] >= raster::ymin(xylim) & xy[, 2] <= raster::ymax(xylim)
-   d <- d[asub, ]  
+  if (!is.null(bins)) {
+    d <- dplyr::inner_join(d, bins, "bin_num")
   }
   d
 }

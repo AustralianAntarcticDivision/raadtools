@@ -51,7 +51,7 @@ bin_chl <- function(bins, value, NROWS, gridmap) {
   bins <- tibble(bin_num = roc::lonlat2bin(ll[,1], ll[, 2], NUMROWS = 4320), gridcell = seq(ncell(gridmap))) %>% 
     dplyr::inner_join(bins, "bin_num")
   gridmap[bins$gridcell] <- bins$value
-  trim(gridmap)
+  gridmap
 }
 
 

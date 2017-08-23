@@ -39,7 +39,7 @@ readchla <- function(date, product = c("MODISA", "SeaWiFS"),
   d <- d[, c("bin_num", thename)]
   names(d) <- c("bin_num", "value")
   NROWS <- product2nrows(product)
-  gridmap <- raster::raster(raster::extent(-180, 180, -90, 0), ncol = NROWS * 2, nrow = NROWS, crs = "+init=epsg:4326")
+  gridmap <- raster::raster(raster::extent(-180, 180, -90, 90), ncol = NROWS * 2, nrow = NROWS, crs = "+init=epsg:4326")
   if (!is.null(xylim)) gridmap <- crop(gridmap, xylim)
   bin_chl(d$bin_num, d$value, NROWS, gridmap)
 

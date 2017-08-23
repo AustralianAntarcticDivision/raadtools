@@ -32,7 +32,3 @@ Read Southern Ocean Chlorophyll-a  in L3 bin form.
 \details{
 relies on processing done here https://github.com/AustralianAntarcticDivision/ocean_colour
 }
-\examples{
- x <- readchla_johnson(date = "2012-01-01")
- ##plot(roc::bin2lonlat(x$bin_num, 4320), col = palr::chlPal(x$chla_johnson), pch = ".")
-}

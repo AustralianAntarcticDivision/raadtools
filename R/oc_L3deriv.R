@@ -14,9 +14,6 @@
 #'
 #' @return tibble of the values in L3 bin form
 #' @export
-#' @examples 
-#'  x <- readchla_johnson(date = "2012-01-01")
-#'  ##plot(roc::bin2lonlat(x$bin_num, 4320), col = palr::chlPal(x$chla_johnson), pch = ".")
 read_oc_sochla <- function(date, time.resolution = c("daily"), bins = NULL, 
                               product = c("MODISA", "SeaWiFS"), 
                              latest = TRUE, returnfiles = FALSE, ..., inputfiles = NULL) {

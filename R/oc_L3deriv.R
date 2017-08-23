@@ -1,6 +1,9 @@
-#' Read Johnson L3 bins
-#'
-#' @details relies on processing done here 'file.path(getOption("default.datadir"), "data_local/acecrc.org.au/ocean_colour")'
+#' Southern Ocean Chlorophyll-a 
+#' 
+#' Read Southern Ocean Chlorophyll-a  in L3 bin form. 
+#' 
+#' 
+#' @details relies on processing done here https://github.com/AustralianAntarcticDivision/ocean_colour
 #' @param date date/s to read
 #' @param time.resolution daily for now
 #' @param xylim extent in longitude latitude using 'raster::extent'
@@ -14,27 +17,28 @@
 #' @examples 
 #'  x <- readchla_johnson(date = "2012-01-01")
 #'  ##plot(roc::bin2lonlat(x$bin_num, 4320), col = palr::chlPal(x$chla_johnson), pch = ".")
-readchla_johnson <- function(date, time.resolution = c("daily"), xylim = NULL, 
-                              product = "MODISA", 
-                             latest = FALSE, returnfiles = FALSE, ..., inputfiles = NULL) {
+read_oc_sochla <- function(date, time.resolution = c("daily"), xylim = NULL, 
+                              product = c("MODISA", "SeaWiFS"), 
+                             latest = TRUE, returnfiles = FALSE, ..., inputfiles = NULL) {
   time.resolution <- match.arg(time.resolution)
   if (is.null(inputfiles)) {
-  files <- chla_johnsonfiles(product = product)
+  files <- oc_sochla_files(product = product)
   }
-  if (latest) date <- max(files$date)
-
-  if (missing(date)) date <- min(files$date)
+  
+  if (missing(date)) {
+    if (latest) date <- max(files$date) else date <- min(files$date)
+  }
   date <- timedateFrom(date)
   files <- files[findInterval(date, files$date), ]
  
   if (returnfiles) return(files)
-  dplyr::bind_rows(lapply(files$fullname, readchla_johnsonday, xylim = xylim, nrows = product2nrows(product)))
+  dplyr::bind_rows(lapply(files$fullname, read_oc_sochla_day, xylim = xylim, nrows = product2nrows(product)))
 }
   
 product2nrows <- function(x) {
   c(MODISA = 4320, SeaWiFS = 2160)[x]
 }
-readchla_johnsonday <- function(file, xylim = NULL, nrows = NULL) {
+read_oc_sochla_day <- function(file, xylim = NULL, nrows = NULL) {
   d <- readRDS(file)
   if (!is.null(xylim)) {
     xy <- do.call(cbind, roc::bin2lonlat(d$bin_num, nrows))
@@ -54,8 +58,8 @@ readchla_johnsonday <- function(file, xylim = NULL, nrows = NULL) {
 #' @return data frame
 #' @export
 #' @importFrom tibble as_tibble
-chla_johnsonfiles <- function(time.resolution = c("daily"), product = c("MODISA", "SeaWiFS")) {
-    #if (!product == "MODISA") stop("only MODISA supported currently")
+oc_sochla_files <- function(time.resolution = c("daily"), 
+                            product = c("MODISA", "SeaWiFS")) {
   product <- match.arg(product)
   pat <- sprintf("^%s_.*.rds$", c(MODISA = "modis", SeaWiFS = "seawifs")[product])
     fs <- data.frame(fullname = list.files(pattern = pat, file.path(getOption("default.datadir"), 
@@ -65,5 +69,8 @@ sprintf("data_local/acecrc.org.au/ocean_colour/%s_daily", c(MODISA = "modis", Se
                                    sprintf("%s_%s", c(MODISA = "modis", SeaWiFS = "seawifs")[product], "%Y%j"), tz = "GMT"))
     fs$file <- gsub(sprintf("%s/", getOption("default.datadir")), "", fs$fullname)
     tibble::as_tibble(fs)
-  }
+}
   
+chla_johnsonfiles <- function(...) {
+  .Defunct("oc_sochla_files")
+}

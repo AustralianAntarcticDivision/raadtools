@@ -32,17 +32,49 @@
 ##' d <- readchla(c("2003-01-01", c("2003-06-01")),
 ##'          xylim = extent(100, 150, -70, -30))
 ##' }
-##' @export
-readchla <- function(date, time.resolution = c("weekly", "monthly"),
-                     product = c("johnson", "oceancolor"),
-                     platform = c("MODISA", "SeaWiFS"), 
+#' @export
+readchla <- function(date, product = c("MODISA", "SeaWiFS"),
                      xylim = NULL,
-                     
-                     ##lon180 = TRUE,
+                     algorithm = c("johnson", "nasa")) {
+  "blah!"
+
+}
+#' @export
+readchla_mean <- function(date,
+#                     algorithm = c("johnson", "oceancolor"),
+                     product = c("MODISA", "SeaWiFS"), 
+                     xylim = NULL,
                      returnfiles = FALSE,
-                     latest = FALSE,
+                     latest = TRUE,
                      verbose = TRUE,
                      ...) {
+  largs <- list(...)
+  if (missing(date)) {
+      files <- oc_sochla_files(product = product)
+      date <- if (latest) max(files$date) else min(files$date)
+  }  
+  if ("time.resolution" %in% names(largs)) stop("time.resolution is not supported, enter the dates directly - underlying temporal resolution is daily")
+  bins <- purrr::map_df(date, read_oc_sochla, xylim = xylim, product = product) %>% 
+    dplyr::select(-date) %>% 
+    dplyr::group_by(bin_num) %>% 
+    dplyr::mutate_all(mean)
+  
+  bins
+  
+}  
+
+
+##' @export
+readchla_old <- function(date, time.resolution = c("weekly", "monthly"),
+                         product = c("johnson", "oceancolor"),
+                         platform = c("MODISA", "SeaWiFS"), 
+                         xylim = NULL,
+                         
+                         ##lon180 = TRUE,
+                         returnfiles = FALSE,
+                         latest = FALSE,
+                         verbose = TRUE,
+                         ...) {
   
   ## Note, fixing this can used the old updatechlafiles below
   warning("readchla only works with a static collection of data, no longer updated")
@@ -123,9 +155,9 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
   if (product == "oceancolor") {
     return(cfiles3)
     xfs <- .expandFileDateList(cfiles3)
-   # nc <- ncdf4::nc_open(cfiles3)
-  #  dates <- 
-   # dates <- timedateFrom(strptime(substr(basename(cfiles3), 2, 8), "%Y%j"))
+    # nc <- ncdf4::nc_open(cfiles3)
+    #  dates <- 
+    # dates <- timedateFrom(strptime(substr(basename(cfiles3), 2, 8), "%Y%j"))
     dates <- xfs$date
     cfiles3 <- xfs$fullname
   }

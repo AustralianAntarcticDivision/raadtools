@@ -54,9 +54,10 @@ readchla <- function(date, product = c("MODISA", "SeaWiFS"),
 bin_chl <- function(bins, value, NROWS, gridmap) {
   bins <- tibble(bin_num = bins, value = value)
   ll <- coordinates(gridmap)
-  bins <- tibble(bin_num = roc::lonlat2bin(ll[,1], ll[, 2], NUMROWS = NROWS), gridcell = seq(ncell(gridmap))) %>% 
+  bins <- tibble(bin_num = roc::lonlat2bin(ll[,1], ll[, 2], NUMROWS = NROWS), 
+                 gridcell = seq_len(ncell(gridmap))) %>% 
     dplyr::inner_join(bins, "bin_num")
-  gridmap[bins$gridcell] <- bins$value
+  gridmap[bins[["gridcell"]]] <- bins[["value"]]
   gridmap
 }
 

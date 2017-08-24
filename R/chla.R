@@ -33,13 +33,19 @@ readchla <- function(date, product = c("MODISA", "SeaWiFS"),
                      algorithm = c("johnson", "nasa")) {
   product <- match.arg(product)
   d <- readchla_mean(date, product = product, xylim = xylim)
-
+  if (nrow(d) < 1) {
+    warning("no data available in Southern Ocean for these date/s")
+   return(NULL) 
+  }
   algorithm <- match.arg(algorithm)  
   thename <- sprintf("chla_%s", algorithm)
   d <- d[, c("bin_num", thename)]
   names(d) <- c("bin_num", "value")
   NROWS <- product2nrows(product)
   gridmap <- raster::raster(raster::extent(-180, 180, -90, 90), ncol = NROWS * 2, nrow = NROWS, crs = "+init=epsg:4326")
+  ## this hack is to align with assumption from here
+  ## https://github.com/AustralianAntarcticDivision/ocean_colour/blob/master/seawifs_daily_bins_init.R#L37
+    gridmap <- raster::crop(gridmap, raster::extent(-180, 180, -90, -30), snap = "out")
   if (!is.null(xylim)) gridmap <- crop(gridmap, xylim)
   bin_chl(d$bin_num, d$value, NROWS, gridmap)
 
@@ -48,7 +54,7 @@ readchla <- function(date, product = c("MODISA", "SeaWiFS"),
 bin_chl <- function(bins, value, NROWS, gridmap) {
   bins <- tibble(bin_num = bins, value = value)
   ll <- coordinates(gridmap)
-  bins <- tibble(bin_num = roc::lonlat2bin(ll[,1], ll[, 2], NUMROWS = 4320), gridcell = seq(ncell(gridmap))) %>% 
+  bins <- tibble(bin_num = roc::lonlat2bin(ll[,1], ll[, 2], NUMROWS = NROWS), gridcell = seq(ncell(gridmap))) %>% 
     dplyr::inner_join(bins, "bin_num")
   gridmap[bins$gridcell] <- bins$value
   gridmap
@@ -65,6 +71,8 @@ readchla_mean <- function(date,
                      verbose = TRUE,
                      ...) {
   largs <- list(...)
+  if ("time.resolution" %in% names(largs)) stop("time.resolution is not supported, enter the dates directly - underlying temporal resolution is daily")
+  
   if (missing(date)) {
       files <- oc_sochla_files(product = product)
       date <- if (latest) max(files$date) else min(files$date)
@@ -72,8 +80,11 @@ readchla_mean <- function(date,
   
   ## here read_oc_sochla should take the bins it needs
   init <- roc::initbin(product2nrows(product))
-  bin_sub <- tibble::tibble(bin_num = roc::crop_init(init, xylim))
-  if ("time.resolution" %in% names(largs)) stop("time.resolution is not supported, enter the dates directly - underlying temporal resolution is daily")
+  if (is.null(xylim)) {
+    bin_sub <- NULL
+  } else {
+    bin_sub <- tibble::tibble(bin_num = roc::crop_init(init, xylim))
+  }
  # bins <- purrr::map_df(date, read_oc_sochla, bins = bin_sub, product = product) %>% 
   
    bins <- read_oc_sochla(date, bins = bin_sub, product = product) %>% 

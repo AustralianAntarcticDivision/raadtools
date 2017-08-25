@@ -1,5 +1,7 @@
 # raadtools dev
 
+* now use raadfiles for AMPS
+
 * `readchla` returns, now providing MODISA/SeaWiFS at native mapped 
  resolution for a given set of input dates (the mean is calculated from
  the daily L3 bins) for either 'nasa' or 'johnson' algorithm

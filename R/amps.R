@@ -42,6 +42,7 @@ dat <- suppressWarnings(rgdal::readGDAL(x, band = band, silent = TRUE))
 #' @section gdalinfo
 #' 
 amps_d1files <- function(data.source = "", time.resolution = "4hourly", ...) {
+  
   files <- amps_model_files(data.source = data.source, time.resolution = time.resolution, ...)
   ## TODO normalize file set
   ## we want the most files with the highest preference
@@ -52,18 +53,13 @@ amps_d1files <- function(data.source = "", time.resolution = "4hourly", ...) {
 }
 
 amps_model_files <- function(data.source = "", time.resolution = "4hourly", ...) {
+  files <- raadfiles::amps_files()
   datadir <- getOption("default.datadir")
-  allfiles <- raadtools:::.allfilelist(rda = TRUE, fullname = FALSE)
-  files1 <- grep("www2.mmm.ucar.edu", allfiles, value = TRUE)
-  files2 <- grep("wrf_grib", files1, value = TRUE)
-  files3 <- grep("grb$", files2, value = TRUE)
-  #files <- tibble::tibble(fullname = grep("grb$", files2, value = TRUE)) %>% filter(grepl("d1", fullname))
-  files <- tibble::tibble(file = files3) %>% filter(grepl("d1", file))
   files$fullname <- file.path(datadir, files$file)
-    mutate(files, hour = substr(basename(fullname), 20, 22),
+    transmute(files, hour = substr(basename(fullname), 20, 22),
            model = substr(basename(fullname), 9, 10),
            date = as.POSIXct(strptime(basename(files$fullname), "%Y%m%d%H"), tz = "GMT") + 
-             as.integer(hour) * 3600) 
+             as.integer(hour) * 3600, fullname, file) 
   
   
 }

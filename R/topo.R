@@ -66,7 +66,8 @@
 }
 
 .smithsandwellvrt <- function(lon180 = FALSE) {
-  binfile <- .smithsandwellraw(allfiles()$fullname)
+  all_files <- raadfiles:::get_raw_raad_filenames() %>% mutate(fullname = file.path(root, file)) %>% dplyr::pull(fullname)
+  binfile <- .smithsandwellraw(all_files)
   vrtfile1 <- file.path(dirname(binfile), ".vrt", gsub(".img$", ".vrt", basename(binfile)))
   vrtfile2 <- file.path(dirname(binfile), ".vrt",gsub(".img$", "atlantic.vrt", basename(binfile)))
                         
@@ -156,58 +157,35 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
                      lon180 = TRUE,
                      ...) {
   
-  allfiles <- .allfilelist()
-  
-  datadir = getOption("default.datadir")
+#  allfiles <- .allfilelist()
+  files <- raadfiles:::get_raw_raad_filenames() 
+#  datadir = getOption("default.datadir")
   topo <- match.arg(topo)
+  pick_file <- function(arg1, arg2, files) {
+    cfiles <- dplyr::filter(files, grepl(arg1, file)) %>% 
+      dplyr::filter(grepl(arg2, file))
+    file.path(cfiles$root, cfiles$file)[1]
+  }
   
   if (topo == "smith_sandwell") {
     topopath <- .smithsandwellvrt(lon180 = lon180)
-  } 
-  if (topo == "gebco_08") {
-    cfiles <- grep("www.bodc.ac.uk", allfiles, value = TRUE)
-    topopath <- grep("GRIDONE_2D.nc$", cfiles, value = TRUE)
+  } else {
+
+   topopath <-  switch(topo, 
+           gebco_08 = pick_file("www.bodc.ac.uk", "GRIDONE_2D.nc$", files),
+           gebco_14 = pick_file("www.bodc.ac.uk", "GEBCO_2014_2D.nc$", files), 
+           ibcso = pick_file("hs.pangaea.de", "ibcso_v1_is.tif$", files), 
+           etopo1 = pick_file("ngdc.noaa.gov", "ETOPO1_Ice_g_gdal.grd$", files), 
+           etopo2 = pick_file("ngdc.noaa.gov" , "ETOPO2v2c_f4.nc$", files), 
+           kerguelen = pick_file("ftt.jcu.edu.au","kerg_dem.grd$" , files), 
+           george_v_terre_adelie = pick_file("data.aad.gov.au", "gvdem250m_v3.nc$",  files), 
+           macrie1100m = pick_file("Macquarie1WGS84UTM57S_100m","w001001.adf$" , files), 
+           macrie2100m = pick_file("Macquarie2WGS84UTM58S_100m", "w001001.adf$", files)
+           )
   }
-  if (topo == "gebco_14") {
-    cfiles <- grep("www.bodc.ac.uk", allfiles, value = TRUE)
-    topopath <- grep("GEBCO_2014_2D.nc$", cfiles, value = TRUE)
-  }
-  if (topo == "ibcso") {
-    cfiles <- grep("hs.pangaea.de", allfiles, value = TRUE)
-    topopath <- grep("ibcso_v1_is.tif$", cfiles, value = TRUE)
-  }
-  if (topo == "etopo1") {
-    cfiles <- grep("ngdc.noaa.gov", allfiles, value = TRUE)
-    topopath <- grep("ETOPO1_Ice_g_gdal.grd$", cfiles, value = TRUE)
-  }
-  if (topo == "etopo2") {
-    cfiles <- grep("ngdc.noaa.gov", allfiles, value = TRUE)
-    topopath <- grep("ETOPO2v2c_f4.nc$", cfiles, value = TRUE)
-  }
-  
-  if (topo == "kerguelen") {
-    cfiles <- grep("ftt.jcu.edu.au", allfiles, value = TRUE)
-    topopath <- grep("kerg_dem.grd$", cfiles, value = TRUE)
-  }
-  
-  if (topo == "george_v_terre_adelie") {
-    cfiles <- grep("data.aad.gov.au", allfiles, value = TRUE)
-    topopath <- grep("gvdem250m_v3.nc$", cfiles, value = TRUE)
-  }
-  
-  
- 
-  if (topo ==  "macrie1100m") {
-    cfiles <- grep("Macquarie1WGS84UTM57S_100m", allfiles, value = TRUE)
-    topopath <- grep("w001001.adf$", cfiles, value = TRUE)
-  }
-  
-  if (topo ==  "macrie2100m") {
-    cfiles <- grep("Macquarie2WGS84UTM58S_100m", allfiles, value = TRUE)
-    topopath <- grep("w001001.adf$", cfiles, value = TRUE)
-  }
-  
+
   if (length(topopath) < 1) stop(sprintf("cannot find %s", topo))
+  if (!file.exists(topopath)) warning(sprintf("cannot file %s", topopath))
   topopath
 }
 

@@ -29,7 +29,7 @@ readwrf0 <- function(x, band = 1) {
 dat <- suppressWarnings(rgdal::readGDAL(x, band = band, silent = TRUE))
   dat <- setExtent(raster(dat), rex)
   projection(dat) <- prj
-
+  data("amps_metadata", package = "raadtools")
   setNames(dat, sprintf("%s_%s", amps_metadata$GRIB_ELEMENT[band], amps_metadata$GRIB_SHORT_NAME[band]))
 }
 
@@ -54,9 +54,9 @@ amps_d1files <- function(data.source = "", time.resolution = "4hourly", ...) {
 
 amps_model_files <- function(data.source = "", time.resolution = "4hourly", ...) {
   files <- raadfiles::amps_files()
-  datadir <- getOption("default.datadir")
-  files$fullname <- file.path(datadir, files$file)
-    transmute(files, hour = substr(basename(fullname), 20, 22),
+  #datadir <- getOption("default.datadir")
+  files$fullname <- file.path(files$root, files$file)
+    dplyr::transmute(files, hour = substr(basename(fullname), 20, 22),
            model = substr(basename(fullname), 9, 10),
            date = as.POSIXct(strptime(basename(files$fullname), "%Y%m%d%H"), tz = "GMT") + 
              as.integer(hour) * 3600, fullname, file) 

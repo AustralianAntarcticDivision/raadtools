@@ -6,7 +6,7 @@
 #' 
 #' @inheritParams raadtools
 #'
-#' @return
+#' @return a raster layer
 #' @export
 #' @name read_ugosa_daily
 #' @examples

@@ -20,6 +20,9 @@ read_ugosa_daily(date, xylim = NULL, latest = TRUE, returnfiles = FALSE,
 
 \item{inputfiles}{input the files data base to speed up initialization}
 }
+\value{
+a raster layer
+}
 \description{
 Functions `read_sla_daily` and so on for "ugosa, adt, ugos, sla, vgos, vgosa, err".
 }

@@ -21,7 +21,7 @@
 #' @param ... 
 #' @param inputfiles 
 #'
-#' @return
+#' @return a raster layer
 #' @noRd
 #'
 #' @examples

@@ -4,7 +4,8 @@
 \alias{read_amsr_ice}
 \title{Read AMSR sea ice data.}
 \usage{
-read_amsr_ice(date, xylim = NULL, latest = TRUE, ...)
+read_amsr_ice(date, xylim = NULL, latest = TRUE, ..., returnfiles = FALSE,
+  inputfiles = NULL)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -14,6 +15,10 @@ read_amsr_ice(date, xylim = NULL, latest = TRUE, ...)
 \item{latest}{if TRUE return the latest time available, ignoring the 'date' argument}
 
 \item{...}{passed to brick, primarily for \code{filename}}
+
+\item{returnfiles}{ignore options and just return the file names and dates}
+
+\item{inputfiles}{input the files data base to speed up initialization}
 }
 \description{
 Both eras are available in the same series, scaling is applied to the first

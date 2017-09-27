@@ -6,8 +6,9 @@
 #' @seealso raadfiles::amsr_daily_files 
 #' @inheritParams readice
 #' @export
-read_amsr_ice <- function(date, xylim = NULL, latest = TRUE, ...) {
-  files <- raadfiles::amsr_daily_files()
+read_amsr_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles = FALSE, inputfiles = NULL) {
+  files <- if (is.null(inputfiles)) raadfiles::amsr_daily_files() else inputfiles
+  if (returnfiles) return(files)
   if (missing(date)) {
      date <- if (latest) max(files$date) else min(files$date)
   }

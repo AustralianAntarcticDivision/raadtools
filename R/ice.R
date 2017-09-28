@@ -108,7 +108,8 @@
 ##' @return \code{\link[raster]{raster}} object
 ##' @seealso \code{\link{icefiles}} for details on the repository of
 ##' data files, \code{\link[raster]{raster}} for the return value
-readice <- function(date,
+##' @name readice
+readice_daily <- function(date,
                     time.resolution = "daily",
                     product = "nsidc",
                     hemisphere = c("south", "north"), 
@@ -135,10 +136,48 @@ readice <- function(date,
   if (latest) date <- max(files$date)
   date <- timedateFrom(date)
   files <- .processFiles(date, files, time.resolution)
+ 
+  read_ice_internal(files, hemisphere, rescale, setNA, ...) 
+}
+#' @name readice
+#' @export
+readice <- readice_daily
+#' @name readice
+#' @export
+readice_monthly <- function(date,
+                    time.resolution = "daily",
+                    product = "nsidc",
+                    hemisphere = c("south", "north"), 
+                    xylim = NULL,
+                    setNA = TRUE, rescale = TRUE, 
+                    latest = FALSE,
+                    returnfiles = FALSE,  ..., inputfiles = NULL) {
   
+  #  time.resolution <- match.arg(time.resolution)
+  product <- match.arg(product)
+  hemisphere <- match.arg(hemisphere)
+  
+  if (!is.null(inputfiles)) {
+    files <- inputfiles
+  } else {
+    ## get file names and dates and full path
+    files <- switch(hemisphere, 
+                    north = raadfiles::nsidc_north_monthly_files(), 
+                    south = raadfiles::nsidc_south_monthly_files())
+  }
+  if (returnfiles) return(files)
+  # if (product == "amsr" & .Platform$OS.type == "windows") warning("sorry, AMSR2 files are HDF4 so this is unlikely to work on your machine")
+  if (missing(date)) date <- min(files$date)
+  if (latest) date <- max(files$date)
+  date <- timedateFrom(date)
+  files <- .processFiles(date, files, time.resolution)
+  
+  read_ice_internal(files, hemisphere, rescale, setNA, ...) 
+}
+
+
+read_ice_internal <- function(files, hemisphere, rescale, setNA, ...) {
   ## check that files are available
-  
-  
   ## NSIDC projection and grid size for the Southern Hemisphere
   prj  <- "+proj=stere +lat_0=-90 +lat_ts=-70 +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m +no_defs " 
   if(hemisphere == "north") prj <-    "+proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +k=1 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m +no_defs"
@@ -192,21 +231,21 @@ readice <- function(date,
                         code = 0:255, stringsAsFactors = FALSE)
       levels(r0) <- rat
     } 
-  
+    
     
     if (cropit) r0 <- crop(r0, cropext)
     r[[ifile]] <- r0
   }
   r <- stack(r)
-
+  
   projection(r) <- prj
   names(r) <- basename(files$file)
   r <- setZ(r, files$date)
-
+  
   if ("filename" %in% names(list(...))) r <- writeRaster(r, ...)
   r
+  
 }
-
 
 
 ##' Load metadata and location of files of sea ice data products.

@@ -1,5 +1,9 @@
 # raadtools dev
 
+* establish readice_daily and readice_monthly model for future separation
+
+* re-instated monthly NSIDC north and south hemisphere
+
 * now use raadfiles for AMPS
 
 * `readchla` returns, now providing MODISA/SeaWiFS at native mapped 

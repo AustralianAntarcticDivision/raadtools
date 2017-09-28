@@ -2,9 +2,23 @@
 % Please edit documentation in R/ice.R
 \name{readice}
 \alias{readice}
+\alias{readice_daily}
+\alias{readice}
+\alias{readice}
+\alias{readice_monthly}
 \title{Read data from sea ice data products.}
 \usage{
+readice_daily(date, time.resolution = "daily", product = "nsidc",
+  hemisphere = c("south", "north"), xylim = NULL, setNA = TRUE,
+  rescale = TRUE, latest = FALSE, returnfiles = FALSE, ...,
+  inputfiles = NULL)
+
 readice(date, time.resolution = "daily", product = "nsidc",
+  hemisphere = c("south", "north"), xylim = NULL, setNA = TRUE,
+  rescale = TRUE, latest = FALSE, returnfiles = FALSE, ...,
+  inputfiles = NULL)
+
+readice_monthly(date, time.resolution = "daily", product = "nsidc",
   hemisphere = c("south", "north"), xylim = NULL, setNA = TRUE,
   rescale = TRUE, latest = FALSE, returnfiles = FALSE, ...,
   inputfiles = NULL)

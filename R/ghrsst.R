@@ -52,9 +52,9 @@ readghrsst  <- function (date, time.resolution = c("daily"),
   files <- .processFiles(date, files, time.resolution)
 
   
-
+xylim <- force(xylim)
   nfiles <- nrow(files)
-  
+#  if (is.null(xylim)) xylim <- extent(-180, 180, -90, 90)
   pb <- progress::progress_bar$new(
     format = "  extracting [:bar] :percent in :elapsed",
     total = nfiles, clear = FALSE, width= 60)

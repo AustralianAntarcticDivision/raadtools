@@ -14,7 +14,7 @@
 #' @return data.frame
 #' @export
 ghrsstfiles <- function() {
-  files <- raadfiles::ghrsst_daily_files()[, c("file", "date", "fullname")]
+  raadfiles::ghrsst_daily_files()[, c("file", "date", "fullname")]
 }
 
 #' Read GHRSST

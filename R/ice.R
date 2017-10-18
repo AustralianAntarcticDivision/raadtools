@@ -121,7 +121,8 @@ readice_daily <- function(date,
 #  time.resolution <- match.arg(time.resolution)
  product <- match.arg(product)
  hemisphere <- match.arg(hemisphere)
-  
+ if (time.resolution != "daily") warning("readice for non-daily data is deprecated, see readice_monthly() and similar for specific functions")
+  time.resolution <- match.arg(time.resolution)
   if (!is.null(inputfiles)) {
     files <- inputfiles
   } else {
@@ -145,7 +146,7 @@ readice <- readice_daily
 #' @name readice
 #' @export
 readice_monthly <- function(date,
-                    time.resolution = "daily",
+                    time.resolution = "monthly",
                     product = "nsidc",
                     hemisphere = c("south", "north"), 
                     xylim = NULL,
@@ -156,7 +157,9 @@ readice_monthly <- function(date,
   #  time.resolution <- match.arg(time.resolution)
   product <- match.arg(product)
   hemisphere <- match.arg(hemisphere)
+  if (time.resolution != "monthly") warning("time.resolution argument is deprecated, see readice_daily() and similar for specific functions")
   
+  time.resolution <- match.arg(time.resolution)
   if (!is.null(inputfiles)) {
     files <- inputfiles
   } else {

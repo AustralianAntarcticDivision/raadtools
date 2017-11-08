@@ -3,7 +3,7 @@ Type: Package
 Title: Tools for Synoptic Environmental Spatial Data
 Depends:
     raster,
-    R (>= 3.4.0)
+    R (>= 3.3.0)
 Imports:
     dplyr (>= 0.7.0),
     maptools,

@@ -95,6 +95,10 @@
     yp <- spTransform(y1, projection(dummy))
     pb$tick() ## ---------------------------------------------
     xylim <- extent(yp)
+  ## expand out a bit for single-location queries
+  if (xmax(xylim) == xmin(xylim) | ymax(xylim) == ymin(xylim)) {
+  xylim <- xylim + res(dummy)
+  }
     dx <- xmax(xylim)-xmin(xylim)
     dy <- ymax(xylim)-ymin(xylim)
     xylim <- xylim + c(dx, dy) / 10

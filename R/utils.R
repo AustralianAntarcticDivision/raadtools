@@ -147,7 +147,10 @@ yrange <- function(x) c(ymin(x), ymax(x))
   ##
   deltatime <- abs(difftime(querydate, refdate, units = "days"))
   deltatest <- deltatime > daytest
-  if (all(deltatest)) stop(sprintf("no data file within %.1f days of %s", daytest, format(querydate)))
+  if (all(deltatest)) {
+    message(sprintf("\nnearest available date is %s", as.Date(refdate)))
+    stop(sprintf("no data file within %.1f days of %s", daytest, format(querydate)))
+  }
   if (any(deltatest)) {
     warning(sprintf("%i input dates have no corresponding data file within %f days of available files", sum(deltatest), daytest))
     index <- index[!deltatest]

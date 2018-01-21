@@ -25,7 +25,7 @@ rapid_responsefiles <- function(product = c("aqua", "terra"), ...) {
     dplyr::filter(stringr::str_detect(.data$file, product)) %>% 
     dplyr::filter(stringr::str_detect(.data$file, "tif$"))
   
- files %>% transmute(date = as.POSIXct(as.Date(stringr::str_extract(.data$file, "[0-9]{7}"), "%Y%j"), tz = "GMT"), 
+ files %>% dplyr::transmute(date = as.POSIXct(as.Date(stringr::str_extract(.data$file, "[0-9]{7}"), "%Y%j"), tz = "GMT"), 
                      fullname = file.path(.data$root, .data$file))
 }
 

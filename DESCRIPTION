@@ -13,7 +13,6 @@ Imports:
     progress,
     purrr,
     raadfiles,
-    roc,
     rgeos,
     sp, 
     tibble

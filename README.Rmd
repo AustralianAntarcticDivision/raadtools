@@ -20,6 +20,20 @@ knitr::opts_chunk$set(
 
 Tools for reading, plotting and manipulating spatial data used at the Australian Antarctic Division (AAD).
 
+The repository of data used by raadtools is available under RDSI/PUBLIC/raad and at the AAD under gridded/new/ in the scientific data collection.  
+
+(We cannot directly link to either resource directly in public so please ask a local expert). 
+
+The [contents of the repository](https://github.com/AustralianAntarcticDivision/blueant#data-source-summary) is listed in the
+technical configuration for bowerbird. 
+
+If you would like a collection added please make a request via a [Github issue](https://github.com/AustralianAntarcticDivision/bowerbird/issues/new) or contact one of the authors directly. 
+
+You are welcome to make your own copies of data from the collection for your own use, but please respect the citation and usage requests of the data providers [listed in the summary](https://github.com/AustralianAntarcticDivision/blueant#data-source-summary).
+
+
+# Using raadtools 
+
 There are two main ways to use it. 
 
 ## 1. RStudio raadtools server

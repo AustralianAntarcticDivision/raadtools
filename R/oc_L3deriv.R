@@ -29,7 +29,7 @@ read_oc_sochla <- function(date, time.resolution = c("daily"), bins = NULL,
   files <- files[findInterval(date, files$date), ]
  
   if (returnfiles) return(files)
-  purrr::map_df(files$fullname, read_oc_sochla_day, bins = bins)
+  l <- purrr::map(files$fullname, read_oc_sochla_day, bins = bins)
 }
   
 product2nrows <- function(x) {

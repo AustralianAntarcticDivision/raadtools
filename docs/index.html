@@ -29,10 +29,31 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="/index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="articles/index.html">Articles</a>
+  <a href="articles/raadtools.html">Get Started</a>
+</li>
+<li>
+  <a href="reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/extract-extent.html">Environmental data from an extent with raadtools</a>
+    </li>
+    <li>
+      <a href="articles/installraadtools.html">raadtools installation</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="news/index.html">News</a>
@@ -67,6 +88,15 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#r-tools-for-spatial-data-at-the-australian-antarctic-division-aad" class="anchor"></a>R tools for spatial data at the Australian Antarctic Division (AAD)</h1></div>
 <p>Tools for reading, plotting and manipulating spatial data used at the Australian Antarctic Division (AAD).</p>
+<p>The repository of data used by raadtools is available under RDSI/PUBLIC/raad and at the AAD under gridded/new/ in the scientific data collection.</p>
+<p>(We cannot directly link to either resource directly in public so please ask a local expert).</p>
+<p>The <a href="https://github.com/AustralianAntarcticDivision/blueant#data-source-summary">contents of the repository</a> is listed in the technical configuration for bowerbird.</p>
+<p>If you would like a collection added please make a request via a <a href="https://github.com/AustralianAntarcticDivision/bowerbird/issues/new">Github issue</a> or contact one of the authors directly.</p>
+<p>You are welcome to make your own copies of data from the collection for your own use, but please respect the citation and usage requests of the data providers <a href="https://github.com/AustralianAntarcticDivision/blueant#data-source-summary">listed in the summary</a>.</p>
+</div>
+<div id="using-raadtools" class="section level1">
+<h1 class="hasAnchor">
+<a href="#using-raadtools" class="anchor"></a>Using raadtools</h1>
 <p>There are two main ways to use it.</p>
 <div id="rstudio-raadtools-server" class="section level2">
 <h2 class="hasAnchor">
@@ -78,7 +108,7 @@
 <h2 class="hasAnchor">
 <a href="#local-computer-within-the-aad-network" class="anchor"></a>2. Local computer, within the AAD network</h2>
 <p>If it’s not installed, trying installing with</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">"AustralianAntarcticDivision/raadtools"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"AustralianAntarcticDivision/raadtools"</span>)
 <span class="kw">library</span>(raadtools)</code></pre></div>
 <p>If neither of 1 or 2 work for you you, see your local administrator.</p>
 </div>

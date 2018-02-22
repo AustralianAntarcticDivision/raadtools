@@ -94,6 +94,8 @@
 #' \item{kerguelen}{Kerguelen Plateau Bathymetric Grid, GeoScience Australia}
 #' \item{george_v_terre_adelie}{A bathymetric Digital Elevation Model (DEM) of the George V and Terre Adelie continental shelf and margin - 100, 250, and 500 metre resolution. \url{http://data.aad.gov.au/aadc/metadata/metadata_redirect.cfm?md=AMD/AU/GVdem_2008}}
 #' \item{smith_sandwell}{Global seafloor topography from satellite altimetry and ship depth soundings. \url{http://topex.ucsd.edu/WWW_html/mar_topo.html}}
+#' \item{cryosat2}{Antarctica CryoSat-2 Digital Elevation Model (DEM). \url{https://earth.esa.int/web/guest/missions/esa-operational-eo-missions/cryosat}}
+#' \item{lake_superior}{Bathymetry of Lake Superior \url{https://www.ngdc.noaa.gov/mgg/greatlakes/superior.html}}
 #' }
 #' @title Topography data
 #' @name readtopo
@@ -113,7 +115,10 @@
 readtopo <- function(topo = c("gebco_08", "ibcso",
                               "etopo1", "etopo2",
                               "kerguelen", "george_v_terre_adelie",
-                              "smith_sandwell", "gebco_14", "macrie1100m", "macrie2100m"),
+                              "smith_sandwell", "gebco_14", 
+                              "macrie1100m", "macrie2100m", 
+                              "cryosat2", 
+                              "lake_superior"),
                      polar = FALSE,
                      lon180 = TRUE,
                      xylim = NULL,
@@ -131,10 +136,11 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
     res <- raster(tfile)
   }
   
-  if (topo == "etopo2") projection(res) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
-  if (topo == "kerguelen") projection(res) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
-  if (topo == "george_v_terre_adelie") projection(res) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
-  
+  ## sources with missing CRS metadata
+  llprojs <- c("etopo2", "kerguelen", "george_v_terre_adelie", "lake_superior")
+  if (topo %in% llprojs)  projection(res) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
+
+  if (topo == "cryosat2") projection(res) <- "+proj=stere +lat_0=-90 +lat_ts=-71 +datum=WGS84 +x_0=0 +y_0=0"
   if (!is.null(xylim)) res <- crop(res, xylim)
   res
 }
@@ -151,7 +157,8 @@ readbathy <- readtopo
 topofile <- function(topo = c("gebco_08",  "ibcso",
                               "etopo1", "etopo2",
                               "kerguelen", "george_v_terre_adelie",
-                              "smith_sandwell", "gebco_14", "macrie1100m", "macrie2100m"),
+                              "smith_sandwell", "gebco_14", "macrie1100m", "macrie2100m", "cryosat2", 
+                              "lake_superior"),
                      polar = FALSE,
                      lon180 = TRUE,
                      ...) {
@@ -169,7 +176,9 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
            kerguelen = raadfiles::kerguelen_files()$fullname, 
            george_v_terre_adelie = raadfiles::george_v_terre_adelie_250m_files()$fullname, 
            macrie1100m = raadfiles::macquarie100m_57S_files()$fullname, 
-           macrie2100m = raadfiles::macquarie100m_58S_files()$fullname
+           macrie2100m = raadfiles::macquarie100m_58S_files()$fullname, 
+           cryosat2 = raadfiles::cryosat2_files()$fullname, 
+           lake_superior = raadfiles::lakesuperior_files()$fullname
            )
   }
 

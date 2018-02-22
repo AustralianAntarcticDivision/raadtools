@@ -1,5 +1,7 @@
 # raadtools dev
 
+* "cryosat2" and "lake_superior" added to readtopo
+
 * establish readice_daily and readice_monthly model for future separation
 
 * re-instated monthly NSIDC north and south hemisphere

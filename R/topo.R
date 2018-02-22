@@ -135,7 +135,6 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
   if (topo == "kerguelen") projection(res) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
   if (topo == "george_v_terre_adelie") projection(res) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
   
-  
   if (!is.null(xylim)) res <- crop(res, xylim)
   res
 }
@@ -156,31 +155,21 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
                      polar = FALSE,
                      lon180 = TRUE,
                      ...) {
-  
-#  allfiles <- .allfilelist()
-  files <- raadfiles:::get_raw_raad_filenames() 
-#  datadir = getOption("default.datadir")
   topo <- match.arg(topo)
-  pick_file <- function(arg1, arg2, files) {
-    cfiles <- dplyr::filter(files, grepl(arg1, file)) %>% 
-      dplyr::filter(grepl(arg2, file))
-    file.path(cfiles$root, cfiles$file)[1]
-  }
-  
   if (topo == "smith_sandwell") {
-    topopath <- .smithsandwellvrt(lon180 = lon180)
+    topopath <- if (lon180) raadfiles::smith_sandwell_lon180_files()$fullname else raadfiles::smith_sandwell_files()$fullname
   } else {
 
    topopath <-  switch(topo, 
-           gebco_08 = pick_file("www.bodc.ac.uk", "GRIDONE_2D.nc$", files),
-           gebco_14 = pick_file("www.bodc.ac.uk", "GEBCO_2014_2D.nc$", files), 
-           ibcso = pick_file("hs.pangaea.de", "ibcso_v1_is.tif$", files), 
-           etopo1 = pick_file("ngdc.noaa.gov", "ETOPO1_Ice_g_gdal.grd$", files), 
-           etopo2 = pick_file("ngdc.noaa.gov" , "ETOPO2v2c_f4.nc$", files), 
-           kerguelen = pick_file("ftt.jcu.edu.au","kerg_dem.grd$" , files), 
-           george_v_terre_adelie = pick_file("data.aad.gov.au", "gvdem250m_v3.nc$",  files), 
-           macrie1100m = pick_file("Macquarie1WGS84UTM57S_100m","w001001.adf$" , files), 
-           macrie2100m = pick_file("Macquarie2WGS84UTM58S_100m", "w001001.adf$", files)
+           gebco_08 = raadfiles::gebco08_files()$fullname,
+           gebco_14 = raadfiles::gebco14_files()$fullname, 
+           ibcso = raadfiles::ibcso_files()$fullname, 
+           etopo1 = raadfiles::etopo1_files()$fullname, 
+           etopo2 = raadfiles::etopo2_files()$fullname, 
+           kerguelen = raadfiles::kerguelen_files()$fullname, 
+           george_v_terre_adelie = raadfiles::george_v_terre_adelie_250m_files()$fullname, 
+           macrie1100m = raadfiles::macquarie100m_57S_files()$fullname, 
+           macrie2100m = raadfiles::macquarie100m_58S_files()$fullname
            )
   }
 

@@ -18,7 +18,7 @@ readice(date, time.resolution = "daily", product = "nsidc",
   rescale = TRUE, latest = FALSE, returnfiles = FALSE, ...,
   inputfiles = NULL)
 
-readice_monthly(date, time.resolution = "daily", product = "nsidc",
+readice_monthly(date, time.resolution = "monthly", product = "nsidc",
   hemisphere = c("south", "north"), xylim = NULL, setNA = TRUE,
   rescale = TRUE, latest = FALSE, returnfiles = FALSE, ...,
   inputfiles = NULL)

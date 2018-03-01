@@ -1,42 +1,45 @@
-
-
-## note that this can be replaced by a direct raster(file) once the package
-## gets updated (post raster_2.1-49, October 2013)
-# .readNSIDC <- function(fname, rtemplate) {
-#   dims <- dim(rtemplate)[1:2]
-#   con <- file(fname, open = "rb")
-#   trash <- readBin(con, "integer", size = 1, n = 300)
-#   dat <- readBin(con, "integer", size = 1, n = prod(dims), endian = "little", signed = FALSE)
-#   close(con)
-#   r100 <- dat > 250
-#   r0 <- dat < 1
-#   if (rescale) {
-#     dat <- dat/2.5  ## rescale back to 100
-#   }
-#   if (setNA) {
-#     dat[r100] <- NA
-#     ##dat[r0] <- NA
-#   }
-#   
-#   # 251  Circular mask used in the Arctic to cover the irregularly-shaped data gap around the pole (caused by the orbit inclination and instrument swath)
-#   # 252	Unused
-#   # 253	Coastlines
-#   # 254	Superimposed land mask
-#   # 255	Missing data
-#   # 
-#   ## ratify if neither rescale nor setNA set
-#   r <- raster(t(matrix(dat, dims[1])), template = rtemplate)
-#   if (!setNA && !rescale) {
-#     ##r <- ratify(r)
-#     rat <- data.frame(ID = 0:255, icecover = c(0:250, "ArcticMask", "Unused", "Coastlines", "LandMask", "Missing"), 
-#                       code = 0:255, stringsAsFactors = FALSE)
-#     levels(r) <- rat
-#     r
-#   } else {
-#     r
-#   }
-# }
-
+#' Area of pixels in sea ice
+#'
+#' Read the NSIDC pixel-area files for either hemisphere. 
+#' Only 25km product is supported. Tool name "psn25area_v3.dat and pss25area_v3.dat": 
+#' \url{http://nsidc.org/data/polar-stereo/tools_geo_pixel.html#pixel_area}. 
+#' @param product "nsidc" the 25km NSIDC passive microwave
+#' @param ... ignored
+#' @param hemisphere south (default) or north
+#'
+#' @return raster with the area of the cells in m^2
+#' @export
+#' @seealso readice
+#' @examples
+#' readice_area()
+#' readice_area(hemisphere = "north")
+readice_area <- function(product = "nsidc", hemisphere = "south", ...) {
+  f <- icefiles(product = product, hemisphere = hemisphere)
+  template <- readice(product = product, hemisphere = hemisphere)
+  ## find dat file
+  fp <- file.path(dirname(dirname(dirname(dirname(dirname(dirname(f$fullname[1])))))), "seaice", "polar-stereo", "tools")
+  south <- hemisphere == "south"
+  datfile <- file.path(fp, tail(list.files(fp, pattern = if(south) "pss25area" else "psn25area" ), 1L))
+  # http://nsidc.org/data/polar-stereo/tools_geo_pixel.html#pixel_area
+  
+  # Grids that determine the area of a given pixel for the 25 km grids for
+  # either hemisphere (psn for the Northern Hemisphere and pss for the Southern
+  # Hemisphere). The arrays are in binary format and are stored as 4-byte
+  # integers scaled by 1000 (divide by 1000 to get square km).
+  #
+  # psn25area_v3.dat: 304 columns x 448 rows pss25area_v3.dat: 316 columns x 332
+  # rows
+  # 
+  
+  ## CONFIRM http://rpubs.com/cyclemumner/365281
+  ## range((dat/1000) -  values(ice_area))
+ ## [1] 0.01916043 0.03261678
+  #datfile <- "/rdsi/PUBLIC/raad/data/sidads.colorado.edu/pub/DATASETS/seaice/polar-stereo/tools/pss25area_v3.dat"
+  con <- file(datfile, open = "rb")
+  on.exit(close(con))
+  dat <- readBin(con, "integer", size = 4, n =  file.info(datfile)$size/4)
+  setNames(setValues(raster(template), dat * 1000), "NSIDC_true_area_m2")
+}
 
 ##' Read data from sea ice data products.
 ##'

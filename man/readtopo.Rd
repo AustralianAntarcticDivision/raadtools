@@ -10,17 +10,18 @@
 \usage{
 readtopo(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
   "george_v_terre_adelie", "smith_sandwell", "gebco_14", "macrie1100m",
-  "macrie2100m"), polar = FALSE, lon180 = TRUE, xylim = NULL,
-  returnfiles = FALSE, ...)
+  "macrie2100m", "cryosat2", "lake_superior"), polar = FALSE, lon180 = TRUE,
+  xylim = NULL, returnfiles = FALSE, ...)
 
 readbathy(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
   "george_v_terre_adelie", "smith_sandwell", "gebco_14", "macrie1100m",
-  "macrie2100m"), polar = FALSE, lon180 = TRUE, xylim = NULL,
-  returnfiles = FALSE, ...)
+  "macrie2100m", "cryosat2", "lake_superior"), polar = FALSE, lon180 = TRUE,
+  xylim = NULL, returnfiles = FALSE, ...)
 
 topofile(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
   "george_v_terre_adelie", "smith_sandwell", "gebco_14", "macrie1100m",
-  "macrie2100m"), polar = FALSE, lon180 = TRUE, ...)
+  "macrie2100m", "cryosat2", "lake_superior"), polar = FALSE, lon180 = TRUE,
+  ...)
 }
 \arguments{
 \item{topo}{Data source, see Details.}
@@ -58,5 +59,7 @@ The following data sets are available using the argument \code{topo}.
 \item{kerguelen}{Kerguelen Plateau Bathymetric Grid, GeoScience Australia}
 \item{george_v_terre_adelie}{A bathymetric Digital Elevation Model (DEM) of the George V and Terre Adelie continental shelf and margin - 100, 250, and 500 metre resolution. \url{http://data.aad.gov.au/aadc/metadata/metadata_redirect.cfm?md=AMD/AU/GVdem_2008}}
 \item{smith_sandwell}{Global seafloor topography from satellite altimetry and ship depth soundings. \url{http://topex.ucsd.edu/WWW_html/mar_topo.html}}
+\item{cryosat2}{Antarctica CryoSat-2 Digital Elevation Model (DEM). \url{https://earth.esa.int/web/guest/missions/esa-operational-eo-missions/cryosat}}
+\item{lake_superior}{Bathymetry of Lake Superior \url{https://www.ngdc.noaa.gov/mgg/greatlakes/superior.html}}
 }
 }

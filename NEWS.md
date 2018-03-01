@@ -1,5 +1,7 @@
 # raadtools dev
 
+* New `readice_area` function for "NSIDC SMMR-SSM/I Nasateam sea ice concentration". 
+
 * "cryosat2" and "lake_superior" added to readtopo
 
 * establish readice_daily and readice_monthly model for future separation

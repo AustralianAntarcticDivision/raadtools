@@ -1,6 +1,9 @@
 xrange <- function(x) c(xmin(x), xmax(x))
 yrange <- function(x) c(ymin(x), ymax(x))
 
+update <- function() {
+  cat('\ndevtools::install_github("AustralianAntarcticDivision/raadtools")\n\n')
+}
 
 
 ## internal rotate to match old behaviour

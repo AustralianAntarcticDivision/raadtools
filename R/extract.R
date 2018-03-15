@@ -1,4 +1,4 @@
-#setOldClass("trip")
+setOldClass("trip")
 .read.generic  <- function(x, y, ...) {
   ## read function "x", takes "y" as Date, POSIXct, character
   x(y, ...)

@@ -2,6 +2,8 @@
 
 * New `readice_area` function for "NSIDC SMMR-SSM/I Nasateam sea ice concentration". 
 
+* Topography functions `readtopo` and `topofile` now support `topo = 'ibcso_is'` and `topo = 'ibcso_bed'` for the ice surface and bedrock versions respectively. The default 'ibcso' remains synonomous with 'ibcso_is'. 
+
 * "cryosat2" and "lake_superior" added to readtopo
 
 * establish readice_daily and readice_monthly model for future separation

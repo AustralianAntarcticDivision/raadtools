@@ -96,6 +96,7 @@
 #' \item{smith_sandwell}{Global seafloor topography from satellite altimetry and ship depth soundings. \url{http://topex.ucsd.edu/WWW_html/mar_topo.html}}
 #' \item{cryosat2}{Antarctica CryoSat-2 Digital Elevation Model (DEM). \url{https://earth.esa.int/web/guest/missions/esa-operational-eo-missions/cryosat}}
 #' \item{lake_superior}{Bathymetry of Lake Superior \url{https://www.ngdc.noaa.gov/mgg/greatlakes/superior.html}}
+#' \item{ramp}{Radarsat Antarctic digital elevation model V2 \url{https://github.com/AustralianAntarcticDivision/blueant#radarsat-antarctic-digital-elevation-model-v2}}
 #' }
 #' @title Topography data
 #' @name readtopo

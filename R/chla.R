@@ -88,7 +88,7 @@ readchla_mean <- function(date,
   }
  # bins <- purrr::map_df(date, read_oc_sochla, bins = bin_sub, product = product) %>% 
   
-   bins <- read_oc_sochla(date, bins = bin_sub, product = product) %>% 
+   bins <- read_oc_sochla(date, bins = bin_sub, product = product, inputfiles = files) %>% 
     dplyr::select(-date) %>% 
     dplyr::group_by(bin_num) %>% 
     dplyr::summarize_all(mean)

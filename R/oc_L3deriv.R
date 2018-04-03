@@ -30,6 +30,7 @@ read_oc_sochla <- function(date, time.resolution = c("daily"), bins = NULL,
  
   if (returnfiles) return(files)
   l <- purrr::map(files$fullname, read_oc_sochla_day, bins = bins)
+  dplyr::bind_rows(l)
 }
   
 product2nrows <- function(x) {

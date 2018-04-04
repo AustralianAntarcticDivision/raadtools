@@ -1,5 +1,7 @@
 # raadtools dev
 
+* New topo option "ga_srtm" for the Australian 1-second DEM (~30m), file available only on nectar for now.
+
 * New `readice_area` function for "NSIDC SMMR-SSM/I Nasateam sea ice concentration". 
 
 * Topography `readtopo` and `topofile` gain `topo = "ramp"` option for Radarsat 

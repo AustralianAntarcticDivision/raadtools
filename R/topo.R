@@ -97,6 +97,7 @@
 #' \item{cryosat2}{Antarctica CryoSat-2 Digital Elevation Model (DEM). \url{https://earth.esa.int/web/guest/missions/esa-operational-eo-missions/cryosat}}
 #' \item{lake_superior}{Bathymetry of Lake Superior \url{https://www.ngdc.noaa.gov/mgg/greatlakes/superior.html}}
 #' \item{ramp}{Radarsat Antarctic digital elevation model V2 \url{https://github.com/AustralianAntarcticDivision/blueant#radarsat-antarctic-digital-elevation-model-v2}}
+#' \item{ga_srtm}{Digital Elevation Model (DEM) of Australia with 1 Second Grid}
 #' }
 #' @title Topography data
 #' @name readtopo
@@ -120,7 +121,8 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
                               "macrie1100m", "macrie2100m", 
                               "cryosat2", 
                               "lake_superior", 
-                              "ramp", "ibcso_is", "ibcso_bed"),
+                              "ramp", "ibcso_is", "ibcso_bed", 
+                              "ga_srtm"),
                      polar = FALSE,
                      lon180 = TRUE,
                      xylim = NULL,
@@ -163,7 +165,8 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
                               "kerguelen", "george_v_terre_adelie",
                               "smith_sandwell", "gebco_14", "macrie1100m", "macrie2100m", "cryosat2", 
                               "lake_superior", 
-                              "ramp", "ibcso_is", "ibcso_bed"),
+                              "ramp", "ibcso_is", "ibcso_bed", 
+                              "ga_srtm"),
                      polar = FALSE,
                      lon180 = TRUE,
                      ...) {
@@ -189,7 +192,10 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
            macrie2100m = raadfiles::macquarie100m_58S_files()$fullname, 
            cryosat2 = raadfiles::cryosat2_files()$fullname, 
            lake_superior = raadfiles::lakesuperior_files()$fullname, 
-           ramp = raadfiles::ramp_files()$fullname
+           ramp = raadfiles::ramp_files()$fullname, 
+           ## FIXME
+           ga_srtm = "/rdsi/PUBLIC/raad/data/elvis.ga.gov.au/elevation/1sec-srtm/a05f7893-0050-7506-e044-00144fdd4fa6"                                        
+           
            )
   }
   if (length(topopath) < 1) stop(sprintf("cannot find %s", topo))

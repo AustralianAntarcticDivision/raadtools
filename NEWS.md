@@ -1,5 +1,9 @@
 # raadtools dev
 
+* AMPS data now supports basic access for 10km "d2" files, with `amps_d1files` moved to raadfiles. 
+
+* Fixed the grid specification for d1 AMPS (and added d2). 
+
 * New topo option "ga_srtm" for the Australian 1-second DEM (~30m), file available only on nectar for now.
 
 * New `readice_area` function for "NSIDC SMMR-SSM/I Nasateam sea ice concentration". 

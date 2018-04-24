@@ -10,18 +10,20 @@
 \usage{
 readtopo(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
   "george_v_terre_adelie", "smith_sandwell", "gebco_14", "macrie1100m",
-  "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is", "ibcso_bed"),
-  polar = FALSE, lon180 = TRUE, xylim = NULL, returnfiles = FALSE, ...)
+  "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is", "ibcso_bed",
+  "ga_srtm"), polar = FALSE, lon180 = TRUE, xylim = NULL,
+  returnfiles = FALSE, ...)
 
 readbathy(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
   "george_v_terre_adelie", "smith_sandwell", "gebco_14", "macrie1100m",
-  "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is", "ibcso_bed"),
-  polar = FALSE, lon180 = TRUE, xylim = NULL, returnfiles = FALSE, ...)
+  "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is", "ibcso_bed",
+  "ga_srtm"), polar = FALSE, lon180 = TRUE, xylim = NULL,
+  returnfiles = FALSE, ...)
 
 topofile(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
   "george_v_terre_adelie", "smith_sandwell", "gebco_14", "macrie1100m",
-  "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is", "ibcso_bed"),
-  polar = FALSE, lon180 = TRUE, ...)
+  "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is", "ibcso_bed",
+  "ga_srtm"), polar = FALSE, lon180 = TRUE, ...)
 }
 \arguments{
 \item{topo}{Data source, see Details.}
@@ -62,5 +64,6 @@ The following data sets are available using the argument \code{topo}.
 \item{cryosat2}{Antarctica CryoSat-2 Digital Elevation Model (DEM). \url{https://earth.esa.int/web/guest/missions/esa-operational-eo-missions/cryosat}}
 \item{lake_superior}{Bathymetry of Lake Superior \url{https://www.ngdc.noaa.gov/mgg/greatlakes/superior.html}}
 \item{ramp}{Radarsat Antarctic digital elevation model V2 \url{https://github.com/AustralianAntarcticDivision/blueant#radarsat-antarctic-digital-elevation-model-v2}}
+\item{ga_srtm}{Digital Elevation Model (DEM) of Australia with 1 Second Grid}
 }
 }

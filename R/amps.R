@@ -9,6 +9,55 @@ readwrfV <- function(date, ..., returnfiles = FALSE, inputfiles = NULL) {
   ff <- inputfiles$fullname[findInterval(date, inputfiles$date)  ]
   readwrf0(ff, band = 27)
 }
+
+detect_amps_grid_from_filename <- function(x) {
+  d1 <- grepl("_d1_", basename(x))
+  d2 <- grepl("_d2_", basename(x))
+  if (all(d1)) return("d1")
+  if (all(d2)) return("d2")
+  stop("grid not recognized, or mixed inputs")
+}
+
+
+### 
+### prj <-  "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=180 +x_0=0 +y_0=0 +a=6367470 +b=6367470 +units=m +no_defs"
+### d1 <- amps_d1files()
+### d2 <- amps_d2files()
+### 
+### lat <- readwrf0(d1$fullname[1])
+### lon <- readwrf0(d1$fullname[1], band = 2)
+### x <- readwrf0(d1$fullname[1], band = 3)
+### pts <- rgdal::project(cbind(values(lon), values(lat)), prj)
+### spex::buffer_extent(extent(pts), 30000)
+### 
+### ######                       MAGIC NUMBERS
+### plot(setExtent(x, extent(c(-4920000 - 30000, 4920000 , -6240000, 6810000))))
+### plot(spTransform(wrld_simpl, projection(x)), add = TRUE)
+### 
+### lat <- readwrf0(d2$fullname[1])
+### lon <- readwrf0(d2$fullname[1], band = 2)
+### x <- readwrf0(d2$fullname[1], band = 3)
+### pts <- rgdal::project(cbind(values(lon), values(lat)), prj)
+### 
+### setExtent(x, spex::buffer_extent(extent(pts), 10000))
+### 
+### ######                       MAGIC NUMBERS
+### plot(setExtent(x, extent(c(-3370000 - 10000, 3280000, -2850000 - 10000, 3410000))))
+### plot(spTransform(wrld_simpl, projection(x)), add = TRUE)
+amps_grid_spec <- function(grid) {
+  prj <-  "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=180 +x_0=0 +y_0=0 +a=6367470 +b=6367470 +units=m +no_defs"
+  ## grid 2 Continental 10km grid
+  ## http://www2.mmm.ucar.edu/rt/amps/information/configuration/maps.html
+  # WRF mass grid:
+  #   dimensions: 666 x 627
+  # lower left lat/lon (i.e., center of lower left mass grid cell): -50.80146 N, 49.79108 E
+  # upper right lat/lon (i.e., center of upper right mass grid cell): -48.20068 N, -136.12355 E
+  # cbind(c(49.79108, -136.12355), c(-50.80146, -48.20068))
+  switch(grid, 
+         d1 =   list(proj = prj, ex = c(xmin = -4920000 - 30000, xmax = 4920000 , ymin = -6240000, ymax = 6810000)), 
+         d2 =   list(proj = prj, ex = c(xmin = -3370000 - 10000, xmax = 3280000, ymin = -2850000 - 10000, ymax = 3410000))
+)
+}
 # readwrf0 <- function(x, band = 1) {
 #   ## band 5 is first u
 #   ## band 27 is first v
@@ -22,13 +71,11 @@ readwrfV <- function(date, ..., returnfiles = FALSE, inputfiles = NULL) {
 readwrf0 <- function(x, band = 1) {
   ## band 5 is first u
   ## band 27 is first v
-  prj <- "+proj=stere +lat_0=-90 +lat_ts=-60 +lon_0=180 +x_0=0 +y_0=0 +a=6367470 +b=6367470 +units=m +no_defs"
-  rex <- c(xmin = -4724338, xmax = 4724338, 
-           ymin = -5979038, ymax = 6518408)
-  #dat <- setExtent(stack(x, quick = TRUE)[[band]], rex)
-dat <- suppressWarnings(rgdal::readGDAL(x, band = band, silent = TRUE))
-  dat <- setExtent(raster(dat), rex)
-  projection(dat) <- prj
+  grid <- detect_amps_grid_from_filename(x)
+  gridspec <- amps_grid_spec(grid)
+  dat <- suppressWarnings(rgdal::readGDAL(x, band = band, silent = TRUE))
+  dat <- setExtent(raster(dat), gridspec$ex)
+  projection(dat) <- gridspec$proj
   data("amps_metadata", package = "raadtools")
   setNames(dat, sprintf("%s_%s", amps_metadata$GRIB_ELEMENT[band], amps_metadata$GRIB_SHORT_NAME[band]))
 }
@@ -40,18 +87,8 @@ dat <- suppressWarnings(rgdal::readGDAL(x, band = band, silent = TRUE))
 #' @importFrom dplyr %>% arrange filter mutate
 #' @export
 #' @section gdalinfo
-#' 
-amps_d1files <- function(data.source = "", time.resolution = "4hourly", ...) {
-  
-  files <- amps_model_files(data.source = data.source, time.resolution = time.resolution, ...)
-  ## TODO normalize file set
-  ## we want the most files with the highest preference
-  dplyr::mutate(files, prefer = as.integer(hour) > 12, h = as.integer(hour))  %>% 
-    arrange(desc(prefer), h)   %>% dplyr::mutate(dupe = duplicated(date)) %>% filter(!dupe) %>% 
-    arrange(date) %>% dplyr::select(file, date, fullname)
-  
-}
-
+#' @importFrom raadfiles amps_d1files amps_d2files
+#' @export amps_d1files amps_d2files
 amps_model_files <- function(data.source = "", time.resolution = "4hourly", ...) {
   files <- raadfiles::amps_files()
   #datadir <- getOption("default.datadir")
@@ -64,7 +101,7 @@ amps_model_files <- function(data.source = "", time.resolution = "4hourly", ...)
   
 }
 amps_d1_icefiles <- function(data.source = "", time.resolution = "12hourly", ...) {
-  files <- amps_model_files(data.source = data.source, time.resolution = time.resolution, ...)
+  files <- amps_model_files(data.source = data.source, time.resolution = time.resolution,  ...)
   ## TODO normalize file set
   ## we want the most files with the highest preference
   filter(files, grepl("f000", basename(fullname)), as.integer(hour) == 0)

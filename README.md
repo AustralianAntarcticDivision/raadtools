@@ -9,7 +9,7 @@ Tools for reading, plotting and manipulating spatial data used at the Australian
 
 The repository of data used by raadtools is available under RDSI/PUBLIC/raad and at the AAD under gridded/new/ in the scientific data collection.
 
-Anyone with a [Nectar account](https://dashboard.rc.nectar.org.au/project/) may run this by creating a VM from our `raadclient` image. Search the public images for **raadclient** (e.g. 'raadclient04\_20180513' but choose the latest one if there are more than one) and ensure that the SSH and RStudio port (8787) is open. Use the default *rstudio/rstudio* account, or create your own.
+Anyone with a [Nectar account](https://dashboard.rc.nectar.org.au) may run this by creating a VM from our `raadclient` image. Search the public images for **raadclient** (e.g. 'raadclient04\_20180513' but choose the latest one) and ensure that the SSH and RStudio port (8787) is open. Use the default *rstudio/rstudio* account, or create your own.
 
 The [contents of the repository](https://github.com/AustralianAntarcticDivision/blueant#data-source-summary) is listed in the technical configuration for bowerbird.
 

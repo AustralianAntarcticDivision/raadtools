@@ -51,14 +51,14 @@ setOldClass("trip")
     
     if (!is.null(fact)) resize <- TRUE
     notime <- FALSE
-    pb$tick() ## ---------------------------------------------
+    pb$tick(0) ## ---------------------------------------------
     ## TODO, will have to figure out how to do this
     args <- list(...)
     if ("xylim" %in% names(args)) {
       warning("xylim argument ignored (determined automatically from the input data)")
       args$xylim <- NULL
     }
-    pb$tick() ## ---------------------------------------------
+    pb$tick(0) ## ---------------------------------------------
     if ("time.resolution" %in% names(args)) {
       files <- x(returnfiles = TRUE, time.resolution = args$time.resolution, ...)
     } else {
@@ -67,18 +67,18 @@ setOldClass("trip")
     if (length(files) == 1L) {
       notime <- TRUE
     }
-    pb$tick() ## ---------------------------------------------
+    pb$tick(0) ## ---------------------------------------------
     ## data.frame input has  assumed structure
     ## we assume y is lon,lat,time
     y1 <- SpatialPoints(as.matrix(y[,1:2]), CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"))
-    pb$tick() ## ---------------------------------------------
+    pb$tick(0) ## ---------------------------------------------
     if (notime) {
       ## assume we want topo/bathy values
       thisx1 <- x(xylim = xylim, ...)
       if (resize) thisx1 <- aggregate(thisx1, fact = fact, fun = 'mean')
       return(extract(thisx1, y1, ...))
     }
-    pb$tick() ## ---------------------------------------------
+    pb$tick(0) ## ---------------------------------------------
     times <- try(timedateFrom(y[[3L]]))
     y <- y1
     ## chuck a
@@ -89,11 +89,11 @@ setOldClass("trip")
     
     
     
-    pb$tick() ## ---------------------------------------------
+    pb$tick(0) ## ---------------------------------------------
 
     dummy <- x(inputfiles = files, ...)
     yp <- spTransform(y1, projection(dummy))
-    pb$tick() ## ---------------------------------------------
+    pb$tick(0) ## ---------------------------------------------
     xylim <- extent(yp)
   ## expand out a bit for single-location queries
   if (xmax(xylim) == xmin(xylim) | ymax(xylim) == ymin(xylim)) {
@@ -102,16 +102,16 @@ setOldClass("trip")
     dx <- xmax(xylim)-xmin(xylim)
     dy <- ymax(xylim)-ymin(xylim)
     xylim <- xylim + c(dx, dy) / 10
-    pb$tick() ## ---------------------------------------------
+    pb$tick(0) ## ---------------------------------------------
     
     ## TODO, this is awful need a fix
     time.resolution <- .determine.time.resolution(files$date)
     ## TODO somehow manage climatology exceptions
     ## unique indexes
-    pb$tick() ## ---------------------------------------------
+    pb$tick(0) ## ---------------------------------------------
     findex <- suppressWarnings(.processDates(times, files$date, timeres = time.resolution))
     windex <- .indexDates(times, files$date)
-    pb$tick() ## ---------------------------------------------
+    pb$tick(0) ## ---------------------------------------------
     ## this won't always work, need to zap anything out of range . . .
     if (max(times) == max(files$date[findex])) findex <- c(findex, max(findex) + 1)
     findex <- findex[findex <= nrow(files)]
@@ -119,8 +119,9 @@ setOldClass("trip")
     l <- list(...)
     if ("inputfiles" %in% names(l)) warning("using inputfiles explicitly is deprecated, please don't do it")
     mess1 <- ""
-    pb$tick() ## ---------------------------------------------
+    pb$tick(0) ## ---------------------------------------------
     ## progress
+    
     pb <- progress::progress_bar$new(
       format = "extracting :what file :ith of :nn [:bar] :percent in :elapsed",
       total = length(date), clear = FALSE, width= 80)

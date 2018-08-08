@@ -97,11 +97,11 @@ setOldClass("trip")
     xylim <- extent(yp)
   ## expand out a bit for single-location queries
   if (xmax(xylim) == xmin(xylim) | ymax(xylim) == ymin(xylim)) {
-  xylim <- xylim + res(dummy)
+  xylim <- xylim + res(dummy) * 3
   }
-    dx <- xmax(xylim)-xmin(xylim)
-    dy <- ymax(xylim)-ymin(xylim)
-    xylim <- xylim + c(dx, dy) / 10
+    #dx <- xmax(xylim)-xmin(xylim)
+    #dy <- ymax(xylim)-ymin(xylim)
+    #xylim <- xylim + c(dx, dy) / 10
     pb$tick(0) ## ---------------------------------------------
     
     ## TODO, this is awful need a fix

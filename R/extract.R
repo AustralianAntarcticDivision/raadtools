@@ -58,6 +58,10 @@ setOldClass("trip")
       warning("xylim argument ignored (determined automatically from the input data)")
       args$xylim <- NULL
     }
+    if ("inputfiles" %in% names(args)) {
+      warning("inputfiles argument ignored")
+      args$inputfiles <- NULL
+    }
     pb$tick(0) ## ---------------------------------------------
     if ("time.resolution" %in% names(args)) {
       files <- x(returnfiles = TRUE, time.resolution = args$time.resolution, ...)
@@ -72,11 +76,24 @@ setOldClass("trip")
     ## we assume y is lon,lat,time
     y1 <- SpatialPoints(as.matrix(y[,1:2]), CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"))
     pb$tick(0) ## ---------------------------------------------
+    
+    dummy <- x(inputfiles = files, ...)
+    yp <- spTransform(y1, projection(dummy))
+    pb$tick(0) ## ---------------------------------------------
+    xylim <- extent(yp)
+    ## expand out a bit for single-location queries
+    if (xmax(xylim) == xmin(xylim) | ymax(xylim) == ymin(xylim)) {
+      xylim <- xylim + res(dummy) * 3
+    }
+    
+    ## never crop
+    xylim <- NULL
+    
     if (notime) {
       ## assume we want topo/bathy values
       thisx1 <- x(xylim = xylim, ...)
       if (resize) thisx1 <- aggregate(thisx1, fact = fact, fun = 'mean')
-      return(extract(thisx1, y1, ...))
+      return(extract(thisx1, yp, ...))
     }
     pb$tick(0) ## ---------------------------------------------
     times <- try(timedateFrom(y[[3L]]))
@@ -91,17 +108,7 @@ setOldClass("trip")
     
     pb$tick(0) ## ---------------------------------------------
 
-    dummy <- x(inputfiles = files, ...)
-    yp <- spTransform(y1, projection(dummy))
-    pb$tick(0) ## ---------------------------------------------
-    xylim <- extent(yp)
-  ## expand out a bit for single-location queries
-  if (xmax(xylim) == xmin(xylim) | ymax(xylim) == ymin(xylim)) {
-  xylim <- xylim + res(dummy) * 3
-  }
-    #dx <- xmax(xylim)-xmin(xylim)
-    #dy <- ymax(xylim)-ymin(xylim)
-    #xylim <- xylim + c(dx, dy) / 10
+
     pb$tick(0) ## ---------------------------------------------
     
     ## TODO, this is awful need a fix

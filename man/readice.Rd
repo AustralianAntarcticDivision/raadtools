@@ -3,8 +3,6 @@
 \name{readice}
 \alias{readice}
 \alias{readice_daily}
-\alias{readice}
-\alias{readice}
 \alias{readice_monthly}
 \title{Read data from sea ice data products.}
 \usage{

@@ -54,7 +54,7 @@ readchla <- function(date, product = c("MODISA", "SeaWiFS"),
 bin_chl <- function(bins, value, NROWS, gridmap) {
   bins <- tibble(bin_num = bins, value = value)
   ll <- coordinates(gridmap)
-  bins <- tibble(bin_num = roc::lonlat2bin(ll[,1], ll[, 2], NUMROWS = NROWS), 
+  bins <- tibble(bin_num = croc::lonlat2bin(ll[,1], ll[, 2], NUMROWS = NROWS), 
                  gridcell = seq_len(ncell(gridmap))) %>% 
     dplyr::inner_join(bins, "bin_num")
   gridmap[bins[["gridcell"]]] <- bins[["value"]]
@@ -74,17 +74,18 @@ readchla_mean <- function(date,
   largs <- list(...)
   if ("time.resolution" %in% names(largs)) stop("time.resolution is not supported, enter the dates directly - underlying temporal resolution is daily")
   
+  files <- oc_sochla_files(product = product)
+  
   if (missing(date)) {
-      files <- oc_sochla_files(product = product)
       date <- if (latest) max(files$date) else min(files$date)
   }  
   
   ## here read_oc_sochla should take the bins it needs
-  init <- roc::initbin(product2nrows(product))
+  init <- croc::initbin(product2nrows(product))
   if (is.null(xylim)) {
     bin_sub <- NULL
   } else {
-    bin_sub <- tibble::tibble(bin_num = roc::crop_init(init, xylim))
+    bin_sub <- tibble::tibble(bin_num = croc::crop_init(init, xylim))
   }
  # bins <- purrr::map_df(date, read_oc_sochla, bins = bin_sub, product = product) %>% 
   

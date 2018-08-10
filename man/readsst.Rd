@@ -5,8 +5,9 @@
 \title{Read OISST sea surface temperature data}
 \usage{
 readsst(date, time.resolution = c("daily", "monthly"), xylim = NULL,
-  lon180 = TRUE, varname = c("sst", "anom", "err", "ice"), setNA = TRUE,
-  latest = FALSE, returnfiles = FALSE, ..., inputfiles = NULL)
+  lon180 = TRUE, varname = c("sst", "anom", "err", "ice"),
+  setNA = TRUE, latest = FALSE, returnfiles = FALSE, ...,
+  inputfiles = NULL)
 }
 \arguments{
 \item{date}{date or dates of data to read,}

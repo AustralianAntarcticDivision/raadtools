@@ -20,6 +20,8 @@ read_oc_sochla <- function(date, time.resolution = c("daily"), bins = NULL,
   time.resolution <- match.arg(time.resolution)
   if (is.null(inputfiles)) {
   files <- oc_sochla_files(product = product)
+  } else {
+    files <- inputfiles
   }
   
   if (missing(date)) {

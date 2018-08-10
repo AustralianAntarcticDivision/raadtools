@@ -4,8 +4,8 @@
 \alias{read_amsr_ice}
 \title{Read AMSR sea ice data.}
 \usage{
-read_amsr_ice(date, xylim = NULL, latest = TRUE, ..., returnfiles = FALSE,
-  inputfiles = NULL)
+read_amsr_ice(date, xylim = NULL, latest = TRUE, ...,
+  returnfiles = FALSE, inputfiles = NULL)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}

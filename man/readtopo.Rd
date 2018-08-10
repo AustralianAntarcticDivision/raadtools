@@ -4,26 +4,24 @@
 \alias{readtopo}
 \alias{topofile}
 \alias{readbathy}
-\alias{readbathy}
-\alias{topofile}
 \title{Topography data}
 \usage{
 readtopo(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
   "george_v_terre_adelie", "smith_sandwell", "gebco_14", "macrie1100m",
-  "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is", "ibcso_bed",
-  "ga_srtm"), polar = FALSE, lon180 = TRUE, xylim = NULL,
-  returnfiles = FALSE, ...)
+  "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is",
+  "ibcso_bed", "ga_srtm"), polar = FALSE, lon180 = TRUE,
+  xylim = NULL, returnfiles = FALSE, ...)
 
 readbathy(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
   "george_v_terre_adelie", "smith_sandwell", "gebco_14", "macrie1100m",
-  "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is", "ibcso_bed",
-  "ga_srtm"), polar = FALSE, lon180 = TRUE, xylim = NULL,
-  returnfiles = FALSE, ...)
+  "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is",
+  "ibcso_bed", "ga_srtm"), polar = FALSE, lon180 = TRUE,
+  xylim = NULL, returnfiles = FALSE, ...)
 
 topofile(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
   "george_v_terre_adelie", "smith_sandwell", "gebco_14", "macrie1100m",
-  "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is", "ibcso_bed",
-  "ga_srtm"), polar = FALSE, lon180 = TRUE, ...)
+  "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is",
+  "ibcso_bed", "ga_srtm"), polar = FALSE, lon180 = TRUE, ...)
 }
 \arguments{
 \item{topo}{Data source, see Details.}

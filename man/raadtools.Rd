@@ -4,8 +4,8 @@
 \alias{raadtools}
 \title{raadtools}
 \usage{
-raadtools(date, time.resolution = "daily", lon180 = TRUE, setNA = TRUE,
-  latest = FALSE, returnfiles = FALSE, ...)
+raadtools(date, time.resolution = "daily", lon180 = TRUE,
+  setNA = TRUE, latest = FALSE, returnfiles = FALSE, ...)
 }
 \arguments{
 \item{date}{date or dates of data to read,}

@@ -4,9 +4,9 @@
 \alias{readssh}
 \title{read SSH/A}
 \usage{
-readssh(date, time.resolution = c("daily"), xylim = NULL, lon180 = TRUE,
-  ssha = FALSE, latest = TRUE, returnfiles = FALSE, verbose = TRUE, ...,
-  inputfiles = NULL)
+readssh(date, time.resolution = c("daily"), xylim = NULL,
+  lon180 = TRUE, ssha = FALSE, latest = TRUE, returnfiles = FALSE,
+  verbose = TRUE, ..., inputfiles = NULL)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}

@@ -6,8 +6,8 @@
 \usage{
 readghrsst(date, time.resolution = c("daily"), xylim = NULL,
   lon180 = TRUE, varname = c("analysed_sst", "analysis_error", "mask",
-  "sea_ice_fraction"), setNA = TRUE, latest = FALSE, returnfiles = FALSE,
-  ..., inputfiles = NULL)
+  "sea_ice_fraction"), setNA = TRUE, latest = FALSE,
+  returnfiles = FALSE, ..., inputfiles = NULL)
 }
 \arguments{
 \item{date}{datetime}

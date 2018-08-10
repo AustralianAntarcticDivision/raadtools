@@ -2,7 +2,6 @@
 % Please edit documentation in R/distance_to_ice.R
 \name{distance_to_ice_edge}
 \alias{distance_to_ice_edge}
-\alias{distance_to_ice_edge}
 \alias{distance_to_ice}
 \title{Distance to a sea ice 'edge'.}
 \usage{

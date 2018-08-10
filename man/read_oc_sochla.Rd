@@ -5,8 +5,8 @@
 \title{Southern Ocean Chlorophyll-a}
 \usage{
 read_oc_sochla(date, time.resolution = c("daily"), bins = NULL,
-  product = c("MODISA", "SeaWiFS"), latest = TRUE, returnfiles = FALSE,
-  ..., inputfiles = NULL)
+  product = c("MODISA", "SeaWiFS"), latest = TRUE,
+  returnfiles = FALSE, ..., inputfiles = NULL)
 }
 \arguments{
 \item{date}{date/s to read}

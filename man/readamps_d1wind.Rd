@@ -2,7 +2,6 @@
 % Please edit documentation in R/amps.R
 \name{readamps_d1wind}
 \alias{readamps_d1wind}
-\alias{readamps_d1wind}
 \alias{readamps}
 \title{read AMPS data}
 \usage{

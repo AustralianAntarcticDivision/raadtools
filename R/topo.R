@@ -69,7 +69,7 @@
   all_files <- raadfiles:::get_raw_raad_filenames() %>% mutate(fullname = file.path(root, file)) %>% dplyr::pull(fullname)
   binfile <- .smithsandwellraw(all_files)
   vrtfile1 <- file.path(dirname(binfile), ".vrt", gsub(".img$", ".vrt", basename(binfile)))
-  vrtfile2 <- file.path(dirname(binfile), ".vrt",gsub(".img$", "atlantic.vrt", basename(binfile)))
+  vrtfile2 <- file.path(dirname(binfile), ".vrt",gsub(".img$", "_atlantic.vrt", basename(binfile)))
                         
   vrtext1 <- gsub("ssbinfile", file.path("..", basename(binfile)), .ssbintext())
   vrtext2 <- gsub("ssvrtfile", basename(vrtfile1), .ssatlanticbintext())

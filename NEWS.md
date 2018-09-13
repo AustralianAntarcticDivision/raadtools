@@ -1,5 +1,7 @@
 # raadtools dev
 
+* New function to return polar coastline with 'polar_map' function. 
+
 * First parts of REMA data now available from `readtopo`, with "rema_8m", "rema_100m" and `read_rema_tiles` (the 8m index). 
 
 * AMPS data now supports basic access for 10km "d2" files, with `amps_d1files` moved to raadfiles. 

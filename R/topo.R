@@ -98,11 +98,11 @@
 #' \item{lake_superior}{Bathymetry of Lake Superior \url{https://www.ngdc.noaa.gov/mgg/greatlakes/superior.html}}
 #' \item{ramp}{Radarsat Antarctic digital elevation model V2 \url{https://github.com/AustralianAntarcticDivision/blueant#radarsat-antarctic-digital-elevation-model-v2}}
 #' \item{ga_srtm}{Digital Elevation Model (DEM) of Australia with 1 Second Grid}
-#' \item{rema_100m}{Reference Elevation Model of Antartica (REMA) for the peninsula}
+#' \item{rema_100m}{Reference Elevation Model of Antartica (REMA) for the peninsula, see `read_rema_tiles` for the index}
 #' }
 #' @title Topography data
 #' @name readtopo
-#' @aliases readtopo topofile readbathy
+#' @aliases readtopo topofile readbathy read_rema_tiles
 #' @param topo Data source, see Details.
 #' @param lon180 Flag for returning data in Atlantic [-180, 180] rather than Pacific [0, 360] view.
 #' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
@@ -208,4 +208,9 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
 }
 
 
+#' @export
+#' @name readtopo
+read_rema_tiles <- function(...) {
+  raster::shapefile(raadfiles::rema_tile_files(all = FALSE)$fullname[1])
+}
 

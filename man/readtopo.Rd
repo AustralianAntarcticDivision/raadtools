@@ -4,6 +4,7 @@
 \alias{readtopo}
 \alias{topofile}
 \alias{readbathy}
+\alias{read_rema_tiles}
 \title{Topography data}
 \usage{
 readtopo(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
@@ -23,6 +24,8 @@ topofile(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
   "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is",
   "ibcso_bed", "ga_srtm", "rema_100m"), polar = FALSE, lon180 = TRUE,
   ...)
+
+read_rema_tiles(...)
 }
 \arguments{
 \item{topo}{Data source, see Details.}
@@ -64,6 +67,6 @@ The following data sets are available using the argument \code{topo}.
 \item{lake_superior}{Bathymetry of Lake Superior \url{https://www.ngdc.noaa.gov/mgg/greatlakes/superior.html}}
 \item{ramp}{Radarsat Antarctic digital elevation model V2 \url{https://github.com/AustralianAntarcticDivision/blueant#radarsat-antarctic-digital-elevation-model-v2}}
 \item{ga_srtm}{Digital Elevation Model (DEM) of Australia with 1 Second Grid}
-\item{rema_100m}{Reference Elevation Model of Antartica (REMA) for the peninsula}
+\item{rema_100m}{Reference Elevation Model of Antartica (REMA) for the peninsula, see `read_rema_tiles` for the index}
 }
 }

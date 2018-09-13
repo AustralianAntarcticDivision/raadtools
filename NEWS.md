@@ -1,5 +1,7 @@
 # raadtools dev
 
+* First parts of REMA data now available from `readtopo`, with "rema_100m1". 
+
 * AMPS data now supports basic access for 10km "d2" files, with `amps_d1files` moved to raadfiles. 
 
 * Fixed the grid specification for d1 AMPS (and added d2). 

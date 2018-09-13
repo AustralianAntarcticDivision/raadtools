@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load metadata and location of files of ocean colour data products. — ocfiles • raadtools</title>
+<title>Derived ocean colour files — oc_sochla_files • raadtools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,10 +30,9 @@
 
 
 
-<meta property="og:title" content="Load metadata and location of files of ocean colour data products. — ocfiles" />
+<meta property="og:title" content="Derived ocean colour files — oc_sochla_files" />
 
-<meta property="og:description" content="This function loads the latest cache of stored files for
-NASA ocean colour products." />
+<meta property="og:description" content="For L3 bin derived products." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -122,59 +121,36 @@ NASA ocean colour products." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load metadata and location of files of ocean colour data products.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/AustralianAntarcticDivision/raadtools/blob/master/R/ocfiles.R'><code>R/ocfiles.R</code></a></small>
-    <div class="hidden name"><code>ocfiles.Rd</code></div>
+    <h1>Derived ocean colour files</h1>
+    <small class="dont-index">Source: <a href='https://github.com/AustralianAntarcticDivision/raadtools/blob/master/R/oc_L3deriv.R'><code>R/oc_L3deriv.R</code></a></small>
+    <div class="hidden name"><code>oc_sochla_files.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This function loads the latest cache of stored files for
-NASA ocean colour products.</p>
+    <p>For L3 bin derived products.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>ocfiles</span>(<span class='kw'>time.resolution</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"daily"</span>, <span class='st'>"weekly"</span>, <span class='st'>"monthly"</span>, <span class='st'>"weekly32"</span>),
-  <span class='kw'>product</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"MODISA"</span>, <span class='st'>"SeaWiFS"</span>, <span class='st'>"VIIRS"</span>), <span class='kw'>varname</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"RRS"</span>, <span class='st'>"CHL"</span>,
-  <span class='st'>"POC"</span>, <span class='st'>"KD490"</span>, <span class='st'>"NPP_PAR"</span>, <span class='st'>"SNPP_CHL"</span>, <span class='st'>"SNPP_RRS"</span>), <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"L3b"</span>,
-  <span class='st'>"L3m"</span>), <span class='kw'>bz2.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ext</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"nc"</span>, <span class='st'>"main"</span>), <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>oc_sochla_files</span>(<span class='kw'>time.resolution</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"daily"</span>), <span class='kw'>product</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"MODISA"</span>,
+  <span class='st'>"SeaWiFS"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>time.resolution</th>
-      <td><p>daily or monthly files?</p></td>
+      <td><p>temporal resolution (base is daily)</p></td>
     </tr>
     <tr>
       <th>product</th>
-      <td><p>choice of ocean colour sensor</p></td>
-    </tr>
-    <tr>
-      <th>varname</th>
-      <td><p>which variable (or set of variables)</p></td>
-    </tr>
-    <tr>
-      <th>type</th>
-      <td><p>which level of data</p></td>
-    </tr>
-    <tr>
-      <th>bz2.rm</th>
-      <td><p>ignore files that are compressed</p></td>
-    </tr>
-    <tr>
-      <th>ext</th>
-      <td><p>which extension, e.g. "nc" or "main"</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>reserved for future use, currently ignored</p></td>
+      <td><p>which product</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>data.frame of <code>file</code> and <code>date</code></p>
+    <p>data frame</p>
     
 
   </div>

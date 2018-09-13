@@ -18,13 +18,25 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="read AMPS data — readamps_d1wind" />
+
+<meta property="og:description" content="Read from 	The Antarctic Mesoscale Prediction System (AMPS) files." />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,18 +59,46 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">raadtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">raadtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.4.0.9002</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="../articles/raadtools.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../articles/index.html">Articles</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/chlorophyll.html">Remotely Sensed Ocean Colour (Chlorophyll) in raadtools</a>
+    </li>
+    <li>
+      <a href="../articles/extract-extent.html">Environmental data from an extent with raadtools</a>
+    </li>
+    <li>
+      <a href="../articles/installraadtools.html">raadtools installation</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -70,6 +110,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -77,15 +118,19 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>read AMPS data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/AustralianAntarcticDivision/raadtools/blob/master/R/amps.R'><code>R/amps.R</code></a></small>
+    <div class="hidden name"><code>readamps_d1wind.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Read from 	The Antarctic Mesoscale Prediction System (AMPS) files.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>readamps_d1wind</span>(<span class='no'>date</span>, <span class='kw'>time.resolution</span> <span class='kw'>=</span> <span class='st'>"4hourly"</span>, <span class='kw'>xylim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>magonly</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>dironly</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>uonly</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>vonly</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
@@ -95,7 +140,7 @@
 <span class='fu'>readamps</span>(<span class='no'>date</span>, <span class='kw'>time.resolution</span> <span class='kw'>=</span> <span class='st'>"4hourly"</span>, <span class='kw'>xylim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>band</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>latest</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>returnfiles</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>, <span class='kw'>inputfiles</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -151,8 +196,8 @@ components</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>readamps_d1wind</code> reads the "d1" <code>level</code> wind (defaults to 1).
-    <code>readamps</code> reads the  <code>band</code> (defaults to 1).</p>
+    <p><code>readamps_d1wind</code> reads the "d1" <code>level</code> wind (defaults to 1).</p>
+<p><code>readamps</code> reads the  <code>band</code> (defaults to 1).</p>
 <p>See <code><a href='amps_metadata.html'>amps_metadata</a></code> for a description of the bands.</p>
 <p>Data  http://www2.mmm.ucar.edu/rt/amps/wrf_grib/, and contain gridded forecast data from the AMPS-WRF model. 
 The ‘d1’ (domain 1) files are on a 30km grid, while the ‘d2’ (domain 2) files are on a 10km grid. 
@@ -161,7 +206,8 @@ d1 covers just Antarctica (including Davis) and parts of the Southern Ocean.
 There are two forecast cycles, starting at 00UT and 12UT daily. Forecasts are for +00, +03, +06, +09, +12 and +15 hours. 
 These steps can be used to see how the wind field is forecast as changing, and to obtain two different data sets each 
 3 hour timestep (e.g. the +15h forecast for the 00UT run is at the same time as the +03h forecast from the 12UT run). 
-The 00UT and 12UT runs contain fewer parameters that the +03h and later forecasts</p><pre>
+The 00UT and 12UT runs contain fewer parameters that the +03h and later forecasts</p>
+<pre>
 An example file date is "2015-10-25 UTC"
 gdalinfo 2015102512_WRF_d1_f000.grb
     uonly is
@@ -190,7 +236,7 @@ GRIB_VALID_TIME=  1445774400 sec UTC
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>af</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='amps_d1files.html'>amps_d1files</a></span>()
+    <pre class="examples"><div class='input'><span class='no'>af</span> <span class='kw'>&lt;-</span> <span class='fu'>amps_d1files</span>()
 <span class='no'>w</span> <span class='kw'>&lt;-</span> <span class='fu'>readamps_d1wind</span>(<span class='kw'>latest</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>inputfiles</span> <span class='kw'>=</span> <span class='no'>af</span>)
 <span class='no'>vlen</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>a</span>, <span class='no'>b</span>) <span class='fu'>sqrt</span>(<span class='no'>a</span> * <span class='no'>a</span> + <span class='no'>b</span> * <span class='no'>b</span>)
 <span class='fu'>plot</span>(<span class='fu'>vlen</span>(<span class='no'>w</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='no'>w</span><span class='kw'>[[</span><span class='fl'>2</span>]]))</div><div class='input'>
@@ -201,7 +247,7 @@ GRIB_VALID_TIME=  1445774400 sec UTC
  <span class='no'>cr1</span>[,<span class='fl'>2</span>] <span class='kw'>&lt;-</span> <span class='no'>cr1</span>[,<span class='fl'>2</span>] + <span class='fu'>values</span>(<span class='no'>x</span><span class='kw'>[[</span><span class='fl'>2</span>]]*<span class='no'>scale</span>);
  <span class='fu'>segments</span>(<span class='no'>cr</span>[<span class='no'>sub</span>,<span class='fl'>1</span>], <span class='no'>cr</span>[<span class='no'>sub</span>,<span class='fl'>2</span>], <span class='no'>cr1</span>[<span class='no'>sub</span>,<span class='fl'>1</span>], <span class='no'>cr1</span>[<span class='no'>sub</span>,<span class='fl'>2</span>])
 }
-<span class='fu'>arr</span>(<span class='no'>w</span>, <span class='fu'>sample</span>(<span class='fu'>ncell</span>(<span class='no'>w</span>), <span class='fl'>10000</span>), <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>30000</span>)</div><img src='readamps_d1wind-3.png' alt='' width='540' height='400' /></pre>
+<span class='fu'>arr</span>(<span class='no'>w</span>, <span class='fu'>sample</span>(<span class='fu'>ncell</span>(<span class='no'>w</span>), <span class='fl'>10000</span>), <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>30000</span>)</div><div class='img'><img src='readamps_d1wind-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -224,11 +270,14 @@ GRIB_VALID_TIME=  1445774400 sec UTC
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

@@ -18,13 +18,22 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Function reference" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,18 +56,46 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">raadtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">raadtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.4.0.9002</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="../articles/raadtools.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../articles/index.html">Articles</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/chlorophyll.html">Remotely Sensed Ocean Colour (Chlorophyll) in raadtools</a>
+    </li>
+    <li>
+      <a href="../articles/extract-extent.html">Environmental data from an extent with raadtools</a>
+    </li>
+    <li>
+      <a href="../articles/installraadtools.html">raadtools installation</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -70,6 +107,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -77,322 +115,324 @@
       
       </header>
 
-      <div class="row">
-  <div class="col-md-9">
+<div class="row">
+  <div class="contents col-md-9">
     <div class="page-header">
-      <h1>
-        Reference
-        <small>version&nbsp;0.4.0.9001</small>
-      </h1>
+      <h1>Reference</h1>
     </div>
 
-    <div class="contents">
-      <table class="ref-index">
+    <table class="ref-index">
 
-      <colgroup>
-        <col class="alias" />
-        <col class="title" />
-      </colgroup>
+    <colgroup>
+      
+      <col class="alias" />
+      <col class="title" />
+    </colgroup>
 
-      <tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="allfiles.html">allfiles</a></code> </p>
-          </td>
-          <td><p>Load raw list of all files available to raadtools from the data repository.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="amps_d1files.html">amps_d1files</a></code> </p>
-          </td>
-          <td><p>AMPS files</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="amps_metadata.html">amps_metadata</a></code> </p>
-          </td>
-          <td><p>AMPS GRIB file metadata</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="aurora.html">aurora</a></code> </p>
-          </td>
-          <td><p>Aurora Australis voyage track</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="chlafiles.html">chlafiles</a></code> </p>
-          </td>
-          <td><p>Chlorophyll-a</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="chla_johnsonfiles.html">chla_johnsonfiles</a></code> </p>
-          </td>
-          <td><p>Derived ocean colour files</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="chl.pal.html">chl.pal</a></code> </p>
-          </td>
-          <td><p>Ocean colour colours for chlorophyll-a.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="coastmap.html">coastmap</a></code> </p>
-          </td>
-          <td><p>Coast map</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="commonprojections.html">commonprojections</a></code> </p>
-          </td>
-          <td><p>This is a list of often used projections, in PROJ.4</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="cpolarfiles.html">cpolarfiles</a></code> </p>
-          </td>
-          <td><p>Circumpolar ROMS files.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="currentsfiles.html">currentsfiles</a></code> </p>
-          </td>
-          <td><p>AVISO ocean currents files</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="derivaadcfiles.html">derivaadcfiles</a></code> </p>
-          </td>
-          <td><p>Load metadata and location of files of polar climatological and other summary environmental data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="derivaadcproducts.html">derivaadcproducts</a></code> </p>
-          </td>
-          <td><p>List all derived data products available through <code>readderivaadc</code></p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="derivicefiles.html">derivicefiles</a></code> </p>
-          </td>
-          <td><p>Load metadata and location of files of derived sea ice data products.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="distance_to_ice_edge.html">distance_to_ice_edge</a></code> <code><a href="distance_to_ice_edge.html">distance_to_ice</a></code> </p>
-          </td>
-          <td><p>Distance to a sea ice 'edge'.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="extract.html">extract</a></code> </p>
-          </td>
-          <td><p>extract</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fasticefiles.html">fasticefiles</a></code> </p>
-          </td>
-          <td><p>fast ice files</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="frontsmap.html">frontsmap</a></code> </p>
-          </td>
-          <td><p>Fronts map data for the Southern Ocean</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="ghrsstfiles.html">ghrsstfiles</a></code> </p>
-          </td>
-          <td><p>GHRSST L4 files</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="icefiles.html">icefiles</a></code> </p>
-          </td>
-          <td><p>Load metadata and location of files of sea ice data products.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="imagemap.html">imagemap</a></code> </p>
-          </td>
-          <td><p>Maps of places</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="ocfiles.html">ocfiles</a></code> </p>
-          </td>
-          <td><p>Load metadata and location of files of ocean colour data products.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="prodfiles.html">prodfiles</a></code> </p>
-          </td>
-          <td><p>Arrigo production files</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="raadtools.html">raadtools</a></code> </p>
-          </td>
-          <td><p>R tools for spatial data, extensions using raster to read and extract</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="rapid_responsefiles.html">rapid_responsefiles</a></code> </p>
-          </td>
-          <td><p>Load metadata and location of files of Rapid Response imagery.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="readamps_d1wind.html">readamps_d1wind</a></code> <code><a href="readamps_d1wind.html">readamps</a></code> </p>
-          </td>
-          <td><p>read AMPS data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="readchl32.html">readchl32</a></code> </p>
-          </td>
-          <td><p>Read R32 VIIRS files</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="readchla_johnson.html">readchla_johnson</a></code> </p>
-          </td>
-          <td><p>Read Johnson L3 bins</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="readchla.html">readchla</a></code> </p>
-          </td>
-          <td><p>Read Chlorophyll-a for the Southern Ocean</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="readcurr.html">readcurr</a></code> </p>
-          </td>
-          <td><p>Read AVISO ocean current data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="readderivaadc.html">readderivaadc</a></code> </p>
-          </td>
-          <td><p>Read data from polar climatological and other summary environmental data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="readderivice.html">readderivice</a></code> </p>
-          </td>
-          <td><p>Read data from derived sea ice data products.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="readfastice.html">readfastice</a></code> </p>
-          </td>
-          <td><p>Fast ice data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="readfronts.html">readfronts</a></code> </p>
-          </td>
-          <td><p>Read data from the Sokolov/Rintoul Southern Ocean fronts analysis.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="readghrsst.html">readghrsst</a></code> </p>
-          </td>
-          <td><p>Read GHRSST</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="readice.html">readice</a></code> </p>
-          </td>
-          <td><p>Read data from sea ice data products.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="readmld.html">readmld</a></code> </p>
-          </td>
-          <td><p>Mixed Layer Depth</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="readprod.html">readprod</a></code> </p>
-          </td>
-          <td><p>Arrigo production data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="readrapid_response.html">readrapid_response</a></code> </p>
-          </td>
-          <td><p>MODIS Rapid Response images</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="readssh.html">readssh</a></code> </p>
-          </td>
-          <td><p>read SSH/A</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="readsst.html">readsst</a></code> </p>
-          </td>
-          <td><p>Read OISST sea surface temperature data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="readtopo.html">readtopo</a></code> <code><a href="readtopo.html">readbathy</a></code> <code><a href="readtopo.html">topofile</a></code> </p>
-          </td>
-          <td><p>Topography data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="readwind.html">readwind</a></code> </p>
-          </td>
-          <td><p>readwind</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="sshfiles.html">sshfiles</a></code> </p>
-          </td>
-          <td><p>AVISO sea surface height / anomaly files</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="sstfiles.html">sstfiles</a></code> </p>
-          </td>
-          <td><p>OISST sea surface temperature files</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="sst.pal.html">sst.pal</a></code> </p>
-          </td>
-          <td><p>SST colours</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="timedateFrom.html">timedateFrom</a></code> </p>
-          </td>
-          <td><p>Stable conversion to POSIXct from character and Date</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="windfiles.html">windfiles</a></code> </p>
-          </td>
-          <td><p>Files containing NCEP2 wind vector data</p></td>
-        </tr>
-      </tbody>
-      </table>
-    </div>
+    <tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="allfiles.html">allfiles()</a></code> </p>
+        </td>
+        <td><p>Load raw list of all files available to raadtools from the data repository.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="amps_metadata.html">amps_metadata</a></code> </p>
+        </td>
+        <td><p>AMPS GRIB file metadata</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="amps_model_files.html">amps_model_files()</a></code> </p>
+        </td>
+        <td><p>AMPS files</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="aurora.html">aurora</a></code> </p>
+        </td>
+        <td><p>Aurora Australis voyage track</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="chl.pal.html">chl.pal()</a></code> </p>
+        </td>
+        <td><p>Ocean colour colours for chlorophyll-a.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="chlafiles.html">chlafiles()</a></code> </p>
+        </td>
+        <td><p>Chlorophyll-a</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="coastmap.html">coastmap()</a></code> </p>
+        </td>
+        <td><p>Coast map</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="commonprojections.html">commonprojections</a></code> </p>
+        </td>
+        <td><p>This is a list of often used projections, in PROJ.4</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="cpolarfiles.html">cpolarfiles()</a></code> </p>
+        </td>
+        <td><p>Circumpolar ROMS files.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="currentsfiles.html">currentsfiles()</a></code> </p>
+        </td>
+        <td><p>AVISO ocean currents files</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derivaadcfiles.html">derivaadcfiles()</a></code> </p>
+        </td>
+        <td><p>Load metadata and location of files of polar climatological and other summary environmental data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derivaadcproducts.html">derivaadcproducts()</a></code> </p>
+        </td>
+        <td><p>List all derived data products available through <code>readderivaadc</code></p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derivicefiles.html">derivicefiles()</a></code> </p>
+        </td>
+        <td><p>Load metadata and location of files of derived sea ice data products.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="distance_to_ice_edge.html">distance_to_ice_edge()</a></code> <code><a href="distance_to_ice_edge.html">distance_to_ice()</a></code> </p>
+        </td>
+        <td><p>Distance to a sea ice 'edge'.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract.html">extract(<i>&lt;function&gt;</i>,<i>&lt;data.frame&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>extract</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="fasticefiles.html">fasticefiles()</a></code> </p>
+        </td>
+        <td><p>fast ice files</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="frontsmap.html">frontsmap()</a></code> </p>
+        </td>
+        <td><p>Fronts map data for the Southern Ocean</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="ghrsstfiles.html">ghrsstfiles()</a></code> </p>
+        </td>
+        <td><p>GHRSST L4 files</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="icefiles.html">icefiles()</a></code> </p>
+        </td>
+        <td><p>Load metadata and location of files of sea ice data products.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="imagemap.html">imagemap()</a></code> </p>
+        </td>
+        <td><p>Maps of places</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="oc_sochla_files.html">oc_sochla_files()</a></code> </p>
+        </td>
+        <td><p>Derived ocean colour files</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="ocfiles.html">ocfiles()</a></code> </p>
+        </td>
+        <td><p>Load metadata and location of files of ocean colour data products.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="raadtools-package.html">raadtools-package</a></code> </p>
+        </td>
+        <td><p>R tools for spatial data, extensions using raster to read and extract</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="raadtools.html">raadtools()</a></code> </p>
+        </td>
+        <td><p>raadtools</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="rapid_responsefiles.html">rapid_responsefiles()</a></code> </p>
+        </td>
+        <td><p>Load metadata and location of files of Rapid Response imagery.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="read_amsr_ice.html">read_amsr_ice()</a></code> </p>
+        </td>
+        <td><p>Read AMSR sea ice data.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="read_oc_sochla.html">read_oc_sochla()</a></code> </p>
+        </td>
+        <td><p>Southern Ocean Chlorophyll-a</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="read_ugosa_daily.html">read_ugosa_daily()</a></code> </p>
+        </td>
+        <td><p>Altimetry products.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="readamps_d1wind.html">readamps_d1wind()</a></code> <code><a href="readamps_d1wind.html">readamps()</a></code> </p>
+        </td>
+        <td><p>read AMPS data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="readchla.html">readchla()</a></code> </p>
+        </td>
+        <td><p>Read Chlorophyll-a for the Southern Ocean</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="readcurr.html">readcurr()</a></code> </p>
+        </td>
+        <td><p>Read AVISO ocean current data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="readderivaadc.html">readderivaadc()</a></code> </p>
+        </td>
+        <td><p>Read data from polar climatological and other summary environmental data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="readderivice.html">readderivice()</a></code> </p>
+        </td>
+        <td><p>Read data from derived sea ice data products.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="readfastice.html">readfastice()</a></code> </p>
+        </td>
+        <td><p>Fast ice data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="readfronts.html">readfronts()</a></code> </p>
+        </td>
+        <td><p>Read data from the Sokolov/Rintoul Southern Ocean fronts analysis.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="readghrsst.html">readghrsst()</a></code> </p>
+        </td>
+        <td><p>Read GHRSST</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="readice.html">readice_daily()</a></code> <code><a href="readice.html">readice()</a></code> <code><a href="readice.html">readice_monthly()</a></code> </p>
+        </td>
+        <td><p>Read data from sea ice data products.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="readice_area.html">readice_area()</a></code> </p>
+        </td>
+        <td><p>Area of pixels in sea ice</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="readmld.html">readmld()</a></code> </p>
+        </td>
+        <td><p>Mixed Layer Depth</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="readrapid_response.html">readrapid_response()</a></code> </p>
+        </td>
+        <td><p>MODIS Rapid Response images</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="readssh.html">readssh()</a></code> </p>
+        </td>
+        <td><p>read SSH/A</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="readsst.html">readsst()</a></code> </p>
+        </td>
+        <td><p>Read OISST sea surface temperature data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="readtopo.html">readtopo()</a></code> <code><a href="readtopo.html">readbathy()</a></code> <code><a href="readtopo.html">topofile()</a></code> </p>
+        </td>
+        <td><p>Topography data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="readwind.html">readwind()</a></code> </p>
+        </td>
+        <td><p>readwind</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sshfiles.html">sshfiles()</a></code> </p>
+        </td>
+        <td><p>AVISO sea surface height / anomaly files</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sst.pal.html">sst.pal()</a></code> </p>
+        </td>
+        <td><p>SST colours</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sstfiles.html">sstfiles()</a></code> </p>
+        </td>
+        <td><p>OISST sea surface temperature files</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="timedateFrom.html">timedateFrom()</a></code> </p>
+        </td>
+        <td><p>Stable conversion to POSIXct from character and Date</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="windfiles.html">windfiles()</a></code> </p>
+        </td>
+        <td><p>Files containing NCEP2 wind vector data</p></td>
+      </tr>
+    </tbody>
+    </table>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -409,11 +449,14 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

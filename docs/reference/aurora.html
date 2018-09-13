@@ -18,13 +18,25 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Aurora Australis voyage track — aurora" />
+
+<meta property="og:description" content="Voyage track data from the Aurora Australis" />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,18 +59,46 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">raadtools</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">raadtools</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.4.0.9002</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="../articles/raadtools.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../articles/index.html">Articles</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/chlorophyll.html">Remotely Sensed Ocean Colour (Chlorophyll) in raadtools</a>
+    </li>
+    <li>
+      <a href="../articles/extract-extent.html">Environmental data from an extent with raadtools</a>
+    </li>
+    <li>
+      <a href="../articles/installraadtools.html">raadtools installation</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -70,6 +110,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -77,30 +118,30 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Aurora Australis voyage track</h1>
+    <small class="dont-index">Source: <a href='https://github.com/AustralianAntarcticDivision/raadtools/blob/master/R/raadtools.R'><code>R/raadtools.R</code></a></small>
+    <div class="hidden name"><code>aurora.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Voyage track data from the Aurora Australis</p>
     
+    </div>
 
         
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p><code>aurora</code> A data frame with 3 columns.  The columns
-represent</p><table><tr><td>
-<code>LONGITUDE_DEGEAST</code> </td>
-<td> Longitude values </td>
-</tr><tr><td>
-<code>LATITUDE_DEGNORTH</code> </td>
-<td> Latitude values </td>
-</tr><tr><td>
-<code>DATE_TIME_UTC</code> </td>
-<td> Date-time values (POSIXct) </td>
-</tr></table>
+represent</p><table class='table'>
+<tr><td><code>LONGITUDE_DEGEAST</code></td><td>Longitude values</td></tr>
+<tr><td><code>LATITUDE_DEGNORTH</code></td><td>Latitude values</td></tr>
+<tr><td><code>DATE_TIME_UTC</code></td><td>Date-time values (POSIXct)</td></tr>
+<tr><td></td><td><code>LONGITUDE_DEGEAST</code></td></tr>
+</table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -108,25 +149,25 @@ represent</p><table><tr><td>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p><a href = 'http://gcmd.nasa.gov/KeywordSearch/Metadata.do?Portal=amd_au&amp;MetadataView=Full&amp;MetadataType=0&amp;KeywordPath=&amp;OrigMetadataNode=AADC&amp;EntryId=201213030'>http://gcmd.nasa.gov/KeywordSearch/Metadata.do?Portal=amd_au&amp;MetadataView=Full&amp;MetadataType=0&amp;KeywordPath=&amp;OrigMetadataNode=AADC&amp;EntryId=201213030</a></p>
+    <p><a href='http://gcmd.nasa.gov/KeywordSearch/Metadata.do?Portal=amd_au&amp;MetadataView=Full&amp;MetadataType=0&amp;KeywordPath=&amp;OrigMetadataNode=AADC&amp;EntryId=201213030'>http://gcmd.nasa.gov/KeywordSearch/Metadata.do?Portal=amd_au&amp;MetadataView=Full&amp;MetadataType=0&amp;KeywordPath=&amp;OrigMetadataNode=AADC&amp;EntryId=201213030</a></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>not_run</span>({
-  <span class='co'>## These data were obtained like this</span>
-  <span class='no'>base</span> <span class='kw'>&lt;-</span> <span class='st'>"http://gcmd.gsfc.nasa.gov/KeywordSearch/RedirectAction.do?target"</span>
-  <span class='no'>b1</span> <span class='kw'>&lt;-</span>   <span class='st'>"=F4t70bSf87FLsT1TNxR9TSPS74xbHAdheLQcH5Z5PMmgzJ9t%2Bi%2FEs1e8Fl61"</span>
-  <span class='no'>b2</span> <span class='kw'>&lt;-</span>   <span class='st'>"MPhKjo9qxb2f9wyA%0D%0AoE1kjJ8AMcpFlMMRH7Z6umgNLsGMnWPeQdU7mZHMp%2"</span>
-  <span class='no'>b3</span> <span class='kw'>&lt;-</span>   <span class='st'>"FtqMpahIrde%2F%2B9%2FZWAkIFrh2bhIiNfl4I9J%0D%0A5KBX9g5Wf7I9JdOgqY"</span>
-  <span class='no'>b4</span> <span class='kw'>&lt;-</span>   <span class='st'>"bDdpj0iM1K%2BA%3D%3D"</span>
-  <span class='no'>aurora2013</span> <span class='kw'>&lt;-</span> <span class='fu'>read.csv</span>(<span class='fu'>paste</span>(<span class='no'>base</span>, <span class='no'>b1</span>, <span class='no'>b2</span>, <span class='no'>b3</span>, <span class='no'>b4</span>, <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>""</span>), <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-  <span class='no'>aurora2013</span>$<span class='no'>DATE_TIME_UTC</span> <span class='kw'>&lt;-</span> <span class='fu'>as.POSIXct</span>(<span class='no'>aurora2013</span>$<span class='no'>DATE_TIME_UTC</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>"GMT"</span>)
-  <span class='co'>## get a daily sample</span>
-  <span class='no'>aurora</span> <span class='kw'>&lt;-</span> <span class='no'>aurora2013</span>[,<span class='fu'>c</span>(<span class='st'>"LONGITUDE_DEGEAST"</span>, <span class='st'>"LATITUDE_DEGNORTH"</span>, <span class='st'>"DATE_TIME_UTC"</span>)]
-  <span class='no'>aurora</span> <span class='kw'>&lt;-</span> <span class='no'>aurora</span>[!<span class='fu'>duplicated</span>(<span class='fu'>format</span>( <span class='no'>aurora</span>$<span class='no'>DATE_TIME_UTC</span>, <span class='st'>"%Y-%j"</span>)), ]
-  <span class='no'>aurora</span> <span class='kw'>&lt;-</span> <span class='no'>aurora</span>[<span class='fu'>order</span>(<span class='no'>aurora</span>$<span class='no'>DATE_TIME_UTC</span>), ]
-  <span class='fu'>save</span>(<span class='no'>aurora</span>, <span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>"aurora.rda"</span>)
-})</div></pre>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'>## These data were obtained like this</span>
+<span class='no'>base</span> <span class='kw'>&lt;-</span> <span class='st'>"http://gcmd.gsfc.nasa.gov/KeywordSearch/RedirectAction.do?target"</span>
+<span class='no'>b1</span> <span class='kw'>&lt;-</span>   <span class='st'>"=F4t70bSf87FLsT1TNxR9TSPS74xbHAdheLQcH5Z5PMmgzJ9t%2Bi%2FEs1e8Fl61"</span>
+<span class='no'>b2</span> <span class='kw'>&lt;-</span>   <span class='st'>"MPhKjo9qxb2f9wyA%0D%0AoE1kjJ8AMcpFlMMRH7Z6umgNLsGMnWPeQdU7mZHMp%2"</span>
+<span class='no'>b3</span> <span class='kw'>&lt;-</span>   <span class='st'>"FtqMpahIrde%2F%2B9%2FZWAkIFrh2bhIiNfl4I9J%0D%0A5KBX9g5Wf7I9JdOgqY"</span>
+<span class='no'>b4</span> <span class='kw'>&lt;-</span>   <span class='st'>"bDdpj0iM1K%2BA%3D%3D"</span>
+<span class='no'>aurora2013</span> <span class='kw'>&lt;-</span> <span class='fu'>read.csv</span>(<span class='fu'>paste</span>(<span class='no'>base</span>, <span class='no'>b1</span>, <span class='no'>b2</span>, <span class='no'>b3</span>, <span class='no'>b4</span>, <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>""</span>), <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='no'>aurora2013</span>$<span class='no'>DATE_TIME_UTC</span> <span class='kw'>&lt;-</span> <span class='fu'>as.POSIXct</span>(<span class='no'>aurora2013</span>$<span class='no'>DATE_TIME_UTC</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>"GMT"</span>)
+<span class='co'>## get a daily sample</span>
+<span class='no'>aurora</span> <span class='kw'>&lt;-</span> <span class='no'>aurora2013</span>[,<span class='fu'>c</span>(<span class='st'>"LONGITUDE_DEGEAST"</span>, <span class='st'>"LATITUDE_DEGNORTH"</span>, <span class='st'>"DATE_TIME_UTC"</span>)]
+<span class='no'>aurora</span> <span class='kw'>&lt;-</span> <span class='no'>aurora</span>[!<span class='fu'>duplicated</span>(<span class='fu'>format</span>( <span class='no'>aurora</span>$<span class='no'>DATE_TIME_UTC</span>, <span class='st'>"%Y-%j"</span>)), ]
+<span class='no'>aurora</span> <span class='kw'>&lt;-</span> <span class='no'>aurora</span>[<span class='fu'>order</span>(<span class='no'>aurora</span>$<span class='no'>DATE_TIME_UTC</span>), ]
+<span class='fu'>save</span>(<span class='no'>aurora</span>, <span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>"aurora.rda"</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -150,11 +191,14 @@ represent</p><table><tr><td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

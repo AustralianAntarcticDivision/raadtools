@@ -98,7 +98,7 @@
 #' \item{lake_superior}{Bathymetry of Lake Superior \url{https://www.ngdc.noaa.gov/mgg/greatlakes/superior.html}}
 #' \item{ramp}{Radarsat Antarctic digital elevation model V2 \url{https://github.com/AustralianAntarcticDivision/blueant#radarsat-antarctic-digital-elevation-model-v2}}
 #' \item{ga_srtm}{Digital Elevation Model (DEM) of Australia with 1 Second Grid}
-#' \item{rema_100m}{Reference Elevation Model of Antartica (REMA) for the peninsula, see `read_rema_tiles` for the index}
+#' \item{rema_100m, rema_8m}{Reference Elevation Model of Antartica (REMA) for the peninsula, see `read_rema_tiles` for the index}
 #' }
 #' @title Topography data
 #' @name readtopo
@@ -124,7 +124,8 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
                               "lake_superior", 
                               "ramp", "ibcso_is", "ibcso_bed", 
                               "ga_srtm", 
-                              "rema_100m"),
+                              "rema_100m", 
+                              "rema_8m"),
                      polar = FALSE,
                      lon180 = TRUE,
                      xylim = NULL,
@@ -149,6 +150,10 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
   if (topo == "ibcso_bed") projection(res) <- "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
   
   if (topo == "cryosat2") projection(res) <- "+proj=stere +lat_0=-90 +lat_ts=-71 +datum=WGS84 +x_0=0 +y_0=0"
+  
+  if (!is.null(xylim) && topo == "rema_8m") {
+    stop("'xylim' is not supported for rema_8m, discuss with local experts for other options (there are many)")
+  }
   if (!is.null(xylim)) res <- crop(res, xylim)
   res
 }
@@ -169,13 +174,18 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
                               "lake_superior", 
                               "ramp", "ibcso_is", "ibcso_bed", 
                               "ga_srtm", 
-                              "rema_100m"),
+                              "rema_100m", 
+                              "rema_8m"),
                      polar = FALSE,
                      lon180 = TRUE,
                      ...) {
   topo <- match.arg(topo)
   if (topo == "ibcso") topo <- "ibcso_is" ## ??
   
+  if (topo == "rema_8m") {
+    r8m_files <- raadfiles::rema_8m_files()
+    warning(sprintf("rema_8m is a very large **virtual** raster consisting of many (%i) files on disk,\n beware of making subsets that will pull a lot of data into memory", nrow(r8m_files)))
+  }
   if (topo == "smith_sandwell") {
     topopath <- if (lon180) raadfiles::smith_sandwell_lon180_files()$fullname else raadfiles::smith_sandwell_files()$fullname
   } else {
@@ -198,7 +208,9 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
            ramp = raadfiles::ramp_files()$fullname, 
            ## FIXME
            ga_srtm = "/rdsi/PUBLIC/raad/data/elvis.ga.gov.au/elevation/1sec-srtm/a05f7893-0050-7506-e044-00144fdd4fa6"  , 
-           rema_100m = raadfiles::rema_100m_files()$fullname[1L]
+           rema_100m = raadfiles::rema_100m_files()$fullname[1L], 
+           rema_8m =   file.path(dirname(dirname(r8m_files$fullname[1])), "rema_mosaic_8m_dem.vrt")
+           
            
            )
   }

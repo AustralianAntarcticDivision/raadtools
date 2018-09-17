@@ -11,10 +11,10 @@ sstfiles <- function(time.resolution = c("daily","monthly"), ...) {
  # datadir <- getOption("default.datadir")
   time.resolution <- match.arg(time.resolution)
   if (time.resolution == "daily") {
-    ## maintain the traditional raad order
-    files <- raadfiles::oisst_daily_files()[, c("file", "date", "fullname")]
+    
+    files <- raadfiles::oisst_daily_files()
   } else {
-    files <- raadfiles::oisst_monthly_files()[, c("file", "date", "fullname", "band")]
+    files <- raadfiles::oisst_monthly_files()
   }
   files
 }

@@ -124,7 +124,7 @@ readice_daily <- function(date,
 #  time.resolution <- match.arg(time.resolution)
  product <- match.arg(product)
  hemisphere <- match.arg(hemisphere)
- if (time.resolution != "daily") warning("readice for non-daily data is deprecated, see readice_monthly() and similar for specific functions")
+ if (time.resolution != "daily") stop("readice for non-daily data is defunct, see 'readice_monthly()', 'readice_daily()' and similarly specific functions")
   time.resolution <- match.arg(time.resolution)
   if (!is.null(inputfiles)) {
     files <- inputfiles
@@ -245,7 +245,7 @@ read_ice_internal <- function(files, hemisphere, rescale, setNA, xylim = NULL,  
   r <- stack(r)
   
   projection(r) <- prj
-  names(r) <- basename(files$file)
+  names(r) <- basename(files$fullname)
   r <- setZ(r, files$date)
   
   if ("filename" %in% names(list(...))) r <- writeRaster(r, ...)

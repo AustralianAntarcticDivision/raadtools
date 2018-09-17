@@ -87,19 +87,8 @@ readwrf0 <- function(x, band = 1) {
 #' @importFrom dplyr %>% arrange filter mutate
 #' @export
 #' @section gdalinfo
-#' @importFrom raadfiles amps_d1files amps_d2files
-#' @export amps_d1files amps_d2files
-amps_model_files <- function(data.source = "", time.resolution = "4hourly", ...) {
-  files <- raadfiles::amps_files()
-  #datadir <- getOption("default.datadir")
-  files$fullname <- file.path(files$root, files$file)
-    dplyr::transmute(files, hour = substr(basename(fullname), 20, 22),
-           model = substr(basename(fullname), 9, 10),
-           date = as.POSIXct(strptime(basename(files$fullname), "%Y%m%d%H"), tz = "GMT") + 
-             as.integer(hour) * 3600, fullname, file) 
-  
-  
-}
+#' @importFrom raadfiles amps_d1files amps_d2files amps_model_files
+#' @export amps_d1files amps_d2files amps_model_files
 amps_d1_icefiles <- function(data.source = "", time.resolution = "12hourly", ...) {
   files <- amps_model_files(data.source = data.source, time.resolution = time.resolution,  ...)
   ## TODO normalize file set

@@ -78,7 +78,7 @@ read_copernicus_daily <- function(date, xylim = NULL, latest = TRUE, returnfiles
       date <- min(files$date)
     }  
   }
-    date <- timedateFrom(date)
+  date <- timedateFrom(date)
   files <- .processFiles(date, files, "daily")
   read0 <- function(x, varname) raster(x)
   

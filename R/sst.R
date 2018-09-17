@@ -56,7 +56,7 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
                       xylim = NULL, lon180 = TRUE,
                       varname = c("sst", "anom", "err", "ice"),
                       setNA = TRUE,
-                      latest = FALSE,
+                      latest = TRUE,
                       returnfiles = FALSE,  ..., inputfiles = NULL) {
   time.resolution <- match.arg(time.resolution)
   varname <- match.arg(varname)

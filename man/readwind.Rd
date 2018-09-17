@@ -6,7 +6,7 @@
 \usage{
 readwind(date, time.resolution = c("6hourly"), xylim = NULL,
   lon180 = TRUE, magonly = FALSE, dironly = FALSE, uonly = FALSE,
-  vonly = FALSE, latest = FALSE, returnfiles = FALSE, ...,
+  vonly = FALSE, latest = TRUE, returnfiles = FALSE, ...,
   inputfiles = NULL)
 }
 \arguments{

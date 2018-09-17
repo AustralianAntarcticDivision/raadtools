@@ -6,7 +6,7 @@
 \usage{
 readsst(date, time.resolution = c("daily", "monthly"), xylim = NULL,
   lon180 = TRUE, varname = c("sst", "anom", "err", "ice"),
-  setNA = TRUE, latest = FALSE, returnfiles = FALSE, ...,
+  setNA = TRUE, latest = TRUE, returnfiles = FALSE, ...,
   inputfiles = NULL)
 }
 \arguments{

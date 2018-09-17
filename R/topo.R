@@ -98,7 +98,7 @@
 #' \item{lake_superior}{Bathymetry of Lake Superior \url{https://www.ngdc.noaa.gov/mgg/greatlakes/superior.html}}
 #' \item{ramp}{Radarsat Antarctic digital elevation model V2 \url{https://github.com/AustralianAntarcticDivision/blueant#radarsat-antarctic-digital-elevation-model-v2}}
 #' \item{ga_srtm}{Digital Elevation Model (DEM) of Australia with 1 Second Grid}
-#' \item{rema_100m, rema_8m}{Reference Elevation Model of Antartica (REMA) for the peninsula, see `read_rema_tiles` for the index}
+#' \item{rema_1km, rema_200m, rema_100m, rema_8m}{Reference Elevation Model of Antartica (REMA) for the peninsula, see `read_rema_tiles` for the index}
 #' }
 #' @title Topography data
 #' @name readtopo
@@ -124,6 +124,8 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
                               "lake_superior", 
                               "ramp", "ibcso_is", "ibcso_bed", 
                               "ga_srtm", 
+                              "rema_1km",
+                              "rema_200m",
                               "rema_100m", 
                               "rema_8m"),
                      polar = FALSE,
@@ -174,6 +176,8 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
                               "lake_superior", 
                               "ramp", "ibcso_is", "ibcso_bed", 
                               "ga_srtm", 
+                              "rema_1km",
+                              "rema_200m", 
                               "rema_100m", 
                               "rema_8m"),
                      polar = FALSE,
@@ -186,6 +190,7 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
     r8m_files <- raadfiles::rema_8m_files()
     warning(sprintf("rema_8m is a very large **virtual** raster consisting of many (%i) files on disk,\n beware of making subsets that will pull a lot of data into memory", nrow(r8m_files)))
   }
+  allf <- allfiles()
   if (topo == "smith_sandwell") {
     topopath <- if (lon180) raadfiles::smith_sandwell_lon180_files()$fullname else raadfiles::smith_sandwell_files()$fullname
   } else {
@@ -194,9 +199,9 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
            gebco_08 = raadfiles::gebco08_files()$fullname,
            gebco_14 = raadfiles::gebco14_files()$fullname, 
            ibcso_is = dplyr::filter(raadfiles::ibcso_files(all = TRUE), 
-                                    grepl("_is.*tif$", file))$fullname,
+                                    grepl("_is.*tif$", basename(.data$fullname)))$fullname,
            ibcso_bed = dplyr::filter(raadfiles::ibcso_files(all = TRUE), 
-                                    grepl("_bed.*grd$", file))$fullname,
+                                    grepl("_bed.*grd$", basename(.data$fullname)))$fullname,
            etopo1 = raadfiles::etopo1_files()$fullname, 
            etopo2 = raadfiles::etopo2_files()$fullname, 
            kerguelen = raadfiles::kerguelen_files()$fullname, 
@@ -207,8 +212,10 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
            lake_superior = raadfiles::lakesuperior_files()$fullname, 
            ramp = raadfiles::ramp_files()$fullname, 
            ## FIXME
-           ga_srtm = "/rdsi/PUBLIC/raad/data/elvis.ga.gov.au/elevation/1sec-srtm/a05f7893-0050-7506-e044-00144fdd4fa6"  , 
+           ga_srtm = grep("1sec-srtm/a05f7893-0050-7506-e044-00144fdd4fa6", allf$fullname, value = TRUE), 
            rema_100m = raadfiles::rema_100m_files()$fullname[1L], 
+           rema_200m = raadfiles::rema_200m_files()$fullname[1L], 
+           rema_1km = raadfiles::rema_1km_files()$fullname[1L], 
            rema_8m =   file.path(dirname(dirname(r8m_files$fullname[1])), "rema_mosaic_8m_dem.vrt")
            
            

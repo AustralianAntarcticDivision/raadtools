@@ -11,16 +11,15 @@
 ##' @export
 windfiles <-
   function(data.source = "", time.resolution = c("6hourly"),  ...) {
-    datadir <- getOption("default.datadir")
     time.resolution <- match.arg(time.resolution)
     wf <- raadfiles::ncep2_uwnd_6hr_files() %>% dplyr::rename(ufullname = fullname)
-    wfU <- .expandFileDateList_FAST(wf$ufullname)
 
-     wf <- tibble::tibble(ufile = gsub("^/", "", gsub(datadir, "", wfU$file)), 
-                      vfile = gsub("uwnd", "vwnd", gsub("^/", "", gsub(datadir, "", wfU$file))), 
-                      ufullname = wfU$file, 
+    wfU <- .expandFileDateList_FAST(wf$ufullname, wf$root)
+
+     wf <- tibble::tibble(date = wfU$date, ufullname = wfU$file, 
                       vfullname = gsub("uwnd", "vwnd", wfU$file), 
-                      date = wfU$date, band = wfU$band)
+                      band = wfU$band, 
+                      root = wfU$root)
      
 wf 
   }
@@ -77,7 +76,7 @@ readwind <- function(date, time.resolution = c("6hourly"), xylim = NULL, lon180 
                      magonly = FALSE, dironly = FALSE,
                      uonly = FALSE,
                      vonly = FALSE,
-                     latest = FALSE,
+                     latest = TRUE,
                      returnfiles = FALSE, ..., 
                      inputfiles = NULL) {
   

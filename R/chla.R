@@ -174,8 +174,6 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
                       product = c("johnson", "oceancolor"),
                       platform = c("MODISA", "SeaWiFS"), ...) {
   
-  #if (product == "oceancolor") stop('sorry MODISA not currently supported')
-  ##datadir <- getOption("default.datadir")
   product <- match.arg(product)
   platform <- match.arg(platform)
   time.resolution <- match.arg(time.resolution)
@@ -196,55 +194,6 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
     dates <- xfs$date
     cfiles3 <- xfs$fullname
   }
-  chlf <- data.frame(fullname= cfiles3, date = dates,  stringsAsFactors = FALSE)[order(dates), ]
+  chlf <- tibble::tibble(fullname= cfiles3, date = dates)[order(dates), ]
   chlf
 }
-
-# .updatechlafiles <- function(datadir = getOption("default.datadir"), preferModis = TRUE) {
-#   tr <- c(monthly = "monthly", weekly = "8d")
-#   
-#   
-#   ## first johnson
-#   for (i in seq_along(tr)) {
-#     dirpath <- file.path("chl", "johnson", c("modis", "seawifs"), tr[i])
-#     
-#     fs <- gsub(datadir, "", list.files(file.path(datadir, dirpath), full.names = TRUE))
-#     fs <- gsub("^/", "", fs)
-#     
-#     if (!length(fs) > 0) {
-#       warning(sprintf("no files fould for %s at %s", tr[i], dirpath))
-#       next;
-#     }
-#     dates <- timedateFrom(strptime(substr(basename(fs), 2, 8), "%Y%j"))
-#     
-#     
-#     chlf <- data.frame(file = fs, date = dates,  stringsAsFactors = FALSE)[order(dates), ]
-#     ## implementing preferModis
-#     dupes <- which(duplicated(chlf$date)) - !preferModis
-#     if (length(dupes) > 0) chlf <- chlf[-dupes, ]
-#     save(chlf, file = file.path(datadir, "cache", sprintf("johnson_%s_chlafiles.Rdata", names(tr[i]))))
-#   }
-#   ## now oceancolor
-#   
-#   for (i in seq_along(tr)) {
-#     dirpath <- file.path("chl", "oceancolor", c("modis", "seawifs"), tr[i], "netcdf")
-#     
-#     fs <- list.files(file.path(datadir, dirpath), full.names = TRUE)
-#     
-#     if (!length(fs) > 0) {
-#       warning(sprintf("no files fould for %s at %s", tr[i], dirpath))
-#       next;
-#     }
-#     xfs <- .expandFileDateList(fs)
-#     fs <- gsub(datadir, "", xfs$file)
-#     fs <- gsub("^/", "", fs)
-#     
-#     dates <- xfs$date  ##timedateFrom(strptime(substr(basename(fs), 2, 8), "%Y%j"))
-#     chlf <- data.frame(file = fs, date = dates,  band = xfs$band, stringsAsFactors = FALSE)[order(dates), ]
-#     ## implementing preferModis
-#     dupes <- which(duplicated(chlf$date)) - !preferModis
-#     if (length(dupes) > 0) chlf <- chlf[-dupes, ]
-#     save(chlf, file = file.path(datadir, "cache", sprintf("oceancolor_%s_chlafiles.Rdata", names(tr[i]))))
-#   }
-#   
-# }

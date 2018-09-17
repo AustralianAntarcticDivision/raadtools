@@ -58,14 +58,16 @@ read_oc_sochla_day <- function(file, bins = NULL) {
 oc_sochla_files <- function(time.resolution = c("daily"), 
                             product = c("MODISA", "SeaWiFS")) {
   product <- match.arg(product)
-  pat <- sprintf("^%s_.*.rds$", c(MODISA = "modis", SeaWiFS = "seawifs")[product])
-    fs <- data.frame(fullname = list.files(pattern = pat, file.path(getOption("default.datadir"), 
-sprintf("data_local/acecrc.org.au/ocean_colour/%s_daily", c(MODISA = "modis", SeaWiFS = "seawifs")[product])), full.names = TRUE, recursive = TRUE), 
-                     stringsAsFactors = FALSE)
-    fs$date <- as.POSIXct(strptime(basename(fs$fullname), 
+  pat <- ".rds$"
+  pat2 <- sprintf("acecrc.org.au/ocean_colour/%s_daily", c(MODISA = "modis", SeaWiFS = "seawifs")[product])
+  fs <- dplyr::filter(allfiles(), stringr::str_detect(.data$file, pat2)) %>% 
+    dplyr::filter(stringr::str_detect(.data$file, pat)) %>% 
+    dplyr::transmute(fullname = file.path(.data$root, .data$file), root = .data$root)
+  
+    fs[["date"]] <- as.POSIXct(strptime(basename(fs$fullname), 
                                    sprintf("%s_%s", c(MODISA = "modis", SeaWiFS = "seawifs")[product], "%Y%j"), tz = "GMT"))
-    fs$file <- gsub(sprintf("%s/", getOption("default.datadir")), "", fs$fullname)
-    tibble::as_tibble(fs)
+    fs <- fs[order(fs$date), ]
+   fs[c("date", "fullname", "root")]
 }
   
 chla_johnsonfiles <- function(...) {

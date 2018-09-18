@@ -1,4 +1,6 @@
-# raadtools dev
+# raadtools 0.5.0
+
+* Now using new `raadfiles` approach. 
 
 * New function to return polar coastline with 'polar_map' function. 
 

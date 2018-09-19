@@ -26,10 +26,9 @@ set_data_roots <- function(..., build_cache_if_missing = TRUE, refresh_cache = F
         raadfiles.data.filedbs <- raadfiles::raad_filedb_path(raadfiles.data.roots)
         miss <- !file.exists(raadfiles.data.filedbs)
         if ((build_cache_if_missing && any(miss)) || refresh_cache) {
-                ## this will build cache for ALL roots
-                raadfiles:::run_this_function_to_build_raad_cache()
-                have_loaded <- TRUE
-            }
+            ## this will build cache for ALL roots
+            raadfiles:::run_this_function_to_build_raad_cache()
+            have_loaded <- TRUE
         }
         ## load cache info into memory if not already done so above
         if (!have_loaded) raadfiles::set_raad_filenames()

@@ -9,7 +9,7 @@
 #' @examples
 #' cpolarfiles()
 cpolarfiles <- function(...) {
-  dplyr::transmute(dplyr::filter(raadfiles:::get_raw_raad_filenames(), 
+  dplyr::transmute(dplyr::filter(allfiles(), 
                               grepl("s_corney/cpolar", file)),
                 fullname = file.path(root, file), 
                 date = as.POSIXct(strptime(sprintf("200%i-01", as.integer(substr(basename(fullname), 12, 14))+800), "%Y%m-%d"), tz = "GMT"))

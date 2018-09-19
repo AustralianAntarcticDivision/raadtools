@@ -18,7 +18,7 @@ rapid_responsefiles <- function(product = c("aqua", "terra"), ...) {
 
   product <- match.arg(product)
   ## this should be in raadfiles, but see what happens with https://github.com/AustralianAntarcticDivision/bowerbird/issues/1
-  files <- raadfiles:::get_raw_raad_filenames()
+  files <- allfiles()
   files <- files %>% 
     dplyr::filter(stringr::str_detect(.data$file, "lance-modis.eosdis.nasa.gov")) %>% 
     dplyr::filter(stringr::str_detect(.data$file, "Antarctica")) %>% 

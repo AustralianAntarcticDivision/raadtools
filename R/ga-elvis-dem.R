@@ -1,10 +1,6 @@
 # https://ecat.ga.gov.au/geonetwork/srv/eng/search#!aac46307-fce8-449d-e044-00144fdd4fa6
 ## https://s3-ap-southeast-2.amazonaws.com/elvis.ga.gov.au/elevation/1sec-srtm/a05f7893-0050-7506-e044-00144fdd4fa6.zip
 
-##raadfiles:::get_raw_raad_filenames() %>% 
-##  dplyr::filter(stringr::str_detect(file, 
-#                      "a05f7893-0050-7506-e044-00144fdd4fa6"))
-
 
 ## for subsetting, this seems to run in reasonable time
 ## the internal tiling is 512 * 4 so as long as

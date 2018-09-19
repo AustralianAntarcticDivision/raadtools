@@ -66,7 +66,7 @@
 }
 
 .smithsandwellvrt <- function(lon180 = FALSE) {
-  all_files <- raadfiles:::get_raw_raad_filenames() %>% mutate(fullname = file.path(root, file)) %>% dplyr::pull(fullname)
+  all_files <- allfiles() %>% mutate(fullname = file.path(root, file)) %>% dplyr::pull(fullname)
   binfile <- .smithsandwellraw(all_files)
   vrtfile1 <- file.path(dirname(binfile), ".vrt", gsub(".img$", ".vrt", basename(binfile)))
   vrtfile2 <- file.path(dirname(binfile), ".vrt",gsub(".img$", "_atlantic.vrt", basename(binfile)))

@@ -1,5 +1,7 @@
 # raadtools 0.5.0
 
+* Removed dependency on 'sosoc/croc' package, by internalizing the imported functions. 
+
 * Now using new `raadfiles` approach. 
 
 * New function to return polar coastline with 'polar_map' function. 

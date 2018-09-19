@@ -69,6 +69,6 @@ The following data sets are available using the argument \code{topo}.
 \item{lake_superior}{Bathymetry of Lake Superior \url{https://www.ngdc.noaa.gov/mgg/greatlakes/superior.html}}
 \item{ramp}{Radarsat Antarctic digital elevation model V2 \url{https://github.com/AustralianAntarcticDivision/blueant#radarsat-antarctic-digital-elevation-model-v2}}
 \item{ga_srtm}{Digital Elevation Model (DEM) of Australia with 1 Second Grid}
-\item{rema_100m, rema_8m}{Reference Elevation Model of Antartica (REMA) for the peninsula, see `read_rema_tiles` for the index}
+\item{rema_1km, rema_200m, rema_100m, rema_8m}{Reference Elevation Model of Antartica (REMA) for the peninsula, see `read_rema_tiles` for the index}
 }
 }

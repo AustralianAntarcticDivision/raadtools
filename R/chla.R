@@ -54,7 +54,8 @@ readchla <- function(date, product = c("MODISA", "SeaWiFS"),
 bin_chl <- function(bins, value, NROWS, gridmap) {
   bins <- tibble(bin_num = bins, value = value)
   ll <- coordinates(gridmap)
-  bins <- tibble(bin_num = croc::lonlat2bin(ll[,1], ll[, 2], NUMROWS = NROWS), 
+  ## removed dep on sosoc/croc 2018-0919
+  bins <- tibble(bin_num = .lonlat2_bin(ll[,1], ll[, 2], NUMROWS = NROWS), 
                  gridcell = seq_len(ncell(gridmap))) %>% 
     dplyr::inner_join(bins, "bin_num")
   gridmap[bins[["gridcell"]]] <- bins[["value"]]
@@ -81,11 +82,13 @@ readchla_mean <- function(date,
   }  
   
   ## here read_oc_sochla should take the bins it needs
-  init <- croc::initbin(product2nrows(product))
+  ## removed dep on sosoc/croc 2018-09-19
+  init <- .init_bin(product2nrows(product))
   if (is.null(xylim)) {
     bin_sub <- NULL
   } else {
-    bin_sub <- tibble::tibble(bin_num = croc::crop_init(init, xylim))
+    ## removed dep on sosoc/croc 2018-09-19
+    bin_sub <- tibble::tibble(bin_num = .crop_init(init, xylim))
   }
  # bins <- purrr::map_df(date, read_oc_sochla, bins = bin_sub, product = product) %>% 
   

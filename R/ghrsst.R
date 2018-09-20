@@ -14,7 +14,7 @@
 #' @return data.frame
 #' @export
 ghrsstfiles <- function() {
-  raadfiles::ghrsst_daily_files()[, c("file", "date", "fullname")]
+  raadfiles::ghrsst_daily_files()
 }
 
 #' Read GHRSST
@@ -36,7 +36,7 @@ readghrsst  <- function (date, time.resolution = c("daily"),
                          xylim = NULL, lon180 = TRUE,
                          varname = c("analysed_sst", "analysis_error", "mask", "sea_ice_fraction"),
                          setNA = TRUE,
-                         latest = FALSE,
+                         latest = TRUE,
                          returnfiles = FALSE, ..., inputfiles = NULL) {
   if (!lon180) stop("only lon180 is supported")
   time.resolution <- match.arg(time.resolution)

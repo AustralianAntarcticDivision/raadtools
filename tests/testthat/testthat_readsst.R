@@ -92,9 +92,9 @@ test_that("another example works", {
 
 
 test_that("expected arrangement of file data frame", { 
-          expect_that(names(sstfiles()), equals(c("file", "date", "fullname"))) 
+          expect_that(names(sstfiles()), equals(c("date", "fullname", "root"))) 
           expect_that(names(sstfiles(time.resolution = "monthly")), 
-                      equals(c("file", "date", "fullname", "band")))
+                      equals(c("date", "fullname", "band", "root")))
           
   })
 

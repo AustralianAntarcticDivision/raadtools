@@ -26,7 +26,7 @@ NULL
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
 ##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
 ##' @param setNA mask out land values (only applies to monthly time.resolution)
-##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
+##' @param latest if TRUE (and date not supplied) return the latest time available
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... passed in to brick, primarily for \code{filename}
 ##' @param inputfiles input the files data base to speed up initialization

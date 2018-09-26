@@ -68,8 +68,8 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
   }
   if (returnfiles)
     return(files)
-  if (missing(date)) date <- min(files$date)
-  if (latest) date <- max(files$date)
+  if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
+  
   date <- timedateFrom(date)
   files <- .processFiles(date, files, time.resolution)
   nfiles <- nrow(files)

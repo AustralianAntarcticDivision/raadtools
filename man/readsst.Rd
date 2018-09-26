@@ -23,7 +23,7 @@ readsst(date, time.resolution = c("daily", "monthly"), xylim = NULL,
 
 \item{setNA}{mask out land values (only applies to monthly time.resolution)}
 
-\item{latest}{if TRUE return the latest time available, ignoring the 'date' argument}
+\item{latest}{if TRUE (and date not supplied) return the latest time available}
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 
@@ -39,7 +39,7 @@ readsst(date, time.resolution = c("daily", "monthly"), xylim = NULL,
   \item{time.resolution}{time resoution data to read, daily or monthly}
   \item{lon180}{defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]}
   \item{setNA}{mask out land values (only applies to monthly time.resolution)}
-  \item{latest}{if TRUE return the latest time available, ignoring the 'date' argument}
+  \item{latest}{if TRUE (and date not supplied) return the latest time available}
   \item{returnfiles}{ignore options and just return the file names and dates}
 }}
 }

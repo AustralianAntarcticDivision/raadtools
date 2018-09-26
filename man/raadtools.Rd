@@ -16,7 +16,7 @@ raadtools(date, time.resolution = "daily", lon180 = TRUE,
 
 \item{setNA}{mask out land values (only applies to monthly time.resolution)}
 
-\item{latest}{if TRUE return the latest time available, ignoring the 'date' argument}
+\item{latest}{if TRUE (and date not supplied) return the latest time available}
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 

@@ -6,7 +6,7 @@
 \usage{
 readghrsst(date, time.resolution = c("daily"), xylim = NULL,
   lon180 = TRUE, varname = c("analysed_sst", "analysis_error", "mask",
-  "sea_ice_fraction"), setNA = TRUE, latest = FALSE,
+  "sea_ice_fraction"), setNA = TRUE, latest = TRUE,
   returnfiles = FALSE, ..., inputfiles = NULL)
 }
 \arguments{

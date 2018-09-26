@@ -28,19 +28,13 @@ wf
 ##'
 ##' Read wind data
 ##' @title readwind
-##' @param date date or dates of data to read, see Details
-##' @param time.resolution time resolution to read
+##' @inheritParams raadtools
+##' @inheritDotParams raadtools
 ##' @param magonly return just the magnitude from the U and V
 ##' components
 ##' @param dironly return just the direction from the U and V, in degrees N=0, E=90, S=180, W=270
 ##' @param uonly return just the horizontal component of velocity, U
 ##' @param vonly return just the vertical component of velocity, V
-##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
-##' @param returnfiles ignore options and just return the file names and dates
-##' @param xylim crop
-##' @param lon180 Pacific or Atlantic
-##' @param ... arguments passed to \code{\link[raster]{brick}}, i.e. \code{filename}
-##' @param inputfiles input the files data base to speed up initialization
 ##' @return raster object
 ##' @details The \code{inputfiles} argument may be used to speed up individual reads, see the examples. Note that 
 ##' this must then ignore the \code{time.resolution} argument, which is also set by \code{windfiles} - and no
@@ -85,20 +79,11 @@ readwind <- function(date, time.resolution = c("6hourly"), xylim = NULL, lon180 
 
   if (is.null(inputfiles)) {
     #files <- windfiles(time.resoluti= time.resolution)
-    wf <- windfiles()
-    if (latest) {
-      date <- max(wf$date)
-    }
-    if (missing(date)) {
-      date <- min(wf$date)
-    }
-  
-    files <- wf
+    files <- windfiles()
   } else {
       files <- inputfiles
-      if (missing(date))  date <- min(files$date)
-    }
-
+  }
+  if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
   if (returnfiles) return(files)
 
   files <- .processFiles(date, files, time.resolution)

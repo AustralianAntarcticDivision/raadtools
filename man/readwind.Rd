@@ -10,13 +10,13 @@ readwind(date, time.resolution = c("6hourly"), xylim = NULL,
   inputfiles = NULL)
 }
 \arguments{
-\item{date}{date or dates of data to read, see Details}
+\item{date}{date or dates of data to read,}
 
-\item{time.resolution}{time resolution to read}
+\item{time.resolution}{time resoution data to read, daily or monthly}
 
-\item{xylim}{crop}
+\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details}
 
-\item{lon180}{Pacific or Atlantic}
+\item{lon180}{defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]}
 
 \item{magonly}{return just the magnitude from the U and V
 components}
@@ -27,13 +27,23 @@ components}
 
 \item{vonly}{return just the vertical component of velocity, V}
 
-\item{latest}{if TRUE return the latest time available, ignoring the 'date' argument}
+\item{latest}{if TRUE (and date not supplied) return the latest time available}
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 
-\item{...}{arguments passed to \code{\link[raster]{brick}}, i.e. \code{filename}}
+\item{...}{passed in to brick, primarily for \code{filename}}
 
 \item{inputfiles}{input the files data base to speed up initialization}
+
+\item{...}{Arguments passed on to \code{raadtools}
+\describe{
+  \item{date}{date or dates of data to read,}
+  \item{time.resolution}{time resoution data to read, daily or monthly}
+  \item{lon180}{defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]}
+  \item{setNA}{mask out land values (only applies to monthly time.resolution)}
+  \item{latest}{if TRUE (and date not supplied) return the latest time available}
+  \item{returnfiles}{ignore options and just return the file names and dates}
+}}
 }
 \value{
 raster object

@@ -12,7 +12,7 @@ read_ugosa_daily(date, xylim = NULL, latest = TRUE,
 
 \item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details}
 
-\item{latest}{if TRUE return the latest time available, ignoring the 'date' argument}
+\item{latest}{if TRUE (and date not supplied) return the latest time available}
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 

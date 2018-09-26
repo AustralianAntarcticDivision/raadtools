@@ -11,7 +11,8 @@
 ##' @param date date or dates of data to read, see Details
 ##' @param product choice of product, see Details
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
-#'  @param algorithm johnson or nasa
+##'  @param algorithm johnson or nasa
+##' @param latest if TRUE (and date not supplied) return the latest time available
 ##' @references  Johnson, R, PG Strutton, SW Wright, A McMinn, and KM
 ##' Meiners (2013) Three improved satellite chlorophyll algorithms for
 ##' the Southern Ocean, J. Geophys. Res. Oceans, 118,
@@ -30,9 +31,10 @@
 #' @export
 readchla <- function(date, product = c("MODISA", "SeaWiFS"),
                      xylim = NULL,
-                     algorithm = c("johnson", "nasa")) {
+                     algorithm = c("johnson", "nasa"), 
+                     latest = TRUE) {
   product <- match.arg(product)
-  d <- readchla_mean(date, product = product, xylim = xylim)
+  d <- readchla_mean(date, product = product, xylim = xylim, latest = latest)
   if (nrow(d) < 1) {
     warning("no data available in Southern Ocean for these date/s")
    return(NULL) 

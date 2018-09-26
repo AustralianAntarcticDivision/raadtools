@@ -60,7 +60,7 @@ currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
 ##' @param uonly return just the U component of velocity
 ##' @param vonly return just the V component of velocity
 ##' components, in degrees (0 north, 90 east, 180 south, 270 west)
-##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
+##' @param latest if TRUE (and date not supplied) return the latest time available
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... passed to brick, primarily for \code{filename}
 ##' @export
@@ -103,7 +103,7 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
                       dironly = FALSE,
                       uonly = FALSE,
                       vonly = FALSE,
-                      latest = FALSE,
+                      latest = TRUE,
                       returnfiles = FALSE, ..., inputfiles = NULL) {
   time.resolution <- match.arg(time.resolution)
   
@@ -151,8 +151,7 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
 
   if (returnfiles)
     return(files)
-  if (missing(date)) date <- min(files$date)
-  if (latest) date <- max(files$date)
+  if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
   date <- timedateFrom(date)
   files <- .processFiles(date, files, time.resolution)
   

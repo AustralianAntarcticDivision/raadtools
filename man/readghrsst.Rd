@@ -14,7 +14,7 @@ readghrsst(date, time.resolution = c("daily"), xylim = NULL,
 
 \item{time.resolution}{daily}
 
-\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}}
+\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details}
 
 \item{lon180}{currently ignored}
 
@@ -22,13 +22,13 @@ readghrsst(date, time.resolution = c("daily"), xylim = NULL,
 
 \item{setNA}{ignored}
 
-\item{latest}{return latest available data}
+\item{latest}{if TRUE (and date not supplied) return the latest time available}
 
-\item{returnfiles}{return the files}
+\item{returnfiles}{ignore options and just return the file names and dates}
 
-\item{...}{pass in filename to writeRaster}
+\item{...}{arguments passed to raster brick}
 
-\item{inputfiles}{input the file set}
+\item{inputfiles}{input the files data base to speed up initialization}
 }
 \value{
 RasterStack or RasterLayer

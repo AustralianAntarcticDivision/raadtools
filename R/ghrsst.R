@@ -24,12 +24,9 @@ ghrsstfiles <- function() {
 #' @param time.resolution daily
 #' @param varname one of "analysed_sst", "analysis_error", "mask", "sea_ice_fraction"
 #' @param setNA ignored
-#' @param latest return latest available data
-#' @param returnfiles return the files
-#' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
 #' @param lon180 currently ignored
-#' @param ... pass in filename to writeRaster
-#' @param inputfiles input the file set
+#' @param ... arguments passed to raster brick
+#' @inheritParams raadtools
 #' @return RasterStack or RasterLayer
 #' @export
 readghrsst  <- function (date, time.resolution = c("daily"),
@@ -46,8 +43,7 @@ readghrsst  <- function (date, time.resolution = c("daily"),
   if (returnfiles)  return(files)
   
   
-  if (missing(date)) date <- min(files$date)
-  if (latest) date <- max(files$date)
+  if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
   date <- timedateFrom(date)
   files <- .processFiles(date, files, time.resolution)
 

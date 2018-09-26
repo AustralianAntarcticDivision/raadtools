@@ -164,7 +164,7 @@ amps_d1_icefiles <- function(data.source = "", time.resolution = "12hourly", ...
 #' arr(w, sample(ncell(w), 10000), scale = 30000)
 readamps_d1wind <- function(date, time.resolution = "4hourly", xylim = NULL, 
                 magonly = FALSE, dironly = FALSE, uonly = FALSE, vonly = FALSE,
-                latest = FALSE, returnfiles = FALSE, level = 1, ..., inputfiles = NULL) {
+                latest = TRUE, returnfiles = FALSE, level = 1, ..., inputfiles = NULL) {
   
   time.resolution <- match.arg(time.resolution)
   if ((magonly + dironly + uonly + vonly) > 1) stop("only one of magonly, dironly, uonly or vonly may be used, exiting")
@@ -176,8 +176,7 @@ readamps_d1wind <- function(date, time.resolution = "4hourly", xylim = NULL,
   }
   if (returnfiles) return(files)
   
-  if (missing(date)) date <- min(files$date)
-  if (latest) date <- max(files$date)
+  if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
   date <- timedateFrom(date)
   ## findex <- .processDates(date, files$date, time.resolution)
   files <- .processFiles(date, files, time.resolution)

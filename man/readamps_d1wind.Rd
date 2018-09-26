@@ -7,7 +7,7 @@
 \usage{
 readamps_d1wind(date, time.resolution = "4hourly", xylim = NULL,
   magonly = FALSE, dironly = FALSE, uonly = FALSE, vonly = FALSE,
-  latest = FALSE, returnfiles = FALSE, level = 1, ...,
+  latest = TRUE, returnfiles = FALSE, level = 1, ...,
   inputfiles = NULL)
 
 readamps(date, time.resolution = "4hourly", xylim = NULL, band = 1,

@@ -5,8 +5,8 @@
 \title{Read data from the Sokolov/Rintoul Southern Ocean fronts analysis.}
 \usage{
 readfronts(date, time.resolution = c("weekly"), product = c("sokolov"),
-  xylim = NULL, lon180 = TRUE, returnfiles = FALSE, RAT = TRUE,
-  ...)
+  xylim = NULL, lon180 = TRUE, setNA = FALSE, trim = TRUE,
+  returnfiles = FALSE, RAT = TRUE, ...)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -18,6 +18,10 @@ readfronts(date, time.resolution = c("weekly"), product = c("sokolov"),
 \item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details}
 
 \item{lon180}{if TRUE, data originally in Pacific view will be returned in Atlantic view (-180:180)}
+
+\item{setNA}{is \code{TRUE} NaN values are replaced with NA}
+
+\item{trim}{if \code{TRUE} the map is cropped to no contiguous margins of missing data}
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 

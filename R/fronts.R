@@ -82,6 +82,8 @@ contourfronts <-
 ##' @param lon180 if TRUE, data originally in Pacific view will be returned in Atlantic view (-180:180)
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param RAT if \code{TRUE} data is returned with region names as a raster attribute table on the gridded data, see \code{\link[raster]{ratify}}
+##' @param setNA is \code{TRUE} NaN values are replaced with NA
+##' @param trim if \code{TRUE} the map is cropped to no contiguous margins of missing data
 ##' @param ... reserved for future use, currently ignored
 ##' @export
 ##' @return \code{\link[raster]{raster}} object
@@ -95,6 +97,8 @@ readfronts <- function(date,
                        product = c("sokolov"),
                        xylim = NULL,
                        lon180 = TRUE,
+                       setNA = FALSE,
+                       trim = TRUE,
                        returnfiles = FALSE, RAT = TRUE, ...) {
   time.resolution <- match.arg(time.resolution)
   ftx <- .allfilelist()
@@ -103,8 +107,8 @@ readfronts <- function(date,
   product <- match.arg(product)
   wks <- seq(timedateFrom("1992-10-14"), by = "7 days", length = 854)
   ## get file names and dates and full path
-  files <- data.frame(fullname = cfiles1,
-                      date = wks, band = seq_along(wks), stringsAsFactors = FALSE)
+  files <- tibble::tibble(fullname = cfiles1,
+                      date = wks, band = seq_along(wks))
     if (missing(date)) date <- min(files$date)
   
   date <- timedateFrom(date)
@@ -135,16 +139,20 @@ readfronts <- function(date,
     extent(r0) <- extent(bbox(epoints.merc))
     projection(r0) <- proj
     e <- new("Extent", xmin = 0, xmax = 2 * 20037508, ymin = -11087823.8567493 , ymax = -3513725)
-    if (lon180)  r0 <- suppressWarnings(.rotate(r0))
     if (!is.null(xylim)) r0<- crop(r0, extent(xylim)) else r0 <- crop(r0, e)
     
+    if (lon180)  r0 <- suppressWarnings(.rotate(r0))
+   
     
-    r0[is.nan(r0)] <- NA
+    if (setNA) r0[is.nan(r0)] <- NA
     if (RAT) {
+      r0 <- ratify(r0)
+      rat <- levels(r0)[[1]]
+      
       rat <- data.frame(ID = 0:12, name = c("south of sBdy", "between SACCF-S & sBdy", "SACCF-N & SACCF-S",
                                             "PF-S & SACCF-N", "PF-M & PF-S", "PF-N & PF-M", "SAF-S & PF-N",
                                             "SAF-M & SAF-S", "SAF-N & SAF-M", "SAZ-S & SAF-N", "SAZ-M & SAZ-S",
-                                            "SAZ-N & SAZ-M", "north of SAZ-N"))
+                                            "SAZ-N & SAZ-M", "north of SAZ-N"), stringsAsFactors = FALSE)
       levels(r0) <- rat
     }
     l[[i]] <- r0
@@ -153,8 +161,13 @@ readfronts <- function(date,
   
   
   r <- if (length(l) > 1) setZ(brick(stack(l)), files$date) else setZ(l[[1L]], files$date)
-  ## lots of cells are wasted with nodata
-  
+  ## lots of cells are wasted with nodata and with float32 becoming 64
+  v <- values(r)
+  mode(v) <- "integer"
+  print(str(v))
+  r <- setValues(r, v)
+  dataType(r) <- "INT4S"
+  if (trim) r <- raster::trim(r)
   r
 }
 

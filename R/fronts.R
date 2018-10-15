@@ -166,8 +166,7 @@ readfronts <- function(date,
   ## lots of cells are wasted with nodata and with float32 becoming 64
   v <- values(r)
   mode(v) <- "integer"
-  print(str(v))
-  r <- setValues(r, v)
+ r <- setValues(r, v)
   dataType(r) <- "INT4S"
   if (trim) r <- raster::trim(r)
   r

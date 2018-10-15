@@ -104,6 +104,8 @@ readfronts <- function(date,
   ftx <- .allfilelist()
  cfiles <- grep("fronts", ftx, value = TRUE)
   cfiles1 <- grep("ACCfronts.nc", cfiles, value = TRUE)
+  if (length(cfiles1) < 1) stop("file ACCfronts.nc not found!")
+  cfiles1 <- cfiles1[1]
   product <- match.arg(product)
   wks <- seq(timedateFrom("1992-10-14"), by = "7 days", length = 854)
   ## get file names and dates and full path

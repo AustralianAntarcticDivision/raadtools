@@ -5,7 +5,10 @@ update <- function() {
   cat('\ndevtools::install_github("AustralianAntarcticDivision/raadtools")\n\n')
 }
 
-
+set_utc_format <- function(x) {
+  attr(x, "tz") <- "UTC"
+  x
+}
 ## internal rotate to match old behaviour
 ## https://r-forge.r-project.org/scm/viewvc.php/pkg/raster/R/rotate.R?root=raster&r1=2782&r2=2981
 #' @importFrom raster merge

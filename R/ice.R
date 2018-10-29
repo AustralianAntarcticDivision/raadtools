@@ -246,8 +246,8 @@ read_ice_internal <- function(files, hemisphere, rescale, setNA, xylim = NULL,  
   
   projection(r) <- prj
   names(r) <- basename(files$fullname)
-  r <- setZ(r, files$date)
-  
+  r <- setZ(r, set_utc_format(files$date))
+
   if ("filename" %in% names(list(...))) r <- writeRaster(r, ...)
   r
   

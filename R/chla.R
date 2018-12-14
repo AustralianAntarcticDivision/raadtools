@@ -31,15 +31,15 @@
 #' @export
 readchla <- function(date, product = c("MODISA", "SeaWiFS"),
                      xylim = NULL,
-                     algorithm = c("johnson", "nasa"), 
+                     algorithm = c("johnson", "nasa"),
                      latest = TRUE) {
   product <- match.arg(product)
   d <- readchla_mean(date, product = product, xylim = xylim, latest = latest)
   if (nrow(d) < 1) {
     warning("no data available in Southern Ocean for these date/s")
-   return(NULL) 
+   return(NULL)
   }
-  algorithm <- match.arg(algorithm)  
+  algorithm <- match.arg(algorithm)
   thename <- sprintf("chla_%s", algorithm)
   d <- d[, c("bin_num", thename)]
   names(d) <- c("bin_num", "value")
@@ -57,18 +57,19 @@ bin_chl <- function(bins, value, NROWS, gridmap) {
   bins <- tibble(bin_num = bins, value = value)
   ll <- coordinates(gridmap)
   ## removed dep on sosoc/croc 2018-0919
-  bins <- tibble(bin_num = .lonlat2_bin(ll[,1], ll[, 2], NUMROWS = NROWS), 
-                 gridcell = seq_len(ncell(gridmap))) %>% 
+  bins <- tibble(bin_num = .lonlat2_bin(ll[,1], ll[, 2], NUMROWS = NROWS),
+                 gridcell = seq_len(ncell(gridmap))) %>%
     dplyr::inner_join(bins, "bin_num")
   gridmap[bins[["gridcell"]]] <- bins[["value"]]
   gridmap
 }
 
 
+#' @importFrom dplyr .data
 #' @export
 readchla_mean <- function(date,
 #                     algorithm = c("johnson", "oceancolor"),
-                     product = c("MODISA", "SeaWiFS"), 
+                     product = c("MODISA", "SeaWiFS"),
                      xylim = NULL,
                      returnfiles = FALSE,
                      latest = TRUE,
@@ -76,13 +77,13 @@ readchla_mean <- function(date,
                      ...) {
   largs <- list(...)
   if ("time.resolution" %in% names(largs)) stop("time.resolution is not supported, enter the dates directly - underlying temporal resolution is daily")
-  
+
   files <- oc_sochla_files(product = product)
-  
+
   if (missing(date)) {
       date <- if (latest) max(files$date) else min(files$date)
-  }  
-  
+  }
+
   ## here read_oc_sochla should take the bins it needs
   ## removed dep on sosoc/croc 2018-09-19
   init <- .init_bin(product2nrows(product))
@@ -92,49 +93,49 @@ readchla_mean <- function(date,
     ## removed dep on sosoc/croc 2018-09-19
     bin_sub <- tibble::tibble(bin_num = .crop_init(init, xylim))
   }
- # bins <- purrr::map_df(date, read_oc_sochla, bins = bin_sub, product = product) %>% 
-  
-   bins <- read_oc_sochla(date, bins = bin_sub, product = product, inputfiles = files) %>% 
-    dplyr::select(-date) %>% 
-    dplyr::group_by(bin_num) %>% 
+ # bins <- purrr::map_df(date, read_oc_sochla, bins = bin_sub, product = product) %>%
+
+   bins <- read_oc_sochla(date, bins = bin_sub, product = product, inputfiles = files) %>%
+    dplyr::select(-"date") %>%
+    dplyr::group_by_at("bin_num") %>%
     dplyr::summarize_all(mean)
-  
+
   bins
-  
-}  
+
+}
 
 
 ##' @export
 readchla_old <- function(date, time.resolution = c("weekly", "monthly"),
                          product = c("johnson", "oceancolor"),
-                         platform = c("MODISA", "SeaWiFS"), 
+                         platform = c("MODISA", "SeaWiFS"),
                          xylim = NULL,
-                         
+
                          ##lon180 = TRUE,
                          returnfiles = FALSE,
                          latest = FALSE,
                          verbose = TRUE,
                          ...) {
-  
+
   ## Note, fixing this can used the old updatechlafiles below
   warning("readchla only works with a static collection of data, no longer updated")
   time.resolution <- match.arg(time.resolution)
   product <- match.arg(product)
   files <- chlafiles(time.resolution = time.resolution, product = product)
   if (returnfiles) return(files)
-  
+
   if (missing(date)) date <- min(files$date)
   if (latest) date <- max(files$date)
   date <- timedateFrom(date)
   ## from this point one, we don't care about the input "date" - this is our index into all files and that's what we use
   ##findex <- .processDates(date, files$date, time.resolution)
   files <- .processFiles(date, files, time.resolution)
-  
-  
-  
+
+
+
   rtemplate <- if (product == "oceancolor") raster(files$fullname[1L], band = files$band[1L]) else raster(files$fullname[1L])
   ##if (lon180) rtemplate <- .rotate(rtemplate)
-  
+
   ## process xylim
   cropit <- FALSE
   if (!is.null(xylim)) {
@@ -142,10 +143,10 @@ readchla_old <- function(date, time.resolution = c("weekly", "monthly"),
     cropext <- extent(xylim)
     ##rtemplate <- crop(rtemplate, cropext)
   }
-  
+
   nfiles <- nrow(files)
   r <- vector("list", nfiles)
-  
+
   for (ifile in seq_len(nfiles)) {
     r0 <- if (product == "oceancolor") raster(files$fullname[ifile], band = files$band[ifile]) else raster(files$fullname[ifile])
     ##if (lon180) r0 <- .rotate(r0)
@@ -154,13 +155,13 @@ readchla_old <- function(date, time.resolution = c("weekly", "monthly"),
     r[[ifile]] <- r0
     ##if (verbose & ifile %% 10L == 0L) .progressreport(ifile, nfiles)
   }
-  
+
   if (nfiles > 1)
     r <- brick(stack(r), ...)
   else r <- r[[1L]]
   names(r) <- basename(files$fullname)
-  if (is.na(projection(r))) projection(r) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0" 
-  
+  if (is.na(projection(r))) projection(r) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
+
   r <- setZ(r, files$date)
   return(r)
 }
@@ -178,7 +179,7 @@ readchla_old <- function(date, time.resolution = c("weekly", "monthly"),
 chlafiles <- function(time.resolution = c("weekly", "monthly"),
                       product = c("johnson", "oceancolor"),
                       platform = c("MODISA", "SeaWiFS"), ...) {
-  
+
   product <- match.arg(product)
   platform <- match.arg(platform)
   time.resolution <- match.arg(time.resolution)
@@ -194,7 +195,7 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
     return(cfiles3)
     xfs <- .expandFileDateList(cfiles3)
     # nc <- ncdf4::nc_open(cfiles3)
-    #  dates <- 
+    #  dates <-
     # dates <- timedateFrom(strptime(substr(basename(cfiles3), 2, 8), "%Y%j"))
     dates <- xfs$date
     cfiles3 <- xfs$fullname

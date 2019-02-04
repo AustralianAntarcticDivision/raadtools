@@ -1,3 +1,7 @@
+#
+ 
+* new function readfsle. 
+
 # raadtools 0.5.0
 
 * Removed dependency on 'sosoc/croc' package, by internalizing the imported functions. 

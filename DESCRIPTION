@@ -12,7 +12,7 @@ Imports:
     ncdf4,
     progress,
     purrr,
-    raadfiles (>= 0.1.0),
+    raadfiles (>= 0.1.1),
     rgeos,
     sp, 
     tibble
@@ -36,5 +36,5 @@ BugReports: https://github.com/AustralianAntarcticDivision/raadtools/issues
 Description: Tools for reading, plotting and manipulating spatial data,
     particularly from remote sensing and model output.
 License: GPL-3
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Remotes: AustralianAntarcticDivision/raadfiles

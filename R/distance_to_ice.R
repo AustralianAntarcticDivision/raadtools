@@ -32,19 +32,31 @@
 #' # extract(distance_to_ice_edge, walrus818[seq(50, 400, by = 20), ], hemisphere = "north")
 distance_to_ice_edge <- function(date, threshold = 15, ..., returnfiles = FALSE, inputfiles = NULL) {
   if (returnfiles) return(icefiles(...))
+  if (!missing(date) && length(date) > 1L) {
+    warning("'date' should be of length = 1, using first supplied")
+    date <- date[1L]
+  }
+  distance_to_ice_edge0(date, threshold = threshold, returnfiles = FALSE, inputfiles = inputfiles, ...)
+}
+
+distance_to_ice_edge0 <- function(date, threshold = 15, ..., returnfiles = FALSE, inputfiles = NULL) {
   ice <- readice(date, ..., inputfiles = inputfiles, setNA = FALSE)
   cl <- keepOnlyMostComplexLine(rasterToContour(ice, levels = threshold))
   pp <- rgdal::project(coordinates(ice), projection(ice), inv = TRUE)
   pcl <- coordinates(as(cl, "SpatialPointsDataFrame"))
-  raster::distanceFromPoints(ice, pcl)
+  raster::setZ(raster::distanceFromPoints(ice, pcl), timedateFrom(date))
 }  
 #' @name distance_to_ice_edge
 #' @export
 distance_to_ice <- function(date, threshold = 15, ..., returnfiles = FALSE, inputfiles = NULL) {
   if (returnfiles) return(icefiles())
+  if (!missing(date) && length(date) > 1L) {
+    warning("'date' should be of length = 1, using first supplied")
+    date <- date[1L]
+  }
   ice <- readice(date, ..., inputfiles = inputfiles, setNA = FALSE)
   cl <- rasterToContour(ice, levels = threshold)
   pp <- rgdal::project(coordinates(ice), projection(ice), inv = TRUE)
   pcl <- coordinates(as(cl, "SpatialPointsDataFrame"))
-  raster::distanceFromPoints(ice, pcl)
+  raster::setZ(raster::distanceFromPoints(ice, pcl), timedateFrom( date))
 }

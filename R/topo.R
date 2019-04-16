@@ -127,7 +127,8 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
                               "rema_1km",
                               "rema_200m",
                               "rema_100m", 
-                              "rema_8m"),
+                              "rema_8m", 
+                              "srtm"),
                      polar = FALSE,
                      lon180 = TRUE,
                      xylim = NULL,
@@ -179,7 +180,8 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
                               "rema_1km",
                               "rema_200m", 
                               "rema_100m", 
-                              "rema_8m"),
+                              "rema_8m", 
+                              "srtm"),
                      polar = FALSE,
                      lon180 = TRUE,
                      ...) {
@@ -216,7 +218,13 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
            rema_100m = raadfiles::rema_100m_files()$fullname[1L], 
            rema_200m = raadfiles::rema_200m_files()$fullname[1L], 
            rema_1km = raadfiles::rema_1km_files()$fullname[1L], 
-           rema_8m =   file.path(dirname(dirname(r8m_files$fullname[1])), "rema_mosaic_8m_dem.vrt")
+           rema_8m =   file.path(dirname(dirname(r8m_files$fullname[1])), "rema_mosaic_8m_dem.vrt"), 
+           srtm = local({
+             files <- raadfiles::srtm_files()
+             ## this will only work for nectar machines ... FIXME
+             file.path(dirname(dirname(files$fullname[1])), "srtm_4.1.vrt")
+             
+           })
            
            
            )

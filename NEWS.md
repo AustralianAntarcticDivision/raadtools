@@ -1,5 +1,7 @@
 # dev
 
+* `readchla()` is now parallelized with furrr, and includes a grid specification argument
+
 * `distance_to_ice()` and `distance_to_ice_edge()` now include the date on the output and are
  strictly not vectorized. 
  

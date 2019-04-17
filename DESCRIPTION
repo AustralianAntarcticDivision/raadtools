@@ -14,8 +14,10 @@ Imports:
     purrr,
     raadfiles (>= 0.1.1),
     rgeos,
-    sp, 
-    tibble
+    sp,
+    tibble,
+    future,
+    furrr
 Suggests:
     graticule,
     knitr,

@@ -5,17 +5,19 @@
 \title{Read Chlorophyll-a for the Southern Ocean}
 \usage{
 readchla(date, product = c("MODISA", "SeaWiFS"), xylim = NULL,
-  algorithm = c("johnson", "nasa"), latest = TRUE)
+  algorithm = c("johnson", "nasa"), latest = TRUE, grid = NULL)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
 
 \item{product}{choice of product, see Details}
 
-\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
+\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, ignored if grid is provided
 @param algorithm johnson or nasa}
 
 \item{latest}{if TRUE (and date not supplied) return the latest time available}
+
+\item{grid}{template raster object for output}
 }
 \value{
 \code{\link[raster]{raster}} object

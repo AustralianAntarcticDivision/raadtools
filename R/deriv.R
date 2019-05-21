@@ -19,6 +19,7 @@
 ##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... passed to brick, primarily for \code{filename}
+##' @param inputfiles input the file set to avoid rescanning that (for extract point-in-time)
 ##' @details 
 ##' time_since_melt
 ##' 
@@ -43,13 +44,17 @@ readderivice <- function(date,
                     xylim = NULL,
                 
                     latest = FALSE,
-                    returnfiles = FALSE, ...) {
+                    returnfiles = FALSE, ..., inputfiles = NULL) {
   
   time.resolution <- match.arg(time.resolution)
   product <- match.arg(product)
   
   ## get file names and dates and full path
-  files <- derivicefiles(product = product, ...)
+  if (is.null(inputfiles)) {
+    files <- derivicefiles(product = product, ...)
+  } else {
+    files <- inputfiles
+  }
   ##files$fullname <- file.path(datadir, files$file)
   if (returnfiles) return(files)
   if (missing(date)) date <- min(files$date)
@@ -69,12 +74,20 @@ readderivice <- function(date,
   }
   
   nfiles <- nrow(files)
+  ## progress
+  if (nrow(files) > 1L) {
+  pb <- progress::progress_bar$new(
+    format = "  extracting [:bar] :percent in :elapsed",
+    total = nfiles, clear = FALSE, width= 60)
+  pb$tick(0)
+  }
   r <- vector("list", nfiles)
   ## loop over file indices
   for (ifile in seq_len(nfiles)) {
     r0 <- raster(files$fullname[ifile])
     if (cropit) r0 <- crop(r0, cropext)
     r[[ifile]] <- r0
+    if (nrow(files) > 1L) { pb$tick()}
   }
   if (nfiles > 1) r <- brick(stack(r), ...) else r <- r[[1L]]
   

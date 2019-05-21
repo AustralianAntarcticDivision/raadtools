@@ -1,0 +1,71 @@
+---
+title: "AAD / ACE CRC and the BCCVL"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Hello, 
+
+I'm writing as a follow-up to discussions on Friday with Sarah and Chantal (14th July 2017 at IMAS in Hobart). I work at the Australian Antarctic Division building software tools for data handling in ecosystems modelling. 
+
+In summary, I see a very productive partnership for us and the BCCVL. We offer a framework for obtaining and using a wide variety of shared data collections, and significant experience for building user-friendly tools for complex and large data. The BCCVL offers a compute platform for delivering user-access to these tools and data, and the ability to develop new tools and techniques. 
+
+I was very impressed on Friday with the quality and scope of the BCCVL platform, and when I heard of plans for an RStudio interface to this it "clicked" for me. I don't think we have to be particularly  formal about working together, and I don't see any pressing requirement for new funding - I think we are well placed to simply work together and can help each other enormously. 
+
+Our data is primarily "marine" and I think there's a very good opportunity to straddle the terrestrial/marine divide with BCCVL and what we have learned with our R tools. 
+
+My broad proposal is that we help kick-start BCCVL's move into marine with our system, and BCCVL provides us access to compute systems on which we can develop our system and deliver its tools to users. 
+
+* we seed BCCVL "marine" with our automatically-updating data collection
+* explore the facilities for adding new data sources to the collection ("bowerbird")
+* design RStudio instances with access to the "curated" data sets in the collection ("raadtools")
+* discuss the relationship of our tools and the BCCVL tools working together
+
+I'm very open to the way in which these techniques are used and delivered, and keen to discuss further. Below I provide a description of our tools and the current pain-points, that I think BCCVL could easily help solve for us. 
+
+I'd love to have a video chat this week, maybe Thursday can work? 
+
+Cheers, Mike.
+
+
+We have built a user-platform that we deliver via Nectar RStudio Server to groups of researchers. The core tools were developed with Ben Raymond at the Antarctic Division, in partnership with the Antarctic Climate and Ecosystems CRC and Institute of Marine and Antarctic Studies. We have several "monolithic" servers that can run our tools with traditional Unix administration, and we've been seeking a way forward that is more flexible and requires less hands-on user and system management. There are facilities for this, such as docker for easily launching new instances, and cloud-container platforms for connecting users to an instance. However, the crux lever we use is an NFS mount to a large file collection on Research Data Storage Infrastructure  (RDSI) hardware. That is the "hard part" and we currently rely on local administrators of the RDSI resource to maintain those NFS connections for us. 
+
+We have explored more flexible arrangements, with a "gateway server" to handle client compute servers managed by us, so there's only one NFS connection we rely on a third-party for. However this only solves one side of the problem and I think that the BCCVL RStudio platform will already provide both sides of the solution. 
+
+
+## More about our tools
+
+* raadtools: a user-library of functions for direct access to time-series remote sensing
+* raadsync: a configuration system for specifying file-based data sources
+
+https://github.com/AustralianAntarcticDivision/raadtools
+
+https://github.com/AustralianAntarcticDataCentre/raadsync
+
+These packages have been extremely valuable for us, allowing us to provide a consistent shared data repository that is flexible and easy to maintain. As new data sources are required we simply add their details (source url) and some options, and then a regular scheduled job drives `wget` to check for any new or updated files at the source, and obtain them. A large upfront download is then worthwhile as the incremental daily update is relatively small. It has to be automated as with dozens of sources we can't keep track of what needs to be updated manually, and also the generality of the system means we aren't bound to particular schemas, file formats, or even data types. Each local file is compared to its remote counterpart via checksum to see if download is needed, and any new file triggers a download.  We synchronize to collections of shapefiles, LiDAR, topographic DEMs, raw remote sensing data, mapped and reanalysis products, model output, in all kinds of map projections and formats. 
+
+Having access to the entire file system has allowed us to act as both "user" and "developer" and to deliver tools that are relatively easy to create, deliver and maintain. The `raadtools` package then exists to "understand" data sets within that collection, providing a straightforward front-end to users, e.g. a function of "date-time" for sea surface temperature, or the "error variable" within that SST product. We don't want to limit what data can be used, so as needed we add new functions, like `readghrsst` for very high resolution interpolated reanalysis products. We have `readice` for polar northern and southern sea ice products, delivered in their original Polar Stereographic projection, and we have lower level products like L2 NASA ocean colour, and L3BIN (statistical daily sums and sums of square geo-physical variables) stored in a sparse ragged-array form in (implicit) Sinusoidal projection. I can do my analytical work on these lower level forms, and provide higher-level products from them all using the same platform. 
+
+In R today this flexiblity allows us to give users a very high-level curated product, i.e. "SST anywhere since 1981", delivered as a map, a temporal mean or as a point-in-time lookup onto animal tracking data. We can also go direct to the raw files, or the lower level files to learn details about specific formats and storage shemes such NetCDF, GRIB, HDF5 so we can design processing tools that are efficient and cut as close to the metal as needed. 
+
+We are taking lessons from this into a new generation of packages, `bowerbird` is a more useable and flexible package to replace `raadsync` and `tidync` is a more general and fast NetCDF access tool to replace `raster` as the main engine for NetCDF in `raadtools`. 
+
+https://github.com/AustralianAntarcticDivision/bowerbird
+
+https://github.com/hypertidy/tidync
+
+There is some extra discussion on our use and vision for "bowerbird" here: 
+
+https://github.com/ropensci/onboarding/issues/129
+
+To build our server image I work from this basic recipe, though this would be easily replaced by the versioned docker "geospatial for R" or similar system. This system set up provides the background and then most other features are delivered using R packages, so it's pretty straightfoward. 
+
+https://github.com/mdsumner/nectar/blob/master/r-spatial.sh
+
+
+
+
+

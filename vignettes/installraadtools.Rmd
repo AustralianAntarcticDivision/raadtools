@@ -1,7 +1,18 @@
-%\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{Installing and maintaining raadtools}
+---
+title: "raadtools installation"
+author: "Michael Sumner"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 9
+    fig_height: 9
+vignette: >
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteIndexEntry{raadtools installation}
+  %\VignetteEncoding{UTF-8}
+---
 
-# Installing the raadtools package, Michael Sumner
+# Installing the raadtools package
 
 NOTE: this is out of date, and currently in review. MDS 2016-09-10
 

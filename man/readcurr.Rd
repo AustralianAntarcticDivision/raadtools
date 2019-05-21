@@ -6,7 +6,7 @@
 \usage{
 readcurr(date, time.resolution = c("daily", "weekly"), xylim = NULL,
   lon180 = TRUE, magonly = FALSE, dironly = FALSE, uonly = FALSE,
-  vonly = FALSE, latest = FALSE, returnfiles = FALSE, ...,
+  vonly = FALSE, latest = TRUE, returnfiles = FALSE, ...,
   inputfiles = NULL)
 }
 \arguments{
@@ -28,7 +28,7 @@ components}
 \item{vonly}{return just the V component of velocity
 components, in degrees (0 north, 90 east, 180 south, 270 west)}
 
-\item{latest}{if TRUE return the latest time available, ignoring the 'date' argument}
+\item{latest}{if TRUE (and date not supplied) return the latest time available}
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 

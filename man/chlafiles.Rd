@@ -4,8 +4,9 @@
 \alias{chlafiles}
 \title{Chlorophyll-a}
 \usage{
-chlafiles(time.resolution = c("weekly", "monthly"), product = c("johnson",
-  "oceancolor"), platform = c("MODISA", "SeaWiFS"), ...)
+chlafiles(time.resolution = c("weekly", "monthly"),
+  product = c("johnson", "oceancolor"), platform = c("MODISA",
+  "SeaWiFS"), ...)
 }
 \arguments{
 \item{time.resolution}{weekly (8day) or monthly}

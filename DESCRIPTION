@@ -2,25 +2,33 @@ Package: raadtools
 Type: Package
 Title: Tools for Synoptic Environmental Spatial Data
 Depends:
-    raster (>= 2.3-12),
-    R (>= 3.1.2)
+    raster,
+    R (>= 3.3.0)
 Imports:
-    dplyr,
+    dplyr (>= 0.7.0),
     maptools,
     methods,
+    orsifronts,
+    ncdf4,
+    progress,
+    purrr,
+    raadfiles (>= 0.1.1),
     rgeos,
-    sp
+    sp,
+    tibble,
+    future,
+    furrr
 Suggests:
     graticule,
     knitr,
-    ncdf4,
     rgdal,
+    RSQLite,
     testthat,
     rmarkdown,
     covr
 LazyData: yes
 VignetteBuilder: knitr
-Version: 0.3.2.9004
+Version: 0.5.1
 Authors@R: c(
    person("Michael D.","Sumner", role = c("aut", "cre"), email = "michael.sumner@aad.gov.au"), 
    person("Ben", "Raymond", role = "ctb", email = "ben.raymond@aad.gov.au")
@@ -30,4 +38,5 @@ BugReports: https://github.com/AustralianAntarcticDivision/raadtools/issues
 Description: Tools for reading, plotting and manipulating spatial data,
     particularly from remote sensing and model output.
 License: GPL-3
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
+Remotes: AustralianAntarcticDivision/raadfiles

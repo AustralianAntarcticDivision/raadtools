@@ -57,5 +57,5 @@ xyt <- data.frame(x = c(100, 120, 130, 145, 150), y = seq(-80, 20, length = 5),
 )
 test_that("read is ok with inputfiles", {
   expect_that(readcurr("2015-01-01", inputfiles = cf), is_a("RasterStack"))
-  expect_that(extract(readcurr, xyt, uonly = TRUE, inputfiles = cf), is_a("numeric"))
+  expect_that(extract(readcurr, xyt, uonly = TRUE), is_a("numeric"))
 })

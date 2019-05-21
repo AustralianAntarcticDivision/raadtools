@@ -18,3 +18,10 @@ data.frame of \code{file} and \code{date}
 This function loads the latest cache of stored files for
 these products, which are available from \url{http://webdav.data.aad.gov.au/data/environmental/derived/antarctic/}
 }
+\examples{
+(prods <- derivaadcproducts())
+readderivaadc(sample(prods, 1L))
+}
+\seealso{
+\code{\link{readderivaadc}} and \code{\link{derivaadcproducts}}
+}

@@ -1,0 +1,128 @@
+---
+  title: "raadtools_example"
+author: "Michael Sumner"
+date: "2015-06-02"
+output: html_document
+---
+  
+  The following code was used to create mean summer values for surface current speed in the Southern Ocean for 2013-2014. 
+
+```{r,eval=FALSE}
+library(raadtools)
+ex <- extent(-180, 180, -80, -30)
+dates <- seq(as.Date("2013-12-01"), as.Date("2014-03-31"), by = "1 day")
+ufile <- file.path("/home/shared/data/test", "u_2013_Dec_2014_Mar.grd")
+vfile <- file.path("/home/shared/data/test", "v_2013_Dec_2014_Mar.grd")
+if (!(file.exists(ufile))) {u <- mean(readcurr(dates, uonly = TRUE, xylim = ex)); writeRaster(u, ufile)}
+if (!(file.exists(vfile))) {v <- mean(readcurr(dates, vonly = TRUE, xylim = ex)); writeRaster(v, vfile)}
+u <- raster(ufile)
+v <- raster(vfile)
+```
+
+This short piece of code hides a lot of background details, which we unpick below by way of example. 
+
+On our computer "Ace Eco Stats  http://144.6.224.186:8787", we have a system installed called "raadtools" - this is an R package, built especially for our work. 
+
+It controls our access to a huge file collection, and the relevant files for this example are all in 
+
+* *[default.datadir]/ftp.aviso.altimetry.fr/global/delayed-time/grids/madt/all-sat-merged/uv/*
+  
+  As you can imagine, there are thousands of files - one for each day since 1993 and next year it will add a new directory for /2016, and so on: 
+  
+  * *[default.datadir]/ftp.aviso.altimetry.fr/global/delayed-time/grids/madt/all-sat-merged/uv/1993*
+  
+  * *...*
+  
+  * *[default.datadir]/ftp.aviso.altimetry.fr/global/delayed-time/grids/madt/all-sat-merged/uv/2015*
+  
+  * *[default.datadir]/ftp.aviso.altimetry.fr/global/delayed-time/grids/madt/all-sat-merged/uv/2016*
+  
+  So it's easier to organize things in the following way: 
+
+1) a background system keeps it up to date (it's called **raadsync**, and it makes sure that new files are collected every few days with our system matching exactly the address of the source data. 
+2) provide tools in R to read the individual files by date - the function **readcurr** knows about these **uv** files, and you can see all of the files using the function **currentsfiles**.
+
+There are other functions in **raadtools** such as **readsst**, **readice**, **readwind**, **readtopo**, etc. 
+
+We start it like this, in R: 
+  
+  ```{r}
+library(raadtools)
+files <- currentsfiles()
+dim(files) ## this is just a table of filenames and dates
+range(files$date)
+#[1] "1993-01-01 11:00:00 AEDT" "2015-06-02 10:00:00 AEST"
+files$file[c(1000, 1200, 8000)] ## randomly pick 3 files, just to illustrate
+```
+
+We don't have to think about those files, but you are free to explore them if you want to. The full name of the files are available with `files$fullname`, or more generally with `file.path(getOption("default.datadir"), files$file)`. 
+
+The way we usually use these data is like this, just ask for one date, which gives us a grid of the whole world (xmin = -180, xmax =  180, ymin = -90, ymax = 90) with two layers (U and V)
+
+```{r}
+uv <- readcurr(files$date[8000])
+uv
+```
+
+So, the code presented previously is hiding quite a bit of detail inside the `if` statement: 
+
+These lines define the dates (daily) of source data we want to read, and a file name, something persistent to save us repeating the same work every time we run it. 
+```{r,eval=FALSE}
+dates <- seq(as.Date("2013-12-01"), as.Date("2014-03-31"), by = "1 day")
+ufile <- file.path("/home/shared/data/test", "u_2013_Dec_2014_Mar.grd")
+```
+
+This `if` clause prevents the hard work from being done every time, since we simply load the data from file if it exists. 
+```{r,eval=FALSE}
+if (!(file.exists(ufile))) {
+## only run this if we haven't already created the file
+u <- readcurr(dates, uonly = TRUE, xylim = ex)  ## read all dates for the summer, U-only, southern ocean only
+## collapse to the mean of this whole sumer
+u <- mean(u)
+writeRaster(u, ufile)  ## write out to 'ufile' to raster's native format (change to .nc for NetCDF etc, see ?writeRaster)
+}
+u <- raster(ufile)
+```
+
+
+All of the work is done by readcurr(dates) - literally here it reads about 90 days of grids, then we calculate the mean for every 90 pixels and leave one map for that summer. 
+The more concise code in the beginning also reads the V component of velocity and calculates the analogous mean for that. We can modify the code to work for any other period that we want. 
+
+## Now, add a blazing fast speed-up to this happy tale
+
+```{r}
+library(raadtools)
+
+## build a summer field of U and V surface currents for all available years
+## trim to just summer months
+files <- subset(readcurr(returnfiles = TRUE), format(date, "%m") %in% c("12", "01", "02", "03"))
+
+## don't use an extent, use the data in the original [0,360] orientation, work with raw matrixes for math
+
+## set up objects to act as cumulative layers for sum and count
+## set values to 0 
+u0 <- values(readcurr(uonly = TRUE, lon180 = FALSE)[[1]], format = "matrix")
+u0[] <- 0 ## no missing values, all zeroes
+nn <- v0 <- u0 
+
+op <- options(warn = -1) ## temporarily turn off warnings
+for (i in seq(nrow(files))) {
+  u <- values(raster(files$fullname[i], varname = "u"), format = "matrix")
+  v <- values(raster(files$fullname[i], varname = "v"), format = "matrix")
+  ## u and v have the same missing values
+  mask <- which(!is.na(u))
+  u0[mask] <- u0[mask] + u[mask]
+  v0[mask] <- v0[mask] + v[mask]
+  nn[mask] <- nn[mask] + 1
+  if (i %% 100 == 0) print(i)  ## prints every 100th file 
+}
+options(op) 
+
+## now reconstruct the object as a raster and plot
+dummy <- readcurr(uonly  = TRUE, lon180 = FALSE)
+u <- rotate(raster(u0/nn, template = dummy))
+v <- rotate(raster(v0/nn, template = dummy))
+
+plot(sqrt(u * u + v * v), col = sst.pal(100))
+
+```

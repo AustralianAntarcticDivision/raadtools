@@ -60,7 +60,7 @@ readderivaadc <- function(products,
 #' List all derived data products available through \code{\link{readderivaadc}}
 #'
 #' @return character vector of product names
-#' @seealso \code{\link{readderivaadc}}
+#' @seealso \code{\link{readderivaadc}} and \code{\link{derivaadcfiles}}
 #' @export derivaadcproducts
 derivaadcproducts <- function() {
     ftx <- .allfilelist()
@@ -77,6 +77,10 @@ derivaadcproducts <- function() {
 ##' @param ... reserved for future use, currently ignored
 ##' @export
 ##' @return data.frame of \code{file} and \code{date}
+#' @seealso \code{\link{readderivaadc}} and \code{\link{derivaadcproducts}}
+#' @examples 
+#' (prods <- derivaadcproducts())
+#' readderivaadc(sample(prods, 1L))
 derivaadcfiles <- function(products, ...) {
 
     if (missing(products)) stop("must specify products")

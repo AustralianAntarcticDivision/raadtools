@@ -4,13 +4,10 @@
 \alias{sshfiles}
 \title{AVISO sea surface height / anomaly files}
 \usage{
-sshfiles(time.resolution = c("daily", "monthly", "monthly_clim",
-  "seasonal_clim"), ssha = FALSE, ...)
+sshfiles(time.resolution = c("daily"), ...)
 }
 \arguments{
-\item{time.resolution}{time resolution to find}
-
-\item{ssha}{logical value, return absolute (SSH) or relative (SSHA anomaly) values}
+\item{time.resolution}{set to daily only}
 
 \item{...}{reserved for future use, currently ignored}
 }

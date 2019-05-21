@@ -15,26 +15,27 @@ currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
   ## ftp.aviso.altimetry.fr/global/delayed-time/grids/madt/all-sat-merged/uv/1993/dt_global_allsat_madt_uv_19930102_20140106.nc" 
   
   time.resolution <- match.arg(time.resolution)
-  if (time.resolution == "weekly") stop("weekly currents no longer supported")
-  ftx <- .allfilelist(rda = TRUE, fullname = FALSE)
-  cfiles0 <- grep("ftp.aviso.altimetry.fr", ftx, value = TRUE)
-  cfiles1 <- grep("uv", cfiles0, value = TRUE)
-  cfiles <- grep(".nc$", cfiles1, value = TRUE)
-  if (length(cfiles) < 1) stop("no files found")
-  
-  doffs <- 1
-  datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x) - doffs])
-  
-  dates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
-  ## just the last one
-  nas <- is.na(dates[length(dates)])
-  if (nas) dates[length(dates)] <- max(dates, na.rm = TRUE) + 24 * 3600
-  #cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = dates,
-  #                  fullname = cfiles, stringsAsFactors = FALSE)[order(dates), ]
-  cfs <- data.frame(file = cfiles, date = dates,
-                    fullname = file.path(datadir, cfiles), stringsAsFactors = FALSE)[order(dates), ]
-  ## drop any duplicated, this occurs with the delayed/near-real time update
-  cfs[!duplicated(cfs$date), ]  
+  # if (time.resolution == "weekly") stop("weekly currents no longer supported")
+  # ftx <- .allfilelist(rda = TRUE, fullname = FALSE)
+  # cfiles0 <- grep("ftp.aviso.altimetry.fr", ftx, value = TRUE)
+  # cfiles1 <- grep("uv", cfiles0, value = TRUE)
+  # cfiles <- grep(".nc$", cfiles1, value = TRUE)
+  # if (length(cfiles) < 1) stop("no files found")
+  # 
+  # doffs <- 1
+  # datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x) - doffs])
+  # 
+  # dates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
+  # ## just the last one
+  # nas <- is.na(dates[length(dates)])
+  # if (nas) dates[length(dates)] <- max(dates, na.rm = TRUE) + 24 * 3600
+  # #cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = dates,
+  # #                  fullname = cfiles, stringsAsFactors = FALSE)[order(dates), ]
+  # cfs <- data.frame(file = cfiles, date = dates,
+  #                   fullname = file.path(datadir, cfiles), stringsAsFactors = FALSE)[order(dates), ]
+  # ## drop any duplicated, this occurs with the delayed/near-real time update
+  # cfs[!duplicated(cfs$date), ]  
+  raadfiles::altimetry_daily_files()
 }
 
 
@@ -59,7 +60,7 @@ currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
 ##' @param uonly return just the U component of velocity
 ##' @param vonly return just the V component of velocity
 ##' components, in degrees (0 north, 90 east, 180 south, 270 west)
-##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
+##' @param latest if TRUE (and date not supplied) return the latest time available
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... passed to brick, primarily for \code{filename}
 ##' @export
@@ -102,10 +103,10 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
                       dironly = FALSE,
                       uonly = FALSE,
                       vonly = FALSE,
-                      latest = FALSE,
+                      latest = TRUE,
                       returnfiles = FALSE, ..., inputfiles = NULL) {
   time.resolution <- match.arg(time.resolution)
-
+  
   if (is.null(inputfiles)) {
     files <- currentsfiles(time.resolution = time.resolution)
   } else {
@@ -113,17 +114,17 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
   }
   
   read_i_u <- function(file, xylim = NULL, lon180 = FALSE) {
-    x <- raster(file, varname = "u")
+    x <- raster(file, varname = "ugos")
     if (lon180) x <- raadtools:::.rotate(x)
     if (!is.null(xylim)) x <- crop(x, xylim)
-
+    
     x
   }
   read_i_v <- function(file, xylim = NULL, lon180 = FALSE) {
-    x <- raster(file, varname = "v")
+    x <- raster(file, varname = "vgos")
     if (lon180) x <- raadtools:::.rotate(x)
     if (!is.null(xylim)) x <- crop(x, xylim)
-   
+    
     x
   }
   read_uv <- function(file, xylim = NULL, lon180 = FALSE) {
@@ -139,7 +140,7 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
     x <- read_uv(file, xylim = xylim, lon180 = lon180)
     vlen(x[[1]], x[[2]])
   }
-
+  
   thefun <- read_uv  
   if (magonly) thefun <- read_i_mag
   if (dironly) thefun <- read_i_dir
@@ -150,8 +151,7 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
 
   if (returnfiles)
     return(files)
-  if (missing(date)) date <- min(files$date)
-  if (latest) date <- max(files$date)
+  if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
   date <- timedateFrom(date)
   files <- .processFiles(date, files, time.resolution)
   

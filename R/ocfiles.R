@@ -13,7 +13,7 @@
 ##' @return data.frame of \code{file} and \code{date}
 ocfiles <- function(time.resolution = c("daily", "weekly", "monthly", "weekly32"),
                     product = c("MODISA", "SeaWiFS", "VIIRS"), 
-                    varname = c("RRS", "CHL", "POC", "KD490", "NPP_PAR", "SNPP_CHL"), 
+                    varname = c("RRS", "CHL", "POC", "KD490", "NPP_PAR", "SNPP_CHL", "SNPP_RRS"), 
                     type = c("L3b", "L3m"),
                     bz2.rm = TRUE, 
                     ext = c("nc", "main"), 
@@ -23,7 +23,7 @@ ocfiles <- function(time.resolution = c("daily", "weekly", "monthly", "weekly32"
   time.resolution <- match.arg(time.resolution)
   product <- match.arg(product)
   ext <- match.arg(ext)
-  #varname <- match.arg(varname)
+  varname <- varname[1L]
   type <- match.arg(type)
   
   time <- switch(time.resolution, 

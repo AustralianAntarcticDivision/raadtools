@@ -4,7 +4,7 @@
 \alias{rapid_responsefiles}
 \title{Load metadata and location of files of Rapid Response imagery.}
 \usage{
-rapid_responsefiles(...)
+rapid_responsefiles(product = c("aqua", "terra"), ...)
 }
 \arguments{
 \item{...}{reserved for future use, currently ignored}

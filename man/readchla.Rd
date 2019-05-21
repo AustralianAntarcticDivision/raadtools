@@ -4,29 +4,18 @@
 \alias{readchla}
 \title{Read Chlorophyll-a for the Southern Ocean}
 \usage{
-readchla(date, time.resolution = c("weekly", "monthly"),
-  product = c("johnson", "oceancolor"), platform = c("MODISA", "SeaWiFS"),
-  xylim = NULL, returnfiles = FALSE, latest = FALSE, verbose = TRUE,
-  ...)
+readchla(date, product = c("MODISA", "SeaWiFS"), xylim = NULL,
+  algorithm = c("johnson", "nasa"), latest = TRUE)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
 
-\item{time.resolution}{time resolution data to read, weekly or monthly}
-
 \item{product}{choice of product, see Details}
 
-\item{platform}{(modis[a] or seawifs)}
+\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
+@param algorithm johnson or nasa}
 
-\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}}
-
-\item{returnfiles}{ignore options and just return the file names and dates}
-
-\item{latest}{if TRUE return the most recent layer}
-
-\item{verbose}{print messages on progress etc.}
-
-\item{...}{passed to brick, for \code{filename}}
+\item{latest}{if TRUE (and date not supplied) return the latest time available}
 }
 \value{
 \code{\link[raster]{raster}} object

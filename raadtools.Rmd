@@ -10,6 +10,7 @@ vignette: >
   %\VignetteIndexEntry{raadtools}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: raadtools.bib
 ---
 
 
@@ -22,7 +23,6 @@ library(knitr)
 # set global chunk options
 opts_chunk$set(fig.path='figure/minimal-', fig.align='center', fig.show='hold', cache = TRUE)
 options(replace.assign=TRUE,width=90)
-knitr::knit_exit()
 ```
 
 # Overview 
@@ -51,13 +51,20 @@ This package relies on the availability of a local file repository which must be
 
 The very first step is to load the package, which also triggers an attempt to connect to the file repository. 
 
-```{r}
+```{r,eval=TRUE}
 library(raadtools)
 library(raster)
 ```
 
 
-```{r}
+
+(TO FIX: In subsequent code sections I'm also attaching raadfiles explicitly to make this document work, but it's not necessary generally. )
+
+
+```{r,eval=TRUE}
+library(raadfiles)
+library(raadtools)
+
 ice <- readice()
 plot(ice)
 ```
@@ -74,8 +81,7 @@ arguments and will return the first available time step for the
 default data source. This is handy for becoming familiar with the
 kinds of data before getting really specific. Plotting the resulting
 `ice} object provides a familiar polar view. These data are a
-single time slice from the daily passive microwave sea ice concentration, here the very first one that is available (from
-`r raster::getZ(ice)`).
+single time slice from the daily passive microwave sea ice concentration, here the very first one that is available (from `raster::getZ(ice)`).
 
 Other read functions include `reachla`, `readcurr`,
 `readsst`, `readwind` and `readtopo`. Each of
@@ -94,7 +100,8 @@ Read a simple example from each of the data types mentioned above and plot.
 
 
 ```{r,echo=TRUE,output=FALSE}
-
+library(raadtools)
+library(raadfiles)
 ## chlorophyll-a is currently only patchily supported
 ##chla <- readchla("2009-10-01")
 curr <- readcurr("2012-01-09", magonly = TRUE, lon180 = FALSE)
@@ -123,20 +130,20 @@ dateline.
 
 
 
-The `ice` object  is a `r class(ice)` from the `raster`
+The `ice` object  is a `class(ice)` from the `raster`
 package.
 
 
-```{r}
+```{r,eval=TRUE}
 ice
 ```
 
 This object is a `RasterLayer` which consists of just a single
 grid layer for the day listed at the beginning of the NSIDC data
 set. The dimensions of the grid are listed, (in the order Y then X)
-`r dim(ice)[1:2]` and these refer to the number of cells seen
-vertically on the page (`r nrow(ice)`) and those seen horizontally
-(`r ncol(ice)`), and then the total number of cells (X * Y).
+`dim(ice)[1:2]` and these refer to the number of cells seen
+vertically on the page (`nrow(ice)`) and those seen horizontally
+(`ncol(ice)`), and then the total number of cells (X * Y).
 
 
 ## Leveraging raster in R 
@@ -145,9 +152,11 @@ The `raster` package provides excellent facilities for working
 with raster data, including images, surfaces, DEMs and time series
 satellite data. From the `raster` package DESCRIPTION:
 
-< Reading, writing, manipulating, analyzing and modeling of
-< gridded spatial data. The package implements basic and high-level
-< functions and processing of very large files is supported.
+```
+Reading, writing, manipulating, analyzing and modeling of
+gridded spatial data. The package implements basic and high-level
+functions and processing of very large files is supported.
+```
 
 This package should be consulted for documentation on the use of
 Raster objects, and in particular the vignette `Raster` is a
@@ -156,11 +165,16 @@ argument to get an overview of the available functions.
 
 ```{r,eval=FALSE}
 library(raster)
+
 ## opens an index page to all of the package's functions
 library(help = raster)
 ## opens a PDF document with extended help and examples
 vignette("Raster")
 ```
+<<<<<<< HEAD:raadtools.Rmd
+=======
+
+>>>>>>> 1fb87b2a2d061ccadc99c9905314e18e58286d86:vignettes/raadtools.Rmd
 See the Section sec:assumedsupport for more detail on the design
 choices made with `raster` and the other package dependencies
 used by `raadtools`. 
@@ -203,16 +217,27 @@ argument. The Smith and Sandwell data set is returned in Pacific view
 on the Mercator projection by default. Use `lon180 = FALSE` to
 return Atlantic view.
 
+<<<<<<< HEAD:raadtools.Rmd
 ```{r}
 geb <- readtopo("gebco_08", xylim = extent(150, 220, -75, -60))
 ```
 
+=======
+```{r,eval=TRUE}
+library(raadtools)
+library(raadfiles)
+geb <- readtopo("gebco_08", xylim = extent(150, 220, -75, -60))
+plot(geb, col = viridis::inferno(100))
+```
+>>>>>>> 1fb87b2a2d061ccadc99c9905314e18e58286d86:vignettes/raadtools.Rmd
 
 
 
 # Plot vector data
 
-```{r}
+```{r,eval=TRUE}
+library(raadtools)
+library(raadfiles)
 ## set up data in advance, to feed the plotting function
 tst <- readcurr()
 xylim <- extent(projectExtent(raster(extent(130, 150, -50, -30), crs = "+proj=longlat"), projection(tst)))
@@ -227,7 +252,9 @@ plotcurrents <- function(date = as.Date("1999-11-24"), ext = NULL, scale = 2, ..
   x2 <- crds[,1] + values(x[[1L]]) * scale
   y2 <- crds[,2] + values(x[[2L]]) * scale
   op <- options(warn = -1)
+  sink("/dev/null")
   arrows(x1, y1, x2, y2, length = 0.03, col = "#00000080")
+  sink(NULL)
   options(op)
   invisible(NULL)
 }
@@ -238,17 +265,19 @@ plotcurrents(date = as.Date("2000-01-05"), ext = xylim, scale = .1, asp = NA)
 
 Animate a series of current plots as above.
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
+library(raadtools)
+library(raadfiles)
 dts <- seq(as.Date("2005-10-01"), length = 104, by = "1 week")
 pal <- sst.pal(palette = TRUE)
 cols <- pal$cols[seq(1, length(pal$cols), length = 16)]
 cols <- gsub("ff$", "99", cols)
 brks <- pal$breaks[seq(1, length(pal$breaks), length = 16)]
 
-library(animation)
-ani.start()
-for (i in seq_along(dts)) plotcurrents(dts[i], ext = xylim, scale = 2500, col = cols, breaks = brks)
-ani.stop()
+#library(animation)
+#ani.start()
+#for (i in seq_along(dts)) plotcurrents(dts[i], ext = xylim, scale = 2500, col = cols, breaks = brks)
+#ani.stop()
 
 ```
 
@@ -392,7 +421,7 @@ All data sets availalable in `raadtools` are provided in their \emph{native proj
 
 R provides all of the tools required to work with these data. 
 
-Coordinate reprojection: raw coordinates and point, line, or polygon objects can be transformed between different map projections using the `rgdal` package. 
+Coordinate reprojection: raw coordinates and point, line, or polygon objects can be transformed between different map projections using the 'rgdal' package. 
 
 Flexible extraction methods: the `raster` package provides extraction methods to do a huge range of `query-based extractions` from gridded data. These include: 
 
@@ -409,13 +438,6 @@ Flexible extraction methods: the `raster` package provides extraction methods to
 
 Together all of these features allow practically any required extraction task. 
 
-What is a datum:  the combination of an \emph{ellipsoid} and the orientation parameters used to align that ellipsoid relative to the Earth's form. An ellipsoid is simply an oblate spheroid defined by either an inverse flattening ratio or a pair of radiuses (these are equivalent ways to define the same thing).   Links:
-
-http://www.geo.hunter.cuny.edu/~jochen/gtech201/lectures/lec6concepts/map%20coordinate%20systems/how%20to%20choose%20a%20projection.htm
-
-http://www.georeference.org/doc/guide_to_selecting_map_projections.htm
-
-http://msdn.microsoft.com/en-us/library/cc749633(v=sql.100).aspx
 
 # Acknowledgements
 
@@ -427,13 +449,6 @@ The `raadtools` package was built with R
 * Git http://git-scm.com}
 * This  document was built with `knitr`http://yihui.name/knitr/
 
-<!-- \nocite{ncdf4} -->
-<!-- \nocite{R} -->
-<!-- \nocite{raster} -->
-<!-- \nocite{rgdal} -->
-<!-- \nocite{rgeos} -->
-<!-- \nocite{Rnews:Pebesma+Bivand:2005} -->
-<!-- \nocite{xie2013knitr} -->
-<!-- \bibliographystyle{apalike} -->
-<!-- \bibliography{raadtools} -->
-
+```{r,eval=FALSE,include=FALSE}
+##[@ncdf4; @R; @raster; @rgdal; @rgeos; @Rnews:Pebesma+Bivand:2005]
+```

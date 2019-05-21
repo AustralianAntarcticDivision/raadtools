@@ -4,7 +4,8 @@
 \alias{readrapid_response}
 \title{MODIS Rapid Response images}
 \usage{
-readrapid_response(date, latest = FALSE, returnfiles = FALSE, ...)
+readrapid_response(date, product = c("aqua", "terra"), latest = FALSE,
+  returnfiles = FALSE, ...)
 }
 \arguments{
 \item{date}{date of image to load}

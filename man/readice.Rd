@@ -2,12 +2,24 @@
 % Please edit documentation in R/ice.R
 \name{readice}
 \alias{readice}
+\alias{readice_daily}
+\alias{readice_monthly}
 \title{Read data from sea ice data products.}
 \usage{
-readice(date, time.resolution = c("daily", "monthly"), product = c("nsidc",
-  "amsr", "ssmi"), hemisphere = c("south", "north"), xylim = NULL,
-  setNA = TRUE, rescale = TRUE, latest = FALSE, returnfiles = FALSE,
-  ..., inputfiles = NULL)
+readice_daily(date, time.resolution = "daily", product = "nsidc",
+  hemisphere = c("south", "north"), xylim = NULL, setNA = TRUE,
+  rescale = TRUE, latest = FALSE, returnfiles = FALSE, ...,
+  inputfiles = NULL)
+
+readice(date, time.resolution = "daily", product = "nsidc",
+  hemisphere = c("south", "north"), xylim = NULL, setNA = TRUE,
+  rescale = TRUE, latest = FALSE, returnfiles = FALSE, ...,
+  inputfiles = NULL)
+
+readice_monthly(date, time.resolution = "monthly", product = "nsidc",
+  hemisphere = c("south", "north"), xylim = NULL, setNA = TRUE,
+  rescale = TRUE, latest = FALSE, returnfiles = FALSE, ...,
+  inputfiles = NULL)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -45,7 +57,6 @@ Currently available products are
 
 \describe{
 \item{'nsidc'}{daily or monthly NSIDC concentration data, processed by the SMMR/SSMI NASA Team}
-\item{'ssmi'}{daily SSMI concentration data for the Southern Hemisphere}
 }
 
 Dates are matched to file names by finding the nearest match in

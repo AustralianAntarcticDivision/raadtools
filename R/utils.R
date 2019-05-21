@@ -1,8 +1,14 @@
 xrange <- function(x) c(xmin(x), xmax(x))
 yrange <- function(x) c(ymin(x), ymax(x))
 
+update <- function() {
+  cat('\ndevtools::install_github("AustralianAntarcticDivision/raadtools")\n\n')
+}
 
-
+set_utc_format <- function(x) {
+  attr(x, "tz") <- "UTC"
+  x
+}
 ## internal rotate to match old behaviour
 ## https://r-forge.r-project.org/scm/viewvc.php/pkg/raster/R/rotate.R?root=raster&r1=2782&r2=2981
 #' @importFrom raster merge
@@ -83,6 +89,35 @@ yrange <- function(x) c(ymin(x), ymax(x))
 }
 
 
+.expandFileDateList_FAST <- function(x, root) {
+  #vl <- vector("list", length(x))
+  do_fun2 <- function(xi, rootdir) {
+    con <- ncdf4::nc_open(xi, suppress_dimvals = FALSE)
+    #time <- ncdf4::ncvar_get(con, "time")
+    time <- con[["dim"]]$time$vals
+    #utime <- ncdf4::ncatt_get(con, "time", 0)
+    #con[["dim"]]$time$units
+    #[1] "hours since 1800-1-1 00:00:0.0
+    ctime <- as.POSIXct("1800-01-01 00:00:00", tz = "GMT") + time * 3600
+    ncdf4::nc_close(con)
+    tibble::tibble(file = xi, date = ctime, band = seq_along(ctime), root = rootdir)
+  }
+  # do_fun <- function(xi) {
+  #   con <- RNetCDF::open.nc(xi)
+  #   time <- RNetCDF::var.get.nc(con, "time")
+  #   utime <- RNetCDF::att.get.nc(con, "time", 0)
+  #   ctime <- RNetCDF::utcal.nc(utime, time, type = "c")
+  #   RNetCDF::close.nc(con)
+  #   tibble::tibble(file = xi, date = ctime, band = seq_along(ctime))
+  # }
+  l <- vector("list", length(x))
+  for (i in seq_along(l)) {
+    l[[i]] <- do_fun2(x[i], root[i])
+  }
+  do.call(rbind, l)
+ 
+}
+
 .valiDates <- function(x, allOK = TRUE) {
   xs <- timedateFrom(x)
   bad <- is.na(xs)
@@ -108,13 +143,14 @@ yrange <- function(x) c(ymin(x), ymax(x))
 
 
 .indexDates <- function(xdate, filedate) {
-  windex <- integer(length(xdate))
-  for (i in seq_along(xdate)) {
-    windex[i] <- which.min(abs(xdate[i] - filedate))
-  }
-  
-  
-  windex
+#   windex <- integer(length(xdate))
+#   for (i in seq_along(xdate)) {
+ #    windex[i] <- which.min(abs(xdate[i] - filedate))
+#   }
+   windex <- findInterval(xdate, filedate)
+   windex[windex < 1] <- 1
+   windex[windex > length(filedate)] <- length(filedate)
+   windex
 }
 
 .dedupe <- function(index, date, removeDupes = TRUE) {
@@ -131,7 +167,10 @@ yrange <- function(x) c(ymin(x), ymax(x))
   ##
   deltatime <- abs(difftime(querydate, refdate, units = "days"))
   deltatest <- deltatime > daytest
-  if (all(deltatest)) stop(sprintf("no data file within %.1f days of %s", daytest, format(querydate)))
+  if (all(deltatest)) {
+    message(sprintf("\nnearest available date is %s", as.Date(refdate)))
+    stop(sprintf("no data file within %.1f days of %s", daytest, format(querydate)))
+  }
   if (any(deltatest)) {
     warning(sprintf("%i input dates have no corresponding data file within %f days of available files", sum(deltatest), daytest))
     index <- index[!deltatest]
@@ -155,7 +194,8 @@ yrange <- function(x) c(ymin(x), ymax(x))
   date <- dedupedates$date
   
   .matchFiles(date, fdate[findex], findex, 
-              daytest = switch(timeres, "4hourly" = 1/6, "6hourly" = 0.25, daily = 1.5, weekly = 4, monthly = 15, weekly3 = 26))
+              daytest = switch(timeres, "4hourly" = 1/6, "12hourly" = 1/2, "3hourly" = 1/8, "6hourly" = 0.25, daily = 1.5, weekly = 4, monthly = 15, weekly3 = 26))
+
 }
 
 

@@ -1,0 +1,94 @@
+---
+title: "Gener data source examples"
+author: "Michael Sumner, Ben Raymond"
+date: "28/07/2017"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This document aims to give a broad overview of the primary remote sensing sources, their types and era. This is to form the basis of
+an "advisable choices" guide, a first-pass way to choose what products are "recommended". 
+
+# Summary of the types of data available for habitat modelling over the satellite era
+
+The primary synoptic and easily-accessible remote sensing era data are based on sensors using passive microwave, radiometry, radar altimetry and optical wavelengths. 
+
+Assessment variables  were chosen based on their accessibility, coverage and relevance to physical and biological change. Sea surface temperature (SST) and sea-ice seasonality are indicative of broad physical trends in ocean and atmospheric properties. Both are readily available with long-time series and good spatial coverage. Ocean topography characterizes the mechanical physical motion of the water bodies at the surface and so is relevant to transport processes in both horizonatal and vertical dimensions. Chlorophyll-a has a shorter time series and patchy spatial coverage but is the most relevant first-choice for synoptic patterns at ocean basin scales.
+
+
+#  Reference to which data sets are most reliable and approaches we are taking to develop habitat time series for ecosystem modelling
+
+## Sea ice
+
+The sea ice concentration data used was the NSIDC SMMR-SSM/I Nasateam sea ice concentration, passive-microwave estimates at 25km spatial resolution, available every two days from 1-Oct-1978 to 1987 and then daily to present Cavalieri et al. (1996). 
+
+http://nsidc.org/data/nsidc-0051.html
+
+## Sea surface temperature (SST)
+
+The sea surface temperature data used was the Optimum Interpolation Sea Surface Tempature. "The NOAA 1/4° daily Optimum Interpolation Sea Surface Temperature (or daily OISST) is an analysis constructed by combining observations from different platforms (satellites, ships, buoys) on a regular global grid. A spatially complete SST map is produced by interpolating to fill in gaps."
+
+https://www.ncdc.noaa.gov/oisst
+
+## Ocean topography
+
+CMEMS global gridded SSH reprocessed (1993-ongoing)
+
+"For the Global Ocean - Multimission altimeter satellite gridded sea surface heights and derived variables computed with respect to a twenty-year mean. Previously distributed by Aviso+, no change in the scientific content. All the missions are homogenized with respect to a reference mission which is currently OSTM/Jason-2."
+
+http://cmems-resources.cls.fr/?option=com_csw&view=details&tab=info&product_id=SEALEVEL_GLO_PHY_L4_REP_OBSERVATIONS_008_047
+
+
+## Ocean colour
+
+Remote sensing reflectance, daily L3 bins (4.6 km MODISA, 9.2 km SeaWiFS). 
+
+Oceandata MODIS Aqua Level-3 binned daily RRS
+
+Daily remote-sensing reflectance from MODIS Aqua. RRS is used to produce (Johnson 2013) chlorophyll concentration. 
+
+
+Oceandata SeaWiFS Level-3 binned daily RRS
+
+Daily remote-sensing reflectance from SeaWiFS. RRS is used to produce (Johnson 2013) chlorophyll concentration. 
+
+https://oceancolor.gsfc.nasa.gov/
+
+
+
+
+# A table of the time series of different data sets, the satellites from which they come, and the web links / citations for the data.
+
+
+In very broad terms and in that order their availability is
+
+instrument, platform         | sensor type                  | temporal range  | key physical variable    | exemplar data set 
+-----------------------------|------------------------------|-----------------|--------------------------|--------------------
+SMMR,  Seasat and Nimbus 7   | passive microwave radiometry | 1979 - 1987     |  sea ice coverage        | NSIDC daily concentration
+SSM/I, Block 5D-2            | passive microwave radiometry | 1987 -          | sea ice coverage         | NSIDC daily concentration 
+NOAA / POES                  | thermal radiometry           | 1981 -          | sea surface temperature  | OISST and GHRSST daily SST
+NASA/CNES TOPEX/Poseidon     | radar altimetry              | 1992 - 2005     | ocean surface topography | Copernicus daily sea surface height, geostrophic velocity
+NASA/CNES Jason-1            | radar altimetry              | 2001 - 2013     | ocean surface topography | Copernicus daily sea surface height, geostrophic velocity
+OSTM / Jason-2               | radar altimetry              | 2008 -          | ocean surface topography | Copernicus daily sea surface height, geostrophic velocity
+SeaWiFS                      | optical wavelengths          | 1997 - 2010     | ocean colour             | SeaWIFS L3bin RRS (for chlorophyll-a)
+MODISA                       | optical wavelengths          | 2002 -          | ocean colour             | MODISA L3bin RRS (for chlorophyll-a)
+
+
+https://en.wikipedia.org/wiki/Ocean_Surface_Topography_Mission
+
+
+platform | description | link | 
+---------|-------------|------  
+SSM/I, Block 5D-2 | special sensor microwave/imager, United States Air Force Defense Meteorological Satellite Program | https://en.wikipedia.org/wiki/Special_sensor_microwave/imager
+SMMR | Scanning Multichannel Microwave Radiometer
+AVHRR, NOAA / POES |  Advanced very-high-resolution radiometer National Oceanic and Atmospheric Administration Polar-orbiting Operational Environmental Satellites | https://en.wikipedia.org/wiki/Advanced_very-high-resolution_radiometer, https://en.wikipedia.org/wiki/Polar_Operational_Environmental_Satellites
+NASA/CNES TOPEX/Poseidon  | Ocean Surface Topography Mission (OSTM) on TOPEX/Poseidon | https://en.wikipedia.org/wiki/TOPEX/Poseidon
+NASA/CNES Jason-1 | Ocean Surface Topography Mission (OSTM) on the Jason-1 | https://en.wikipedia.org/wiki/Jason-1
+OSTM / Jason-2 | Ocean Surface Topography Mission (OSTM) on the Jason-2 | https://en.wikipedia.org/wiki/Ocean_Surface_Topography_Mission
+SeaWiFS | Sea-Viewing Wide Field-of-View Sensor |  https://en.wikipedia.org/wiki/SeaWiFS
+MODIS-Aqua | moderate-resolution imaging spectroradiometer | https://en.wikipedia.org/wiki/Moderate-resolution_imaging_spectroradiometer  

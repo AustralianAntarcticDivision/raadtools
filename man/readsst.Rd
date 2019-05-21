@@ -2,15 +2,15 @@
 % Please edit documentation in R/sst.R
 \name{readsst}
 \alias{readsst}
-\title{Read OISST sea surface temperature data from daily files}
+\title{Read OISST sea surface temperature data}
 \usage{
 readsst(date, time.resolution = c("daily", "monthly"), xylim = NULL,
-  lon180 = TRUE, varname = c("sst", "anom", "err", "ice"), setNA = TRUE,
-  latest = FALSE, returnfiles = FALSE, readall = FALSE, ...,
+  lon180 = TRUE, varname = c("sst", "anom", "err", "ice"),
+  setNA = TRUE, latest = TRUE, returnfiles = FALSE, ...,
   inputfiles = NULL)
 }
 \arguments{
-\item{date}{date or dates of data to read, see Details}
+\item{date}{date or dates of data to read,}
 
 \item{time.resolution}{time resoution data to read, daily or monthly}
 
@@ -23,15 +23,25 @@ readsst(date, time.resolution = c("daily", "monthly"), xylim = NULL,
 
 \item{setNA}{mask out land values (only applies to monthly time.resolution)}
 
-\item{latest}{if TRUE return the latest time available, ignoring the 'date' argument}
+\item{latest}{if TRUE (and date not supplied) return the latest time available}
 
 \item{returnfiles}{ignore options and just return the file names and dates}
-
-\item{readall}{FALSE by default}
 
 \item{...}{passed in to brick, primarily for \code{filename}}
 
 \item{inputfiles}{input the files data base to speed up initialization}
+
+\item{readall}{FALSE by default}
+
+\item{...}{Arguments passed on to \code{raadtools}
+\describe{
+  \item{date}{date or dates of data to read,}
+  \item{time.resolution}{time resoution data to read, daily or monthly}
+  \item{lon180}{defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]}
+  \item{setNA}{mask out land values (only applies to monthly time.resolution)}
+  \item{latest}{if TRUE (and date not supplied) return the latest time available}
+  \item{returnfiles}{ignore options and just return the file names and dates}
+}}
 }
 \value{
 \code{\link[raster]{raster}} object
@@ -42,6 +52,7 @@ SST data read from files managed by
 the nearest match in time within a short duration. If \code{date}
 is greater than length 1 then the sorted set of unique matches is
 returned.
+see Details in raadtools
 }
 \examples{
 \dontrun{

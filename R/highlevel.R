@@ -27,8 +27,8 @@ keepOnlyMostComplexLine <- function(x) {
 #' @importFrom sp  spChFIDs
 #' @importFrom maptools spRbind
 monthlyIceContours <- function(month, years = NULL, fun = max, 
-                                  llim = NULL, product = "nsidc", lev = 15, 
-                                  longlat = TRUE) {
+                               llim = NULL, product = "nsidc", lev = 15, 
+                               longlat = TRUE) {
   icf <- icefiles(product = product)
   if (is.null(years)) years <- unique(format(icf$date, "%Y"))
   cl <- vector("list", length(years))

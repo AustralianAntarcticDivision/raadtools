@@ -4,8 +4,8 @@
 \alias{icefiles}
 \title{Load metadata and location of files of sea ice data products.}
 \usage{
-icefiles(time.resolution = c("daily", "monthly"), product = c("nsidc",
-  "amsr"), hemisphere = c("south", "north"), ..., extension = "hdf")
+icefiles(time.resolution = "daily", product = "nsidc",
+  hemisphere = c("south", "north"), ...)
 }
 \arguments{
 \item{time.resolution}{daily or monthly files?}
@@ -15,8 +15,6 @@ icefiles(time.resolution = c("daily", "monthly"), product = c("nsidc",
 \item{hemisphere}{north or south}
 
 \item{...}{reserved for future use, currently ignored}
-
-\item{extension}{default for product "amsr" is "hdf" but can be "tif" , extension = "hdf"}
 }
 \value{
 data.frame of \code{file} and \code{date}

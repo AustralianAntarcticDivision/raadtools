@@ -2,6 +2,8 @@ library(testthat)
 
 options(default.datadir = "/rdsi/PRIVATE")
 library(raadtools)
+f <- "/mnt/aadc/Scientific_Data/Data/gridded_new"
+options(default.datadir = f)
 
 test_check("raadtools")
 

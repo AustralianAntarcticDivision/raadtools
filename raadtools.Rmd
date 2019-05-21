@@ -174,7 +174,11 @@ vignette("Raster")
 <<<<<<< HEAD:raadtools.Rmd
 =======
 
+<<<<<<< HEAD
 >>>>>>> 1fb87b2a2d061ccadc99c9905314e18e58286d86:vignettes/raadtools.Rmd
+=======
+>>>>>>> e63b5cf976c2c0469edc19520ea53405acfbacd0:vignettes/raadtools.Rmd
+>>>>>>> master
 See the Section sec:assumedsupport for more detail on the design
 choices made with `raster` and the other package dependencies
 used by `raadtools`. 
@@ -229,7 +233,11 @@ library(raadfiles)
 geb <- readtopo("gebco_08", xylim = extent(150, 220, -75, -60))
 plot(geb, col = viridis::inferno(100))
 ```
+<<<<<<< HEAD
 >>>>>>> 1fb87b2a2d061ccadc99c9905314e18e58286d86:vignettes/raadtools.Rmd
+=======
+>>>>>>> e63b5cf976c2c0469edc19520ea53405acfbacd0:vignettes/raadtools.Rmd
+>>>>>>> master
 
 
 

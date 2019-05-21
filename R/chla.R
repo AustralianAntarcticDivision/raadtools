@@ -10,8 +10,10 @@
 ##'
 ##' @param date date or dates of data to read, see Details
 ##' @param product choice of product, see Details
-##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
+
+##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, ignored if grid is provided
 ##'  @param algorithm johnson or nasa
+##' @param grid template raster object for output
 ##' @param latest if TRUE (and date not supplied) return the latest time available
 ##' @references  Johnson, R, PG Strutton, SW Wright, A McMinn, and KM
 ##' Meiners (2013) Three improved satellite chlorophyll algorithms for
@@ -32,7 +34,9 @@
 readchla <- function(date, product = c("MODISA", "SeaWiFS"),
                      xylim = NULL,
                      algorithm = c("johnson", "nasa"),
-                     latest = TRUE) {
+
+                     latest = TRUE, 
+                     grid = NULL) {
   product <- match.arg(product)
   d <- readchla_mean(date, product = product, xylim = xylim, latest = latest)
   if (nrow(d) < 1) {
@@ -47,8 +51,9 @@ readchla <- function(date, product = c("MODISA", "SeaWiFS"),
   gridmap <- raster::raster(raster::extent(-180, 180, -90, 90), ncol = NROWS * 2, nrow = NROWS, crs = "+init=epsg:4326")
   ## this hack is to align with assumption from here
   ## https://github.com/AustralianAntarcticDivision/ocean_colour/blob/master/seawifs_daily_bins_init.R#L37
-    gridmap <- raster::crop(gridmap, raster::extent(-180, 180, -90, -30), snap = "out")
+  gridmap <- raster::crop(gridmap, raster::extent(-180, 180, -90, -30), snap = "out")
   if (!is.null(xylim)) gridmap <- crop(gridmap, xylim)
+  if (!is.null(grid)) gridmap <- grid
   bin_chl(d$bin_num, d$value, NROWS, gridmap)
 
 }

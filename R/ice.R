@@ -207,8 +207,8 @@ read_ice_internal <- function(files, hemisphere, rescale, setNA, xylim = NULL,  
   
   fname <- files$fullname
   r <- vector("list", length(fname))
-  for (ifile in seq_len(nfiles)) {
-    
+  #for (ifile in seq_len(nfiles)) {
+   do_read <- function(ifile) { 
     con <- file(fname[ifile], open = "rb")
     trash <- readBin(con, "integer", size = 1, n = 300)
     dat <- readBin(con, "integer", size = 1, n = prod(nsidcdims), endian = "little", signed = FALSE)
@@ -240,10 +240,13 @@ read_ice_internal <- function(files, hemisphere, rescale, setNA, xylim = NULL,  
     
     
     if (cropit) r0 <- crop(r0, cropext)
-    r[[ifile]] <- r0
-  }
-  r <- stack(r)
+    #r[[ifile]] <- r0
+    r0
+   }
+    r <- furrr::future_map(seq_along(fname), do_read)
   
+
+  r <- raster::stack(r)
   projection(r) <- prj
   names(r) <- basename(files$fullname)
   r <- setZ(r, set_utc_format(files$date))

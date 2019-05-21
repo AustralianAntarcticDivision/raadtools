@@ -126,8 +126,8 @@ read_oc_sochla <- function(date, time.resolution = c("daily"), bins = NULL,
   files <- files[findInterval(date, files$date), ]
  
   if (returnfiles) return(files)
-  l <- purrr::map(files$fullname, read_oc_sochla_day, bins = bins)
-  dplyr::bind_rows(l)
+ l <- furrr::future_map_dfr(files$fullname, read_oc_sochla_day, bins = bins)
+l
 }
   
 product2nrows <- function(x) {

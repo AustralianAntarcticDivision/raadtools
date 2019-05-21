@@ -10,22 +10,39 @@
 readtopo(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
   "george_v_terre_adelie", "smith_sandwell", "gebco_14", "macrie1100m",
   "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is",
+<<<<<<< HEAD
   "ibcso_bed", "ga_srtm", "rema_1km", "rema_200m", "rema_100m", "rema_8m"),
   polar = FALSE, lon180 = TRUE, xylim = NULL, returnfiles = FALSE,
   ...)
+=======
+  "ibcso_bed", "ga_srtm", "rema_1km", "rema_200m", "rema_100m", "rema_8m",
+  "srtm"), polar = FALSE, lon180 = TRUE, xylim = NULL,
+  returnfiles = FALSE, ...)
+>>>>>>> master
 
 readbathy(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
   "george_v_terre_adelie", "smith_sandwell", "gebco_14", "macrie1100m",
   "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is",
+<<<<<<< HEAD
   "ibcso_bed", "ga_srtm", "rema_1km", "rema_200m", "rema_100m", "rema_8m"),
   polar = FALSE, lon180 = TRUE, xylim = NULL, returnfiles = FALSE,
   ...)
+=======
+  "ibcso_bed", "ga_srtm", "rema_1km", "rema_200m", "rema_100m", "rema_8m",
+  "srtm"), polar = FALSE, lon180 = TRUE, xylim = NULL,
+  returnfiles = FALSE, ...)
+>>>>>>> master
 
 topofile(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
   "george_v_terre_adelie", "smith_sandwell", "gebco_14", "macrie1100m",
   "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is",
+<<<<<<< HEAD
   "ibcso_bed", "ga_srtm", "rema_1km", "rema_200m", "rema_100m", "rema_8m"),
   polar = FALSE, lon180 = TRUE, ...)
+=======
+  "ibcso_bed", "ga_srtm", "rema_1km", "rema_200m", "rema_100m", "rema_8m",
+  "srtm"), polar = FALSE, lon180 = TRUE, ...)
+>>>>>>> master
 
 read_rema_tiles(...)
 }

@@ -40,11 +40,6 @@ There is a fairly complex stack of infrastructure underneath this function to ma
 
 The L3 RRS bin data is downloaded and processed for Johnson and NASA chlorophyll,  and stored in sparse form as a table with bin number and chlorophyll-a values. 
 
-Binning, summarizing
-
-Re-gridding
 
 
-etc. 
 
-Flesh all this out. 

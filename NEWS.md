@@ -1,10 +1,10 @@
 # dev
 
-<<<<<<< HEAD
-=======
+* Add GEBCO 2019 "gebco_19" topography. 
+
 * `readchla()` is now parallelized with furrr, and includes a grid specification argument
 
->>>>>>> master
+
 * `distance_to_ice()` and `distance_to_ice_edge()` now include the date on the output and are
  strictly not vectorized. 
  

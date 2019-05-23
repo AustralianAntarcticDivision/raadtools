@@ -1,4 +1,4 @@
-# dev
+# raadtools 0.5.2
 
 * Add GEBCO 2019 "gebco_19" topography. 
 

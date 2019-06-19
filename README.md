@@ -1,33 +1,44 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<<<<<<< HEAD
-[![Travis-CI Build Status](https://travis-ci.org/AustralianAntarcticDivision/raadtools.svg?branch=master)](https://travis-ci.org/AustralianAntarcticDivision/raadtools) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/AustralianAntarcticDivision/raadtools?branch=master&svg=true)](https://ci.appveyor.com/project/AustralianAntarcticDivision/raadtools)
-=======
->>>>>>> master
+
+[![Travis-CI Build
+Status](https://travis-ci.org/AustralianAntarcticDivision/raadtools.svg?branch=master)](https://travis-ci.org/AustralianAntarcticDivision/raadtools)
+[![AppVeyor Build
+Status](https://ci.appveyor.com/api/projects/status/github/AustralianAntarcticDivision/raadtools?branch=master&svg=true)](https://ci.appveyor.com/project/AustralianAntarcticDivision/raadtools)
 
 # R tools for spatial data at the Australian Antarctic Division (AAD)
 
 Tools for reading, plotting and manipulating spatial data used at the
 Australian Antarctic Division (AAD).
 
-<<<<<<< HEAD
-The repository of data used by raadtools is available under RDSI/PUBLIC/raad and at the AAD under gridded/new/ in the scientific data collection.
+The repository of data used by raadtools is available under
+RDSI/PUBLIC/raad and at the AAD under gridded/new/ in the scientific
+data collection.
 
-Anyone with a [Nectar account](https://dashboard.rc.nectar.org.au) may run this by creating a VM from our `raadclient` image. Search the public images for **raadclient** (e.g. 'raadclient04\_20180513' but choose the latest one) and ensure that the SSH and RStudio port (8787) is open. Use the default *rstudio/rstudio* account, or create your own.
+Anyone with a [Nectar account](https://dashboard.rc.nectar.org.au) may
+run this by creating a VM from our `raadclient` image. Search the public
+images for **raadclient** (e.g. ‘raadclient04\_20180513’ but choose the
+latest one) and ensure that the SSH and RStudio port (8787) is open. Use
+the default *rstudio/rstudio* account, or create your own.
 
-The [contents of the repository](https://github.com/AustralianAntarcticDivision/blueant#data-source-summary) is listed in the technical configuration for bowerbird.
+The [contents of the
+repository](https://github.com/AustralianAntarcticDivision/blueant#data-source-summary)
+is listed in the technical configuration for bowerbird.
 
-If you would like a collection added please make a request via a [Github issue](https://github.com/AustralianAntarcticDivision/bowerbird/issues/new) or contact one of the authors directly.
+If you would like a collection added please make a request via a [Github
+issue](https://github.com/AustralianAntarcticDivision/bowerbird/issues/new)
+or contact one of the authors directly.
 
-You are welcome to make your own copies of data from the collection for your own use, but please respect the citation and usage requests of the data providers [listed in the summary](https://github.com/AustralianAntarcticDivision/blueant#data-source-summary).
+You are welcome to make your own copies of data from the collection for
+your own use, but please respect the citation and usage requests of the
+data providers [listed in the
+summary](https://github.com/AustralianAntarcticDivision/blueant#data-source-summary).
 
-Using raadtools
-===============
+# Using raadtools
 
 There are two main ways to use it.
-=======
+
 The typical use-cases for raadtools are
->>>>>>> master
 
   - read a time series gridded data set as a function of date,
     optionally with spatial subsetting

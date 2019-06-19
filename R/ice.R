@@ -209,11 +209,9 @@ read_ice_internal <- function(files, hemisphere, rescale, setNA, xylim = NULL,  
   r <- vector("list", length(fname))
   #for (ifile in seq_len(nfiles)) {
    do_read <- function(ifile) { 
-    con <- file(fname[ifile], open = "rb")
-    trash <- readBin(con, "integer", size = 1, n = 300)
-    dat <- readBin(con, "integer", size = 1, n = prod(nsidcdims), endian = "little", signed = FALSE)
-    close(con)
-    r100 <- dat > 250
+    dat <- tail(readBin(fname[ifile], "integer", size = 1, n = prod(nsidcdims) + 300L, endian = "little", signed = FALSE), 
+                -300L)
+   r100 <- dat > 250
     #r0 <- dat < 1
     if (rescale) {
       dat <- dat/2.5  ## rescale back to 100
@@ -222,7 +220,10 @@ read_ice_internal <- function(files, hemisphere, rescale, setNA, xylim = NULL,  
       dat[r100] <- NA
       ##dat[r0] <- NA
     }
-    
+
+   #r0 <- raster(t(matrix(dat, nsidcdims[1])), template = rtemplate)
+   r0 <- setValues(rtemplate, dat)
+   
     # 251  Circular mask used in the Arctic to cover the irregularly-shaped data gap around the pole (caused by the orbit inclination and instrument swath)
     # 252	Unused
     # 253	Coastlines
@@ -230,7 +231,6 @@ read_ice_internal <- function(files, hemisphere, rescale, setNA, xylim = NULL,  
     # 255	Missing data
     # 
     ## ratify if neither rescale nor setNA set
-    r0 <- raster(t(matrix(dat, nsidcdims[1])), template = rtemplate)
     if (!setNA && !rescale) {
       ##r <- ratify(r)
       rat <- data.frame(ID = 0:255, icecover = c(0:250, "ArcticMask", "Unused", "Coastlines", "LandMask", "Missing"), 

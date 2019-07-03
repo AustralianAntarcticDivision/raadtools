@@ -12,12 +12,18 @@
 windfiles <-
   function(data.source = "", time.resolution = c("6hourly"),  ...) {
     time.resolution <- match.arg(time.resolution)
-    wf <- raadfiles::ncep2_uwnd_6hr_files() %>% dplyr::rename(ufullname = fullname)
+    wf <- dplyr::rename(raadfiles::ncep2_uwnd_6hr_files(), ufullname = fullname)
+    lens <- purrr::map_dbl(wf$ufullname, ~ncmeta::nc_dims(.x, "uwnd")$length[4])
+    times0 <- purrr::map(lens, ~seq(0, by = 6 * 3600, length.out = .x))
+    wfU <- dplyr::slice(wf, rep(dplyr::row_number(), lens))
+    wfU <- dplyr::group_by(wfU, .data$date)
+    wfU <- dplyr::mutate(wfU, band = dplyr::row_number())
+    wfU <- dplyr::ungroup(wfU)
+    wfU$date <- wfU$date + unlist(times0)
 
-    wfU <- .expandFileDateList_FAST(wf$ufullname, wf$root)
-
-     wf <- tibble::tibble(date = wfU$date, ufullname = wfU$file, 
-                      vfullname = gsub("uwnd", "vwnd", wfU$file), 
+    
+     wf <- tibble::tibble(date = wfU$date, ufullname = wfU$ufullname, 
+                      vfullname = gsub("uwnd", "vwnd", wfU$ufullname), 
                       band = wfU$band, 
                       root = wfU$root)
      

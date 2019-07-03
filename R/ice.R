@@ -141,7 +141,7 @@ readice_daily <- function(date,
   date <- timedateFrom(date)
   files <- .processFiles(date, files, time.resolution)
  
-  read_ice_internal(files, hemisphere, rescale, setNA, ...) 
+  read_ice_internal(files, hemisphere, rescale, setNA, xylim, ...) 
 }
 #' @name readice
 #' @export

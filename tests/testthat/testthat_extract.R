@@ -7,8 +7,8 @@ data(aurora)
 aurora$DATE_TIME_UTC <- aurora$DATE_TIME_UTC - 720 * 24 * 3600
 test_that("we get values", {
   #  expect_that(extract(readchla, aurora), is_a("numeric"))
-  expect_that(extract(readssh, aurora[c(1, 5, 10, 15), ]), 
-              equals(c(0.5336, 0.4795, -0.5973, -1.2508)))
+  expect_equivalent(extract(readssh, aurora[c(1, 5, 10, 15), ]), 
+              c( 0.5424,  0.4929, -0.6060, -1.2465))
     expect_that(extract(readwind, aurora[c(1, 5, 10, 15), ], magonly = TRUE), is_a("numeric"))
     ##expect_that(extract(readprod, aurora), is_a("numeric"))
 })

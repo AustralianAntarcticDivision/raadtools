@@ -4,13 +4,15 @@ require(testthat)
 require(raadtools)
 
 test_that("all variants are available", {
-  r1 <- readice(time.resolution = "monthly", hemisphere = "south")
-  r2 <- readice(time.resolution = "monthly", hemisphere = "north")
+ expect_error(readice(time.resolution = "monthly", hemisphere = "south"))
+  r1 <- readice_monthly(hemisphere = "south")
+  r2 <- readice_monthly(time.resolution = "monthly", hemisphere = "north")
   r3 <- readice(time.resolution = "daily", hemisphere = "south")
   r4 <- readice(time.resolution = "daily", hemisphere = "north")
   
-  r5 <- readice(product = "amsr")
-  expect_that(readice(product = "ssmi"), throws_error())
+  expect_error(readice(product = "amsr"))
+  r5 <- read_amsr_ice()
+  expect_error(readice(product = "ssmi"))
   
 })
 
@@ -18,8 +20,8 @@ test_that("requested files only are returned as a data.frame", {
     ffs <- readice(returnfiles = TRUE)
     expect_that(ffs, is_a("data.frame"))
 
-    expect_that(all(names(ffs) %in% c("date", "file", "fullname")), is_true())
-    expect_that(all(file.exists(ffs$fullname[sample(nrow(ffs), 100)])), is_true())
+    expect_true(all(names(ffs) %in% c("date", "root", "fullname")))
+    expect_true(all(file.exists(ffs$fullname[sample(nrow(ffs), 100)])))
     expect_that(sum(is.na(ffs$date)), equals(0))
 
 })
@@ -83,7 +85,7 @@ test_that("multi read on duplicated dates give only non-dupes", {
     expect_that(nlayers(readice(x)), equals(length(x) - 1L))
 })
 
-x <- as.POSIXct(c("1997-04-06", "2005-10-11", "1997-04-09"))
+x <- as.POSIXct(c("1997-04-06", "2005-10-11", "1997-04-09"), tz = "UTC")
 test_that("multi read on out of order dates sorts them", {
     expect_that(format(getZ(readice(x))), equals(format(sort(x))))
 })
@@ -96,15 +98,16 @@ test_that("ice projection is not missing", {
 })
 
 
-cf <- icefiles(time.resolution = "daily", product = "amsr")
+cf <- raadfiles::amsr_daily_files()
 xyt <- data.frame(x = c(100, 120, 130, 145, 150), y = seq(-80, 20, length = 5),   
                   dts = seq(as.Date("2011-01-03"), by = "1 month", length = 5)
 )
-test_that("read is ok with inputfiles", {
-  expect_that(readice("2015-01-01", product = "amsr", time.resolution = "daily", inputfiles = cf),
-            is_a("RasterStack"))
-  expect_that(extract(readice, xyt, product = "amsr", time.resolution = "daily"), is_a("numeric"))
-  expect_that(extract(readice, xyt, product = "amsr", time.resolution = "daily", inputfiles = cf), is_a("numeric"))
+test_that("read is", {
+  expect_error(readice("2015-01-01", product = "amsr", time.resolution = "daily", inputfiles = cf))
+  expect_that(read_amsr_ice("2015-01-01", inputfiles = cf),
+            is_a("RasterBrick"))
+  expect_that(extract(read_amsr_ice, xyt), is_a("numeric"))
+  expect_that(extract(read_amsr_ice, xyt, product = "amsr"), is_a("numeric"))
 })
 
 

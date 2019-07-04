@@ -21,9 +21,9 @@ sst <- c(27.3899993877858, 28.3199993669987, 29.3799993433058, 29.2199993468821,
 
 test_that("extracting for trip works", {
   expect_equal(extract(readsst, tr), sst)
-  expect_output(extract(readice, tr[1:4, ]), "daily file")
-  expect_output(extract(readcurr, walrus818[1:4, ], uonly = TRUE), "daily file")
-  print("aaaa")
-  projection(tr) <- NA
+  expect_type(extract(readice, tr[1:4, ]), "double")
+  expect_type(extract(readcurr, walrus818[1:4, ], uonly = TRUE), "double")
+
+  tr@proj4string@projargs <- NA_character_
   expect_warning(extract(readice, tr[1:4, ]), "longitude/latitude")
 })

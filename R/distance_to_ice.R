@@ -13,7 +13,7 @@
 #' Future work may generalize this to other data sources. 
 #' @inheritParams readice
 #' @param threshold the sea ice concentration threshold to contour at
-#' @param ... passed to `readice`, e.g. `hemisphere`
+#' @param hemisphere "north" or "south", default is "south"
 #' @return raster layer with distances to this date's sea ice edge
 #' @export
 #' @note beware that any queried location outside of this layer's range will be 
@@ -30,17 +30,25 @@
 #' extract(distance_to_ice, aurora[17:25, ], hemisphere = "south")
 #' # library(trip)
 #' # extract(distance_to_ice_edge, walrus818[seq(50, 400, by = 20), ], hemisphere = "north")
-distance_to_ice_edge <- function(date, threshold = 15, ..., returnfiles = FALSE, inputfiles = NULL) {
-  if (returnfiles) return(icefiles(...))
-  if (!missing(date) && length(date) > 1L) {
+distance_to_ice_edge <- function(date, threshold = 15, hemisphere = "south", returnfiles = FALSE, inputfiles = NULL) {
+  if (!is.null(inputfiles)) {
+    files <- inputfiles 
+  } else {
+    files <- icefiles(hemisphere = hemisphere)
+  }
+  if (returnfiles) return(files)
+  if (missing(date)) {
+    date <- max(files$date)
+  }
+  if (length(date) > 1L) {
     warning("'date' should be of length = 1, using first supplied")
     date <- date[1L]
   }
-  distance_to_ice_edge0(date, threshold = threshold, returnfiles = FALSE, inputfiles = inputfiles, ...)
+  distance_to_ice_edge0(date, threshold = threshold, returnfiles = FALSE, inputfiles = inputfiles, hemisphere = hemisphere)
 }
 
-distance_to_ice_edge0 <- function(date, threshold = 15, ..., returnfiles = FALSE, inputfiles = NULL) {
-  ice <- readice(date, ..., inputfiles = inputfiles, setNA = FALSE)
+distance_to_ice_edge0 <- function(date, threshold = 15, hemisphere = "south", returnfiles = FALSE, inputfiles = NULL) {
+  ice <- readice(date, hemisphere = hemisphere, inputfiles = inputfiles, setNA = FALSE)
   cl <- keepOnlyMostComplexLine(rasterToContour(ice, levels = threshold))
   pp <- rgdal::project(coordinates(ice), projection(ice), inv = TRUE)
   pcl <- coordinates(as(cl, "SpatialPointsDataFrame"))
@@ -48,13 +56,21 @@ distance_to_ice_edge0 <- function(date, threshold = 15, ..., returnfiles = FALSE
 }  
 #' @name distance_to_ice_edge
 #' @export
-distance_to_ice <- function(date, threshold = 15, ..., returnfiles = FALSE, inputfiles = NULL) {
-  if (returnfiles) return(icefiles())
-  if (!missing(date) && length(date) > 1L) {
+distance_to_ice <- function(date, threshold = 15, hemisphere = "south", returnfiles = FALSE, inputfiles = NULL) {
+  if (!is.null(inputfiles)) {
+    files <- inputfiles 
+  } else {
+    files <- icefiles(hemisphere = hemisphere)
+  }
+  if (returnfiles) return(files)
+  if (missing(date)) {
+    date <- max(files$date)
+  }
+  if (length(date) > 1L) {
     warning("'date' should be of length = 1, using first supplied")
     date <- date[1L]
   }
-  ice <- readice(date, ..., inputfiles = inputfiles, setNA = FALSE)
+  ice <- readice(date, hemisphere = hemisphere, inputfiles = files, setNA = FALSE)
   cl <- rasterToContour(ice, levels = threshold)
   pp <- rgdal::project(coordinates(ice), projection(ice), inv = TRUE)
   pcl <- coordinates(as(cl, "SpatialPointsDataFrame"))

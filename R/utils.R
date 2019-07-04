@@ -48,13 +48,6 @@ set_utc_format <- function(x) {
 }
 
 
-
-
-
-
-
-
-
 ## shared stuff
 ## datadir
 ## normalize input dates - need index and value
@@ -74,11 +67,6 @@ set_utc_format <- function(x) {
 .expandFileDateList <- function(x) {
   vl <- vector("list", length(x))
   for (i in seq_along(x)) {
-    #       if (fastNC) {
-    #         ## essentially we rely on the readx function to what metadata to apply
-    #         ## (until we get some better general nc tools)
-    #        dates <- .fastNCvar(x[i], varname) 
-    #       } else {
     b <- brick(x[i], quick = TRUE)
     dates <- timedateFrom(getZ(b))
     
@@ -86,36 +74,6 @@ set_utc_format <- function(x) {
                           stringsAsFactors = FALSE)
   }
   do.call("rbind", vl)
-}
-
-
-.expandFileDateList_FAST <- function(x, root) {
-  #vl <- vector("list", length(x))
-  do_fun2 <- function(xi, rootdir) {
-    con <- ncdf4::nc_open(xi, suppress_dimvals = FALSE)
-    #time <- ncdf4::ncvar_get(con, "time")
-    time <- con[["dim"]]$time$vals
-    #utime <- ncdf4::ncatt_get(con, "time", 0)
-    #con[["dim"]]$time$units
-    #[1] "hours since 1800-1-1 00:00:0.0
-    ctime <- as.POSIXct("1800-01-01 00:00:00", tz = "GMT") + time * 3600
-    ncdf4::nc_close(con)
-    tibble::tibble(file = xi, date = ctime, band = seq_along(ctime), root = rootdir)
-  }
-  # do_fun <- function(xi) {
-  #   con <- RNetCDF::open.nc(xi)
-  #   time <- RNetCDF::var.get.nc(con, "time")
-  #   utime <- RNetCDF::att.get.nc(con, "time", 0)
-  #   ctime <- RNetCDF::utcal.nc(utime, time, type = "c")
-  #   RNetCDF::close.nc(con)
-  #   tibble::tibble(file = xi, date = ctime, band = seq_along(ctime))
-  # }
-  l <- vector("list", length(x))
-  for (i in seq_along(l)) {
-    l[[i]] <- do_fun2(x[i], root[i])
-  }
-  do.call(rbind, l)
- 
 }
 
 .valiDates <- function(x, allOK = TRUE) {

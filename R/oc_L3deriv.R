@@ -126,9 +126,8 @@ read_oc_sochla <- function(date, time.resolution = c("daily"), bins = NULL,
   files <- files[findInterval(date, files$date), ]
  
   if (returnfiles) return(files)
-  future::plan("future::multiprocess")
-  l <- furrr::future_map_dfr(files$fullname, read_oc_sochla_day, bins = bins)
-  l
+ l <- furrr::future_map_dfr(files$fullname, read_oc_sochla_day, bins = bins)
+l
 }
   
 product2nrows <- function(x) {

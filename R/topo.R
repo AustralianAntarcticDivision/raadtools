@@ -99,6 +99,7 @@
 #' \item{ramp}{Radarsat Antarctic digital elevation model V2 \url{https://github.com/AustralianAntarcticDivision/blueant#radarsat-antarctic-digital-elevation-model-v2}}
 #' \item{ga_srtm}{Digital Elevation Model (DEM) of Australia with 1 Second Grid}
 #' \item{rema_1km, rema_200m, rema_100m, rema_8m}{Reference Elevation Model of Antartica (REMA) for the peninsula, see `read_rema_tiles` for the index}
+#' \item{gebco_19}{GEBCO_2019 Grid https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html}
 #' }
 #' @title Topography data
 #' @name readtopo
@@ -128,7 +129,7 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
                               "rema_200m",
                               "rema_100m", 
                               "rema_8m", 
-                              "srtm"),
+                              "srtm", "gebco_19"),
                      polar = FALSE,
                      lon180 = TRUE,
                      xylim = NULL,
@@ -181,7 +182,7 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
                               "rema_200m", 
                               "rema_100m", 
                               "rema_8m", 
-                              "srtm"),
+                              "srtm", "gebco_19"),
                      polar = FALSE,
                      lon180 = TRUE,
                      ...) {
@@ -199,7 +200,8 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
 
    topopath <-  switch(topo, 
            gebco_08 = raadfiles::gebco08_files()$fullname,
-           gebco_14 = raadfiles::gebco14_files()$fullname, 
+           gebco_14 = raadfiles::gebco14_files()$fullname,
+           gebco_19 = raadfiles::gebco19_files()$fullname,
            ibcso_is = dplyr::filter(raadfiles::ibcso_files(all = TRUE), 
                                     grepl("_is.*tif$", basename(.data$fullname)))$fullname,
            ibcso_bed = dplyr::filter(raadfiles::ibcso_files(all = TRUE), 
@@ -225,7 +227,7 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
              file.path(dirname(dirname(files$fullname[1])), "srtm_4.1.vrt")
              
            })
-           
+
            
            )
   }

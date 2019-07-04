@@ -137,18 +137,18 @@ readfronts <- function(date,
   
   l <- vector("list", nfiles)
   for (i in seq_along(l)) {
-    r0 <- raster(files$fullname[i], band = files$band[i], stopIfNotEqualSpaced=FALSE)
-    extent(r0) <- extent(bbox(epoints.merc))
-    projection(r0) <- proj
+    r0 <- raster::raster(files$fullname[i], band = files$band[i], stopIfNotEqualSpaced=FALSE)
+    raster::extent(r0) <- raster::extent(bbox(epoints.merc))
+    raster::projection(r0) <- proj
     e <- new("Extent", xmin = 0, xmax = 2 * 20037508, ymin = -11087823.8567493 , ymax = -3513725)
-    if (!is.null(xylim)) r0<- crop(r0, extent(xylim)) else r0 <- crop(r0, e)
+    if (!is.null(xylim)) r0<- raster::crop(r0, raster::extent(xylim)) else r0 <- raster::crop(r0, e)
     
     if (lon180)  r0 <- suppressWarnings(.rotate(r0))
    
     
     if (setNA) r0[is.nan(r0)] <- NA
     if (RAT) {
-      r0 <- ratify(r0)
+      r0 <- raster::ratify(r0)
       rat <- levels(r0)[[1]]
       
       rat <- data.frame(ID = 0:12, name = c("south of sBdy", "between SACCF-S & sBdy", "SACCF-N & SACCF-S",
@@ -161,14 +161,17 @@ readfronts <- function(date,
   }
   
   
+  r <- if (length(l) > 1) raster::brick(raster::stack(l)) else l[[1L]]
   
-  r <- if (length(l) > 1) setZ(brick(stack(l)), files$date) else setZ(l[[1L]], files$date)
   ## lots of cells are wasted with nodata and with float32 becoming 64
-  v <- values(r)
+  v <- raster::values(r)
   mode(v) <- "integer"
- r <- setValues(r, v)
-  dataType(r) <- "INT4S"
+ r <- raster::setValues(r, v)
+ 
+ raster::dataType(r) <- "INT4S"
   if (trim) r <- raster::trim(r)
-  r
+
+  raster::setZ(r, files$date)
+  
 }
 

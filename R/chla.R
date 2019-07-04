@@ -10,6 +10,7 @@
 ##'
 ##' @param date date or dates of data to read, see Details
 ##' @param product choice of product, see Details
+
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, ignored if grid is provided
 ##'  @param algorithm johnson or nasa
 ##' @param grid template raster object for output
@@ -33,6 +34,7 @@
 readchla <- function(date, product = c("MODISA", "SeaWiFS"),
                      xylim = NULL,
                      algorithm = c("johnson", "nasa"),
+
                      latest = TRUE, 
                      grid = NULL) {
   product <- match.arg(product)

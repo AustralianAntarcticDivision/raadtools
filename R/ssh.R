@@ -9,9 +9,7 @@
 ##' @return data.frame of file names and dates
 ##' @export
 sshfiles <- function(time.resolution = c("daily"),  ...) {
-  datadir <- getOption("default.datadir")
   time.resolution <- match.arg(time.resolution)
-  
   raadfiles::altimetry_daily_files()
 }
 

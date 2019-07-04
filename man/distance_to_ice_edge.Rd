@@ -5,18 +5,18 @@
 \alias{distance_to_ice}
 \title{Distance to a sea ice 'edge'.}
 \usage{
-distance_to_ice_edge(date, threshold = 15, ..., returnfiles = FALSE,
-  inputfiles = NULL)
+distance_to_ice_edge(date, threshold = 15, hemisphere = "south",
+  returnfiles = FALSE, inputfiles = NULL)
 
-distance_to_ice(date, threshold = 15, ..., returnfiles = FALSE,
-  inputfiles = NULL)
+distance_to_ice(date, threshold = 15, hemisphere = "south",
+  returnfiles = FALSE, inputfiles = NULL)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
 
 \item{threshold}{the sea ice concentration threshold to contour at}
 
-\item{...}{passed to `readice`, e.g. `hemisphere`}
+\item{hemisphere}{"north" or "south", default is "south"}
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 

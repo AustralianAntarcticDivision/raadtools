@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Mixed Layer Depth — readmld • raadtools</title>
+<title>Read a single SRTM tile — read_srtm_tile • raadtools</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Mixed Layer Depth — readmld" />
+<meta property="og:title" content="Read a single SRTM tile — read_srtm_tile" />
 
-<meta property="og:description" content="Read the Sall?e Mixed layer depth climatology." />
+<meta property="og:description" content="Read a tile by x and y index." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -120,78 +120,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Mixed Layer Depth</h1>
-    <small class="dont-index">Source: <a href='https://github.com/AustralianAntarcticDivision/raadtools/blob/master/R/mld.R'><code>R/mld.R</code></a></small>
-    <div class="hidden name"><code>readmld.Rd</code></div>
+    <h1>Read a single SRTM tile</h1>
+    <small class="dont-index">Source: <a href='https://github.com/AustralianAntarcticDivision/raadtools/blob/master/R/srtm.R'><code>R/srtm.R</code></a></small>
+    <div class="hidden name"><code>read_srtm_tile.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Read the Sall?e Mixed layer depth climatology.</p>
+    <p>Read a tile by x and y index.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>readmld</span>(<span class='no'>date</span>, <span class='kw'>xylim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>returnfiles</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>date</th>
-      <td><p>date to extract, can only be a climatology month</p></td>
-    </tr>
-    <tr>
-      <th>xylim</th>
-      <td><p>extent specification</p></td>
-    </tr>
-    <tr>
-      <th>returnfiles</th>
-      <td><p>return the file details only</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>ignored</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>RasterBrick</p>
-    
+    <pre class="usage"><span class='fu'>read_srtm_tile</span>(<span class='kw'>tile_x</span> <span class='kw'>=</span> <span class='fl'>39</span>, <span class='kw'>tile_y</span> <span class='kw'>=</span> <span class='fl'>6</span>)</pre>
+        
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Information from JB Sallee (2013-06-06) is below, and an example to
-read and display it in R.
-A recently updated dataset using the most recent Southern Ocean observation,
-with updated gridding analysis so it should be better and have appropriate
-land mask:  ftp://ftp.nerc-bas.ac.uk/jbsall/MLfitted_SO.mat
-This is a compilation of ocean *observations*: a compilation of 225389
-profiles from the Argo program and 106682 profiles from all kind of different
-ships and PIs. This is *not* model evaluation.
-This is likely the best estimate of monthly MLD , because it uses the largest
-number of observations. There is no observational products with time
-variability because the Southern Ocean only started to be observed (at basin
-scale) in this last decade. No observation product can give a temporal
-evolution at basin scale.
-Model estimate could be use, but model are known to perform particularly badly
-in the surface layer so the mixed-layer is always problematic from model.
-Another possibility could be to use some reanalysis product like that
-Met-Office product
-(http://www.metoffice.gov.uk/hadobs/en3/data/EN3_v2a/download_EN3_v2a.html),
-but this is an objective analysis of available observation, so in the southern
-Ocean before 2002 (when Argo started), there is not much, so the results will
-be strongly dominated by the climatology (World ocean Atlas).
-Unfortunately there is no good answer for time variability of MLD.</p>
+    <p>See [raadfiles::srtm_files()] for filename in `fullname` and `x`, `y` for tile indices.</p>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
           </ul>
 

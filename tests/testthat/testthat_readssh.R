@@ -3,8 +3,8 @@ context("sea surface height")
 require(testthat)
 require(raadtools)
 test_that("ssh data is returned as a raster object", {
-          expect_that(readssh("2000-01-01"), is_a("RasterLayer"))
-          expect_that(readssh("2000-01-01", ssha = TRUE), is_a("RasterLayer"))
+          expect_that(readssh("2000-01-01"), is_a("RasterBrick"))
+          expect_that(readssh("2000-01-01", ssha = TRUE), is_a("RasterBrick"))
       })
 
 test_that("multiple dates return a multilayer object", {
@@ -18,7 +18,7 @@ test_that("using filename with two dates gives a brick", {
 
 test_that("nuances of different defaults for multilayer object", {
   expect_that(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10")), is_a("RasterBrick"))
-  expect_that(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10"), lon180 = FALSE), is_a("RasterStack"))
+  expect_that(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10"), lon180 = FALSE), is_a("RasterBrick"))
   expect_that(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10"), xylim = extent(-180, 180, -90, -40)), is_a("RasterBrick"))
 })
 

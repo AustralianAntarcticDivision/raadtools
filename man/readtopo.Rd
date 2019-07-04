@@ -11,21 +11,21 @@ readtopo(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
   "george_v_terre_adelie", "smith_sandwell", "gebco_14", "macrie1100m",
   "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is",
   "ibcso_bed", "ga_srtm", "rema_1km", "rema_200m", "rema_100m", "rema_8m",
-  "srtm"), polar = FALSE, lon180 = TRUE, xylim = NULL,
+  "srtm", "gebco_19"), polar = FALSE, lon180 = TRUE, xylim = NULL,
   returnfiles = FALSE, ...)
 
 readbathy(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
   "george_v_terre_adelie", "smith_sandwell", "gebco_14", "macrie1100m",
   "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is",
   "ibcso_bed", "ga_srtm", "rema_1km", "rema_200m", "rema_100m", "rema_8m",
-  "srtm"), polar = FALSE, lon180 = TRUE, xylim = NULL,
+  "srtm", "gebco_19"), polar = FALSE, lon180 = TRUE, xylim = NULL,
   returnfiles = FALSE, ...)
 
 topofile(topo = c("gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
   "george_v_terre_adelie", "smith_sandwell", "gebco_14", "macrie1100m",
   "macrie2100m", "cryosat2", "lake_superior", "ramp", "ibcso_is",
   "ibcso_bed", "ga_srtm", "rema_1km", "rema_200m", "rema_100m", "rema_8m",
-  "srtm"), polar = FALSE, lon180 = TRUE, ...)
+  "srtm", "gebco_19"), polar = FALSE, lon180 = TRUE, ...)
 
 read_rema_tiles(...)
 }
@@ -70,5 +70,6 @@ The following data sets are available using the argument \code{topo}.
 \item{ramp}{Radarsat Antarctic digital elevation model V2 \url{https://github.com/AustralianAntarcticDivision/blueant#radarsat-antarctic-digital-elevation-model-v2}}
 \item{ga_srtm}{Digital Elevation Model (DEM) of Australia with 1 Second Grid}
 \item{rema_1km, rema_200m, rema_100m, rema_8m}{Reference Elevation Model of Antartica (REMA) for the peninsula, see `read_rema_tiles` for the index}
+\item{gebco_19}{GEBCO_2019 Grid https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html}
 }
 }

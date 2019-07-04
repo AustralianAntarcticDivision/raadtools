@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.2.9001</span>
       </span>
     </div>
 
@@ -92,15 +92,20 @@
     
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<div id="r-tools-for-spatial-data-at-the-australian-antarctic-division-aad" class="section level1">
+<div id="r-tools-for-synoptic-environmental-spatial-data" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#r-tools-for-spatial-data-at-the-australian-antarctic-division-aad" class="anchor"></a>R tools for spatial data at the Australian Antarctic Division (AAD)</h1></div>
+<a href="#r-tools-for-synoptic-environmental-spatial-data" class="anchor"></a>R Tools for Synoptic Environmental Spatial Data</h1></div>
 <p>Tools for reading, plotting and manipulating spatial data used at the Australian Antarctic Division (AAD).</p>
-<p>The repository of data used by raadtools is available under RDSI/PUBLIC/raad and at the AAD under gridded/new/ in the scientific data collection.</p>
-<p>Anyone with a <a href="https://dashboard.rc.nectar.org.au">Nectar account</a> may run this by creating a VM from our <code>raadclient</code> image. Search the public images for <strong>raadclient</strong> (e.g. ‘raadclient04_20180513’ but choose the latest one) and ensure that the SSH and RStudio port (8787) is open. Use the default <em>rstudio/rstudio</em> account, or create your own.</p>
-<p>The <a href="https://github.com/AustralianAntarcticDivision/blueant#data-source-summary">contents of the repository</a> is listed in the technical configuration for bowerbird.</p>
+<p>A common example is to read an environmental layer as a function of date:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(raadtools)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">ice &lt;-<span class="st"> </span><span class="kw"><a href="reference/readice.html">readice</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"2018-06-01"</span>, <span class="st">"2019-06-01"</span>))</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(ice)</a></code></pre></div>
+<p><img src="README-eg-1-1.png" width="700"></p>
+<p>The available data sources are accessed using <strong>read*()</strong> functions for a <a href="http://australianantarcticdivision.github.io/raadtools/reference/index.html">wide variety of data sources</a>.</p>
+<p>There are data sets from oceanography, topography, meteorology, altimetry, sea ice, ocean colour, and many other data sources. These are mostly remote sensing but include re-analysis and model output products.</p>
+<p>The package uses the R <a href="https://CRAN.R-project.org/package=raster">raster package</a> and always provides data as a standard raster (RasterLayer, RasterBrick, or RasterStack). Each data set is invdividually handled by a function to ensure the spatial and temporal registration is correct.</p>
+<p>The contents of the data library itself is listed in the <a href="https://github.com/AustralianAntarcticDivision/blueant#data-source-summary">technical configuration</a>.</p>
 <p>If you would like a collection added please make a request via a <a href="https://github.com/AustralianAntarcticDivision/bowerbird/issues/new">Github issue</a> or contact one of the authors directly.</p>
-<p>You are welcome to make your own copies of data from the collection for your own use, but please respect the citation and usage requests of the data providers <a href="https://github.com/AustralianAntarcticDivision/blueant#data-source-summary">listed in the summary</a>.</p>
 </div>
 <div id="using-raadtools" class="section level1">
 <h1 class="hasAnchor">
@@ -112,37 +117,28 @@
 <li>match a data set of longitude, latitude, time to the corresponding value in a time series gridded data set</li>
 </ul>
 <p>Examples of these workflows are outlined in this <a href="https://ropensci.org/blog/2018/11/13/antarctic/">rOpenSci blog post</a>.</p>
-<p>There are oceanography, topography, meteorology, altimetry, sea ice, ocean colour, and many other data sources. These are mostly remote sensing but including re-analysis and model output products.</p>
-<p>The package uses the R <a href="https://CRAN.R-project.org/package=raster">raster package</a> and always provides data as a standard raster (RasterLayer, RasterBrick, or RasterStack). Each data set is invdividually handled by a function to ensure the spatial and temporal registration is correct. There are several <code>read*()</code> functions in raadtools, see the full list in the documentation:</p>
-<p><a href="http://australianantarcticdivision.github.io/raadtools/reference/index.html" class="uri">http://australianantarcticdivision.github.io/raadtools/reference/index.html</a></p>
-<p>To build the underlying data collection raadtools relies on the <a href="https://github.com/ropensci/bowerbird">bowerbird</a> and <a href="https://github.com/AustralianAntarcticDivision/blueant">blueant</a> packages.</p>
 </div>
-<div id="acess-to-raadtools" class="section level1">
+<div id="access-to-raadtools" class="section level1">
 <h1 class="hasAnchor">
-<a href="#acess-to-raadtools" class="anchor"></a>Acess to raadtools</h1>
-<p>Typically you will be provided with access, and won’t be aware of the underlying details, but the repository of data used by raadtools is available under RDSI/PUBLIC/raad and at the AAD under gridded_new/ in the scientific data collection.</p>
-<p>Anyone with a <a href="https://dashboard.rc.nectar.org.au">Nectar account</a> may run this by creating a VM from our <code>raadclient</code> image. Search the public images for <strong>raadclient</strong> (e.g. ’ raadclient06_20181016’ but choose the latest one) and ensure that the SSH and RStudio port (8787) is open. Use the default <em>rstudio/rstudio</em> account, or create your own.</p>
-<p>The <a href="https://github.com/AustralianAntarcticDivision/blueant#data-source-summary">contents of the repository</a> is listed in the technical configuration for bowerbird.</p>
-<p>If you would like a collection added please make a request via a <a href="https://github.com/AustralianAntarcticDivision/bowerbird/issues/new">Github issue</a> or contact one of the authors directly.</p>
-<p>You are welcome to make your own copies of data from the collection for your own use, but please respect the citation and usage requests of the data providers <a href="https://github.com/AustralianAntarcticDivision/blueant#data-source-summary">listed in the summary</a>.</p>
-</div>
-<div id="using-raadtools-1" class="section level1">
-<h1 class="hasAnchor">
-<a href="#using-raadtools-1" class="anchor"></a>Using raadtools</h1>
-<p>There are two main ways to use it.</p>
+<a href="#access-to-raadtools" class="anchor"></a>Access to raadtools</h1>
+<p>The repository of data used by raadtools is available via the <a href="https://dashboard.rc.nectar.org.au">Nectar research cloud</a> or for local use within the AAD.</p>
+<p>There are two main ways to access raadtools. (If neither of 1 or 2 work for you you, see your local raadtools expert.)</p>
 <div id="rstudio-raadtools-server" class="section level2">
 <h2 class="hasAnchor">
 <a href="#rstudio-raadtools-server" class="anchor"></a>1. RStudio raadtools server</h2>
 <p>If you have access to a “raadtools-RStudio-server” then you need only load the package to get started:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(raadtools)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(raadtools)</a></code></pre></div>
 </div>
 <div id="local-computer-within-the-aad-network" class="section level2">
 <h2 class="hasAnchor">
 <a href="#local-computer-within-the-aad-network" class="anchor"></a>2. Local computer, within the AAD network</h2>
 <p>If it’s not installed, trying installing with</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"AustralianAntarcticDivision/raadtools"</span>)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(raadtools)</a></code></pre></div>
-<p>If neither of 1 or 2 work for you you, see your local raadtools expert.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"AustralianAntarcticDivision/raadtools"</span>)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(raadtools)</a></code></pre></div>
+<p>Typically you will be provided with access, and won’t be aware of the underlying details, but the repository of data used by raadtools is available under RDSI/PUBLIC/raad and at the AAD in the scientific data collection.</p>
+<p>Anyone with a <a href="https://dashboard.rc.nectar.org.au">Nectar account</a> may run this by creating a VM from our <code>raadclient</code> image. Search the public images for <strong>raadclient</strong> (e.g. ’ raadclient06_20181016’ but choose the latest one) and ensure that the SSH and RStudio port (8787) is open. Use the default <em>rstudio/rstudio</em> account, or create your own.</p>
+<p>You are welcome to make your own copies of data from the collection for your own use, but please respect the citation and usage requests of the data providers <a href="https://github.com/AustralianAntarcticDivision/blueant#data-source-summary">listed in the summary</a>.</p>
+<hr>
 <p>Please note that the ‘raadtools’ project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
 </div>

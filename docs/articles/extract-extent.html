@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.2.9001</span>
       </span>
     </div>
 
@@ -89,7 +89,7 @@
       <h1>Environmental data from an extent with raadtools</h1>
                         <h4 class="author">Michael Sumner and Jaimie Cleeland</h4>
             
-            <h4 class="date">2019-05-23</h4>
+            <h4 class="date">2019-07-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AustralianAntarcticDivision/raadtools/blob/master/vignettes/extract-extent.Rmd"><code>vignettes/extract-extent.Rmd</code></a></small>
       <div class="hidden name"><code>extract-extent.Rmd</code></div>
@@ -104,12 +104,12 @@
 <pre><code>## Loading required package: raster</code></pre>
 <pre><code>## Loading required package: sp</code></pre>
 <pre><code>## global option 'raadfiles.data.roots' set:
-## '/rdsi/PRIVATE/raad/data               2019-05-23 12:35:19
-##  /rdsi/PRIVATE/raad/data_local         2019-05-23 12:43:08
-##  /rdsi/PRIVATE/raad/data_staging       2019-05-23 12:43:10
-##  /rdsi/PRIVATE/raad/data_deprecated    2019-05-23 12:48:36
-##  /rdsi/PUBLIC/raad/data                2019-05-23 13:21:42'</code></pre>
-<pre><code>## Uploading raad file cache as at 2019-05-23 14:03:06 (962921 files listed)</code></pre>
+## '/rdsi/PRIVATE/raad/data               2019-07-04 12:35:12
+##  /rdsi/PRIVATE/raad/data_local         2019-07-04 12:39:34
+##  /rdsi/PRIVATE/raad/data_staging       2019-07-04 12:39:34
+##  /rdsi/PRIVATE/raad/data_deprecated    2019-07-04 12:42:41
+##  /rdsi/PUBLIC/raad/data                2019-07-04 12:53:54'</code></pre>
+<pre><code>## Uploading raad file cache as at 2019-07-04 13:49:23 (993776 files listed)</code></pre>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(raadfiles)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw"><a href="../reference/readsst.html">readsst</a></span>(<span class="st">"2010-01-01"</span>, <span class="dt">xylim =</span> <span class="kw">extent</span>(<span class="dv">100</span>, <span class="dv">160</span>, <span class="dv">-50</span>, <span class="dv">-40</span>))</a></code></pre></div>
 <pre><code>## class      : RasterLayer 
@@ -134,8 +134,8 @@
 ## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
 ## source     : memory
 ## names      : Daily.sea.surface.temperature 
-## values     : -1.8, 32.06  (min, max)
-## time       : 2019-05-21</code></pre>
+## values     : -1.8, 33.64  (min, max)
+## time       : 2019-06-30</code></pre>
 <p>That works for <code>readssh</code>, <code>readcurr</code>, and <code>readwind</code> just the same, and the date argument can be a single date or a vector of them. In the <code>raster</code> package there are single <code>RasterLayer</code> objects and multi-layer <code>RasterBrick</code> (or <code>RasterStack</code>) objects. Raadtools will usually return a RasterStack or a RasterLayer, and it will record the time-step/s on the data as well (when relevant). After the read function is finished we are back to using the <code>raster</code> package, so familiarity with that package and its documentation is important.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/vignette">vignette</a></span>(<span class="st">"Raster"</span>, <span class="dt">package=</span> <span class="st">"raster"</span>)</a></code></pre></div>
 <p>Some of the functions respect <code>lon180 = FALSE</code> because they have a grid that was originally in <code>[0, 360, -90, 90]</code> and in that case it can be faster to use that domain for the extent rather than the common <code>[-180, 180, -90, 90]</code> one. (Please feel free to ask about this for specific data sets, it’s one of those boring details).</p>
@@ -181,8 +181,8 @@
 ## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
 ## source     : memory
 ## names      : Daily.sea.surface.temperature 
-## values     : 3.3, 18.1  (min, max)
-## time       : 2019-05-21</code></pre>
+## values     : 2.64, 17.27  (min, max)
+## time       : 2019-06-30</code></pre>
 <p>(Internally <code>raadtools</code> always uses <code>snap=out</code> since that makes sure the intersection is <em>inclusive</em>, i.e. any overlapping part of a pixel means that pixel is included in the result. By default <code>crop</code> would drop partial overlaps on the edge).</p>
 <p>If there’s a really long time series though it will be better to do that with xylim, and even to pass it out to a file:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">sst &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readsst.html">readsst</a></span>(dates,  <span class="dt">xylim =</span> <span class="kw">extent</span>(<span class="dv">100</span>, <span class="dv">160</span>, <span class="dv">-50</span>, <span class="dv">-40</span>), <span class="dt">filename =</span> <span class="st">"mymegasplat.grd"</span>)</a></code></pre></div>
@@ -229,11 +229,6 @@
 <a class="sourceLine" id="cb22-5" data-line-number="5">msst &lt;-<span class="st"> </span><span class="kw">calc</span>(sst, mean)</a>
 <a class="sourceLine" id="cb22-6" data-line-number="6">sdsst &lt;-<span class="st"> </span><span class="kw">calc</span>(sst, sd)</a>
 <a class="sourceLine" id="cb22-7" data-line-number="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(msst, <span class="dt">col =</span> viridis<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/viridis/topics/reexports">viridis</a></span>(<span class="dv">50</span>), <span class="dt">main =</span> <span class="st">"mean SST Jan 2016"</span>,  <span class="dt">addfun =</span> <span class="cf">function</span>() <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/contour">contour</a></span>(sdsst, <span class="dt">add =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
-<pre><code>## Registered S3 methods overwritten by 'ggplot2':
-##   method         from 
-##   [.quosures     rlang
-##   c.quosures     rlang
-##   print.quosures rlang</code></pre>
 <p><img src="extract-extent_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 </div>
   </div>

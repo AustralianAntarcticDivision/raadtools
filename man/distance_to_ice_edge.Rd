@@ -5,22 +5,30 @@
 \alias{distance_to_ice}
 \title{Distance to a sea ice 'edge'.}
 \usage{
-distance_to_ice_edge(date, threshold = 15, hemisphere = "south",
-  returnfiles = FALSE, inputfiles = NULL)
+distance_to_ice_edge(date, threshold = 15, xylim = NULL,
+  hemisphere = "south", returnfiles = FALSE, inputfiles = NULL,
+  latest = TRUE, ...)
 
-distance_to_ice(date, threshold = 15, hemisphere = "south",
-  returnfiles = FALSE, inputfiles = NULL)
+distance_to_ice(date, threshold = 15, xylim = NULL,
+  hemisphere = "south", returnfiles = FALSE, inputfiles = NULL,
+  latest = TRUE, ...)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
 
 \item{threshold}{the sea ice concentration threshold to contour at}
 
+\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}}
+
 \item{hemisphere}{"north" or "south", default is "south"}
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 
 \item{inputfiles}{input the files data base to speed up initialization}
+
+\item{latest}{if TRUE return the latest time available, ignoring the 'date' argument}
+
+\item{...}{passed to brick, primarily for \code{filename}}
 }
 \value{
 raster layer with distances to this date's sea ice edge

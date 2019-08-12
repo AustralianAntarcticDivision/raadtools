@@ -139,11 +139,13 @@ the higher resolution products and near the coast.
     
     </div>
 
-    <pre class="usage"><span class='fu'>distance_to_ice_edge</span>(<span class='no'>date</span>, <span class='kw'>threshold</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>hemisphere</span> <span class='kw'>=</span> <span class='st'>"south"</span>,
-  <span class='kw'>returnfiles</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>inputfiles</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+    <pre class="usage"><span class='fu'>distance_to_ice_edge</span>(<span class='no'>date</span>, <span class='kw'>threshold</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>xylim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>hemisphere</span> <span class='kw'>=</span> <span class='st'>"south"</span>, <span class='kw'>returnfiles</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>inputfiles</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>latest</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
-<span class='fu'>distance_to_ice</span>(<span class='no'>date</span>, <span class='kw'>threshold</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>hemisphere</span> <span class='kw'>=</span> <span class='st'>"south"</span>,
-  <span class='kw'>returnfiles</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>inputfiles</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+<span class='fu'>distance_to_ice</span>(<span class='no'>date</span>, <span class='kw'>threshold</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>xylim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>hemisphere</span> <span class='kw'>=</span> <span class='st'>"south"</span>, <span class='kw'>returnfiles</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>inputfiles</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>latest</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -157,6 +159,10 @@ the higher resolution products and near the coast.
       <td><p>the sea ice concentration threshold to contour at</p></td>
     </tr>
     <tr>
+      <th>xylim</th>
+      <td><p>spatial extents to crop from source data, can be anything accepted by <code><a href='https://www.rdocumentation.org/packages/raster/topics/extent'>extent</a></code></p></td>
+    </tr>
+    <tr>
       <th>hemisphere</th>
       <td><p>"north" or "south", default is "south"</p></td>
     </tr>
@@ -167,6 +173,14 @@ the higher resolution products and near the coast.
     <tr>
       <th>inputfiles</th>
       <td><p>input the files data base to speed up initialization</p></td>
+    </tr>
+    <tr>
+      <th>latest</th>
+      <td><p>if TRUE return the latest time available, ignoring the 'date' argument</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>passed to brick, primarily for <code>filename</code></p></td>
     </tr>
     </table>
     
@@ -192,10 +206,11 @@ are on the actual map, so it's not possible to request the distance to ice in bo
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='fu'>distance_to_ice</span>(<span class='kw'>latest</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='error'>Error in distance_to_ice(latest = TRUE): unused argument (latest = TRUE)</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='fu'>distance_to_ice_edge</span>(<span class='kw'>latest</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='error'>Error in distance_to_ice_edge(latest = TRUE): unused argument (latest = TRUE)</span></div><div class='input'><span class='no'>a</span> <span class='kw'>=</span> <span class='fu'><a href='extract.html'>extract</a></span>(<span class='no'>distance_to_ice</span>, <span class='no'>aurora</span>[<span class='fl'>17</span>:<span class='fl'>25</span>, ])</div><div class='output co'>#&gt; <span class='message'></span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='fu'>distance_to_ice</span>(<span class='kw'>latest</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘purrr’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:testthat’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    is_null</span></div><div class='output co'>#&gt; <span class='warning'>Warning: 'tzone' attributes are inconsistent</span></div><div class='output co'>#&gt; <span class='error'>Error in x(date[i], verbose = FALSE, inputfiles = files, xylim = xylim,     ...): unused arguments (verbose = FALSE, xylim = xylim)</span></div><div class='input'><span class='fu'><a href='extract.html'>extract</a></span>(<span class='no'>distance_to_ice</span>, <span class='no'>aurora</span>[<span class='fl'>17</span>:<span class='fl'>25</span>, ], <span class='kw'>hemisphere</span> <span class='kw'>=</span> <span class='st'>"south"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 'tzone' attributes are inconsistent</span></div><div class='output co'>#&gt; <span class='error'>Error in x(date[i], verbose = FALSE, inputfiles = files, xylim = xylim,     ...): unused arguments (verbose = FALSE, xylim = xylim)</span></div><div class='input'># library(trip)
+#&gt; <span class='message'>    is_null</span></div><div class='img'><img src='distance_to_ice_edge-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='fu'>distance_to_ice_edge</span>(<span class='kw'>latest</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='img'><img src='distance_to_ice_edge-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>a</span> <span class='kw'>=</span> <span class='fu'><a href='extract.html'>extract</a></span>(<span class='no'>distance_to_ice</span>, <span class='no'>aurora</span>[<span class='fl'>17</span>:<span class='fl'>25</span>, ])</div><div class='output co'>#&gt; <span class='warning'>Warning: 'tzone' attributes are inconsistent</span></div><div class='input'><span class='fu'><a href='extract.html'>extract</a></span>(<span class='no'>distance_to_ice</span>, <span class='no'>aurora</span>[<span class='fl'>17</span>:<span class='fl'>25</span>, ], <span class='kw'>hemisphere</span> <span class='kw'>=</span> <span class='st'>"south"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 'tzone' attributes are inconsistent</span></div><div class='output co'>#&gt; [1] 23745.89 23745.89 23745.89 23745.89 48006.72 21531.33 23499.99 23745.89
+#&gt; [9] 23745.89</div><div class='input'># library(trip)
 # extract(distance_to_ice_edge, walrus818[seq(50, 400, by = 20), ], hemisphere = "north")
 </div></pre>
   </div>

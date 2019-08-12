@@ -10,14 +10,11 @@ editor_options:
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "README-"
+  fig.path = "man/figures/README-"
 )
 
 library(raadtools)
 ```
-
-[![Travis-CI Build Status](https://travis-ci.org/AustralianAntarcticDivision/raadtools.svg?branch=master)](https://travis-ci.org/AustralianAntarcticDivision/raadtools)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/AustralianAntarcticDivision/raadtools?branch=master&svg=true)](https://ci.appveyor.com/project/AustralianAntarcticDivision/raadtools)
 
 
 # R Tools for Synoptic Environmental Spatial Data

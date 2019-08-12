@@ -1,11 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![Travis-CI Build
-Status](https://travis-ci.org/AustralianAntarcticDivision/raadtools.svg?branch=master)](https://travis-ci.org/AustralianAntarcticDivision/raadtools)
-[![AppVeyor Build
-Status](https://ci.appveyor.com/api/projects/status/github/AustralianAntarcticDivision/raadtools?branch=master&svg=true)](https://ci.appveyor.com/project/AustralianAntarcticDivision/raadtools)
-
 # R Tools for Synoptic Environmental Spatial Data
 
 Tools for reading, plotting and manipulating spatial data used at the
@@ -20,7 +15,7 @@ ice <- readice(c("2018-06-01", "2019-06-01"))
 plot(ice)
 ```
 
-![](README-eg-1-1.png)<!-- -->
+![](man/figures/README-eg-1-1.png)<!-- -->
 
 The available data sources are accessed using **read\*()** functions for
 a [wide variety of data

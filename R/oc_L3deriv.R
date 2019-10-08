@@ -102,7 +102,7 @@
 #' @param date date/s to read
 #' @param time.resolution daily for now
 #' @param xylim extent in longitude latitude using 'raster::extent'
-#' @param latest return only the latest day
+#' @param latest return only the latest day if date intput missing, otherwise the earliest
 #' @param returnfiles give the files instead of the data 
 #' @param ... ignored
 #' @param inputfiles speed up the read by inputting the files

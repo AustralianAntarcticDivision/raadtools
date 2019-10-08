@@ -62,7 +62,7 @@ readice_area <- function(product = "nsidc", hemisphere = "south", ...) {
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
 ##' @param setNA mask zero and values greater than 100 as NA
 ##' @param rescale rescale values from integer range?
-##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
+##' @param latest if TRUE and date input is missing, return the latest time available otherwise the earliest
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... passed to brick, primarily for \code{filename}
 ##' @param extension default for product "amsr" is "hdf" but can be "tif" , extension = "hdf"
@@ -118,7 +118,7 @@ readice_daily <- function(date,
                     hemisphere = c("south", "north"), 
                     xylim = NULL,
                     setNA = TRUE, rescale = TRUE, 
-                    latest = FALSE,
+                    latest = TRUE,
                     returnfiles = FALSE,  ..., inputfiles = NULL) {
   
 #  time.resolution <- match.arg(time.resolution)
@@ -136,8 +136,9 @@ readice_daily <- function(date,
   }
   if (returnfiles) return(files)
   # if (product == "amsr" & .Platform$OS.type == "windows") warning("sorry, AMSR2 files are HDF4 so this is unlikely to work on your machine")
-  if (missing(date)) date <- min(files$date)
-  if (latest) date <- max(files$date)
+  if (missing(date)) {
+    if (latest) date <- max(files$date)  else date <- min(files$date)
+  }
   date <- timedateFrom(date)
   files <- .processFiles(date, files, time.resolution)
  
@@ -154,7 +155,7 @@ readice_monthly <- function(date,
                     hemisphere = c("south", "north"), 
                     xylim = NULL,
                     setNA = TRUE, rescale = TRUE, 
-                    latest = FALSE,
+                    latest = TRUE,
                     returnfiles = FALSE,  ..., inputfiles = NULL) {
   
   #  time.resolution <- match.arg(time.resolution)
@@ -173,8 +174,9 @@ readice_monthly <- function(date,
   }
   if (returnfiles) return(files)
   # if (product == "amsr" & .Platform$OS.type == "windows") warning("sorry, AMSR2 files are HDF4 so this is unlikely to work on your machine")
-  if (missing(date)) date <- min(files$date)
-  if (latest) date <- max(files$date)
+  if (missing(date)) {
+    if (latest) date <- max(files$date)  else date <- min(files$date)
+  }
   date <- timedateFrom(date)
   files <- .processFiles(date, files, time.resolution)
   

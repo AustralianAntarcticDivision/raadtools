@@ -60,7 +60,7 @@ currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
 ##' @param uonly return just the U component of velocity
 ##' @param vonly return just the V component of velocity
 ##' components, in degrees (0 north, 90 east, 180 south, 270 west)
-##' @param latest if TRUE (and date not supplied) return the latest time available
+##' @param latest if TRUE (and date not supplied) return the latest time available, otherwise the earliest
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... passed to brick, primarily for \code{filename}
 ##' @export

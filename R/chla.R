@@ -14,7 +14,7 @@
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, ignored if grid is provided
 ##'  @param algorithm johnson or nasa
 ##' @param grid template raster object for output
-##' @param latest if TRUE (and date not supplied) return the latest time available
+##' @param latest if TRUE (and date not supplied) return the latest time available, otherwise the earliest
 ##' @references  Johnson, R, PG Strutton, SW Wright, A McMinn, and KM
 ##' Meiners (2013) Three improved satellite chlorophyll algorithms for
 ##' the Southern Ocean, J. Geophys. Res. Oceans, 118,

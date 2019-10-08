@@ -26,7 +26,7 @@ sshfiles <- function(time.resolution = c("daily"),  ...) {
 ##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
 ##' components, in degrees (0 north, 90 east, 180 south, 270 west)
 ##' @param ssha logical, to optionally return anomaly or height
-##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
+##' @param latest if TRUE and date input is missing return the latest time available, otherwise the earliest
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param verbose print messages on progress etc.
 ##' @param ... passed to brick, primarily for \code{filename}

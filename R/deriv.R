@@ -16,7 +16,7 @@
 ##' @param time.resolution time resoution data to read, daily or monthly
 ##' @param product choice of sea ice product, see Details
 ##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
-##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
+##' @param latest if TRUE and date input missing, return the latest time available, otherwise the earliest
 ##' @param returnfiles ignore options and just return the file names and dates
 ##' @param ... passed to brick, primarily for \code{filename}
 ##' @param inputfiles input the file set to avoid rescanning that (for extract point-in-time)
@@ -57,8 +57,9 @@ readderivice <- function(date,
   }
   ##files$fullname <- file.path(datadir, files$file)
   if (returnfiles) return(files)
-  if (missing(date)) date <- min(files$date)
-  if (latest) date <- max(files$date)
+  if (missing(date)) {
+    if (latest) date <- max(files$date)  else date <- min(files$date)
+  }
   date <- timedateFrom(date)
   files <- .processFiles(date, files, time.resolution)
   

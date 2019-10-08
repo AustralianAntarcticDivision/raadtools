@@ -1,3 +1,10 @@
+# raadtools dev
+
+* Fixed longstanding bugs in several functions that treated `latest = TRUE` as an override of the date argument. The latest
+ argument now only applies if date is missing.  Thanks to @maierhofert  https://github.com/AustralianAntarcticDivision/raadtools/issues/96. 
+ 
+ 
+
 # raadtools 0.5.2
 
 * Add GEBCO 2019 "gebco_19" topography. 

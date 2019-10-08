@@ -45,7 +45,7 @@
 #' 
 read_sst_heuristic <- function (date, time.resolution = c("daily", "monthly"), xylim = NULL, 
                                 lon180 = TRUE, varname = c("sst", "anom", "err", "ice"), 
-                                setNA = TRUE, latest = FALSE, returnfiles = FALSE, readall = FALSE, 
+                                setNA = TRUE, latest = TRUE, returnfiles = FALSE, readall = FALSE, 
                                 ..., inputfiles = NULL) {
   if (missing(inputfiles)) {
     files <- sstfiles(time.resolution = time.resolution)
@@ -57,11 +57,10 @@ read_sst_heuristic <- function (date, time.resolution = c("daily", "monthly"), x
                      `, but give me some room to think here` = 2e9 -1)
   time.resolution <- match.arg(time.resolution)
   if (missing(date)) {
-    files <- tail(files, 1L)  ## don't let this catch you out later ...
-    date <- files$date
-  } else {
-    files <- .processFiles(date, files, time.resolution)
+    if (latest) date <- max(files$date)  else date <- min(files$date)
   }
+  files <- .processFiles(date, files, time.resolution)
+
   varname <- match.arg(varname)
   dummy <- crop_if_needed(readsst(varname = varname), xylim)
   nlayer_ <- length(date)

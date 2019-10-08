@@ -9,7 +9,7 @@
 #' @param time.resolution time resolution to read (only daily)
 #' @param varname either `fsle_max` or `theta_max``
 #' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
-#' @param latest if TRUE return the latest time available, ignoring the 'date' argument
+#' @param latest if TRUE and input date is missing return the latest time available, otherwise the earliest
 #' @param returnfiles ignore options and just return the file names and dates
 #' @param verbose print messages on progress etc.
 #' @param ... passed to brick, primarily for \code{filename}

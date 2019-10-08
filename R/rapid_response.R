@@ -35,7 +35,7 @@ rapid_responsefiles <- function(product = c("aqua", "terra"), ...) {
 ##'
 ##' @title MODIS Rapid Response images
 ##' @param date date of image to load
-##' @param latest if TRUE return the latest time available, ignoring the 'date' argument
+##' @param latest if TRUE and date input is missing return the latest time available, otherwise the earliest
 ##' @param returnfiles return just the list of files
 ##' @param ... other arguments for \code{\link[raster]{brick}}
 ##' @export

@@ -256,7 +256,7 @@ readamps_d1wind <- function(date, time.resolution = "4hourly", xylim = NULL,
 
 readamps_d1ice <- function(date, time.resolution = "daily", xylim = NULL, 
                             
-                            latest = FALSE, returnfiles = FALSE, level = 1, ..., inputfiles = NULL) {
+                            latest = TRUE, returnfiles = FALSE, level = 1, ..., inputfiles = NULL) {
   
   time.resolution <- match.arg(time.resolution)
  
@@ -267,8 +267,7 @@ readamps_d1ice <- function(date, time.resolution = "daily", xylim = NULL,
   }
   if (returnfiles) return(files)
   
-  if (missing(date)) date <- min(files$date)
-  if (latest) date <- max(files$date)
+  if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
   date <- timedateFrom(date)
   ## findex <- .processDates(date, files$date, time.resolution)
   files <- .processFiles(date, files, time.resolution)
@@ -322,7 +321,7 @@ readamps_d1ice <- function(date, time.resolution = "daily", xylim = NULL,
 #' @name readamps_d1wind
 readamps <- function(date, time.resolution = "4hourly", xylim = NULL, 
                             band = 1, 
-                            latest = FALSE, returnfiles = FALSE, ..., inputfiles = NULL) {
+                            latest = TRUE, returnfiles = FALSE, ..., inputfiles = NULL) {
   
   time.resolution <- match.arg(time.resolution)
 
@@ -333,8 +332,7 @@ readamps <- function(date, time.resolution = "4hourly", xylim = NULL,
   }
   if (returnfiles) return(files)
   
-  if (missing(date)) date <- min(files$date)
-  if (latest) date <- max(files$date)
+  if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
   date <- timedateFrom(date)
   ## findex <- .processDates(date, files$date, time.resolution)
   files <- .processFiles(date, files, time.resolution)

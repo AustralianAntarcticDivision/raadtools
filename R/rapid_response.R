@@ -39,7 +39,7 @@ rapid_responsefiles <- function(product = c("aqua", "terra"), ...) {
 ##' @param returnfiles return just the list of files
 ##' @param ... other arguments for \code{\link[raster]{brick}}
 ##' @export
-readrapid_response <- function(date, product = c("aqua", "terra"), latest = FALSE, returnfiles = FALSE, ...) {
+readrapid_response <- function(date, product = c("aqua", "terra"), latest = TRUE, returnfiles = FALSE, ...) {
   product <- match.arg(product)
   files <- rapid_responsefiles(product = product)
   ## something's wrong with the files

@@ -43,7 +43,7 @@ readderivice <- function(date,
                     product = c("time_since_melt"),
                     xylim = NULL,
                 
-                    latest = FALSE,
+                    latest = TRUE,
                     returnfiles = FALSE, ..., inputfiles = NULL) {
   
   time.resolution <- match.arg(time.resolution)

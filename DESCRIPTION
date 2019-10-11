@@ -39,4 +39,4 @@ Description: Tools for reading, plotting and manipulating spatial data,
     particularly from remote sensing and model output.
 License: GPL-3
 RoxygenNote: 6.1.1
-Remotes: AustralianAntarcticDivision/raadfiles@memoize
+Remotes: AustralianAntarcticDivision/raadfiles

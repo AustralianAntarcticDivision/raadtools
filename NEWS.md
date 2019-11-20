@@ -1,5 +1,8 @@
 # raadtools dev
 
+
+* Add SMAP functions `salfiles()` and `readsal()` for surface salinity. 
+
 * Fixed longstanding bugs in several functions that treated `latest = TRUE` as an override of the date argument. The latest
  argument now only applies if date is missing.  Thanks to @maierhofert  https://github.com/AustralianAntarcticDivision/raadtools/issues/96. 
  

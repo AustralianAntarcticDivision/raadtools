@@ -4,10 +4,18 @@
 \alias{readsst}
 \title{Read OISST sea surface temperature data}
 \usage{
-readsst(date, time.resolution = c("daily", "monthly"), xylim = NULL,
-  lon180 = TRUE, varname = c("sst", "anom", "err", "ice"),
-  setNA = TRUE, latest = TRUE, returnfiles = FALSE, ...,
-  inputfiles = NULL)
+readsst(
+  date,
+  time.resolution = c("daily", "monthly"),
+  xylim = NULL,
+  lon180 = TRUE,
+  varname = c("sst", "anom", "err", "ice"),
+  setNA = TRUE,
+  latest = TRUE,
+  returnfiles = FALSE,
+  ...,
+  inputfiles = NULL
+)
 }
 \arguments{
 \item{date}{date or dates of data to read,}
@@ -27,21 +35,15 @@ readsst(date, time.resolution = c("daily", "monthly"), xylim = NULL,
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 
-\item{...}{passed in to brick, primarily for \code{filename}}
+\item{...}{
+  Arguments passed on to \code{\link[=raadtools]{raadtools}}
+  \describe{
+    \item{\code{}}{}
+  }}
 
 \item{inputfiles}{input the files data base to speed up initialization}
 
 \item{readall}{FALSE by default}
-
-\item{...}{Arguments passed on to \code{raadtools}
-\describe{
-  \item{date}{date or dates of data to read,}
-  \item{time.resolution}{time resoution data to read, daily or monthly}
-  \item{lon180}{defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]}
-  \item{setNA}{mask out land values (only applies to monthly time.resolution)}
-  \item{latest}{if TRUE (and date not supplied) return the latest time available}
-  \item{returnfiles}{ignore options and just return the file names and dates}
-}}
 }
 \value{
 \code{\link[raster]{raster}} object

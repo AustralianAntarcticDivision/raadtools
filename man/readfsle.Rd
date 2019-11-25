@@ -4,9 +4,17 @@
 \alias{readfsle}
 \title{Backward-in-time Finite-Size Lyapunov Exponents}
 \usage{
-readfsle(date, time.resolution = c("daily"), xylim = NULL,
-  latest = TRUE, varname = c("fsle_max", "theta_max"),
-  returnfiles = FALSE, verbose = TRUE, ..., inputfiles = NULL)
+readfsle(
+  date,
+  time.resolution = c("daily"),
+  xylim = NULL,
+  latest = TRUE,
+  varname = c("fsle_max", "theta_max"),
+  returnfiles = FALSE,
+  verbose = TRUE,
+  ...,
+  inputfiles = NULL
+)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -15,7 +23,7 @@ readfsle(date, time.resolution = c("daily"), xylim = NULL,
 
 \item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details}
 
-\item{latest}{if TRUE return the latest time available, ignoring the 'date' argument}
+\item{latest}{if TRUE and input date is missing return the latest time available, otherwise the earliest}
 
 \item{varname}{either `fsle_max` or `theta_max``}
 

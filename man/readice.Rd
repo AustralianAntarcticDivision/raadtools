@@ -6,20 +6,47 @@
 \alias{readice_monthly}
 \title{Read data from sea ice data products.}
 \usage{
-readice_daily(date, time.resolution = "daily", product = "nsidc",
-  hemisphere = c("south", "north"), xylim = NULL, setNA = TRUE,
-  rescale = TRUE, latest = FALSE, returnfiles = FALSE, ...,
-  inputfiles = NULL)
+readice_daily(
+  date,
+  time.resolution = "daily",
+  product = "nsidc",
+  hemisphere = c("south", "north"),
+  xylim = NULL,
+  setNA = TRUE,
+  rescale = TRUE,
+  latest = TRUE,
+  returnfiles = FALSE,
+  ...,
+  inputfiles = NULL
+)
 
-readice(date, time.resolution = "daily", product = "nsidc",
-  hemisphere = c("south", "north"), xylim = NULL, setNA = TRUE,
-  rescale = TRUE, latest = FALSE, returnfiles = FALSE, ...,
-  inputfiles = NULL)
+readice(
+  date,
+  time.resolution = "daily",
+  product = "nsidc",
+  hemisphere = c("south", "north"),
+  xylim = NULL,
+  setNA = TRUE,
+  rescale = TRUE,
+  latest = TRUE,
+  returnfiles = FALSE,
+  ...,
+  inputfiles = NULL
+)
 
-readice_monthly(date, time.resolution = "monthly", product = "nsidc",
-  hemisphere = c("south", "north"), xylim = NULL, setNA = TRUE,
-  rescale = TRUE, latest = FALSE, returnfiles = FALSE, ...,
-  inputfiles = NULL)
+readice_monthly(
+  date,
+  time.resolution = "monthly",
+  product = "nsidc",
+  hemisphere = c("south", "north"),
+  xylim = NULL,
+  setNA = TRUE,
+  rescale = TRUE,
+  latest = TRUE,
+  returnfiles = FALSE,
+  ...,
+  inputfiles = NULL
+)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -36,7 +63,7 @@ readice_monthly(date, time.resolution = "monthly", product = "nsidc",
 
 \item{rescale}{rescale values from integer range?}
 
-\item{latest}{if TRUE return the latest time available, ignoring the 'date' argument}
+\item{latest}{if TRUE and date input is missing, return the latest time available otherwise the earliest}
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 

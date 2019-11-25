@@ -5,13 +5,27 @@
 \alias{distance_to_ice}
 \title{Distance to a sea ice 'edge'.}
 \usage{
-distance_to_ice_edge(date, threshold = 15, xylim = NULL,
-  hemisphere = "south", returnfiles = FALSE, inputfiles = NULL,
-  latest = TRUE, ...)
+distance_to_ice_edge(
+  date,
+  threshold = 15,
+  xylim = NULL,
+  hemisphere = "south",
+  returnfiles = FALSE,
+  inputfiles = NULL,
+  latest = TRUE,
+  ...
+)
 
-distance_to_ice(date, threshold = 15, xylim = NULL,
-  hemisphere = "south", returnfiles = FALSE, inputfiles = NULL,
-  latest = TRUE, ...)
+distance_to_ice(
+  date,
+  threshold = 15,
+  xylim = NULL,
+  hemisphere = "south",
+  returnfiles = FALSE,
+  inputfiles = NULL,
+  latest = TRUE,
+  ...
+)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -26,7 +40,7 @@ distance_to_ice(date, threshold = 15, xylim = NULL,
 
 \item{inputfiles}{input the files data base to speed up initialization}
 
-\item{latest}{if TRUE return the latest time available, ignoring the 'date' argument}
+\item{latest}{if TRUE and date input is missing, return the latest time available otherwise the earliest}
 
 \item{...}{passed to brick, primarily for \code{filename}}
 }

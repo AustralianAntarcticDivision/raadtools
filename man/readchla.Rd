@@ -4,8 +4,14 @@
 \alias{readchla}
 \title{Read Chlorophyll-a for the Southern Ocean}
 \usage{
-readchla(date, product = c("MODISA", "SeaWiFS"), xylim = NULL,
-  algorithm = c("johnson", "nasa"), latest = TRUE, grid = NULL)
+readchla(
+  date,
+  product = c("MODISA", "SeaWiFS"),
+  xylim = NULL,
+  algorithm = c("johnson", "nasa"),
+  latest = TRUE,
+  grid = NULL
+)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -15,7 +21,7 @@ readchla(date, product = c("MODISA", "SeaWiFS"), xylim = NULL,
 \item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, ignored if grid is provided
 @param algorithm johnson or nasa}
 
-\item{latest}{if TRUE (and date not supplied) return the latest time available}
+\item{latest}{if TRUE (and date not supplied) return the latest time available, otherwise the earliest}
 
 \item{grid}{template raster object for output}
 }
@@ -31,6 +37,8 @@ algorithms, but the original MODIS and SeaWIFs products are also available via t
 Dates are matched to file names by finding the nearest match in
 time within a short duration. If \code{date} is greater than
 length 1 then the sorted set of unique matches is returned.
+
+The code that creates these derived files is at [raad-deriv](https://github.com/AustralianAntarcticDivision/raad-deriv).
 }
 \examples{
 \dontrun{

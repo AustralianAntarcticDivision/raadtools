@@ -4,8 +4,13 @@
 \alias{readfastice}
 \title{Fast ice data}
 \usage{
-readfastice(date, time.resolution = "weekly3", xylim = NULL,
-  returnfiles = FALSE, ...)
+readfastice(
+  date,
+  time.resolution = "weekly3",
+  xylim = NULL,
+  returnfiles = FALSE,
+  ...
+)
 }
 \arguments{
 \item{date}{date or dates to read (can be character, POSIXt, or Date)}

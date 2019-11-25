@@ -4,8 +4,14 @@
 \alias{read_ugosa_daily}
 \title{Altimetry products.}
 \usage{
-read_ugosa_daily(date, xylim = NULL, latest = TRUE,
-  returnfiles = FALSE, ..., inputfiles = NULL)
+read_ugosa_daily(
+  date,
+  xylim = NULL,
+  latest = TRUE,
+  returnfiles = FALSE,
+  ...,
+  inputfiles = NULL
+)
 }
 \arguments{
 \item{date}{date or dates of data to read,}

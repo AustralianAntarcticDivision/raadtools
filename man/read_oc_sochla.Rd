@@ -4,16 +4,23 @@
 \alias{read_oc_sochla}
 \title{Southern Ocean Chlorophyll-a}
 \usage{
-read_oc_sochla(date, time.resolution = c("daily"), bins = NULL,
-  product = c("MODISA", "SeaWiFS"), latest = TRUE,
-  returnfiles = FALSE, ..., inputfiles = NULL)
+read_oc_sochla(
+  date,
+  time.resolution = c("daily"),
+  bins = NULL,
+  product = c("MODISA", "SeaWiFS"),
+  latest = TRUE,
+  returnfiles = FALSE,
+  ...,
+  inputfiles = NULL
+)
 }
 \arguments{
 \item{date}{date/s to read}
 
 \item{time.resolution}{daily for now}
 
-\item{latest}{return only the latest day}
+\item{latest}{return only the latest day if date intput missing, otherwise the earliest}
 
 \item{returnfiles}{give the files instead of the data}
 

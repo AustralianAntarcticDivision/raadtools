@@ -4,9 +4,18 @@
 \alias{readssh}
 \title{read SSH/A}
 \usage{
-readssh(date, time.resolution = c("daily"), xylim = NULL,
-  lon180 = TRUE, ssha = FALSE, latest = TRUE, returnfiles = FALSE,
-  verbose = TRUE, ..., inputfiles = NULL)
+readssh(
+  date,
+  time.resolution = c("daily"),
+  xylim = NULL,
+  lon180 = TRUE,
+  ssha = FALSE,
+  latest = TRUE,
+  returnfiles = FALSE,
+  verbose = TRUE,
+  ...,
+  inputfiles = NULL
+)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -20,7 +29,7 @@ components, in degrees (0 north, 90 east, 180 south, 270 west)}
 
 \item{ssha}{logical, to optionally return anomaly or height}
 
-\item{latest}{if TRUE return the latest time available, ignoring the 'date' argument}
+\item{latest}{if TRUE and date input is missing return the latest time available, otherwise the earliest}
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 

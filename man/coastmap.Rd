@@ -4,9 +4,12 @@
 \alias{coastmap}
 \title{Coast map}
 \usage{
-coastmap(map = c("world", "world2", "ant_coast", "ant_coast01",
-  "ant_coast10", "Countries_hires", "world1", "world360", "cst00_polygon",
-  "cst01_polygon", "cst10_polygon"), ...)
+coastmap(
+  map = c("world", "world2", "ant_coast", "ant_coast01", "ant_coast10",
+    "Countries_hires", "world1", "world360", "cst00_polygon", "cst01_polygon",
+    "cst10_polygon"),
+  ...
+)
 }
 \arguments{
 \item{map}{A named map source}

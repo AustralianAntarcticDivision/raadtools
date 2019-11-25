@@ -5,8 +5,7 @@
 \alias{get_data_roots}
 \title{Set the file system locations where data are stored}
 \usage{
-set_data_roots(..., build_cache_if_missing = TRUE,
-  refresh_cache = FALSE)
+set_data_roots(..., build_cache_if_missing = TRUE, refresh_cache = FALSE)
 
 get_data_roots()
 }

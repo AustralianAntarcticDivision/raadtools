@@ -4,15 +4,21 @@
 \alias{read_amsr_ice}
 \title{Read AMSR sea ice data.}
 \usage{
-read_amsr_ice(date, xylim = NULL, latest = TRUE, ...,
-  returnfiles = FALSE, inputfiles = NULL)
+read_amsr_ice(
+  date,
+  xylim = NULL,
+  latest = TRUE,
+  ...,
+  returnfiles = FALSE,
+  inputfiles = NULL
+)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
 
 \item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}}
 
-\item{latest}{if TRUE return the latest time available, ignoring the 'date' argument}
+\item{latest}{if TRUE and date input is missing, return the latest time available otherwise the earliest}
 
 \item{...}{passed to brick, primarily for \code{filename}}
 

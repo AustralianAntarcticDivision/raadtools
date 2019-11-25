@@ -4,10 +4,20 @@
 \alias{readwind}
 \title{readwind}
 \usage{
-readwind(date, time.resolution = c("6hourly"), xylim = NULL,
-  lon180 = TRUE, magonly = FALSE, dironly = FALSE, uonly = FALSE,
-  vonly = FALSE, latest = TRUE, returnfiles = FALSE, ...,
-  inputfiles = NULL)
+readwind(
+  date,
+  time.resolution = c("6hourly"),
+  xylim = NULL,
+  lon180 = TRUE,
+  magonly = FALSE,
+  dironly = FALSE,
+  uonly = FALSE,
+  vonly = FALSE,
+  latest = TRUE,
+  returnfiles = FALSE,
+  ...,
+  inputfiles = NULL
+)
 }
 \arguments{
 \item{date}{date or dates of data to read,}
@@ -31,19 +41,13 @@ components}
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 
-\item{...}{passed in to brick, primarily for \code{filename}}
+\item{...}{
+  Arguments passed on to \code{\link[=raadtools]{raadtools}}
+  \describe{
+    \item{\code{setNA}}{mask out land values (only applies to monthly time.resolution)}
+  }}
 
 \item{inputfiles}{input the files data base to speed up initialization}
-
-\item{...}{Arguments passed on to \code{raadtools}
-\describe{
-  \item{date}{date or dates of data to read,}
-  \item{time.resolution}{time resoution data to read, daily or monthly}
-  \item{lon180}{defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]}
-  \item{setNA}{mask out land values (only applies to monthly time.resolution)}
-  \item{latest}{if TRUE (and date not supplied) return the latest time available}
-  \item{returnfiles}{ignore options and just return the file names and dates}
-}}
 }
 \value{
 raster object

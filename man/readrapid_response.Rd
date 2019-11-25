@@ -4,13 +4,18 @@
 \alias{readrapid_response}
 \title{MODIS Rapid Response images}
 \usage{
-readrapid_response(date, product = c("aqua", "terra"), latest = FALSE,
-  returnfiles = FALSE, ...)
+readrapid_response(
+  date,
+  product = c("aqua", "terra"),
+  latest = TRUE,
+  returnfiles = FALSE,
+  ...
+)
 }
 \arguments{
 \item{date}{date of image to load}
 
-\item{latest}{if TRUE return the latest time available, ignoring the 'date' argument}
+\item{latest}{if TRUE and date input is missing return the latest time available, otherwise the earliest}
 
 \item{returnfiles}{return just the list of files}
 

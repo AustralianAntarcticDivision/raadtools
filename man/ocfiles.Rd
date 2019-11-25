@@ -4,10 +4,15 @@
 \alias{ocfiles}
 \title{Load metadata and location of files of ocean colour data products.}
 \usage{
-ocfiles(time.resolution = c("daily", "weekly", "monthly", "weekly32"),
-  product = c("MODISA", "SeaWiFS", "VIIRS"), varname = c("RRS", "CHL",
-  "POC", "KD490", "NPP_PAR", "SNPP_CHL", "SNPP_RRS"), type = c("L3b",
-  "L3m"), bz2.rm = TRUE, ext = c("nc", "main"), ...)
+ocfiles(
+  time.resolution = c("daily", "weekly", "monthly", "weekly32"),
+  product = c("MODISA", "SeaWiFS", "VIIRS"),
+  varname = c("RRS", "CHL", "POC", "KD490", "NPP_PAR", "SNPP_CHL", "SNPP_RRS"),
+  type = c("L3b", "L3m"),
+  bz2.rm = TRUE,
+  ext = c("nc", "main"),
+  ...
+)
 }
 \arguments{
 \item{time.resolution}{daily or monthly files?}

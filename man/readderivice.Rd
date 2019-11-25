@@ -4,9 +4,16 @@
 \alias{readderivice}
 \title{Read data from derived sea ice data products.}
 \usage{
-readderivice(date, time.resolution = c("daily"),
-  product = c("time_since_melt"), xylim = NULL, latest = FALSE,
-  returnfiles = FALSE, ..., inputfiles = NULL)
+readderivice(
+  date,
+  time.resolution = c("daily"),
+  product = c("time_since_melt"),
+  xylim = NULL,
+  latest = TRUE,
+  returnfiles = FALSE,
+  ...,
+  inputfiles = NULL
+)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
@@ -17,7 +24,7 @@ readderivice(date, time.resolution = c("daily"),
 
 \item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}}
 
-\item{latest}{if TRUE return the latest time available, ignoring the 'date' argument}
+\item{latest}{if TRUE and date input missing, return the latest time available, otherwise the earliest}
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 

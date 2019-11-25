@@ -4,8 +4,7 @@
 \alias{oc_sochla_files}
 \title{Derived ocean colour files}
 \usage{
-oc_sochla_files(time.resolution = c("daily"), product = c("MODISA",
-  "SeaWiFS"))
+oc_sochla_files(time.resolution = c("daily"), product = c("MODISA", "SeaWiFS"))
 }
 \arguments{
 \item{time.resolution}{temporal resolution (base is daily)}

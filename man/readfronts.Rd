@@ -4,9 +4,18 @@
 \alias{readfronts}
 \title{Read data from the Sokolov/Rintoul Southern Ocean fronts analysis.}
 \usage{
-readfronts(date, time.resolution = c("weekly"), product = c("sokolov"),
-  xylim = NULL, lon180 = TRUE, setNA = FALSE, trim = TRUE,
-  returnfiles = FALSE, RAT = TRUE, ...)
+readfronts(
+  date,
+  time.resolution = c("weekly"),
+  product = c("sokolov"),
+  xylim = NULL,
+  lon180 = TRUE,
+  setNA = FALSE,
+  trim = TRUE,
+  returnfiles = FALSE,
+  RAT = TRUE,
+  ...
+)
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}

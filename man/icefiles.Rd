@@ -4,8 +4,12 @@
 \alias{icefiles}
 \title{Load metadata and location of files of sea ice data products.}
 \usage{
-icefiles(time.resolution = "daily", product = "nsidc",
-  hemisphere = c("south", "north"), ...)
+icefiles(
+  time.resolution = "daily",
+  product = "nsidc",
+  hemisphere = c("south", "north"),
+  ...
+)
 }
 \arguments{
 \item{time.resolution}{daily or monthly files?}

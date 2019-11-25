@@ -8,6 +8,7 @@
 ##' time within a short duration. If \code{date} is greater than
 ##' length 1 then the sorted set of unique matches is returned.
 ##'
+##' The code that creates these derived files is at [raad-deriv](https://github.com/AustralianAntarcticDivision/raad-deriv).
 ##' @param date date or dates of data to read, see Details
 ##' @param product choice of product, see Details
 

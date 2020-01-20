@@ -38,7 +38,7 @@ readice_area <- function(product = "nsidc", hemisphere = "south", ...) {
   con <- file(datfile, open = "rb")
   on.exit(close(con))
   dat <- readBin(con, "integer", size = 4, n =  file.info(datfile)$size/4)
-  setNames(setValues(raster(template), dat * 1000), "NSIDC_true_area_m2")
+  setNames(raster::setValues(raster::raster(template), dat * 1000), "NSIDC_true_area_m2")
 }
 
 ##' Read data from sea ice data products.
@@ -224,7 +224,7 @@ read_ice_internal <- function(files, hemisphere, rescale, setNA, xylim = NULL,  
     }
 
    #r0 <- raster(t(matrix(dat, nsidcdims[1])), template = rtemplate)
-   r0 <- setValues(rtemplate, dat)
+   r0 <- raster::setValues(rtemplate, dat)
    
     # 251  Circular mask used in the Arctic to cover the irregularly-shaped data gap around the pole (caused by the orbit inclination and instrument swath)
     # 252	Unused

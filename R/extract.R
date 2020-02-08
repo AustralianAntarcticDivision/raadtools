@@ -230,7 +230,7 @@ setMethod("extract", signature(x = 'function', y = 'data.frame'), .big.extract)
 longlat_coords <- function(x) {
   x <- as(x, "SpatialPoints")
   if (!raster::couldBeLonLat(x)) {
-    x <- sp::spTransform(x, sp::CRS("+init=epsg:4326"))
+    x <- sp::spTransform(x, sp::CRS("+proj=longlat +datum=WGS84 +no_defs", doCheckCRSArgs = FALSE))
   }
   as.data.frame(coordinates(x))
 }

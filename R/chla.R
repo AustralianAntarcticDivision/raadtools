@@ -49,7 +49,7 @@ readchla <- function(date, product = c("MODISA", "SeaWiFS"),
   d <- d[, c("bin_num", thename)]
   names(d) <- c("bin_num", "value")
   NROWS <- product2nrows(product)
-  gridmap <- raster::raster(raster::extent(-180, 180, -90, 90), ncol = NROWS * 2, nrow = NROWS, crs = "+init=epsg:4326")
+  gridmap <- raster::raster(raster::extent(-180, 180, -90, 90), ncol = NROWS * 2, nrow = NROWS, crs = "+proj=longlat +datum=WGS84 +no_defs")
   ## this hack is to align with assumption from here
   ## https://github.com/AustralianAntarcticDivision/ocean_colour/blob/master/seawifs_daily_bins_init.R#L37
   gridmap <- raster::crop(gridmap, raster::extent(-180, 180, -90, -30), snap = "out")

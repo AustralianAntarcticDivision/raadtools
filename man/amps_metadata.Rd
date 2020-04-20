@@ -4,7 +4,8 @@
 \name{amps_metadata}
 \alias{amps_metadata}
 \title{AMPS GRIB file metadata}
-\format{\code{amps_metadata} A data frame with 8 columns.  The columns
+\format{
+\code{amps_metadata} A data frame with 8 columns.  The columns
 represent
 \tabular{rl}{
 \code{Band} \tab the band number \cr
@@ -15,7 +16,8 @@ represent
 \code{GRIB_SHORT_NAME} \tab short name  \cr
 \code{GRIB_UNIT} \tab  text unit \cr
 \code{GRIB_VALID_TIME} \tab text valid time \cr 
-}}
+}
+}
 \description{
 GRIB format metadata from the Antarctic Mesoscale Prediction System (AMPS) files.
 }

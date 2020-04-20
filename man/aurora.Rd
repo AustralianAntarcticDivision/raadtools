@@ -4,13 +4,15 @@
 \name{aurora}
 \alias{aurora}
 \title{Aurora Australis voyage track}
-\format{\code{aurora} A data frame with 3 columns.  The columns
+\format{
+\code{aurora} A data frame with 3 columns.  The columns
 represent
 \tabular{rl}{
 \code{LONGITUDE_DEGEAST} \tab Longitude values \cr
 \code{LATITUDE_DEGNORTH} \tab Latitude values \cr
 \code{DATE_TIME_UTC} \tab Date-time values (POSIXct) \cr
-}}
+}
+}
 \description{
 Voyage track data from the Aurora Australis
 }

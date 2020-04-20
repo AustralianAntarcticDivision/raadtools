@@ -1,7 +1,7 @@
 
 
 .loadMLD <- function() {
- f <-  raadfiles::get_raad_filenames() %>% dplyr::filter(stringr::str_detect(file, "sallee_mld2013.Rdata"))
+ f <-  raadfiles::get_raad_filenames(all = TRUE) %>% dplyr::filter(stringr::str_detect(file, "sallee_mld2013.Rdata"))
  p <- file.path(f$root, f$file)[1]
   if (!file.exists(p)) return(NULL)
   mld <- NULL
@@ -57,10 +57,10 @@ readmld <- function(date, xylim = NULL, returnfiles = FALSE, ...) {
   date <- format(date, "%b")
   x <- .loadMLD()
   if (!is.null(xylim)) x  <- crop(x, extent(xylim))
-  f <-  raadfiles::get_raad_filenames() %>% dplyr::filter(stringr::str_detect(file, "sallee_mld2013.Rdata"))
+  f <-  raadfiles::get_raad_filenames(all = TRUE) %>% dplyr::filter(stringr::str_detect(file, "sallee_mld2013.Rdata"))
   
   files <- tibble::tibble(fullname = file.path(f$root, f$file), date = timedateFrom(seq(as.Date("2013-01-01"), by = "1 month", length = 12L)))
   if (returnfiles) return(files)
   warning("MLD data is only a climatology, returning matching month only")
-  subset(x, date)
+  raster::subset(x, date)
 }

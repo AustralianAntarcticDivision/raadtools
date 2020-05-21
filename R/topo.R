@@ -70,10 +70,10 @@
   binfile <- .smithsandwellraw(all_files)
   vrtfile1 <- file.path(dirname(binfile), ".vrt", gsub(".img$", ".vrt", basename(binfile)))
   vrtfile2 <- file.path(dirname(binfile), ".vrt",gsub(".img$", "_atlantic.vrt", basename(binfile)))
-                        
+
   vrtext1 <- gsub("ssbinfile", file.path("..", basename(binfile)), .ssbintext())
   vrtext2 <- gsub("ssvrtfile", basename(vrtfile1), .ssatlanticbintext())
-  
+
   if (!file.exists(vrtfile1)) writeLines(vrtext1, vrtfile1)
   if (!file.exists(vrtfile2)) writeLines(vrtext2, vrtfile2)
   if (lon180) vrtfile2 else vrtfile1
@@ -119,16 +119,16 @@
 readtopo <- function(topo = c("gebco_08", "ibcso",
                               "etopo1", "etopo2",
                               "kerguelen", "george_v_terre_adelie",
-                              "smith_sandwell", "gebco_14", 
-                              "macrie1100m", "macrie2100m", 
-                              "cryosat2", 
-                              "lake_superior", 
-                              "ramp", "ibcso_is", "ibcso_bed", 
-                              "ga_srtm", 
+                              "smith_sandwell", "gebco_14",
+                              "macrie1100m", "macrie2100m",
+                              "cryosat2",
+                              "lake_superior",
+                              "ramp", "ibcso_is", "ibcso_bed",
+                              "ga_srtm",
                               "rema_1km",
                               "rema_200m",
-                              "rema_100m", 
-                              "rema_8m", 
+                              "rema_100m",
+                              "rema_8m",
                               "srtm", "gebco_19"),
                      polar = FALSE,
                      lon180 = TRUE,
@@ -136,7 +136,7 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
                      returnfiles = FALSE,
                      ...) {
   topo <- match.arg(topo)
-  
+
   if (!lon180 & topo %in% c("geboc_08", "ibcso", "etopo2")) {
     tfile <- topofile(topo = topo, polar = FALSE, ...)
     if (returnfiles) return(tfile)
@@ -146,15 +146,15 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
     if (returnfiles) return(tfile)
     res <- raster(tfile)
   }
-  
+
   ## sources with missing CRS metadata
   llprojs <- c("etopo2", "kerguelen", "george_v_terre_adelie", "lake_superior")
   if (topo %in% llprojs)  projection(res) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
   ## self-describing, if you always work in lon-lat ...
   if (topo == "ibcso_bed") projection(res) <- "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
-  
+
   if (topo == "cryosat2") projection(res) <- "+proj=stere +lat_0=-90 +lat_ts=-71 +datum=WGS84 +x_0=0 +y_0=0"
-  
+
   if (!is.null(xylim) && topo == "rema_8m") {
     stop("'xylim' is not supported for rema_8m, discuss with local experts for other options (there are many)")
   }
@@ -171,24 +171,24 @@ readbathy <- readtopo
 
 ##' @rdname readtopo
 ##' @export
-topofile <- function(topo = c("gebco_08",  "ibcso",  
+topofile <- function(topo = c("gebco_08",  "ibcso",
                               "etopo1", "etopo2",
                               "kerguelen", "george_v_terre_adelie",
-                              "smith_sandwell", "gebco_14", "macrie1100m", "macrie2100m", "cryosat2", 
-                              "lake_superior", 
-                              "ramp", "ibcso_is", "ibcso_bed", 
-                              "ga_srtm", 
+                              "smith_sandwell", "gebco_14", "macrie1100m", "macrie2100m", "cryosat2",
+                              "lake_superior",
+                              "ramp", "ibcso_is", "ibcso_bed",
+                              "ga_srtm",
                               "rema_1km",
-                              "rema_200m", 
-                              "rema_100m", 
-                              "rema_8m", 
+                              "rema_200m",
+                              "rema_100m",
+                              "rema_8m",
                               "srtm", "gebco_19"),
                      polar = FALSE,
                      lon180 = TRUE,
                      ...) {
   topo <- match.arg(topo)
   if (topo == "ibcso") topo <- "ibcso_is" ## ??
-  
+
   if (topo == "rema_8m") {
     r8m_files <- raadfiles::rema_8m_files()
     warning(sprintf("rema_8m is a very large **virtual** raster consisting of many (%i) files on disk,\n beware of making subsets that will pull a lot of data into memory", nrow(r8m_files)))
@@ -198,42 +198,42 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
     topopath <- if (lon180) raadfiles::smith_sandwell_lon180_files()$fullname else raadfiles::smith_sandwell_files()$fullname
   } else {
 
-   topopath <-  switch(topo, 
+   topopath <-  switch(topo,
            gebco_08 = raadfiles::gebco08_files()$fullname,
            gebco_14 = raadfiles::gebco14_files()$fullname,
            gebco_19 = raadfiles::gebco19_files()$fullname,
-           ibcso_is = dplyr::filter(raadfiles::ibcso_files(all = TRUE), 
+           ibcso_is = dplyr::filter(raadfiles::ibcso_files(all = TRUE),
                                     grepl("_is.*tif$", basename(.data$fullname)))$fullname,
-           ibcso_bed = dplyr::filter(raadfiles::ibcso_files(all = TRUE), 
+           ibcso_bed = dplyr::filter(raadfiles::ibcso_files(all = TRUE),
                                     grepl("_bed.*grd$", basename(.data$fullname)))$fullname,
-           etopo1 = raadfiles::etopo1_files()$fullname, 
-           etopo2 = raadfiles::etopo2_files()$fullname, 
-           kerguelen = raadfiles::kerguelen_files()$fullname, 
-           george_v_terre_adelie = raadfiles::george_v_terre_adelie_250m_files()$fullname, 
-           macrie1100m = raadfiles::macquarie100m_57S_files()$fullname, 
-           macrie2100m = raadfiles::macquarie100m_58S_files()$fullname, 
-           cryosat2 = raadfiles::cryosat2_files()$fullname, 
-           lake_superior = raadfiles::lakesuperior_files()$fullname, 
-           ramp = raadfiles::ramp_files()$fullname, 
+           etopo1 = raadfiles::etopo1_files()$fullname,
+           etopo2 = raadfiles::etopo2_files()$fullname,
+           kerguelen = raadfiles::kerguelen_files()$fullname,
+           george_v_terre_adelie = raadfiles::george_v_terre_adelie_250m_files()$fullname,
+           macrie1100m = raadfiles::macquarie100m_57S_files()$fullname,
+           macrie2100m = raadfiles::macquarie100m_58S_files()$fullname,
+           cryosat2 = raadfiles::cryosat2_files()$fullname,
+           lake_superior = raadfiles::lakesuperior_files()$fullname,
+           ramp = raadfiles::ramp_files()$fullname,
            ## FIXME
-           ga_srtm = grep("1sec-srtm/a05f7893-0050-7506-e044-00144fdd4fa6", allf$fullname, value = TRUE), 
-           rema_100m = raadfiles::rema_100m_files()$fullname[1L], 
-           rema_200m = raadfiles::rema_200m_files()$fullname[1L], 
-           rema_1km = raadfiles::rema_1km_files()$fullname[1L], 
-           rema_8m =   file.path(dirname(dirname(r8m_files$fullname[1])), "rema_mosaic_8m_dem.vrt"), 
+           ga_srtm = grep("1sec-srtm/a05f7893-0050-7506-e044-00144fdd4fa6", allf$fullname, value = TRUE),
+           rema_100m = raadfiles::rema_100m_files()$fullname[1L],
+           rema_200m = raadfiles::rema_200m_files()$fullname[1L],
+           rema_1km = raadfiles::rema_1km_files()$fullname[1L],
+           rema_8m =   file.path(dirname(dirname(r8m_files$fullname[1])), "rema_mosaic_8m_dem.vrt"),
            srtm = local({
              files <- raadfiles::srtm_files()
              ## this will only work for nectar machines ... FIXME
              file.path(dirname(dirname(files$fullname[1])), "srtm_4.1.vrt")
-             
+
            })
 
-           
+
            )
   }
   if (length(topopath) < 1) stop(sprintf("cannot find %s", topo))
   if (!file.exists(topopath)) warning(sprintf("cannot file %s", topopath))
-  topopath
+  topopath[1L]
 }
 
 

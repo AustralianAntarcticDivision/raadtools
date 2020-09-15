@@ -7,6 +7,7 @@
   if (is.null(mm)){
     raster::rasterOptions(maxmemory = 4e9)
   }
+  options(raadtools.geoid_tile_vrt = NULL)
 }
 
 

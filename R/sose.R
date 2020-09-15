@@ -60,11 +60,19 @@ read_sose <-  function (date, time.resolution = c("monthly"),
   if (nfiles > 1) files <- files[1L, ]
   xfile <- files$fullname[1L]
   band <- files$band[1L]
-  r0 <- raster(xfile, band = band, level = level, stopIfNotEqualSpaced = FALSE)
+  if (length(level) > 1) {
+   r0 <- brick(xfile, band = band, lvar = 4, stopIfNotEqualSpaced = FALSE)
+   r0 <- subset(r0, level)
+
+   r0 <- setZ(r0, level)
+  } else {
+    r0 <- raster(xfile, band = band, level = level, stopIfNotEqualSpaced = FALSE)
+    r0 <- setZ(r0, files$date)
+  }
   extent(r0) <- extent(c(0, 2 * 20037508 , -14317550, -3445832))
   merc <- "+proj=merc +datum=WGS84"
   projection(r0) <- merc
-  r0 <- setZ(r0, files$date)
+
 
   r0
 

@@ -1,5 +1,7 @@
 # raadtools dev
 
+* New function `read_geoid()` to read geoid. 
+
 * New function `read_sose()` to read SOSE Southern Ocean State Estimate layers by level and 
 date, no capacity for xylim or multiple dates (only monthly for now). Explore available variables
 with `sose_monthly_varnames()` and available files with 'raadfiles::sose_monthly_files()'. 

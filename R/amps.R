@@ -1,13 +1,13 @@
 ## driver functions for our AMPS collection
-readwrfU <- function(date, ..., returnfiles = FALSE, inputfiles = NULL) {
-  if (returnfiles) return(files)
+readwrfU <- function(date, level = 1L, ..., returnfiles = FALSE, inputfiles = NULL) {
+  if (returnfiles) return(inputfiles)
   ff <- inputfiles$fullname[findInterval(date, inputfiles$date)  ]
-  readwrf0(ff, band = 5)
+  readwrf0(ff, band = 5 + level - 1L)
 }
-readwrfV <- function(date, ..., returnfiles = FALSE, inputfiles = NULL) {
-  if (returnfiles) return(files)
+readwrfV <- function(date, level = 1L, ..., returnfiles = FALSE, inputfiles = NULL) {
+  if (returnfiles) return(inputfiles)
   ff <- inputfiles$fullname[findInterval(date, inputfiles$date)  ]
-  readwrf0(ff, band = 27)
+  readwrf0(ff, band = 27 + level - 1L)
 }
 
 detect_amps_grid_from_filename <- function(x) {
@@ -16,6 +16,18 @@ detect_amps_grid_from_filename <- function(x) {
   if (all(d1)) return("d1")
   if (all(d2)) return("d2")
   stop("grid not recognized, or mixed inputs")
+}
+
+
+parse_amps_meta <- function(){
+  tx <- readLines(system.file("extdata/amps/ampsfile_gdalinfo.txt", package= "raadtools"))
+  idx <- grep("Description", tx)
+  description <- gsub("Description = ", "", tx[idx])
+  l <- lapply(idx, function(x) gsub("\\s+", "", tx[x + 1 + 1:7]))
+  nms <- unlist(lapply(strsplit(l[[1]], "="), "[", 1))
+  d <- bind_rows(lapply(l, function(x) tibble::as_tibble(setNames(lapply(strsplit(x, "="), "[", 2), nms))), .id = "Band")
+  d$Band <- as.integer(d$Band)
+  d
 }
 
 
@@ -82,10 +94,12 @@ readwrf0 <- function(x, band = 1) {
 
 #' AMPS files
 #' 
+#' @name readamps
 #' @inheritParams windfiles
 #' @importFrom tibble tibble
 #' @importFrom dplyr %>% arrange filter mutate
 #' @export
+#' @aliases amps_d1_icefiles
 #' @section gdalinfo
 #' @importFrom raadfiles amps_d1files amps_d2files amps_model_files
 #' @export amps_d1files amps_d2files amps_model_files
@@ -147,7 +161,8 @@ amps_d1_icefiles <- function(data.source = "", time.resolution = "12hourly", ...
 #' @inheritParams readwind
 #' @return Raster
 #' @export
-#'
+#' @name readamps
+#' @aliases readamps_d1wind
 #' @examples
 #' af <- amps_d1files()
 #' w <- readamps_d1wind(latest = TRUE, inputfiles = af)
@@ -318,7 +333,7 @@ readamps_d1ice <- function(date, time.resolution = "daily", xylim = NULL,
 
 
 #' @export
-#' @name readamps_d1wind
+#' @name readamps
 readamps <- function(date, time.resolution = "4hourly", xylim = NULL, 
                             band = 1, 
                             latest = TRUE, returnfiles = FALSE, ..., inputfiles = NULL) {
@@ -375,14 +390,4 @@ readamps <- function(date, time.resolution = "4hourly", xylim = NULL,
  # print(sprintf("band: %i\n", band))
  # print(sprintf("min: %f\n", cellStats(r, min)))
   r
-}
-parse_amps_meta <- function(){
-  tx <- readLines(system.file("extdata/amps/ampsfile_gdalinfo.txt", package= "raadtools"))
-  idx <- grep("Description", tx)
-  description <- gsub("Description = ", "", tx[idx])
-  l <- lapply(idx, function(x) gsub("\\s+", "", tx[x + 1 + 1:7]))
-  nms <- unlist(lapply(strsplit(l[[1]], "="), "[", 1))
-  d <- bind_rows(lapply(l, function(x) tibble::as_tibble(setNames(lapply(strsplit(x, "="), "[", 2), nms))), .id = "Band")
-  d$Band <- as.integer(d$Band)
-  d
 }

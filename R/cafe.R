@@ -8,7 +8,7 @@
 #' @name readcafe
 #' @export
 #' @examples
-#' readcafe(date = "2010-01-15)
+#' readcafe(date = "2010-01-15")
 readcafe <-  function (date, time.resolution = c("monthly"),
                       xylim = NULL, lon180 = TRUE,
                       setNA = TRUE,

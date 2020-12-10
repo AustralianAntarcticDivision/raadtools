@@ -1,5 +1,7 @@
 # raadtools dev
 
+* New function `read_cersat_ice()` for 12.5 km SSM/I. 
+
 * New function `read_geoid()` to read geoid. 
 
 * New function `read_sose()` to read SOSE Southern Ocean State Estimate layers by level and 

@@ -12,15 +12,15 @@ parse_amps_meta <- function(){
 
 
 ## driver functions for our AMPS collection
-readwrfU <- function(date, ..., returnfiles = FALSE, inputfiles = NULL) {
-  if (returnfiles) return(files)
+readwrfU <- function(date, level = 1L, ..., returnfiles = FALSE, inputfiles = NULL) {
+  if (returnfiles) return(inputfiles)
   ff <- inputfiles$fullname[findInterval(date, inputfiles$date)  ]
-  readwrf0(ff, band = 5)
+  readwrf0(ff, band = 5 + level - 1L)
 }
-readwrfV <- function(date, ..., returnfiles = FALSE, inputfiles = NULL) {
-  if (returnfiles) return(files)
+readwrfV <- function(date, level = 1L, ..., returnfiles = FALSE, inputfiles = NULL) {
+  if (returnfiles) return(inputfiles)
   ff <- inputfiles$fullname[findInterval(date, inputfiles$date)  ]
-  readwrf0(ff, band = 27)
+  readwrf0(ff, band = 27 + level - 1L)
 }
 
 detect_amps_grid_from_filename <- function(x) {
@@ -58,7 +58,19 @@ readwrf0 <- function(x, band = 1) {
   setNames(dat, sprintf("%s_%s", amps_metadata$GRIB_ELEMENT[band], amps_metadata$GRIB_SHORT_NAME[band]))
 }
 
-
+#' AMPS files
+#'
+#' @inheritParams windfiles
+#' @importFrom tibble tibble
+#' @importFrom dplyr %>% arrange filter mutate
+#' @importFrom raadfiles amps_d1files amps_d2files amps_model_files
+#' @export
+amps_d1_icefiles <- function(data.source = "", time.resolution = "12hourly", ...) {
+  files <- amps_model_files(data.source = data.source, time.resolution = time.resolution,  ...)
+  ## TODO normalize file set
+  ## we want the most files with the highest preference
+  filter(files, grepl("f000", basename(fullname)), as.integer(hour) == 0)
+}
 
 readamps_d1ice <- function(date, time.resolution = "daily", xylim = NULL,
 
@@ -120,23 +132,5 @@ readamps_d1ice <- function(date, time.resolution = "daily", xylim = NULL,
 
 
   r
-}
-
-
-
-
-#' AMPS files
-#'
-#' Files for the The Antarctic Mesoscale Prediction System (AMPS).
-#' @inheritParams windfiles
-#' @importFrom tibble tibble
-#' @importFrom dplyr %>% arrange filter mutate
-#' @importFrom raadfiles amps_d1files amps_d2files amps_model_files
-#' @export
-amps_d1_icefiles <- function(data.source = "", time.resolution = "12hourly", ...) {
-  files <- amps_model_files(data.source = data.source, time.resolution = time.resolution,  ...)
-  ## TODO normalize file set
-  ## we want the most files with the highest preference
-  filter(files, grepl("f000", basename(fullname)), as.integer(hour) == 0)
 }
 

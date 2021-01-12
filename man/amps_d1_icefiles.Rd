@@ -14,5 +14,5 @@ amps_d1_icefiles(data.source = "", time.resolution = "12hourly", ...)
 \item{...}{reserved for future use, currently ignored}
 }
 \description{
-Files for the The Antarctic Mesoscale Prediction System (AMPS).
+AMPS files
 }

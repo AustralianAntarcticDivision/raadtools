@@ -1,4 +1,6 @@
-# raadtools dev (RC 0.5.5)
+# raadtools 0.5.5
+
+* readamps_d1wind() now correctly read the right bands. New function readamps_d2wind() to read the d2 grid. 
 
 * Bit of a clean up around AMPS and Copernicus documentation. 
 

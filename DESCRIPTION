@@ -1,7 +1,7 @@
 Package: raadtools
 Type: Package
 Title: Tools for Synoptic Environmental Spatial Data
-Version: 0.5.3.9005
+Version: 0.5.5
 Authors@R: c(
    person("Michael D.","Sumner", role = c("aut", "cre"), email = "michael.sumner@aad.gov.au"), 
    person("Ben", "Raymond", role = "ctb", email = "ben.raymond@aad.gov.au")
@@ -31,6 +31,7 @@ Suggests:
     testthat,
     rmarkdown,
     covr
+Encoding: UTF-8
 LazyData: yes
 VignetteBuilder: knitr
 URL: https://github.com/AustralianAntarcticDivision/raadtools

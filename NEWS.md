@@ -1,4 +1,6 @@
-# raadtools dev
+# raadtools dev (RC 0.5.5)
+
+* Bit of a clean up around AMPS and Copernicus documentation. 
 
 * New function `read_cersat_ice()` for 12.5 km SSM/I. 
 

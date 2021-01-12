@@ -94,21 +94,21 @@ readwrf0 <- function(x, band = 1) {
 
 #' AMPS files
 #' 
-#' @name readamps
 #' @inheritParams windfiles
 #' @importFrom tibble tibble
 #' @importFrom dplyr %>% arrange filter mutate
-#' @export
-#' @aliases amps_d1_icefiles
-#' @section gdalinfo
+#' @section gdalinfo: 
+#' gdalinfo n stuff
+#' 
 #' @importFrom raadfiles amps_d1files amps_d2files amps_model_files
-#' @export amps_d1files amps_d2files amps_model_files
+#' @export 
 amps_d1_icefiles <- function(data.source = "", time.resolution = "12hourly", ...) {
   files <- amps_model_files(data.source = data.source, time.resolution = time.resolution,  ...)
   ## TODO normalize file set
   ## we want the most files with the highest preference
   filter(files, grepl("f000", basename(fullname)), as.integer(hour) == 0)
 }
+
 #' read AMPS data
 #' 
 #' Read from 	The Antarctic Mesoscale Prediction System (AMPS) files. 
@@ -160,9 +160,6 @@ amps_d1_icefiles <- function(data.source = "", time.resolution = "12hourly", ...
 #' }
 #' @inheritParams readwind
 #' @return Raster
-#' @export
-#' @name readamps
-#' @aliases readamps_d1wind
 #' @examples
 #' af <- amps_d1files()
 #' w <- readamps_d1wind(latest = TRUE, inputfiles = af)
@@ -177,6 +174,7 @@ amps_d1_icefiles <- function(data.source = "", time.resolution = "12hourly", ...
 #'  segments(cr[sub,1], cr[sub,2], cr1[sub,1], cr1[sub,2])
 #' }
 #' arr(w, sample(ncell(w), 10000), scale = 30000)
+#' @export
 readamps_d1wind <- function(date, time.resolution = "4hourly", xylim = NULL, 
                 magonly = FALSE, dironly = FALSE, uonly = FALSE, vonly = FALSE,
                 latest = TRUE, returnfiles = FALSE, level = 1, ..., inputfiles = NULL) {
@@ -205,20 +203,22 @@ readamps_d1wind <- function(date, time.resolution = "4hourly", xylim = NULL,
   }
   
   
-  if (!(magonly | dironly))
+  if (!(magonly | dironly)) {
     rasterfun <- function(x1, x2) {
       x <- brick(x1, x2)
       names(x) <- c("U", "V")
       x
     }
-  if (magonly)
+  }
+  if (magonly) {
     rasterfun <- function(x1, x2) sqrt(x1 * x1 + x2 * x2)
-  if (dironly)
+  }
+  if (dironly) {
     rasterfun <- function(x1, x2) (90 - atan2(x2, x1) * 180/pi)%%360
-  
+  }
   if (!(magonly | dironly)) {
-    if (uonly) rasterfun <- function(x1, x2) x1
-    if (vonly) rasterfun <- function(x1, x2) x2
+    if (uonly) {rasterfun <- function(x1, x2) x1}
+    if (vonly) {rasterfun <- function(x1, x2) x2}
   }
   
   
@@ -231,7 +231,8 @@ readamps_d1wind <- function(date, time.resolution = "4hourly", xylim = NULL,
   r <- vector("list", nfiles)
   
   is_first_hour <- grepl("f000", basename(files$fullname))
-  bands <- c(1, 23) + level - 1
+  #bands <- c(1, 23) + level - 1
+  bands <- c(5, 27) + level - 1
   for (ifile in seq_len(nfiles)) {
     r1 <- readwrf0(files$fullname[ifile], band = bands[1L] + is_first_hour[ifile] * 4) #raster(files$ufullname[ifile], band = files$band[ifile])
     r2 <- readwrf0(files$fullname[ifile], band = bands[2L] + is_first_hour[ifile] * 4) #raster(files$vfullname[ifile], band = files$band[ifile])
@@ -331,10 +332,11 @@ readamps_d1ice <- function(date, time.resolution = "daily", xylim = NULL,
   r
 }
 
-
+#' Read AMPS
+#' 
+#' AMPS
 #' @export
-#' @name readamps
-readamps <- function(date, time.resolution = "4hourly", xylim = NULL, 
+readamps0 <- function(date, time.resolution = "4hourly", xylim = NULL, 
                             band = 1, 
                             latest = TRUE, returnfiles = FALSE, ..., inputfiles = NULL) {
   

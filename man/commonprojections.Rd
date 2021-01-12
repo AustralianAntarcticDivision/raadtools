@@ -3,7 +3,13 @@
 \docType{data}
 \name{commonprojections}
 \alias{commonprojections}
-\title{This is a list of often used projections, in PROJ.4}
+\title{This is a list of often used projections, in PROJ}
+\format{
+An object of class \code{list} of length 4.
+}
+\usage{
+commonprojections
+}
 \description{
 Each element can be looked up by name, see Examples
 }

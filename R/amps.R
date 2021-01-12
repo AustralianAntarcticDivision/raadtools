@@ -51,7 +51,7 @@ readwrf0 <- function(x, band = 1) {
   ## band 27 is first v
   grid <- detect_amps_grid_from_filename(x)
   gridspec <- amps_grid_spec(grid)
-  print(band)
+  #print(band)
   dat <- suppressWarnings(rgdal::readGDAL(x, band = band, silent = TRUE))
   dat <- setExtent(raster(dat), gridspec$ex)
   projection(dat) <- gridspec$proj
@@ -256,11 +256,16 @@ readamps_d1wind <- function(date, time.resolution = "4hourly", xylim = NULL,
   r <- vector("list", nfiles)
 
   is_first_hour <- grepl("f000", basename(files$fullname))
-  bands <- c(5, 27) + level - 1
+
+  ## we can't hardcode the bands since 202010 ...
+  bands <- c(5, 27)
+  ## so if total bands is > 254 we use this number
+  if (vapour::vapour_raster_info(files$fullname[ifile])$bands > 254) {
+    bands <- c(33, 40)
+  }
   for (ifile in seq_len(nfiles)) {
     r1 <- readwrf0(files$fullname[ifile], band = bands[1L] + is_first_hour[ifile] * 4) #raster(files$ufullname[ifile], band = files$band[ifile])
     r2 <- readwrf0(files$fullname[ifile], band = bands[2L] + is_first_hour[ifile] * 4) #raster(files$vfullname[ifile], band = files$band[ifile])
-browser()
     r0 <- rasterfun(r1, r2)
     #if (lon180)     r0 <- suppressWarnings(.rotate(r0))
     if (cropit) r0 <- crop(r0, cropext)

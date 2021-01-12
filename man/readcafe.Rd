@@ -42,3 +42,6 @@ readcafe(
 \description{
 Files are found with `raadfiles::cafe_monthly_files()`.
 }
+\examples{
+readcafe(date = "2010-01-15")
+}

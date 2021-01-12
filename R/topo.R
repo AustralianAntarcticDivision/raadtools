@@ -163,8 +163,8 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
 }
 
 
-##' @rdname readtopo
-##' @export
+#' @rdname readtopo
+#' @export
 readbathy <- readtopo
 
 

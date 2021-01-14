@@ -1,3 +1,7 @@
+# raadtools dev
+
+* Align to updated raadfiles (0.1.3.9006) for new OISST file paths. 
+
 # raadtools 0.5.5
 
 * readamps_d1wind() now correctly read the right bands. New function readamps_d2wind() to read the d2 grid. 

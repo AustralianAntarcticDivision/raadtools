@@ -1,5 +1,8 @@
 # raadtools dev
 
+* Now importing `fasticefiles()` from raadfiles. 
+
+
 * Align to updated raadfiles (0.1.3.9006) for new OISST file paths. 
 
 # raadtools 0.5.5

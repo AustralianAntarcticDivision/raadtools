@@ -2,17 +2,7 @@
 % Please edit documentation in R/fastice.R
 \name{fasticefiles}
 \alias{fasticefiles}
-\title{fast ice files}
-\usage{
-fasticefiles(product = "binary_fast_ice", mask = FALSE, ...)
-}
-\arguments{
-\item{product}{which product}
-
-\item{mask}{if TRUE return mask file name}
-
-\item{...}{reserved for future use, currently ignored}
-}
+\title{fasticefiles}
 \value{
 data frame
 }

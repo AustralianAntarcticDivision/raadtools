@@ -1,30 +1,12 @@
 
-##' Data frame of all available fast ice files.
-##'
-##' A data frame with file, date, fullname
-##' @title fast ice files
-#' @param product which product
-#' @param mask if TRUE return mask file name
-##' @param ... reserved for future use, currently ignored
-##' @return data frame
-##' @export
-fasticefiles <- function(product = "binary_fast_ice", mask = FALSE, ...) {
-  product <- match.arg(product)
-  #pref <- file.path("fastice", "fraser_fastice", product)
-  #fs <- list.files(file.path(datadir, pref), pattern = "img$")
-  allfiles <- .allfilelist()
-
-  cfiles <- grep("data.aad.gov.au", allfiles, value = TRUE)
-  cfiles1 <- grep("3656", allfiles, value = TRUE)
-  if (mask) {
-    f <- grep("geo",cfiles1, value = TRUE)
-    return(grep("coastmask.img$", f, value = TRUE))
-  }
-  cfiles2 <- grep("sqc.img$", allfiles, value = TRUE)
-  
-  dates <- as.POSIXct(strptime(basename(cfiles2), "%Y_%j"), tz = "GMT")
-  data.frame(date = dates, fullname = cfiles2, stringsAsFactors = FALSE)
-}
+#' fasticefiles
+#' 
+#' 
+#' @importFrom raadfiles fasticefiles
+#' @export
+#' @inherit raadfiles::fasticefiles
+#' @name fasticefiles
+NULL
 
 ##' Read fast ice data, optionally with a mask
 ##'

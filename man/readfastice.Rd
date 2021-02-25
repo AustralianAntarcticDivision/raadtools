@@ -6,37 +6,56 @@
 \usage{
 readfastice(
   date,
-  time.resolution = "weekly3",
+  product = c("circum_fast_ice", "binary_fast_ice"),
   xylim = NULL,
+  latest = TRUE,
   returnfiles = FALSE,
-  ...
+  ...,
+  inputfiles = NULL
 )
 }
 \arguments{
 \item{date}{date or dates to read (can be character, POSIXt, or Date)}
-
-\item{time.resolution}{fixed at roughly "3 weekly"}
 
 \item{xylim}{extent in native space of the grid}
 
 \item{returnfiles}{return the file details only}
 
 \item{...}{reserved for future use, currently ignored}
+
+\item{time.resolution}{fixed at roughly "3 weekly"}
 }
 \value{
-RasterBrick with 
+RasterBrick see Details
+}
+\description{
+Read fast ice data
+}
+\details{
+Fast ice data on original polar stereographic grid, the product "circum_fast_ice" 
+is 1000m resolution published in Fraser et al. (2020).
+}
+\section{New circumpolar product}{
+ 
+
+ Classified surface type: 
+0: pack ice or ocean
+1: continent
+2: islands
+3: ice shelf
+4: fast ice
+5: manual fast ice edge
+6: auto fast ice edge
+}
+
+\section{Old binary product}{
+ 
+
 0: Southern Ocean, pack ice or icebergs, corresponding to light blue in the PNG files.
 1: Antarctic continent (including ice shelves), as defined using the Mosaic of Antarctica product, corresponding to white in the PNG files.
 2: Fast ice, as classified from a single 20-day MODIS composite image, corresponding to dark blue in the PNG files
 3: Fast ice, as classified using a single 20-day AMSR-E composite image, corresponding to yellow in the PNG files
 4: Fast ice, as classified using the previous or next 20-day MODIS composite images, corresponding to red in the PNG files
-}
-\description{
-Read fast ice data, optionally with a mask
-}
-\details{
-Fast ice data on original Equal Area Cylindrical grid
-}
-\references{
 \url{http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=modis_20day_fast_ice}
 }
+

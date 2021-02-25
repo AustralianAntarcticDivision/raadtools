@@ -8,30 +8,130 @@
 #' @name fasticefiles
 NULL
 
-##' Read fast ice data, optionally with a mask
+##' Read fast ice data
 ##'
-##' Fast ice data on original Equal Area Cylindrical grid
+##' Fast ice data on original polar stereographic grid, the product "circum_fast_ice" 
+##' is 1000m resolution published in Fraser et al. (2020). 
+##' 
+##' 
+##' @section New circumpolar product: 
+##' 
+##'  Classified surface type: 
+##' 0: pack ice or ocean
+##' 1: continent
+##' 2: islands
+##' 3: ice shelf
+##' 4: fast ice
+##' 5: manual fast ice edge
+##' 6: auto fast ice edge
+##' 
+##' @section Old binary product: 
+##' 
+##' 0: Southern Ocean, pack ice or icebergs, corresponding to light blue in the PNG files.
+##' 1: Antarctic continent (including ice shelves), as defined using the Mosaic of Antarctica product, corresponding to white in the PNG files.
+##' 2: Fast ice, as classified from a single 20-day MODIS composite image, corresponding to dark blue in the PNG files
+##' 3: Fast ice, as classified using a single 20-day AMSR-E composite image, corresponding to yellow in the PNG files
+##' 4: Fast ice, as classified using the previous or next 20-day MODIS composite images, corresponding to red in the PNG files
+##' \url{http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=modis_20day_fast_ice}
 ##' @title Fast ice data
 ##' @param date date or dates to read (can be character, POSIXt, or Date)
 ##' @param time.resolution fixed at roughly "3 weekly"
 ##' @param xylim extent in native space of the grid
 ##' @param returnfiles return the file details only
 ##' @param ... reserved for future use, currently ignored
-##' @return RasterBrick with 
-##' 0: Southern Ocean, pack ice or icebergs, corresponding to light blue in the PNG files.
-##' 1: Antarctic continent (including ice shelves), as defined using the Mosaic of Antarctica product, corresponding to white in the PNG files.
-##' 2: Fast ice, as classified from a single 20-day MODIS composite image, corresponding to dark blue in the PNG files
-##' 3: Fast ice, as classified using a single 20-day AMSR-E composite image, corresponding to yellow in the PNG files
-##' 4: Fast ice, as classified using the previous or next 20-day MODIS composite images, corresponding to red in the PNG files
-##' @references \url{http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=modis_20day_fast_ice}
+##' @return RasterBrick see Details 
 ##' @export
-readfastice <-
-  function(date, time.resolution = "weekly3",
-           xylim = NULL, returnfiles = FALSE, ...) {
+readfastice <- function(date, product = c("circum_fast_ice", "binary_fast_ice"), 
+                        xylim = NULL, latest = TRUE, returnfiles = FALSE, ..., 
+                        inputfiles = NULL) {
+ product <- match.arg(product)
+  if (product == "circum_fast_ice") {
+    
+    out <- readfastice_circum(date, xylim = xylim, latest = latest, returnfiles = returnfiles, inputfiles = inputfiles)
+  }
+  if (product == "binary_fast_ice") {
+    out <- 
+  readfastice_binary(date, xylim = xylim, latest = latest, returnfiles = returnfiles, inputfiles = inputfiles)   
+  }
+out
+  }
+
+readfastice_circum <- function(date, time.resolution = "daily", 
+                               xylim = NULL, latest = TRUE, returnfiles = FALSE, ..., 
+                               inputfiles = NULL) {
+  read0 <- function(x) {
+    #x <- raadfiles::fasticefiles()$fullname[1]
+    on.exit(sink(NULL), add = TRUE)
+    sink(tempfile())
+    r <- flip(raster::raster(x), "y")
+    prj <- "+proj=stere +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m +no_defs"
+    ext <- raster::extent(-2691000,  2934000, -2390000,  2310000)
+    #lon <- flip(raster::raster(x, varname = "longitude"), "y")
+    #lat <- flip(raster::raster(x, varname = "latitude"), "y")
+    #idx <- c(1, ncol(lon), ncell(lon) - ncol(lon), ncell(lon))
+    #corner <- cbind(lon[idx], lat[idx])
+    #setExtent(r, spex::buffer_extent(extent(rgdal::project(corner, prj)), 1000))
+    # class      : RasterLayer 
+    # band       : 1  (of  20  bands)
+    # dimensions : 4700, 5625, 26437500  (nrow, ncol, ncell)
+    # resolution : 1000, 1000  (x, y)
+    # extent     : -2691000, 2934000, -2390000, 2310000  (xmin, xmax, ymin, ymax)
+    # crs        : NA 
+    # source     : /rdsi/PUBLIC/raad/data/public.services.aad.gov.au/datasets/science/AAS_4116_Fraser_fastice_circumantarctic/fastice_v2_2/FastIce_70_2000.nc 
+    # names      : Fast.Ice.Time.Series 
+    # z-value    : 2000-03-01 
+    # zvar       : Fast_Ice_Time_series 
+    # 
+    projection(r) <- prj
+    setExtent(r, ext)
+  }
+  if (!is.null(inputfiles)) {
+    files <- inputfiles
+  } else {
+    files <- raadfiles::fasticefiles("circum_fast_ice")
+  }
+  if (returnfiles) return(files)
+  
+  if (missing(date)) {
+   date <- min(files$date)
+   if (latest) date <- max(files$date)
+ }
+  date <- timedateFrom(date)
+  
+  ## it would be nice here to trim down if there were input dates
+  if (returnfiles) return(files)
+  files <- .processFiles(date, files, time.resolution)
+  
+  cropit <- FALSE
+  if (!is.null(xylim)) {
+    cropit <- TRUE
+    cropext <- extent(xylim)
+  }
+  
+  nfiles <- nrow(files)
+  r <- vector("list", nfiles)
+  
+  for (ifile in seq_len(nfiles)) {
+    r0 <- read0(files$fullname[ifile])
+    if (cropit) {
+      r0 <- crop(r0, cropext)
+    }
+    r[[ifile]] <- r0
+  }
+  r <- if (nfiles > 1) brick(stack(r), ...) else r[[1L]]
+  names(r) <- sprintf("fastice_%s", format(files$date, "%Y%m%d"))
+  
+  setZ(r, files$date)
+  
+}
+readfastice_binary <-
+  function(date, time.resolution = "weekly3", 
+           xylim = NULL, latest = TRUE, returnfiles = FALSE, ..., 
+           inputfiles = NULL) {
     
     dims <- c(4300, 425)
     
-    gridmask <- t(matrix(readBin(fasticefiles(mask = TRUE), "integer", size = 2, n = prod(dims), endian = "little"), dims[1]))
+    gridmask <- t(matrix(readBin(fasticefiles(mask = TRUE, product = "binary_fast_ice"), "integer", size = 2, n = prod(dims), endian = "little"), dims[1]))
     read0 <- function(x) {
       projstring <- "+proj=cea +lon_0=91 +lat_0=-90 +lat_ts=-65 +datum=WGS84"
       ## bbox in cea
@@ -47,8 +147,12 @@ readfastice <-
       raster(d, crs = projstring, xmn = topleft[1], xmx = botright[1], ymn = botright[2], ymx = topleft[2])
     }
     
-    files <- fasticefiles()
-    
+    if (!is.null(inputfiles)) {
+            files <- inputfiles
+    } else {
+      files <- fasticefiles(product = "binary_fast_ice")
+    }
+    if (returnfiles) return(files)
     if (missing(date)) date <- min(files$date)
     date <- timedateFrom(date)
     

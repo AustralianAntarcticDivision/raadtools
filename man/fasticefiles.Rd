@@ -11,4 +11,24 @@ Data frame of all available fast ice files.
 }
 \details{
 A data frame with file, date, fullname
+
+Note that this product changed from the legacy 2000-2008 initial East Antarctic product
+"binary_fast_ice" to the circumpolar update "circum_fast_ice" 2000-2018 in Feburary 2021.
+
+If you want the old files, use `product = "binary_fast_ice"`, but it's safe to assume
+the default product supersedes the old one.
+
+The initial product was in Cylindrical Equal Area projection, while the circumpolar product
+uses the NSIDC-compatible polar stereographic (but with an unspecified extent, though implicit in the
+longitude and latitude arrays of the NetCDF files).
+
+Exists in 'public.services.aad.gov.au/datasets/science' (Feb 2021).
+}
+\references{
+Fraser, A. D., Massom, R. A., Ohshima, K. I., Willmes, S.,
+ Kappes, P. J., Cartwright, J., and Porter-Smith, R.:
+ High-resolution mapping of circum-Antarctic landfast sea ice distribution,
+ 2000–2018, Earth Syst. Sci. Data, 12, 2987–2999, https://doi.org/10.5194/essd-12-2987-2020, 2020.
+
+[Fraser et al. 2018](https://doi.org/10.5194/essd-12-2987-2020)
 }

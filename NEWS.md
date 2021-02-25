@@ -1,7 +1,8 @@
 # raadtools dev
 
-* Now importing `fasticefiles()` from raadfiles. 
+* Function `readfastice()` now defaults to the 2020 updated circumpolar files. 
 
+* Now importing `fasticefiles()` from raadfiles. 
 
 * Align to updated raadfiles (0.1.3.9006) for new OISST file paths. 
 

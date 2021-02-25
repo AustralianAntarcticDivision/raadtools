@@ -56,14 +56,14 @@ readfastice <- function(date, product = c("circum_fast_ice", "binary_fast_ice"),
 out
   }
 
-readfastice_circum <- function(date, time.resolution = "daily", 
+readfastice_circum <- function(date, time.resolution = "weekly3", 
                                xylim = NULL, latest = TRUE, returnfiles = FALSE, ..., 
                                inputfiles = NULL) {
-  read0 <- function(x) {
+  read0 <- function(x, band) {
     #x <- raadfiles::fasticefiles()$fullname[1]
     on.exit(sink(NULL), add = TRUE)
     sink(tempfile())
-    r <- flip(raster::raster(x), "y")
+    r <- flip(raster::raster(x, band = band), "y")
     prj <- "+proj=stere +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m +no_defs"
     ext <- raster::extent(-2691000,  2934000, -2390000,  2310000)
     #lon <- flip(raster::raster(x, varname = "longitude"), "y")
@@ -112,7 +112,7 @@ readfastice_circum <- function(date, time.resolution = "daily",
   r <- vector("list", nfiles)
   
   for (ifile in seq_len(nfiles)) {
-    r0 <- read0(files$fullname[ifile])
+    r0 <- read0(files$fullname[ifile], files$band[ifile])
     if (cropit) {
       r0 <- crop(r0, cropext)
     }

@@ -1,4 +1,4 @@
-# raadtools dev
+# raadtools 0.6.0
 
 * Function `readfastice()` now defaults to the 2020 updated circumpolar files. 
 

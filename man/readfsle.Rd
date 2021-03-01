@@ -25,7 +25,7 @@ readfsle(
 
 \item{latest}{if TRUE and input date is missing return the latest time available, otherwise the earliest}
 
-\item{varname}{either `fsle_max` or `theta_max``}
+\item{varname}{either \code{fsle_max} or `theta_max``}
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 

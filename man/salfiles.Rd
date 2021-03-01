@@ -18,8 +18,8 @@ data.frame of file names and dates
 Load file names and dates of SMAP sea surface salinity
 }
 \details{
-A data frame of file names and dates. 
+A data frame of file names and dates.
 
-Only a short period of daily data is available, from '2015-03-27' to 
+Only a short period of daily data is available, from '2015-03-27' to
 '2018-10-21'.
 }

@@ -18,7 +18,7 @@ read_sose(
 }
 \arguments{
 \item{varname}{variable to return from the data files, default is whatever first value
-from [sose_monthly_varnames()]}
+from \code{\link[=sose_monthly_varnames]{sose_monthly_varnames()}}}
 
 \item{level, }{defaults to 1L - there are 52}
 }

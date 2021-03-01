@@ -90,10 +90,10 @@ Dates are matched to file names by finding the nearest match in
 time within a short duration. If \code{date} is greater than
 length 1 then the sorted set of unique matches is returned.
 
-For NSIDC data a \code{\link[raster]{ratify}}ied raster is returned if \code{setNA} and 
-\code{rescale} are both set to \code{FALSE}.  Use \code{levels(x)} to return the data.frame of values 
+For NSIDC data a \code{\link[raster]{ratify}}ied raster is returned if \code{setNA} and
+\code{rescale} are both set to \code{FALSE}.  Use \code{levels(x)} to return the data.frame of values
 and levels (there's no straight-through rule, all numeric values are explicit along with special
-values like "Unused"). 
+values like "Unused").
 The values used are documented here \url{http://nsidc.org/data/docs/daac/nsidc0051_gsfc_seaice.gd.html}
 }
 \examples{

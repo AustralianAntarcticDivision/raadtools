@@ -19,7 +19,7 @@ raadtools(
 
 \item{time.resolution}{time resoution data to read, daily or monthly}
 
-\item{lon180}{defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]}
+\item{lon180}{defaults to TRUE, to "rotate" Pacific view \link{0, 360} data to Atlantic view \link{-180, 180}}
 
 \item{setNA}{mask out land values (only applies to monthly time.resolution)}
 

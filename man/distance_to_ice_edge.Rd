@@ -49,24 +49,24 @@ raster layer with distances to this date's sea ice edge
 }
 \description{
 Calculate the shortest distance (metres) to a threshold sea ice contour.  If in
-doubt use `distance_to_ice_edge`, the definition of the edge is not straightforward, especially so for
-the higher resolution products and near the coast. 
-`distance_to_ice_edge` computes a single "main" edge at continental scale
-`distance_to_ice` computes all distances to any ice at threshold concentration
+doubt use \code{distance_to_ice_edge}, the definition of the edge is not straightforward, especially so for
+the higher resolution products and near the coast.
+\code{distance_to_ice_edge} computes a single "main" edge at continental scale
+\code{distance_to_ice} computes all distances to any ice at threshold concentration
 }
 \details{
-The distance is always positive, use `readice` in the usual way to determine if a
+The distance is always positive, use \code{readice} in the usual way to determine if a
 location is inside or out of the ice field itself. (If inside means zero distance to ice
 for you then set it explicitly based on the concentration a point is in.)
 Future work may generalize this to other data sources.
 }
 \note{
-beware that any queried location outside of this layer's range will be 
-undetermined, and the external boundary of this layer is not constant with 
-respect to the pole, and that in general a location may be closer to ice in the 
-opposite hemisphere. 
+beware that any queried location outside of this layer's range will be
+undetermined, and the external boundary of this layer is not constant with
+respect to the pole, and that in general a location may be closer to ice in the
+opposite hemisphere.
 
-The argument `hemisphere` may be north or south (default is south), but this will only work if your locations
+The argument \code{hemisphere} may be north or south (default is south), but this will only work if your locations
 are on the actual map, so it's not possible to request the distance to ice in both poles for any point.
 }
 \examples{

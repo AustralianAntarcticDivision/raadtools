@@ -81,10 +81,10 @@ read_err_daily(
 a raster layer
 }
 \description{
-Functions `read_sla_daily` and so on for "ugosa, adt, ugos, sla, vgos, vgosa, err".
+Functions \code{read_sla_daily} and so on for "ugosa, adt, ugos, sla, vgos, vgosa, err".
 }
 \details{
-sla is sea level anomaly, for the raw files see `raadfiles::altimetry_daily_files`
+sla is sea level anomaly, for the raw files see \code{raadfiles::altimetry_daily_files}
 }
 \examples{
 a <- read_adt_daily(sort(Sys.Date() - 1:50),

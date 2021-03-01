@@ -24,7 +24,7 @@ readssh(
 
 \item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details}
 
-\item{lon180}{defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
+\item{lon180}{defaults to TRUE, to "rotate" Pacific view \link{0, 360} data to Atlantic view \link{-180, 180}
 components, in degrees (0 north, 90 east, 180 south, 270 west)}
 
 \item{ssha}{logical, to optionally return anomaly or height}

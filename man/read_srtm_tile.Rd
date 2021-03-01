@@ -10,6 +10,6 @@ read_srtm_tile(tile_x = 39, tile_y = 6)
 Read a tile by x and y index.
 }
 \details{
-See [raadfiles::srtm_files()] for filename in `fullname` and `x`, `y` for tile indices.
+See \code{\link[raadfiles:srtm]{raadfiles::srtm_files()}} for filename in \code{fullname} and \code{x}, \code{y} for tile indices.
 }
 \keyword{internal}

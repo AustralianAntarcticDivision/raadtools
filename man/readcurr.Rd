@@ -26,7 +26,7 @@ readcurr(
 
 \item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details}
 
-\item{lon180}{defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]}
+\item{lon180}{defaults to TRUE, to "rotate" Pacific view \link{0, 360} data to Atlantic view \link{-180, 180}}
 
 \item{magonly}{return just the magnitude from the U and V
 components}
@@ -64,10 +64,10 @@ This is the "SSALTO/DUACS - DT Geostrophic Velocities - Up-to-date Global Proces
 }
 \note{
 These data for daily files are stored in longitude/latitude projection on the sphere between longitudes in the Pacific
-view \[0, 360\], the default behaviour is to reset this to Atlantic
-view \[-180, 180\] with \code{lon180}. 
+view [0, 360], the default behaviour is to reset this to Atlantic
+view [-180, 180] with \code{lon180}.
 
-For weekly files, this source is no longer provided by Aviso but is cached by the raadtools system at AAD/ACE, for the period 1992 to 2014. 
+For weekly files, this source is no longer provided by Aviso but is cached by the raadtools system at AAD/ACE, for the period 1992 to 2014.
 Note that the projection was Mercator for this earlier product.
 }
 \examples{

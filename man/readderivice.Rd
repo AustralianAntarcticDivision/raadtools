@@ -48,7 +48,6 @@ Dates are matched to file names by finding the nearest match in
 time within a short duration. If \code{date} is greater than
 length 1 then the sorted set of unique matches is returned.
 
-
 time_since_melt
 
 32767 (treated as missing data)
@@ -59,8 +58,8 @@ time_since_melt
 
 -32768 = ice that hasn't melted during the data period
 
-In terms of missing data 32767,  in the nc file, so should be NA once read into R): these are 
-either open water in the sea ice zone that hasn't re-frozen during the data period, or missing sea ice data that 
+In terms of missing data 32767,  in the nc file, so should be NA once read into R): these are
+either open water in the sea ice zone that hasn't re-frozen during the data period, or missing sea ice data that
 couldn't be interpolated.
 }
 \seealso{

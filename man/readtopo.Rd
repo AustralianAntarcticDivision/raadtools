@@ -48,7 +48,7 @@ read_rema_tiles(...)
 
 \item{polar}{Flag for returning the polar version of the IBCSO data.}
 
-\item{lon180}{Flag for returning data in Atlantic [-180, 180] rather than Pacific [0, 360] view.}
+\item{lon180}{Flag for returning data in Atlantic \link{-180, 180} rather than Pacific \link{0, 360} view.}
 
 \item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details}
 
@@ -83,7 +83,7 @@ The following data sets are available using the argument \code{topo}.
 \item{lake_superior}{Bathymetry of Lake Superior \url{https://www.ngdc.noaa.gov/mgg/greatlakes/superior.html}}
 \item{ramp}{Radarsat Antarctic digital elevation model V2 \url{https://github.com/AustralianAntarcticDivision/blueant#radarsat-antarctic-digital-elevation-model-v2}}
 \item{ga_srtm}{Digital Elevation Model (DEM) of Australia with 1 Second Grid}
-\item{rema_1km, rema_200m, rema_100m, rema_8m}{Reference Elevation Model of Antartica (REMA) for the peninsula, see `read_rema_tiles` for the index}
+\item{rema_1km, rema_200m, rema_100m, rema_8m}{Reference Elevation Model of Antartica (REMA) for the peninsula, see \code{read_rema_tiles} for the index}
 \item{gebco_19}{GEBCO_2019 Grid https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html}
 }
 }

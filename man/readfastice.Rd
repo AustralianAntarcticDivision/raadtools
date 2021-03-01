@@ -34,33 +34,36 @@ RasterBrick see Details
 Fast ice data
 }
 \details{
-High-resolution mapping of circum-Antarctic landfast sea ice distribution, 2000–2018. 
+High-resolution mapping of circum-Antarctic landfast sea ice distribution, 2000–2018.
 
-Fast ice data on original polar stereographic grid, the product "circum_fast_ice" 
-is 1000m resolution published in  [Alex Fraser et al. (2020)](https://doi.org/10.5194/essd-12-2987-2020).
+Fast ice data on original polar stereographic grid, the product "circum_fast_ice"
+is 1000m resolution published in  \href{https://doi.org/10.5194/essd-12-2987-2020}{Alex Fraser et al. (2020)}.
 }
 \section{Circumpolar product from 2020}{
- 
 
- Classified surface type: 
- 
-- 0: pack ice or ocean
-- 1: continent
-- 2: islands
-- 3: ice shelf
-- 4: fast ice
-- 5: manual fast ice edge
-- 6: auto fast ice edge
+
+Classified surface type:
+\itemize{
+\item 0: pack ice or ocean
+\item 1: continent
+\item 2: islands
+\item 3: ice shelf
+\item 4: fast ice
+\item 5: manual fast ice edge
+\item 6: auto fast ice edge
+}
 }
 
 \section{Old binary product}{
- 
 
-0: Southern Ocean, pack ice or icebergs, corresponding to light blue in the PNG files.
-1: Antarctic continent (including ice shelves), as defined using the Mosaic of Antarctica product, corresponding to white in the PNG files.
-2: Fast ice, as classified from a single 20-day MODIS composite image, corresponding to dark blue in the PNG files
-3: Fast ice, as classified using a single 20-day AMSR-E composite image, corresponding to yellow in the PNG files
-4: Fast ice, as classified using the previous or next 20-day MODIS composite images, corresponding to red in the PNG files
+\itemize{
+\item 0: Southern Ocean, pack ice or icebergs, corresponding to light blue in the PNG files.
+\item 1: Antarctic continent (including ice shelves), as defined using the Mosaic of Antarctica product, corresponding to white in the PNG files.
+\item 2: Fast ice, as classified from a single 20-day MODIS composite image, corresponding to dark blue in the PNG files
+\item 3: Fast ice, as classified using a single 20-day AMSR-E composite image, corresponding to yellow in the PNG files
+\item 4: Fast ice, as classified using the previous or next 20-day MODIS composite images, corresponding to red in the PNG files
+}
+
 \url{http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=modis_20day_fast_ice}
 }
 

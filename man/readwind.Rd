@@ -26,7 +26,7 @@ readwind(
 
 \item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details}
 
-\item{lon180}{defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]}
+\item{lon180}{defaults to TRUE, to "rotate" Pacific view \link{0, 360} data to Atlantic view \link{-180, 180}}
 
 \item{magonly}{return just the magnitude from the U and V
 components}
@@ -58,7 +58,7 @@ Read wind
 \details{
 Read wind data
 
-The \code{inputfiles} argument may be used to speed up individual reads, see the examples. Note that 
+The \code{inputfiles} argument may be used to speed up individual reads, see the examples. Note that
 this must then ignore the \code{time.resolution} argument, which is also set by \code{windfiles} - and no
 warning is given.  If using this argument you must give the same \code{time.resolution} as was used to create the files
 \code{data.frame}.

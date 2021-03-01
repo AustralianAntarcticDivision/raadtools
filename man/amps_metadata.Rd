@@ -15,7 +15,7 @@ represent
 \code{GRIB_REF_TIME} \tab text reference time \cr
 \code{GRIB_SHORT_NAME} \tab short name  \cr
 \code{GRIB_UNIT} \tab  text unit \cr
-\code{GRIB_VALID_TIME} \tab text valid time \cr 
+\code{GRIB_VALID_TIME} \tab text valid time \cr
 }
 }
 \description{

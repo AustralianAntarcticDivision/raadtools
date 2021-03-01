@@ -17,8 +17,8 @@ This function loads the latest cache of stored files for
 rapid response products.
 }
 \details{
-We acknowledge the use of Rapid Response imagery from the Land 
-Atmosphere Near-real time Capability for EOS (LANCE) system operated by 
+We acknowledge the use of Rapid Response imagery from the Land
+Atmosphere Near-real time Capability for EOS (LANCE) system operated by
 the NASA/GSFC/Earth Science Data and Information System (ESDIS) with funding provided by NASA/HQ.
 }
 \examples{

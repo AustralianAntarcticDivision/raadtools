@@ -13,7 +13,7 @@ chacter vector
 Available variable names from SOSE.
 }
 \details{
-These varnames can be used in `read_sose(varname = )`.
+These varnames can be used in \code{read_sose(varname = )}.
 }
 \examples{
 sose_monthly_varnames()

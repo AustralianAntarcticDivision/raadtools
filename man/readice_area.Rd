@@ -17,8 +17,8 @@ readice_area(product = "nsidc", hemisphere = "south", ...)
 raster with the area of the cells in m^2
 }
 \description{
-Read the NSIDC pixel-area files for either hemisphere. 
-Only 25km product is supported. Tool name "psn25area_v3.dat and pss25area_v3.dat": 
+Read the NSIDC pixel-area files for either hemisphere.
+Only 25km product is supported. Tool name "psn25area_v3.dat and pss25area_v3.dat":
 \url{http://nsidc.org/data/polar-stereo/tools_geo_pixel.html#pixel_area}.
 }
 \examples{

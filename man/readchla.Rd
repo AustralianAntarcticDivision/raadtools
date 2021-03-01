@@ -38,7 +38,7 @@ Dates are matched to file names by finding the nearest match in
 time within a short duration. If \code{date} is greater than
 length 1 then the sorted set of unique matches is returned.
 
-The code that creates these derived files is at [raad-deriv](https://github.com/AustralianAntarcticDivision/raad-deriv).
+The code that creates these derived files is at \href{https://github.com/AustralianAntarcticDivision/raad-deriv}{raad-deriv}.
 }
 \examples{
 \dontrun{

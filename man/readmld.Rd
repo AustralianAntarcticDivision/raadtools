@@ -28,9 +28,9 @@ read and display it in R.
 A recently updated dataset using the most recent Southern Ocean observation,
 with updated gridding analysis so it should be better and have appropriate
 land mask:  ftp://ftp.nerc-bas.ac.uk/jbsall/MLfitted_SO.mat
-This is a compilation of ocean *observations*: a compilation of 225389
+This is a compilation of ocean \emph{observations}: a compilation of 225389
 profiles from the Argo program and 106682 profiles from all kind of different
-ships and PIs. This is *not* model evaluation.
+ships and PIs. This is \emph{not} model evaluation.
 This is likely the best estimate of monthly MLD , because it uses the largest
 number of observations. There is no observational products with time
 variability because the Southern Ocean only started to be observed (at basin

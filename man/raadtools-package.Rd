@@ -5,12 +5,12 @@
 \alias{raadtools-package}
 \title{R tools for spatial data, extensions using raster to read and extract}
 \description{
-Tools in R for reading, plotting and manipulating spatial data, originally 
+Tools in R for reading, plotting and manipulating spatial data, originally
 used at the Australian Antarctic Division (AAD).
 }
 \details{
-read functions like \code{\link{readsst}} will read a data set by date-time vector, with a 
- set of shared arguments that work the same and documented against this dummy function.
+read functions like \code{\link{readsst}} will read a data set by date-time vector, with a
+set of shared arguments that work the same and documented against this dummy function.
 }
 \author{
 Michael D. Sumner \email{michael.sumner@aad.gov.au}

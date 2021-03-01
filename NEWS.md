@@ -1,5 +1,8 @@
 # raadtools 0.6.0
 
+
+* Updated 'kerguelen' topo to revised version (2019). 
+
 * Function `readfastice()` now defaults to the 2020 updated circumpolar files. 
 
 * Now importing `fasticefiles()` from raadfiles. 

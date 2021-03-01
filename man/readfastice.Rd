@@ -25,7 +25,7 @@ readfastice(
 
 \item{...}{reserved for future use, currently ignored}
 
-\item{time.resolution}{fixed at roughly "3 weekly"}
+\item{time.resolution}{fixed, the underlying time step is 15 days}
 }
 \value{
 RasterBrick see Details

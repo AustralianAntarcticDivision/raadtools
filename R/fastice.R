@@ -40,7 +40,7 @@ NULL
 #' @title Fast ice data
 #' @param date date or dates to read (can be character, POSIXt, or Date)
 #' @param product 'circum_fast_ice' or 'binary_fast_ice'
-#' @param time.resolution fixed at roughly "3 weekly"
+#' @param time.resolution fixed, the underlying time step is 15 days
 #' @param xylim extent in native space of the grid
 #' @param returnfiles return the file details only
 #' @param ... reserved for future use, currently ignored

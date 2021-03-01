@@ -8,21 +8,29 @@
 
 <title>Topography data — readtopo • raadtools</title>
 
+
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,10 +38,10 @@
 
 
 
-<meta property="og:title" content="Topography data — readtopo" />
 
+<meta property="og:title" content="Topography data — readtopo" />
 <meta property="og:description" content="Functions to provide topographic (bathymetry and/or topography) data." />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -47,9 +55,10 @@
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -63,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.2.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -71,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -100,11 +109,10 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/AustralianAntarcticDivision/raadtools">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/AustralianAntarcticDivision/raadtools/">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -115,6 +123,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -126,33 +135,45 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Functions to provide topographic (bathymetry and/or topography) data.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>readtopo</span>(<span class='kw'>topo</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"gebco_08"</span>, <span class='st'>"ibcso"</span>, <span class='st'>"etopo1"</span>, <span class='st'>"etopo2"</span>, <span class='st'>"kerguelen"</span>,
-  <span class='st'>"george_v_terre_adelie"</span>, <span class='st'>"smith_sandwell"</span>, <span class='st'>"gebco_14"</span>, <span class='st'>"macrie1100m"</span>,
-  <span class='st'>"macrie2100m"</span>, <span class='st'>"cryosat2"</span>, <span class='st'>"lake_superior"</span>, <span class='st'>"ramp"</span>, <span class='st'>"ibcso_is"</span>,
-  <span class='st'>"ibcso_bed"</span>, <span class='st'>"ga_srtm"</span>, <span class='st'>"rema_1km"</span>, <span class='st'>"rema_200m"</span>, <span class='st'>"rema_100m"</span>, <span class='st'>"rema_8m"</span>,
-  <span class='st'>"srtm"</span>, <span class='st'>"gebco_19"</span>), <span class='kw'>polar</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>lon180</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>xylim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>returnfiles</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>readtopo</span><span class='op'>(</span>
+  topo <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"gebco_08"</span>, <span class='st'>"ibcso"</span>, <span class='st'>"etopo1"</span>, <span class='st'>"etopo2"</span>, <span class='st'>"kerguelen"</span>,
+    <span class='st'>"george_v_terre_adelie"</span>, <span class='st'>"smith_sandwell"</span>, <span class='st'>"gebco_14"</span>, <span class='st'>"macrie1100m"</span>, <span class='st'>"macrie2100m"</span>,
+    <span class='st'>"cryosat2"</span>, <span class='st'>"lake_superior"</span>, <span class='st'>"ramp"</span>, <span class='st'>"ibcso_is"</span>, <span class='st'>"ibcso_bed"</span>, <span class='st'>"ga_srtm"</span>, <span class='st'>"rema_1km"</span>,
+    <span class='st'>"rema_200m"</span>, <span class='st'>"rema_100m"</span>, <span class='st'>"rema_8m"</span>, <span class='st'>"srtm"</span>, <span class='st'>"gebco_19"</span><span class='op'>)</span>,
+  polar <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  lon180 <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  xylim <span class='op'>=</span> <span class='cn'>NULL</span>,
+  returnfiles <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
-<span class='fu'>readbathy</span>(<span class='kw'>topo</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"gebco_08"</span>, <span class='st'>"ibcso"</span>, <span class='st'>"etopo1"</span>, <span class='st'>"etopo2"</span>, <span class='st'>"kerguelen"</span>,
-  <span class='st'>"george_v_terre_adelie"</span>, <span class='st'>"smith_sandwell"</span>, <span class='st'>"gebco_14"</span>, <span class='st'>"macrie1100m"</span>,
-  <span class='st'>"macrie2100m"</span>, <span class='st'>"cryosat2"</span>, <span class='st'>"lake_superior"</span>, <span class='st'>"ramp"</span>, <span class='st'>"ibcso_is"</span>,
-  <span class='st'>"ibcso_bed"</span>, <span class='st'>"ga_srtm"</span>, <span class='st'>"rema_1km"</span>, <span class='st'>"rema_200m"</span>, <span class='st'>"rema_100m"</span>, <span class='st'>"rema_8m"</span>,
-  <span class='st'>"srtm"</span>, <span class='st'>"gebco_19"</span>), <span class='kw'>polar</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>lon180</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>xylim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>returnfiles</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+<span class='fu'>readbathy</span><span class='op'>(</span>
+  topo <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"gebco_08"</span>, <span class='st'>"ibcso"</span>, <span class='st'>"etopo1"</span>, <span class='st'>"etopo2"</span>, <span class='st'>"kerguelen"</span>,
+    <span class='st'>"george_v_terre_adelie"</span>, <span class='st'>"smith_sandwell"</span>, <span class='st'>"gebco_14"</span>, <span class='st'>"macrie1100m"</span>, <span class='st'>"macrie2100m"</span>,
+    <span class='st'>"cryosat2"</span>, <span class='st'>"lake_superior"</span>, <span class='st'>"ramp"</span>, <span class='st'>"ibcso_is"</span>, <span class='st'>"ibcso_bed"</span>, <span class='st'>"ga_srtm"</span>, <span class='st'>"rema_1km"</span>,
+    <span class='st'>"rema_200m"</span>, <span class='st'>"rema_100m"</span>, <span class='st'>"rema_8m"</span>, <span class='st'>"srtm"</span>, <span class='st'>"gebco_19"</span><span class='op'>)</span>,
+  polar <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  lon180 <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  xylim <span class='op'>=</span> <span class='cn'>NULL</span>,
+  returnfiles <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
-<span class='fu'>topofile</span>(<span class='kw'>topo</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"gebco_08"</span>, <span class='st'>"ibcso"</span>, <span class='st'>"etopo1"</span>, <span class='st'>"etopo2"</span>, <span class='st'>"kerguelen"</span>,
-  <span class='st'>"george_v_terre_adelie"</span>, <span class='st'>"smith_sandwell"</span>, <span class='st'>"gebco_14"</span>, <span class='st'>"macrie1100m"</span>,
-  <span class='st'>"macrie2100m"</span>, <span class='st'>"cryosat2"</span>, <span class='st'>"lake_superior"</span>, <span class='st'>"ramp"</span>, <span class='st'>"ibcso_is"</span>,
-  <span class='st'>"ibcso_bed"</span>, <span class='st'>"ga_srtm"</span>, <span class='st'>"rema_1km"</span>, <span class='st'>"rema_200m"</span>, <span class='st'>"rema_100m"</span>, <span class='st'>"rema_8m"</span>,
-  <span class='st'>"srtm"</span>, <span class='st'>"gebco_19"</span>), <span class='kw'>polar</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>lon180</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+<span class='fu'>topofile</span><span class='op'>(</span>
+  topo <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"gebco_08"</span>, <span class='st'>"ibcso"</span>, <span class='st'>"etopo1"</span>, <span class='st'>"etopo2"</span>, <span class='st'>"kerguelen"</span>,
+    <span class='st'>"george_v_terre_adelie"</span>, <span class='st'>"smith_sandwell"</span>, <span class='st'>"gebco_14"</span>, <span class='st'>"macrie1100m"</span>, <span class='st'>"macrie2100m"</span>,
+    <span class='st'>"cryosat2"</span>, <span class='st'>"lake_superior"</span>, <span class='st'>"ramp"</span>, <span class='st'>"ibcso_is"</span>, <span class='st'>"ibcso_bed"</span>, <span class='st'>"ga_srtm"</span>, <span class='st'>"rema_1km"</span>,
+    <span class='st'>"rema_200m"</span>, <span class='st'>"rema_100m"</span>, <span class='st'>"rema_8m"</span>, <span class='st'>"srtm"</span>, <span class='st'>"gebco_19"</span><span class='op'>)</span>,
+  polar <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  lon180 <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
-<span class='fu'>read_rema_tiles</span>(<span class='no'>...</span>)</pre>
-    
+<span class='fu'>read_rema_tiles</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -166,11 +187,11 @@
     </tr>
     <tr>
       <th>lon180</th>
-      <td><p>Flag for returning data in Atlantic [-180, 180] rather than Pacific [0, 360] view.</p></td>
+      <td><p>Flag for returning data in Atlantic -180, 180 rather than Pacific 0, 360 view.</p></td>
     </tr>
     <tr>
       <th>xylim</th>
-      <td><p>spatial extents to crop from source data, can be anything accepted by <code><a href='https://www.rdocumentation.org/packages/raster/topics/extent'>extent</a></code>, see Details</p></td>
+      <td><p>spatial extents to crop from source data, can be anything accepted by <code><a href='https://rdrr.io/pkg/raster/man/extent.html'>extent</a></code>, see Details</p></td>
     </tr>
     <tr>
       <th>returnfiles</th>
@@ -181,52 +202,48 @@
       <td><p>reserved for future use, ignored currently</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     
-<dl class='dl-horizontal'>
+<dl>
 <dt></dt><dd><p><code>topofile</code> returns a character string of the full path to a file name</p></dd>
 <dt></dt><dd><p><code>readtopo</code> and <code>readbathy</code> return the requested data as a RasterLayer (these are aliases)</p></dd>
+
 </dl>
 
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Use <code>readtopo</code> (or its alias <code>readbathy</code>) to read data
 from the chosen data set. The function <code>topofile</code> is used to
 find the full file name.
 <code>xylim</code> is expected to be consistent with <code>lon180</code>
-The following data sets are available using the argument <code>topo</code>.</p><dl class='dl-horizontal'>
+The following data sets are available using the argument <code>topo</code>.</p><dl>
 <dt>gebco_08</dt><dd><p>The GEBCO_08 Grid, a global 30 arc-second grid largely generated by combining quality-controlled ship depth soundings with interpolation between sounding points guided by satellite-derived gravity data. <a href='http://www.gebco.net/data_and_products/gridded_bathymetry_data/'>http://www.gebco.net/data_and_products/gridded_bathymetry_data/</a></p></dd>
 <dt>ibcso</dt><dd><p>IBCSO bathymetry data, resolution 1min, use argument <code>polar = TRUE</code> to return the projected version (polar stereographic with true scale at 71S, WGS84), 500m resolution. <a href='http://www.ibcso.org/data.html'>http://www.ibcso.org/data.html</a>. Default is Ice Surface 'ibcso_is', use 'ibcso_bed' for Bedrock.</p></dd>
 <dt>etopo1</dt><dd><p>ETOPO1 is a 1 arc-minute global relief model of Earth's surface that integrates land topography and ocean bathymetry. <a href='http://www.ngdc.noaa.gov/mgg/global/global.html'>http://www.ngdc.noaa.gov/mgg/global/global.html</a></p></dd>
 <dt>etopo2</dt><dd><p>Historic and deprecated prior version of ETOPO1. <a href='http://www.ngdc.noaa.gov/mgg/global/etopo2.html'>http://www.ngdc.noaa.gov/mgg/global/etopo2.html</a></p></dd>
-<dt>kerguelen</dt><dd><p>Kerguelen Plateau Bathymetric Grid, GeoScience Australia</p></dd>
+<dt>kerguelen</dt><dd><p>Kerguelen Plateau Bathymetric Grid, GeoScience Australia <a href='https://data.gov.au/data/dataset/kerguelen-plateau-bathymetric-grid-2010'>https://data.gov.au/data/dataset/kerguelen-plateau-bathymetric-grid-2010</a></p></dd>
 <dt>george_v_terre_adelie</dt><dd><p>A bathymetric Digital Elevation Model (DEM) of the George V and Terre Adelie continental shelf and margin - 100, 250, and 500 metre resolution. <a href='http://data.aad.gov.au/aadc/metadata/metadata_redirect.cfm?md=AMD/AU/GVdem_2008'>http://data.aad.gov.au/aadc/metadata/metadata_redirect.cfm?md=AMD/AU/GVdem_2008</a></p></dd>
 <dt>smith_sandwell</dt><dd><p>Global seafloor topography from satellite altimetry and ship depth soundings. <a href='http://topex.ucsd.edu/WWW_html/mar_topo.html'>http://topex.ucsd.edu/WWW_html/mar_topo.html</a></p></dd>
 <dt>cryosat2</dt><dd><p>Antarctica CryoSat-2 Digital Elevation Model (DEM). <a href='https://earth.esa.int/web/guest/missions/esa-operational-eo-missions/cryosat'>https://earth.esa.int/web/guest/missions/esa-operational-eo-missions/cryosat</a></p></dd>
 <dt>lake_superior</dt><dd><p>Bathymetry of Lake Superior <a href='https://www.ngdc.noaa.gov/mgg/greatlakes/superior.html'>https://www.ngdc.noaa.gov/mgg/greatlakes/superior.html</a></p></dd>
 <dt>ramp</dt><dd><p>Radarsat Antarctic digital elevation model V2 <a href='https://github.com/AustralianAntarcticDivision/blueant#radarsat-antarctic-digital-elevation-model-v2'>https://github.com/AustralianAntarcticDivision/blueant#radarsat-antarctic-digital-elevation-model-v2</a></p></dd>
 <dt>ga_srtm</dt><dd><p>Digital Elevation Model (DEM) of Australia with 1 Second Grid</p></dd>
-<dt>rema_1km, rema_200m, rema_100m, rema_8m</dt><dd><p>Reference Elevation Model of Antartica (REMA) for the peninsula, see `read_rema_tiles` for the index</p></dd>
+<dt>rema_1km, rema_200m, rema_100m, rema_8m</dt><dd><p>Reference Elevation Model of Antartica (REMA) for the peninsula, see <code>read_rema_tiles</code> for the index</p></dd>
 <dt>gebco_19</dt><dd><p>GEBCO_2019 Grid https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html</p></dd>
+
 </dl>
-    
+
 
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-          </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -234,13 +251,16 @@ The following data sets are available using the argument <code>topo</code>.</p><
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

@@ -8,21 +8,29 @@
 
 <title>extract — extract • raadtools</title>
 
+
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,10 +38,10 @@
 
 
 
-<meta property="og:title" content="extract — extract" />
 
+<meta property="og:title" content="extract — extract" />
 <meta property="og:description" content="Extract methods for raadtools read functions" />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -47,9 +55,10 @@
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -63,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.2.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -71,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -100,11 +109,10 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/AustralianAntarcticDivision/raadtools">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/AustralianAntarcticDivision/raadtools/">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -115,6 +123,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -126,15 +135,12 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Extract methods for raadtools read functions</p>
-    
     </div>
 
     <pre class="usage"><span class='co'># S4 method for `function`,data.frame</span>
-<span class='fu'>extract</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>ctstime</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>fact</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
-    
+<span class='fu'>extract</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, ctstime <span class='op'>=</span> <span class='cn'>FALSE</span>, fact <span class='op'>=</span> <span class='cn'>NULL</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -152,7 +158,7 @@
     </tr>
     <tr>
       <th>fact</th>
-      <td><p>integer. Aggregation factor expressed as number of cells in each direction (horizontally and vertically). Or two integers (horizontal and vertical aggregation factor). See Details in <code><a href='https://www.rdocumentation.org/packages/raster/topics/aggregate'>aggregate</a></code></p></td>
+      <td><p>integer. Aggregation factor expressed as number of cells in each direction (horizontally and vertically). Or two integers (horizontal and vertical aggregation factor). See Details in <code><a href='https://rdrr.io/pkg/raster/man/aggregate.html'>aggregate</a></code></p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -163,53 +169,44 @@
       <td><p>Additional arguments passed to the read function.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>data values extracted by the read functions</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Extract data from read functions in various ways.</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='readsst.html'>readsst</a></code> and <code>extract</code></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/structure'>structure</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>174</span>, <span class='fl'>168</span>, <span class='fl'>156</span>, <span class='fl'>111</span>, <span class='fl'>99</span>, <span class='fl'>64</span>, <span class='fl'>52</span>, <span class='fl'>46</span>, -<span class='fl'>4</span>,
--<span class='fl'>15</span>, -<span class='fl'>30</span>, -<span class='fl'>38</span>, -<span class='fl'>47</span>, -<span class='fl'>62</span>, -<span class='fl'>87</span>, -<span class='fl'>127</span>, -<span class='fl'>145</span>, -<span class='fl'>160</span>, -<span class='fl'>161</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(-<span class='fl'>72</span>,
--<span class='fl'>39</span>, -<span class='fl'>50</span>, -<span class='fl'>58</span>, -<span class='fl'>35</span>, -<span class='fl'>38</span>, -<span class='fl'>48</span>, -<span class='fl'>60</span>, -<span class='fl'>48</span>, -<span class='fl'>35</span>, -<span class='fl'>37</span>, -<span class='fl'>51</span>, -<span class='fl'>68</span>, -<span class='fl'>72</span>,
--<span class='fl'>69</span>, -<span class='fl'>54</span>, -<span class='fl'>40</span>, -<span class='fl'>49</span>, -<span class='fl'>54</span>)), <span class='kw'>.Names</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>), <span class='kw'>row.names</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>NA</span>,
--<span class='fl'>19L</span>), <span class='kw'>class</span> <span class='kw'>=</span> <span class='st'>"data.frame"</span>)
+<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/structure.html'>structure</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>174</span>, <span class='fl'>168</span>, <span class='fl'>156</span>, <span class='fl'>111</span>, <span class='fl'>99</span>, <span class='fl'>64</span>, <span class='fl'>52</span>, <span class='fl'>46</span>, <span class='op'>-</span><span class='fl'>4</span>,
+<span class='op'>-</span><span class='fl'>15</span>, <span class='op'>-</span><span class='fl'>30</span>, <span class='op'>-</span><span class='fl'>38</span>, <span class='op'>-</span><span class='fl'>47</span>, <span class='op'>-</span><span class='fl'>62</span>, <span class='op'>-</span><span class='fl'>87</span>, <span class='op'>-</span><span class='fl'>127</span>, <span class='op'>-</span><span class='fl'>145</span>, <span class='op'>-</span><span class='fl'>160</span>, <span class='op'>-</span><span class='fl'>161</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>72</span>,
+<span class='op'>-</span><span class='fl'>39</span>, <span class='op'>-</span><span class='fl'>50</span>, <span class='op'>-</span><span class='fl'>58</span>, <span class='op'>-</span><span class='fl'>35</span>, <span class='op'>-</span><span class='fl'>38</span>, <span class='op'>-</span><span class='fl'>48</span>, <span class='op'>-</span><span class='fl'>60</span>, <span class='op'>-</span><span class='fl'>48</span>, <span class='op'>-</span><span class='fl'>35</span>, <span class='op'>-</span><span class='fl'>37</span>, <span class='op'>-</span><span class='fl'>51</span>, <span class='op'>-</span><span class='fl'>68</span>, <span class='op'>-</span><span class='fl'>72</span>,
+<span class='op'>-</span><span class='fl'>69</span>, <span class='op'>-</span><span class='fl'>54</span>, <span class='op'>-</span><span class='fl'>40</span>, <span class='op'>-</span><span class='fl'>49</span>, <span class='op'>-</span><span class='fl'>54</span><span class='op'>)</span><span class='op'>)</span>, .Names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span><span class='op'>)</span>, row.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>,
+<span class='op'>-</span><span class='fl'>19L</span><span class='op'>)</span>, class <span class='op'>=</span> <span class='st'>"data.frame"</span><span class='op'>)</span>
 
-<span class='no'>a</span>$<span class='no'>time</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/structure'>structure</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>5479</span>, <span class='fl'>5479</span>, <span class='fl'>5479</span>, <span class='fl'>5479</span>, <span class='fl'>5479</span>, <span class='fl'>5479</span>, <span class='fl'>5479</span>, <span class='fl'>5479</span>, <span class='fl'>5479</span>,
-<span class='fl'>5479</span>, <span class='fl'>5479</span>, <span class='fl'>5489</span>, <span class='fl'>5529</span>, <span class='fl'>5529</span>, <span class='fl'>5529</span>, <span class='fl'>5579</span>, <span class='fl'>5579</span>, <span class='fl'>5579</span>, <span class='fl'>5579</span>), <span class='kw'>class</span> <span class='kw'>=</span> <span class='st'>"Date"</span>)
-<span class='fu'>extract</span>(<span class='no'>readsst</span>, <span class='no'>a</span>)</div><div class='output co'>#&gt;  [1] -0.99 18.49 10.93  1.85 15.59 16.11  5.51  0.56  5.90 17.60 16.80  3.17
-#&gt; [13] -0.36    NA  0.43  6.27 15.55 11.56  7.73</div><div class='input'><span class='fu'>extract</span>(<span class='no'>readsst</span>, <span class='no'>a</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"bilinear"</span>)</div><div class='output co'>#&gt;  [1] -1.0700 18.4375 10.9700  1.9925 15.6750 16.2825  5.5925  0.6100  5.9325
+<span class='va'>a</span><span class='op'>$</span><span class='va'>time</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/structure.html'>structure</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5479</span>, <span class='fl'>5479</span>, <span class='fl'>5479</span>, <span class='fl'>5479</span>, <span class='fl'>5479</span>, <span class='fl'>5479</span>, <span class='fl'>5479</span>, <span class='fl'>5479</span>, <span class='fl'>5479</span>,
+<span class='fl'>5479</span>, <span class='fl'>5479</span>, <span class='fl'>5489</span>, <span class='fl'>5529</span>, <span class='fl'>5529</span>, <span class='fl'>5529</span>, <span class='fl'>5579</span>, <span class='fl'>5579</span>, <span class='fl'>5579</span>, <span class='fl'>5579</span><span class='op'>)</span>, class <span class='op'>=</span> <span class='st'>"Date"</span><span class='op'>)</span>
+<span class='fu'>extract</span><span class='op'>(</span><span class='va'>readsst</span>, <span class='va'>a</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] -0.99 18.49 10.93  1.85 15.59 16.11  5.51  0.56  5.90 17.60 16.80  3.17
+#&gt; [13] -0.36    NA  0.43  6.27 15.55 11.56  7.73</div><div class='input'><span class='fu'>extract</span><span class='op'>(</span><span class='va'>readsst</span>, <span class='va'>a</span>, method <span class='op'>=</span> <span class='st'>"bilinear"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] -1.0700 18.4375 10.9700  1.9925 15.6750 16.2825  5.5925  0.6100  5.9325
 #&gt; [10] 17.7225 16.7800  3.6350 -0.3575 -0.9200  0.5025  6.2700 15.5300 11.5550
-#&gt; [19]  7.8575</div><div class='input'><span class='no'>a</span>$<span class='no'>time</span> <span class='kw'>&lt;-</span>  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='st'>"2005-01-01"</span>) + <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>8</span>, <span class='fl'>20</span>, <span class='fl'>50</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span>(<span class='no'>a</span>), <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))
-<span class='fu'>extract</span>(<span class='no'>readsst</span>, <span class='no'>a</span>)</div><div class='output co'>#&gt;  [1] -0.16 16.22 10.71  3.13 16.71 17.29  4.77  0.44  6.15 20.51 18.42  5.98
-#&gt; [13] -1.53    NA -0.77  7.70 18.80 13.61  8.26</div></pre>
+#&gt; [19]  7.8575</div><div class='input'><span class='va'>a</span><span class='op'>$</span><span class='va'>time</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2005-01-01"</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>8</span>, <span class='fl'>20</span>, <span class='fl'>50</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>extract</span><span class='op'>(</span><span class='va'>readsst</span>, <span class='va'>a</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] -0.16 16.22 10.71  3.13 16.71 17.32  4.77  0.44  4.27 20.51 18.42  5.98
+#&gt; [13] -1.53    NA -0.52  7.70 18.80 13.61  8.26</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -217,13 +214,16 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

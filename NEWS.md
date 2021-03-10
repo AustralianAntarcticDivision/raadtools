@@ -1,5 +1,8 @@
-# raadtools 0.6.0
+# raadtools dev
 
+* Lead frequency functions `read_leads_clim()`, `read_leads_north_clim()`, `read_leads_south_clim()`. 
+
+# raadtools 0.6.0
 
 * Updated 'kerguelen' topo to revised version (2019). 
 

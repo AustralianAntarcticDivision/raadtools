@@ -9,6 +9,7 @@ read_amsr2_3k_ice(
   xylim = NULL,
   latest = TRUE,
   ...,
+  setNA = TRUE,
   returnfiles = FALSE,
   inputfiles = NULL
 )
@@ -21,6 +22,8 @@ read_amsr2_3k_ice(
 \item{latest}{if TRUE and date input is missing, return the latest time available otherwise the earliest}
 
 \item{...}{passed to brick, primarily for \code{filename}}
+
+\item{setNA}{mask zero and values greater than 100 as NA}
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 

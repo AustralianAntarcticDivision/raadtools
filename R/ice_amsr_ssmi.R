@@ -20,7 +20,7 @@ read_amsre_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles =
   files <- .processFiles(date, files, "daily")
   ext <- raster::extent(.antarctic_extent())
   
-  out <- raster::brick(purrr::map(files$fullname, .readAMSR))
+  out <- raster::brick(purrr::map(files$fullname, .readAMSRE))
   raster::projection(out) <- .antarctic_crs()
   
   raster::setExtent(raster::setZ(out, files$date), ext)
@@ -33,7 +33,7 @@ read_amsre_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles =
 #' @seealso raadfiles::amsr2_daily_files 
 #' @inheritParams readice
 #' @export
-read_amsr2_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles = FALSE, inputfiles = NULL) {
+read_amsr2_ice <- function(date, xylim = NULL, latest = TRUE, ..., setNA = TRUE, returnfiles = FALSE, inputfiles = NULL) {
   files <- if (is.null(inputfiles)) raadfiles::amsr2_daily_files() else inputfiles
   if (returnfiles) return(files)
   if (missing(date)) {
@@ -42,7 +42,7 @@ read_amsr2_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles =
   files <- .processFiles(date, files, "daily")
   ext <- raster::extent(.antarctic_extent())
   
-  out <- raster::brick(purrr::map(files$fullname, .readAMSR2, ext = xylim))
+  out <- raster::brick(purrr::map(files$fullname, .readAMSR2, ext = xylim, setNA = setNA))
   raster::projection(out) <- .antarctic_crs()
   
   raster::setZ(out, files$date)
@@ -55,7 +55,7 @@ read_amsr2_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles =
 #' @seealso raadfiles::amsr2_3k_daily_files  read_amsr2_ice
 #' @inheritParams readice
 #' @export
-read_amsr2_3k_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles = FALSE, inputfiles = NULL) {
+read_amsr2_3k_ice <- function(date, xylim = NULL, latest = TRUE, ...,  setNA = TRUE, returnfiles = FALSE, inputfiles = NULL) {
   files <- if (is.null(inputfiles)) raadfiles::amsr2_3k_daily_files() else inputfiles
   if (returnfiles) return(files)
   if (missing(date)) {
@@ -64,7 +64,7 @@ read_amsr2_3k_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfile
   files <- .processFiles(date, files, "daily")
   ext <- raster::extent(.antarctic_extent())
   
-  out <- raster::brick(purrr::map(files$fullname, .readAMSR2, ext = xylim))
+  out <- raster::brick(purrr::map(files$fullname, .readAMSR2, ext = xylim, setNA = setNA))
   raster::projection(out) <- .antarctic_crs()
   
   raster::setZ(out, files$date)
@@ -113,7 +113,7 @@ read_amsr_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles = 
   }
   files <- .processFiles(date, files, "daily")
  
-  out <- raster::brick(purrr::map(files$fullname, .readAMSR))
+  out <- raster::brick(purrr::map(files$fullname, .readAMSRE))
   raster::projection(out) <- .antarctic_crs()
 
   raster::setZ(out, files$date)
@@ -132,11 +132,15 @@ read_amsr_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles = 
     x
  }
  
- .readAMSR2 <- function(fname, ext = NULL) {
+ .readAMSR2 <- function(fname, ext = NULL, setNA = TRUE) {
    
     x <- raster::raster(fname)
+    
    if (!is.null(ext)) {
      x <- raster::crop(x, ext)
    }
+  if (setNA) {
+    x[x > 100] <- NA
+  }
    x
  }

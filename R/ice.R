@@ -41,77 +41,77 @@ readice_area <- function(product = "nsidc", hemisphere = "south", ...) {
   setNames(raster::setValues(raster::raster(template), dat * 1000), "NSIDC_true_area_m2")
 }
 
-##' Read data from sea ice data products.
-##'
-##'
-##' Sea ice data is read from files managed by \code{\link{icefiles}}.
-##'
-##' Currently available products are
-##'
-##' \describe{
-##' \item{'nsidc'}{daily or monthly NSIDC concentration data, processed by the SMMR/SSMI NASA Team}
-##' }
-##'
-##' Dates are matched to file names by finding the nearest match in
-##' time within a short duration. If \code{date} is greater than
-##' length 1 then the sorted set of unique matches is returned.
-##' @param date date or dates of data to read, see Details
-##' @param time.resolution time resoution data to read, daily or monthly
-##' @param product choice of sea ice product, see Details
-##' @param hemisphere north or south
-##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
-##' @param setNA mask zero and values greater than 100 as NA
-##' @param rescale rescale values from integer range?
-##' @param latest if TRUE and date input is missing, return the latest time available otherwise the earliest
-##' @param returnfiles ignore options and just return the file names and dates
-##' @param ... passed to brick, primarily for \code{filename}
-##' @param extension default for product "amsr" is "hdf" but can be "tif" , extension = "hdf"
-##' @param inputfiles input the files data base to speed up initialization
-##' @details For NSIDC data a \code{\link[raster]{ratify}}ied raster is returned if \code{setNA} and 
-##' \code{rescale} are both set to \code{FALSE}.  Use \code{levels(x)} to return the data.frame of values 
-##' and levels (there's no straight-through rule, all numeric values are explicit along with special
-##' values like "Unused"). 
-##' The values used are documented here \url{http://nsidc.org/data/docs/daac/nsidc0051_gsfc_seaice.gd.html}
-##' @export
-##' @examples 
-##' \dontrun{
-##' # library(raadtools)
-##' # 
-##' # ice <- readice(product = "amsr", latest = TRUE)
-##' # 
-##' # sensor <- "MODISA"
-##' # ocf <- ocfiles(product = sensor, varname = "RRS")
-##' # 
-##' # library(roc)
-##' # rrs <- readL3(ocf$fullname[nrow(ocf)])
-##' # chl <- chla(rrs, algo = "johnson", sensor = sensor)/rrs$weights
-##' # 
-##' # library(rgdal)
-##' # pxy <- project(do.call(cbind, bin2lonlat(rrs$bin_num, rrs$NUMROWS)), projection(ice))
-##' # 
-##' # par(bg = grey(0))
-##' # ##plot(ice, col = grey(seq(0, 0.9, length = 100)), axes = FALSE, legend = FALSE)
-##' # plot(ice, col = "transparent", axes = FALSE, legend = FALSE)
-##' # points(pxy, cex = 0.1, pch = 16, col = chl.pal(chl))
-##' # 
-##' # n <- 14
-##' # ss <-  rev( 1/((1:n)^.3))
-##' # 
-##' # for (i in 1:n) {
-##' #   rrs <- readL3(ocf$fullname[nrow(ocf) - i])
-##' #   chl <- chla(rrs, algo = "johnson", sensor = sensor)/rrs$weights
-##' #   ice <- readice(ocf$date[nrow(ocf) - i], product = "amsr")
-##' #   xy <- do.call(cbind, bin2lonlat(rrs$bin_num, rrs$NUMROWS))
-##' #   asub <- xy[,2] < -38
-##' #   pxy <- project(xy[asub, ], projection(ice))
-##' #   points(pxy, cex = 0.2, pch = 16, col = chl.pal(chl[asub], alpha = 1/(i + 0.1)))
-##' #   contour(ice, lev = 15, col =  rgb(1, 1, 1, alpha = 0.2, add = TRUE, lwd = 1.3)
-##' # }  
-##' }
-##' @return \code{\link[raster]{raster}} object
-##' @seealso \code{\link{icefiles}} for details on the repository of
-##' data files, \code{\link[raster]{raster}} for the return value
-##' @name readice
+#' Read data from sea ice data products.
+#'
+#'
+#' Sea ice data is read from files managed by \code{\link{icefiles}}.
+#'
+#' Currently available products are
+#'
+#' \describe{
+#' \item{'nsidc'}{daily or monthly NSIDC concentration data, processed by the SMMR/SSMI NASA Team}
+#' }
+#'
+#' Dates are matched to file names by finding the nearest match in
+#' time within a short duration. If \code{date} is greater than
+#' length 1 then the sorted set of unique matches is returned.
+#' @param date date or dates of data to read, see Details
+#' @param time.resolution time resoution data to read, daily or monthly
+#' @param product choice of sea ice product, see Details
+#' @param hemisphere north or south
+#' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
+#' @param setNA mask zero and values greater than 100 as NA
+#' @param rescale rescale values from integer range?
+#' @param latest if TRUE and date input is missing, return the latest time available otherwise the earliest
+#' @param returnfiles ignore options and just return the file names and dates
+#' @param ... passed to brick, primarily for \code{filename}
+#' @param extension default for product "amsr" is "hdf" but can be "tif" , extension = "hdf"
+#' @param inputfiles input the files data base to speed up initialization
+#' @details For NSIDC data a \code{\link[raster]{ratify}}ied raster is returned if \code{setNA} and 
+#' \code{rescale} are both set to \code{FALSE}.  Use \code{levels(x)} to return the data.frame of values 
+#' and levels (there's no straight-through rule, all numeric values are explicit along with special
+#' values like "Unused"). 
+#' The values used are documented here \url{http://nsidc.org/data/docs/daac/nsidc0051_gsfc_seaice.gd.html}
+#' @export
+#' @examples 
+#' \dontrun{
+#' # library(raadtools)
+#' # 
+#' # ice <- readice(product = "amsr", latest = TRUE)
+#' # 
+#' # sensor <- "MODISA"
+#' # ocf <- ocfiles(product = sensor, varname = "RRS")
+#' # 
+#' # library(roc)
+#' # rrs <- readL3(ocf$fullname[nrow(ocf)])
+#' # chl <- chla(rrs, algo = "johnson", sensor = sensor)/rrs$weights
+#' # 
+#' # library(rgdal)
+#' # pxy <- project(do.call(cbind, bin2lonlat(rrs$bin_num, rrs$NUMROWS)), projection(ice))
+#' # 
+#' # par(bg = grey(0))
+#' # ##plot(ice, col = grey(seq(0, 0.9, length = 100)), axes = FALSE, legend = FALSE)
+#' # plot(ice, col = "transparent", axes = FALSE, legend = FALSE)
+#' # points(pxy, cex = 0.1, pch = 16, col = chl.pal(chl))
+#' # 
+#' # n <- 14
+#' # ss <-  rev( 1/((1:n)^.3))
+#' # 
+#' # for (i in 1:n) {
+#' #   rrs <- readL3(ocf$fullname[nrow(ocf) - i])
+#' #   chl <- chla(rrs, algo = "johnson", sensor = sensor)/rrs$weights
+#' #   ice <- readice(ocf$date[nrow(ocf) - i], product = "amsr")
+#' #   xy <- do.call(cbind, bin2lonlat(rrs$bin_num, rrs$NUMROWS))
+#' #   asub <- xy[,2] < -38
+#' #   pxy <- project(xy[asub, ], projection(ice))
+#' #   points(pxy, cex = 0.2, pch = 16, col = chl.pal(chl[asub], alpha = 1/(i + 0.1)))
+#' #   contour(ice, lev = 15, col =  rgb(1, 1, 1, alpha = 0.2, add = TRUE, lwd = 1.3)
+#' # }  
+#' }
+#' @return \code{\link[raster]{raster}} object
+#' @seealso \code{\link{icefiles}} for details on the repository of
+#' data files, \code{\link[raster]{raster}} for the return value
+#' @name readice
 readice_daily <- function(date,
                     time.resolution = "daily",
                     product = "nsidc",
@@ -259,22 +259,22 @@ read_ice_internal <- function(files, hemisphere, rescale, setNA, xylim = NULL,  
 }
 
 
-##' Load metadata and location of files of sea ice data products.
-##'
-##' This function loads the latest cache of stored files for
-##' ice products.
-##' @param time.resolution daily or monthly files?
-##' @param product choice of sea ice product, see \code{\link{readice}}
-##' @param hemisphere north or south
-##' @param ... reserved for future use, currently ignored
-##' @export
-##' @importFrom raadfiles nsidc_south_monthly_files nsidc_north_monthly_files 
-##' @examples
-##' \dontrun{
-##' icf <- icefiles(time.resolution = "monthly")
-##' icf[which.min((as.Date("1995-01-01") + runif(1, -4000, 4000)) - as.Date(icf$date), ]
-##' }
-##' @return data.frame of \code{file} and \code{date}
+#' Load metadata and location of files of sea ice data products.
+#'
+#' This function loads the latest cache of stored files for
+#' ice products.
+#' @param time.resolution daily or monthly files?
+#' @param product choice of sea ice product, see \code{\link{readice}}
+#' @param hemisphere north or south
+#' @param ... reserved for future use, currently ignored
+#' @export
+#' @importFrom raadfiles nsidc_south_monthly_files nsidc_north_monthly_files 
+#' @examples
+#' \dontrun{
+#' icf <- icefiles()
+#' icf[nrow(icf), ]
+#' }
+#' @return data.frame of \code{file} and \code{date}
 icefiles <- function(time.resolution = "daily", 
                      product = "nsidc", hemisphere =c("south", "north"), ...) {
   

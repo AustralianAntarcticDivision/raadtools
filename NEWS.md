@@ -1,5 +1,10 @@
 # raadtools dev
 
+* New functions `read_amsre_ice()`, `read_amsr2_ice()`, `read_amsr2_3k_ice()`  to round out read
+of AMRS2 and AMSRE at 6km and 3km resolutions using new file list functions from raadfiles. 
+ 
+* AMSR read ice functions now correctly apply `xylim` argument. 
+
 * Lead frequency functions `read_leads_clim()`, `read_leads_north_clim()`, `read_leads_south_clim()`. 
 
 # raadtools 0.6.0

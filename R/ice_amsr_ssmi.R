@@ -8,7 +8,8 @@
 #' 
 #' Using the TIF files (these are 2012 onwards)
 #' 
-#' @seealso raadfiles::amsr2_daily_files 
+#'  This function relies on the file-listing of [raadfiles::amsre_daily_files()]. 
+#' @seealso raadfiles::amsre_daily_files read_amsr2_ice
 #' @inheritParams readice
 #' @export
 read_amsre_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles = FALSE, inputfiles = NULL) {
@@ -30,6 +31,7 @@ read_amsre_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles =
 #' 
 #' Using the TIF files (these are 2012 onwards)
 #' 
+#' This function relies on the file-listing of [raadfiles::amsr2_daily_files()]. 
 #' @seealso raadfiles::amsr2_daily_files 
 #' @inheritParams readice
 #' @export
@@ -52,6 +54,7 @@ read_amsr2_ice <- function(date, xylim = NULL, latest = TRUE, ..., setNA = TRUE,
 #' 
 #' Using the TIF files (these are 2012 onwards)
 #' 
+#' This function relies on the file-listing of [raadfiles::amsr2_3k_daily_files()]
 #' @seealso raadfiles::amsr2_3k_daily_files  read_amsr2_ice
 #' @inheritParams readice
 #' @export
@@ -74,6 +77,7 @@ read_amsr2_3k_ice <- function(date, xylim = NULL, latest = TRUE, ...,  setNA = T
 #' 
 #' This is southern hemisphere daily 12.5km SSM/I since 1991. 
 #' 
+#' This function relies on the file-listing of [raadfiles::cersat_daily_files()]
 #' @seealso raadfiles::cersat_daily_files read_amsr_ice
 #' @inheritParams readice
 #' @export
@@ -93,6 +97,9 @@ read_cersat_ice <- function(date, xylim = NULL, latest = TRUE, setNA = TRUE, ...
   
   out <- raster::setExtent(raster::setZ(out, files$date), ext)
   if (setNA) out[out > 100] <- NA
+  if (!is.null(xylim)) {
+    out <- crop(out, xylim)
+  }
   out
 }
 
@@ -102,6 +109,7 @@ read_cersat_ice <- function(date, xylim = NULL, latest = TRUE, setNA = TRUE, ...
 #' Both eras are available in the same series, scaling is applied to the first
 #' series to ensure the data is always in percentage (0, 100). 
 #' 
+#' This function relies on the file-listing of [raadfiles::amsr_daily_files()]
 #' @seealso raadfiles::amsr_daily_files read_cersat_ice readice
 #' @inheritParams readice
 #' @export

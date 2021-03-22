@@ -32,6 +32,9 @@ read_amsr2_ice(
 \description{
 Using the TIF files (these are 2012 onwards)
 }
+\details{
+This function relies on the file-listing of \code{\link[raadfiles:amsr_daily_files]{raadfiles::amsr2_daily_files()}}.
+}
 \seealso{
 raadfiles::amsr2_daily_files
 }

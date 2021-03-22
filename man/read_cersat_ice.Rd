@@ -32,6 +32,9 @@ read_cersat_ice(
 \description{
 This is southern hemisphere daily 12.5km SSM/I since 1991.
 }
+\details{
+This function relies on the file-listing of \code{\link[raadfiles:cersat_daily_files]{raadfiles::cersat_daily_files()}}
+}
 \seealso{
 raadfiles::cersat_daily_files read_amsr_ice
 }

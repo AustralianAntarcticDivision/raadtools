@@ -30,6 +30,9 @@ read_amsr_ice(
 Both eras are available in the same series, scaling is applied to the first
 series to ensure the data is always in percentage (0, 100).
 }
+\details{
+This function relies on the file-listing of \code{\link[raadfiles:amsr_daily_files]{raadfiles::amsr_daily_files()}}
+}
 \seealso{
 raadfiles::amsr_daily_files read_cersat_ice readice
 }

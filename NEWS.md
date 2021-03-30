@@ -1,5 +1,7 @@
 # raadtools dev
 
+* New data set `stations` with locations of Mawson, Davis, and Casey. 
+
 * New functions `read_amsre_ice()`, `read_amsr2_ice()`, `read_amsr2_3k_ice()`  to round out read
 of AMRS2 and AMSRE at 6km and 3km resolutions using new file list functions from raadfiles. 
  

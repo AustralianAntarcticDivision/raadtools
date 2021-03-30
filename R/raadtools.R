@@ -81,7 +81,17 @@ commonprojections <- list(longlat = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no
 #' ## u_wind_at_900 <- read  ## unfinished
 NULL
 
-
+#' Stations locations
+#' 
+#' In polar stereographic, with longitude and latitude and name as attributes. 
+#' 
+#' Obtained with antanym
+#' @docType data
+#' @name stations
+#' @examples 
+#' plot(readice())
+#' plot(stations, add = TRUE)
+NULL
 
 #' Voyage track data from the Aurora Australis
 #'

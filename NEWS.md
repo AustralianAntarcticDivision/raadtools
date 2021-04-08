@@ -1,5 +1,8 @@
 # raadtools dev
 
+* `readcurr()` now behaves consistently for use of 'lon180', default is Atlantic view but can be set to FALSE to give Pacific view (and
+ behaves correctly no matter the source file arrangement). 
+ 
 * New data set `stations` with locations of Mawson, Davis, and Casey. 
 
 * New functions `read_amsre_ice()`, `read_amsr2_ice()`, `read_amsr2_3k_ice()`  to round out read

@@ -1,3 +1,11 @@
+is_atlantic <- function(x) {
+  nc <- RNetCDF::open.nc(x)
+  ## on April Fools 2020 the files switch to Atlantic (from Pacific 0,360)
+  out <- any(RNetCDF::var.get.nc(nc, "longitude") < 0)
+  RNetCDF::close.nc(nc)
+  out
+}
+
 
 ##' Load file names and dates of AVISO current data
 ##'
@@ -115,14 +123,16 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
   
   read_i_u <- function(file, xylim = NULL, lon180 = FALSE) {
     x <- raster(file, varname = "ugos")
-    if (lon180) x <- raadtools:::.rotate(x)
+    if (is_atlantic(file) && !lon180) x <- raadtools:::.rotate(x)
+    if (!is_atlantic(file) && lon180) x <- raadtools:::.rotate(x)
     if (!is.null(xylim)) x <- crop(x, xylim)
     
     x
   }
   read_i_v <- function(file, xylim = NULL, lon180 = FALSE) {
     x <- raster(file, varname = "vgos")
-    if (lon180) x <- raadtools:::.rotate(x)
+    if (is_atlantic(file) && !lon180) x <- raadtools:::.rotate(x)
+    if (!is_atlantic(file) && lon180) x <- raadtools:::.rotate(x)
     if (!is.null(xylim)) x <- crop(x, xylim)
     
     x

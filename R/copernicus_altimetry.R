@@ -64,7 +64,7 @@ read_err_daily <- function(date, xylim = NULL, latest = TRUE, returnfiles = FALS
 
 
 
-read_copernicus_daily <- function(date, xylim = NULL, latest = TRUE, returnfiles = FALSE, varname, ..., inputfiles = NULL) {
+read_copernicus_daily <- function(date, xylim = NULL, latest = TRUE, returnfiles = FALSE, varname, lon180 = FALSE, ..., inputfiles = NULL) {
   if (is.null(inputfiles)){
     files <- raadfiles::altimetry_daily_files()
   } else {
@@ -90,6 +90,9 @@ read_copernicus_daily <- function(date, xylim = NULL, latest = TRUE, returnfiles
   pb$tick(0)
   read_fun <- function(xfile, ext, msk, rot, varname = "", band = 1) {
     pb$tick()
+    ## override passed in rot
+    if (is_atlantic(xfile) && !lon180) rot <- TRUE
+    if (!is_atlantic(xfile) && lon180) rot <- TRUE
     mask_if_needed(crop_if_needed(rotate_if_needed(raster(xfile, varname = varname, band = band), rot), ext), msk)
   }
 

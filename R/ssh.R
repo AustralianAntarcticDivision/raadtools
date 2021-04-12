@@ -40,9 +40,9 @@ readssh <- function (date, time.resolution = c("daily"),
   time.resolution <- match.arg(time.resolution)
   
   if (ssha) {
-    out <- read_sla_daily(date, xylim = xylim, latest = latest, returnfiles = returnfiles, ..., inputfiles = inputfiles) 
+    out <- read_sla_daily(date, xylim = xylim, latest = latest, returnfiles = returnfiles, lon180 = lon180, ..., inputfiles = inputfiles) 
   } else {
-    out <- read_adt_daily(date, xylim = xylim, latest = latest, returnfiles = returnfiles, ..., inputfiles = inputfiles) 
+    out <- read_adt_daily(date, xylim = xylim, latest = latest, returnfiles = returnfiles, lon180 = lon180, ..., inputfiles = inputfiles) 
   }
   out
 }

@@ -1,7 +1,9 @@
 # raadtools dev
 
-* `readcurr()` now behaves consistently for use of 'lon180', default is Atlantic view but can be set to FALSE to give Pacific view (and
- behaves correctly no matter the source file arrangement). 
+* `readcurr()` and other altimetry read functions now behave consistently for use of 'lon180', default is Atlantic view but can be set to FALSE to give Pacific 
+ view (and behaves correctly no matter the source file arrangement). The other functions include `readssh()`, `read_sla_daily()`, `read_ugosa_daily()`, 
+ `read_vgosa_daily()`, `read_ugos_daily()`, `read_vgos_daily()`, `read_err_daily()`. 
+ 
  
 * New data set `stations` with locations of Mawson, Davis, and Casey. 
 

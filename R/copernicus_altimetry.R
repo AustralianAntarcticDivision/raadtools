@@ -91,8 +91,8 @@ read_copernicus_daily <- function(date, xylim = NULL, latest = TRUE, returnfiles
   read_fun <- function(xfile, ext, msk, rot, varname = "", band = 1) {
     pb$tick()
     ## override passed in rot
-    if (is_atlantic(xfile) && !lon180) rot <- TRUE
-    if (!is_atlantic(xfile) && lon180) rot <- TRUE
+    if (copernicus_is_atlantic(xfile) && !lon180) rot <- TRUE
+    if (!copernicus_is_atlantic(xfile) && lon180) rot <- TRUE
     mask_if_needed(crop_if_needed(rotate_if_needed(raster(xfile, varname = varname, band = band), rot), ext), msk)
   }
 

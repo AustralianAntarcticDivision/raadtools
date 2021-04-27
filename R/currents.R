@@ -10,6 +10,30 @@ copernicus_get_maxlon <- function(x) {
 }
 
 
+readcurr_polar <- function(date, 
+                            xylim = NULL, 
+                            latest = TRUE,
+                            returnfiles = FALSE, ..., inputfiles = NULL) {
+  
+  if (is.null(inputfiles)) {
+    files <- raadfiles:::altimetry_currents_polar_files()
+  } else {
+    files <- inputfiles
+  }
+  if (returnfiles)
+    return(files)
+  if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
+  date <- timedateFrom(date)
+  files <- .processFiles(date, files, "daily")
+  
+  nfiles <- nrow(files)
+  
+  if (nfiles > 1) warning("only read one time slice atm with readcurr_polar")
+  
+  out <- raster::setZ(raster::brick(raster::raster(files$ufullname[1L]), raster::raster(files$vfullname[1L])), rep(files$date[1L], 2L))
+  if (!is.null(xylim)) out <- raster::crop(out, xylim)
+  out
+}
 
 
 ##' Load file names and dates of AVISO current data

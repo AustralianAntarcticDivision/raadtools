@@ -49,14 +49,14 @@ table_uvgos <- function(date, xylim = NULL, ..., xy = TRUE, cell = FALSE, na.rm 
   out <- tibble::tibble(u = uvalues, v = vvalues)
   if (cell || xy) {
     nc <- raster::ncell(ustack)
-    cell <- rep(1:nc, raster::nlayers(ustack))[mask]
+    cells <- rep(1:nc, raster::nlayers(ustack))[mask]
   }
   if (xy) {
-    out[["x"]] <- raster::xFromCell(ustack[[1L]], cell)
-    out[["y"]] <- raster::yFromCell(ustack[[1L]], cell)
+    out[["x"]] <- raster::xFromCell(ustack[[1L]], cells)
+    out[["y"]] <- raster::yFromCell(ustack[[1L]], cells)
   }
   if (cell) {
-    out[["cell"]] <- cell
+    out[["cell"]] <- cells
   }
   out[["date"]] <-  rep(date, each = nc)[mask]
   out

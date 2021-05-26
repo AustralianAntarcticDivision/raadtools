@@ -1,5 +1,7 @@
 # raadtools dev
 
+* New function `table_vgos()` to read surface current values as a data frame. 
+
 * `readcurr()` and other altimetry read functions now behave consistently for use of 'lon180', default is Atlantic view but can be set to FALSE to give Pacific 
  view (and behaves correctly no matter the source file arrangement). The other functions include `readssh()`, `read_sla_daily()`, `read_ugosa_daily()`, 
  `read_vgosa_daily()`, `read_ugos_daily()`, `read_vgos_daily()`, `read_err_daily()`. 

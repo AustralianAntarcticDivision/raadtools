@@ -11,7 +11,8 @@ table_uvgos(
   xy = TRUE,
   cell = FALSE,
   na.rm = TRUE,
-  latest = TRUE
+  latest = TRUE,
+  res = NULL
 )
 }
 \arguments{

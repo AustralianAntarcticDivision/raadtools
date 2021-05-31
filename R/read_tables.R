@@ -26,7 +26,7 @@
 #' scal <- function(x) (x - min(x, na.rm = TRUE))/diff(range(x, na.rm = TRUE))
 #' nn <- 56
 #' arrows(uv$x, uv$y, uv$x + uv$u, uv$y + uv$v, col = grey.colors(nn)[scal(sqrt(uv$u^2 + uv$v^2)) * (nn-1) + 1], length = 0)
-table_uvgos <- function(date, xylim = NULL, ..., xy = TRUE, cell = FALSE, na.rm = TRUE, latest = TRUE) {
+table_uvgos <- function(date, xylim = NULL, ..., xy = TRUE, cell = FALSE, na.rm = TRUE, latest = TRUE, res = NULL) {
   if (missing(date)) {
     rd <- range(raadfiles::altimetry_daily_files()$date)
     if (latest) {
@@ -38,6 +38,14 @@ table_uvgos <- function(date, xylim = NULL, ..., xy = TRUE, cell = FALSE, na.rm 
   date <- timedateFrom(date)
   ustack <- read_ugos_daily(date = date, xylim = xylim, ...)
   vstack <- read_vgos_daily(date = date, xylim = xylim, ...)
+  if (!is.null(res)) {
+   rs <- res(ustack)
+   if (res == rs[1L]) break; 
+    fact <- res/mean(rs)
+    
+    ustack <- raster::aggregate(ustack, fact = fact)
+    vstack <- raster::aggregate(vstack, fact = fact)
+  }
   uvalues <- as.vector(raster::values(ustack))
   mask <- TRUE
   if (na.rm) {

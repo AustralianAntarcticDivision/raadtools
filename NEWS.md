@@ -1,5 +1,7 @@
 # raadtools dev
 
+* New function `readCHL_month()` to read NASA's monthly CHL files. 
+
 * New function `table_vgos()` to read surface current values as a data frame. 
 
 * `readcurr()` and other altimetry read functions now behave consistently for use of 'lon180', default is Atlantic view but can be set to FALSE to give Pacific 

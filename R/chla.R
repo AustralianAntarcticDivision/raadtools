@@ -1,3 +1,28 @@
+
+#' @name readchla
+#' @export
+#' @examples 
+#' readCHL_month()
+readCHL_month <- function(date, xylim = NULL, ..., inputfiles = NULL, latest = TRUE) {
+  if (is.null(inputfiles)) {
+    ## memoize this call
+    files <- ocfiles("monthly", product = "MODISA", varnam = "CHL", type = "L3m")
+  } else {
+    files <- inputfiles
+  }
+  if (missing(date)) {
+    if (latest)  date <- max(files$date) else date <- min(files$date)
+  }
+  date <- raadtools:::timedateFrom(date)
+  files <- .processFiles(date, files, "monthly")
+  rl <- lapply(files$fullname[idx], raster::raster, varname = "chlor_a")
+  if (!is.null(xylim)) rl <- lapply(rl, raster::crop, raster::extent(xylim))
+  raster::setZ(raster::brick(rl), date)
+}
+
+
+
+
 ##' Read Chlorophyll-a for the Southern Ocean
 ##'
 ##' Ocean colour Chlorophyll-a data. Default is to read from the Johnson Improved
@@ -22,6 +47,9 @@
 ##' doi:10.1002/jgrc.20270
 ##' \url{http://onlinelibrary.wiley.com/doi/10.1002/jgrc.20270/full}
 ##'
+##' Note that reaCHL_month reads the NASA algorith L3m products. 
+##' 
+##' @seealso readCHL_month
 ##' @export
 ##' @return \code{\link[raster]{raster}} object
 ##' @seealso \code{\link{chlafiles}} for details on the repository of

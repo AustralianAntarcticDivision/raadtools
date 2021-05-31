@@ -2,8 +2,11 @@
 % Please edit documentation in R/chla.R
 \name{readchla}
 \alias{readchla}
+\alias{readCHL_month}
 \title{Read Chlorophyll-a for the Southern Ocean}
 \usage{
+readCHL_month(date, xylim = NULL, ..., inputfiles = NULL, latest = TRUE)
+
 readchla(
   date,
   product = c("MODISA", "SeaWiFS"),
@@ -16,12 +19,12 @@ readchla(
 \arguments{
 \item{date}{date or dates of data to read, see Details}
 
-\item{product}{choice of product, see Details}
-
 \item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, ignored if grid is provided
 @param algorithm johnson or nasa}
 
 \item{latest}{if TRUE (and date not supplied) return the latest time available, otherwise the earliest}
+
+\item{product}{choice of product, see Details}
 
 \item{grid}{template raster object for output}
 }
@@ -41,6 +44,7 @@ length 1 then the sorted set of unique matches is returned.
 The code that creates these derived files is at \href{https://github.com/AustralianAntarcticDivision/raad-deriv}{raad-deriv}.
 }
 \examples{
+readCHL_month()
 \dontrun{
 d <- readchla(c("2003-01-01", c("2003-06-01")),
          xylim = extent(100, 150, -70, -30))
@@ -52,8 +56,12 @@ Meiners (2013) Three improved satellite chlorophyll algorithms for
 the Southern Ocean, J. Geophys. Res. Oceans, 118,
 doi:10.1002/jgrc.20270
 \url{http://onlinelibrary.wiley.com/doi/10.1002/jgrc.20270/full}
+
+Note that reaCHL_month reads the NASA algorith L3m products.
 }
 \seealso{
+readCHL_month
+
 \code{\link{chlafiles}} for details on the repository of
 data files, \code{\link[raster]{raster}} for the return value
 }

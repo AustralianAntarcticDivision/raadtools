@@ -44,7 +44,7 @@ ocfiles <- function(time.resolution = c("daily", "weekly", "monthly", "weekly32"
   #print(mtag)
   ##cfiles1 <- sapply(product, function(x) file.path("oceandata.sci.gsfc.nasa.gov", x)
   cfiles2 <- grep(mtag, ftx, value = TRUE)
-  cfiles3 <- grep(prod, basename(cfiles2), value = TRUE)
+  cfiles3 <- cfiles2[grep(prod, basename(cfiles2))]
   
   cfiles <- if (bz2.rm)  grep(paste0(ext, "$"), cfiles3, value = TRUE) else cfiles3
   tokens <- .filetok(basename(cfiles))

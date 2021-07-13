@@ -18,8 +18,9 @@ ocfiles <- function(time.resolution = c("daily", "weekly", "monthly", "weekly32"
                     bz2.rm = TRUE, 
                     ext = c("nc", "main"), 
                     ...) {
-  datadir <- getOption("default.datadir")
-  ftx <- .allfilelist()
+
+  #ftx <- .allfilelist()
+  ftx <- dplyr::transmute(raadtools:::allfiles() %>% dplyr::filter(stringr::str_detect(file, "oceandata.sci.gsfc.nasa.gov")), fullname = fs::path(root, file))$fullname
   time.resolution <- match.arg(time.resolution)
   product <- match.arg(product)
   ext <- match.arg(ext)
@@ -40,14 +41,13 @@ ocfiles <- function(time.resolution = c("daily", "weekly", "monthly", "weekly32"
   mtag <- sprintf(paste0("%s.*\\.", ext), paste(type, time, varname, sep = "_"))
   #print(mtag)
   ##cfiles1 <- sapply(product, function(x) file.path("oceandata.sci.gsfc.nasa.gov", x)
-  cfiles1 <- grep(file.path("oceandata.sci.gsfc.nasa.gov", product), ftx, value = TRUE)
-  cfiles2 <- grep(mtag, cfiles1, value = TRUE)
+  cfiles2 <- grep(mtag, ftx, value = TRUE)
   cfiles <- if (bz2.rm)  grep(paste0(ext, "$"), cfiles2, value = TRUE) else cfiles2
   tokens <- .filetok(basename(cfiles))
   if (length(cfiles) < 1) stop("no files found for ", paste(product, varname, type, time.resolution, collapse = ", "))
   dates <- as.POSIXct(strptime(paste0(tokens$year, tokens$jday), "%Y%j", tz = "GMT"))
-  cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), fullname = cfiles, 
-                    date = dates, stringsAsFactors = FALSE)[order(dates), ]
+  cfs <- tibble::tibble(fullname = cfiles, 
+                    date = dates)[order(dates), ]
   cfs
   
 }

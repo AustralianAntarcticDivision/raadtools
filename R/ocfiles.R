@@ -33,6 +33,8 @@ ocfiles <- function(time.resolution = c("daily", "weekly", "monthly", "weekly32"
                  monthly = "MO", 
                  weekly32 = "R32")
   
+  prod <- switch(product, 
+                 MODISA = "^A", SeaWiFS = "^S", VIIRS = "^V")
   ## don't forget those ST93c files!  
   ## see here: http://oceancolor.gsfc.nasa.gov/DOCS/FormatChange.html
   #Note: ST92 is the test set designation for the SeaWiFS test run, similarly 
@@ -42,7 +44,9 @@ ocfiles <- function(time.resolution = c("daily", "weekly", "monthly", "weekly32"
   #print(mtag)
   ##cfiles1 <- sapply(product, function(x) file.path("oceandata.sci.gsfc.nasa.gov", x)
   cfiles2 <- grep(mtag, ftx, value = TRUE)
-  cfiles <- if (bz2.rm)  grep(paste0(ext, "$"), cfiles2, value = TRUE) else cfiles2
+  cfiles3 <- grep(prod, basename(cfiles2), value = TRUE)
+  
+  cfiles <- if (bz2.rm)  grep(paste0(ext, "$"), cfiles3, value = TRUE) else cfiles3
   tokens <- .filetok(basename(cfiles))
   if (length(cfiles) < 1) stop("no files found for ", paste(product, varname, type, time.resolution, collapse = ", "))
   dates <- as.POSIXct(strptime(paste0(tokens$year, tokens$jday), "%Y%j", tz = "GMT"))

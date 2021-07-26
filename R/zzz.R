@@ -7,6 +7,8 @@
   if (is.null(mm)){
     raster::rasterOptions(maxmemory = 4e9)
   }
+  read_rema_tiles <<- memoise::memoize(read_rema_tiles)
+  
   options(raadtools.geoid_tile_vrt = NULL)
 }
 

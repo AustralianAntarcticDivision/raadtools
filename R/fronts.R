@@ -90,7 +90,6 @@ contourfronts <-
 ##' @examples
 ##' \dontrun{
 ##' b <- readfronts(c("1993-01-01", "2005-01-02"), lon180 = FALSE)
-##' extract(readfronts, data.frame(aurora[,1:2], aurora[,3] - 10 * 365.25 * 24 * 3600)
 ##' }
 readfronts <- function(date,
                        time.resolution = c("weekly"),

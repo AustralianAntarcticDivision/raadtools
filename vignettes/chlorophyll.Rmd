@@ -4,7 +4,7 @@ author: "Michael D. Sumner"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{chlorophyll}
+  %\VignetteIndexEntry{Remotely Sensed Ocean Colour (Chlorophyll) in raadtools}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

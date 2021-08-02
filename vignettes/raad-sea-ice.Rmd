@@ -5,7 +5,7 @@ output:
     fig_width: 7
     fig_height: 7
 vignette: >
-  %\VignetteIndexEntry{raad-sea-ice}
+  %\VignetteIndexEntry{Sea Ice Concentation Data in raadtools}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

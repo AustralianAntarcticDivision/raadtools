@@ -1,5 +1,7 @@
 # raadtools dev
 
+* New function `query_grid()` to build a query data frame for `extract(function, ...)` workflows. 
+
 * New function `readCHL_month()` to read NASA's monthly CHL files. 
 
 * New function `table_vgos()` to read surface current values as a data frame. 

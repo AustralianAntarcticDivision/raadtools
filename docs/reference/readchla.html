@@ -74,7 +74,7 @@ algorithms, but the original MODIS and SeaWIFs products are also available via t
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9022</span>
       </span>
     </div>
 
@@ -145,7 +145,9 @@ chlorophyll-a estimates using Southern Ocean-specific calibration
 algorithms, but the original MODIS and SeaWIFs products are also available via the argument <code>product</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>readchla</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>readCHL_month</span><span class='op'>(</span><span class='va'>date</span>, xylim <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span>, inputfiles <span class='op'>=</span> <span class='cn'>NULL</span>, latest <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='fu'>readchla</span><span class='op'>(</span>
   <span class='va'>date</span>,
   product <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"MODISA"</span>, <span class='st'>"SeaWiFS"</span><span class='op'>)</span>,
   xylim <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -162,10 +164,6 @@ algorithms, but the original MODIS and SeaWIFs products are also available via t
       <td><p>date or dates of data to read, see Details</p></td>
     </tr>
     <tr>
-      <th>product</th>
-      <td><p>choice of product, see Details</p></td>
-    </tr>
-    <tr>
       <th>xylim</th>
       <td><p>spatial extents to crop from source data, can be anything accepted by <code><a href='https://rdrr.io/pkg/raster/man/extent.html'>extent</a></code>, ignored if grid is provided
 @param algorithm johnson or nasa</p></td>
@@ -173,6 +171,10 @@ algorithms, but the original MODIS and SeaWIFs products are also available via t
     <tr>
       <th>latest</th>
       <td><p>if TRUE (and date not supplied) return the latest time available, otherwise the earliest</p></td>
+    </tr>
+    <tr>
+      <th>product</th>
+      <td><p>choice of product, see Details</p></td>
     </tr>
     <tr>
       <th>grid</th>
@@ -196,13 +198,16 @@ Meiners (2013) Three improved satellite chlorophyll algorithms for
 the Southern Ocean, J. Geophys. Res. Oceans, 118,
 doi:10.1002/jgrc.20270
 <a href='http://onlinelibrary.wiley.com/doi/10.1002/jgrc.20270/full'>http://onlinelibrary.wiley.com/doi/10.1002/jgrc.20270/full</a></p>
+<p>Note that reaCHL_month reads the NASA algorith L3m products.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='chlafiles.html'>chlafiles</a></code> for details on the repository of
+    <div class='dont-index'><p>readCHL_month</p>
+<p><code><a href='chlafiles.html'>chlafiles</a></code> for details on the repository of
 data files, <code><a href='https://rdrr.io/pkg/raster/man/raster.html'>raster</a></code> for the return value</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+    <pre class="examples"><div class='input'><span class='fu'>readCHL_month</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in lapply(files$fullname[idx], raster::raster, varname = "chlor_a"): object 'idx' not found</span></div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'>readchla</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"2003-01-01"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"2003-06-01"</span><span class='op'>)</span><span class='op'>)</span>,
          xylim <span class='op'>=</span> <span class='fu'>extent</span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>150</span>, <span class='op'>-</span><span class='fl'>70</span>, <span class='op'>-</span><span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>

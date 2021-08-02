@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9022</span>
       </span>
     </div>
 
@@ -231,8 +231,8 @@ warning is given.  If using this argument you must give the same <code>time.reso
 <span class='va'>t2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='op'>{</span><span class='fu'>readwind</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>ff</span><span class='op'>$</span><span class='va'>date</span><span class='op'>)</span>, inputfiles <span class='op'>=</span> <span class='va'>ff</span><span class='op'>)</span><span class='op'>}</span><span class='op'>)</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
  <span class='va'>dts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2000-01-01"</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='st'>"1 days"</span>, length <span class='op'>=</span> <span class='fl'>350</span><span class='op'>)</span>
- <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>animation</span><span class='op'>)</span>
- <span class='fu'>ani.start</span><span class='op'>(</span>ani.width <span class='op'>=</span> <span class='fl'>800</span>, ani.height <span class='op'>=</span> <span class='fl'>800</span><span class='op'>)</span>
+ <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://yihui.name/animation'>animation</a></span><span class='op'>)</span>
+ <span class='fu'><a href='https://rdrr.io/pkg/animation/man/ani.start.html'>ani.start</a></span><span class='op'>(</span>ani.width <span class='op'>=</span> <span class='fl'>800</span>, ani.height <span class='op'>=</span> <span class='fl'>800</span><span class='op'>)</span>
  <span class='kw'>for</span> <span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span><span class='op'>(</span><span class='va'>dts</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
     <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>readwind</span><span class='op'>(</span><span class='va'>dts</span><span class='op'>[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>)</span>;
     <span class='kw'>if</span> <span class='op'>(</span><span class='va'>i</span> <span class='op'>==</span> <span class='fl'>1L</span><span class='op'>)</span> <span class='va'>crds</span> <span class='op'>&lt;-</span> <span class='fu'>coordinates</span><span class='op'>(</span><span class='va'>x</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
@@ -244,7 +244,7 @@ warning is given.  If using this argument you must give the same <code>time.reso
     <span class='fu'><a href='https://rdrr.io/r/graphics/arrows.html'>arrows</a></span><span class='op'>(</span><span class='va'>x1</span>, <span class='va'>y1</span>, <span class='va'>x2</span>, <span class='va'>y2</span>, length <span class='op'>=</span> <span class='fl'>0.06</span><span class='op'>)</span>;
     <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>m</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='op'>}</span>
-<span class='fu'>ani.stop</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/animation/man/ani.start.html'>ani.stop</a></span><span class='op'>(</span><span class='op'>)</span>
 
 
 

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9022</span>
       </span>
     </div>
 
@@ -88,13 +88,13 @@
 
       
 
-      </header><script src="chlorophyll_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
+      </header><script src="chlorophyll_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Remotely Sensed Ocean Colour (Chlorophyll) in raadtools</h1>
                         <h4 class="author">Michael D. Sumner</h4>
             
-            <h4 class="date">2021-03-30</h4>
+            <h4 class="date">2021-08-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AustralianAntarcticDivision/raadtools/blob/master/vignettes/chlorophyll.Rmd"><code>vignettes/chlorophyll.Rmd</code></a></small>
       <div class="hidden name"><code>chlorophyll.Rmd</code></div>
@@ -110,14 +110,12 @@
 <span class="co">#&gt; Loading required package: raster</span>
 <span class="co">#&gt; Loading required package: sp</span>
 <span class="co">#&gt; global option 'raadfiles.data.roots' set:</span>
-<span class="co">#&gt; '/rdsi/PRIVATE/raad/data               2021-03-30 03:35:10</span>
-<span class="co">#&gt;  /rdsi/PRIVATE/raad/data_local         2021-03-30 03:39:48</span>
-<span class="co">#&gt;  /rdsi/PRIVATE/raad/data_staging       2021-03-30 03:39:48</span>
-<span class="co">#&gt;  /rdsi/PRIVATE/raad/data_deprecated    2021-03-30 03:39:55</span>
-<span class="co">#&gt;  /rdsi/PUBLIC/raad/data                2021-03-30 03:53:43'</span>
-<span class="co">#&gt; Uploading raad file cache as at 2021-03-30 05:34:55 (1063229 files listed)</span>
-<span class="co">#&gt; Warning in fun(libname, pkgname): rgeos: versions of GEOS runtime 3.9.0-CAPI-1.16.2</span>
-<span class="co">#&gt; and GEOS at installation 3.8.1-CAPI-1.13.3differ</span>
+<span class="co">#&gt; '/rdsi/PRIVATE/raad/data               2021-06-10 11:27:17</span>
+<span class="co">#&gt;  /rdsi/PRIVATE/raad/data_local         2021-06-10 11:33:25</span>
+<span class="co">#&gt;  /rdsi/PRIVATE/raad/data_staging       2021-06-10 11:33:28</span>
+<span class="co">#&gt;  /rdsi/PRIVATE/raad/data_deprecated    2021-06-10 11:34:11</span>
+<span class="co">#&gt;  /rdsi/PUBLIC/raad/data                2021-06-10 11:13:58'</span>
+<span class="co">#&gt; Uploading raad file cache as at 2021-08-02 02:08:44 (1147322 files listed)</span>
 <span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="st">"2010-01-01"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"1 day"</span>, length <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
 <span class="va">ext</span> <span class="op">&lt;-</span> <span class="fu">extent</span><span class="op">(</span><span class="fl">140</span>, <span class="fl">150</span>, <span class="op">-</span><span class="fl">60</span>, <span class="op">-</span><span class="fl">40</span><span class="op">)</span>
 <span class="va">modis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readchla.html">readchla</a></span><span class="op">(</span><span class="va">dates</span>, <span class="va">ext</span>, product <span class="op">=</span> <span class="st">"MODISA"</span><span class="op">)</span>

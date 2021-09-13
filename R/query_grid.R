@@ -12,7 +12,7 @@
 #' @param lat vector of latitudes in the grid
 #' @param date vector of dates in the grid
 #' @export
-#' @example 
+#' @examples
 #' lon <- c(100, 110, 120)
 #' lat <-seq(-60, -40, by = 5)
 #' dts <- seq(as.Date("2002-03-03"), by = "5 days", length.out = 10)

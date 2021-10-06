@@ -59,6 +59,14 @@ xylim <- force(xylim)
     pb$tick()
     crop_if_needed(setExtent(raster(xfile, varname = varname), extent(-180, 180, -90, 90)), ext)
   }
+  
+  if (inherits(xylim, "BasicRaster")) {
+    out <- raster::brick(purrr::map(purrr::transpose(files), 
+                                    ~do_it_vapour_ghrsst(.x, xylim, varname))
+    )
+    return(raster::setZ(out, files$date))  
+  }
+  
    r0 <- stack(lapply(seq_len(nfiles), function(xi) read_fun(files$fullname[xi], ext = xylim, varname = varname)))
   if (is.na(projection(r0))) projection(r0) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
   r0 <- setZ(r0, files$date)
@@ -79,4 +87,13 @@ xylim <- force(xylim)
   ## Kelvin
    r0 
   
+}
+
+do_it_vapour_ghrsst <- function(files, grid, varname) {
+  gdalio::gdalio_set_default_grid(grid)
+  sds <- gdalio::vrt(grep(varname, vapour::vapour_sds_names(files$fullname[1])$subdataset, value = TRUE), 
+                     projection = "OGC:CRS84", extent = c(-180, 180, -90, 90))
+  
+  v <- gdalio::gdalio_data(sds)
+  raster::setValues(grid, v[[1]])
 }

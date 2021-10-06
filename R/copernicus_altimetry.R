@@ -96,6 +96,14 @@ read_copernicus_daily <- function(date, xylim = NULL, latest = TRUE, returnfiles
     mask_if_needed(crop_if_needed(rotate_if_needed(raster(xfile, varname = varname, band = band), rot), ext), msk)
   }
 
+  ## smash everything if xylim is raster-ish
+  if (inherits(xylim, "BasicRaster")) {
+    out <- raster::brick(purrr::map(purrr::transpose(files), 
+                                    ~do_it_vapour_copernicus(.x, xylim, varname))
+    )
+    return(raster::setZ(out, files$date))  
+  }
+  
   msk <- NULL
   rot <- FALSE
   files$band <- 1
@@ -106,3 +114,12 @@ read_copernicus_daily <- function(date, xylim = NULL, latest = TRUE, returnfiles
   r0 <- setZ(r0, files$date)
  r0
   }
+
+do_it_vapour_copernicus <- function(files, grid, varname) {
+  gdalio::gdalio_set_default_grid(grid)
+  sds <- gdalio::vrt(grep(varname, vapour::vapour_sds_names(files$fullname[1])$subdataset, value = TRUE), 
+                     projection = "OGC:CRS84")
+  
+  v <- gdalio::gdalio_data(sds)
+  raster::setValues(grid, v[[1]])
+}

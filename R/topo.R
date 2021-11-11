@@ -147,6 +147,8 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
     res <- raster(tfile)
   }
 
+  ## sources with wrong extent
+  if (topo == "etopo1") res <- raster::setExtent(res, raster::extent(-180, 180, -90, 90))
   ## sources with missing CRS metadata
   llprojs <- c("etopo2", "kerguelen", "george_v_terre_adelie", "lake_superior")
   if (topo %in% llprojs)  projection(res) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"

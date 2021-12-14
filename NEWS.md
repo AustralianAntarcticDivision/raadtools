@@ -1,5 +1,7 @@
 # raadtools dev
 
+* Fixed documentation for units in surface currents, thanks Ryan Reisinger. #117
+
 * New function `query_grid()` to build a query data frame for `extract(function, ...)` workflows. 
 
 * New function `readCHL_month()` to read NASA's monthly CHL files. 

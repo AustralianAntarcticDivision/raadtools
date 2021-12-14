@@ -46,9 +46,9 @@ components, in degrees (0 north, 90 east, 180 south, 270 west)}
 }
 \value{
 \code{\link[raster]{raster}} object with the "U"
-(horizontal/X) and "V" (vertical/Y) components of velocity in
-cm/s. Setting either of the (mutually exclusive) \code{magonly}
-and \code{dironly} arguments returns the magnitude (in cm) or
+(meridional/horizontal/X) and "V" (zonal/vertical/Y) components of velocity in
+m/s. Setting either of the (mutually exclusive) \code{magonly}
+and \code{dironly} arguments returns the magnitude (in m/s) or
 direction (in degrees relative to North) of the velocity vectors.
 }
 \description{
@@ -60,35 +60,32 @@ components. Multiple dates can be returned for magnitude or
 direction, U or V only.
 }
 \details{
-This is the "SSALTO/DUACS - DT Geostrophic Velocities - Up-to-date Global Processing". See References.
+This is the "DT merged all satellites Global Ocean Gridded SSALTO/DUACS Sea Surface Height L4 product and derived variables"
+See References.
 }
 \note{
 These data for daily files are stored in longitude/latitude projection on the sphere between longitudes in the Pacific
 view [0, 360], the default behaviour is to reset this to Atlantic
 view [-180, 180] with \code{lon180}.
-
-For weekly files, this source is no longer provided by Aviso but is cached by the raadtools system at AAD/ACE, for the period 1992 to 2014.
-Note that the projection was Mercator for this earlier product.
 }
 \examples{
-\dontrun{
 ## read a single time slice, and plot the directions [0,360) as an image with arrows
 x <- readcurr(dironly = TRUE)
 ## get a local extent for a zoom plot
 e <- extent(projectExtent(raster(extent(130, 150, -50, -30), crs = "+proj=longlat"), projection(x)))
-x1 <- crop(readcurr(), e)
-crds <- coordinates(x1)
-scale <- 2000
-plot(crop(x, e))
+x <- crop(readcurr(), e)
+crds <- coordinates(x)
+scale <- 1.5
+vlen <- function(x) sqrt(x[[1]]^2 + x[[2]]^2)
+plot(vlen(crop(x, e)))
 x1 <- crds[,1]
 y1 <- crds[,2]
-x2 <- crds[,1] + values(x1[["U"]]) * scale
-y2 <- crds[,2] + values(x1[["V"]]) * scale
+x2 <- crds[,1] + values(x[[1]]) * scale
+y2 <- crds[,2] + values(x[[1]]) * scale
 arrows(x1, y1, x2, y2, length = 0.03)
 }
-}
 \references{
-\url{http://www.aviso.oceanobs.com/en/data/products/sea-surface-height-products/global/index.html}
+\url{http://marine.copernicus.eu}
 }
 \seealso{
 \code{\link{icefiles}} for details on the repository of

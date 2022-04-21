@@ -1,0 +1,90 @@
+---
+title: "raadtools , overview for remote sensing Community of Practice"
+author: "Michael Sumner"
+date: "2/7/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## raadtools and bowerbird, R packages for time-varying geospatial
+
+Remote sensing products and climate models provide a dizzying variety of data
+types, resolution, and coverage, with many different ways of structuring data.
+The ways in which different kinds of data are collected, modelled, and processed
+impact in complicated ways how they are used. While standards exist, practices
+evolve over time, there are many standards, and scientists need to deal with
+more of these structural details in their day to day work than is ideal. There
+are details about file formats, map projections, and complex software to contend
+with before getting close to the measurements of actual physical variables used
+in scientific research.
+
+raadtools, supported by bowerbird is our developed response to these
+complexities, primarily supporting statistical modelling and analysis in marine
+conservation using the programming language R.
+
+
+### overall features
+
+Our approach aims at reducing repetitive work required by individual scientists
+to find, download, wrangle, time-varying spatial data sets.
+
+We curate products that are commonly used by us and our collaborators. When we
+or a collaborating researcher requires a new data source, we add it to our
+synchronization tool (the daily downloader), and write a toolkit function to
+read it. This way, everyone using our approach can leverage these efforts.
+
+### what is {raadtools}
+
+This R package is "R at the AAD tools" (Australian Antarctic Division). These
+were born at the AAD but are used among collaborators at UTAS, the CSIRO, and
+local and international collaborators.
+
+raadtools is a suite of R functions to read time-varying collections of remote
+sensing data, climate model output, and general geospatial data. It provides a
+consistent, easy function for each product to read by input of a date-time and
+(optionally) a spatial extent. Each includes options specific to various
+products. Data sources include commonly used remote sensing products such as sea
+ice concentration, SST, altimetry, ocean colour, wind vectors, ocean current
+vectors, and the output of various ocean models.
+
+Data sets come in different grid resolutions, spatial coverages, and in
+different projections, and each function simply returns the data in its native
+form using spatial data structures in R. Because of the consistency provided we
+can restructure (resample, regrid) these grids to other forms if required, and
+providing  match ups of satellite data to animal and voyage tracks allows us to
+get point-in-time values.
+
+Other specific analysis-required steps are provided by the geospatial libraries
+GDAL and NetCDF (amongst others), and by the general geospatial facilities in R
+itself.
+
+### what is bowerbird
+
+the data-source registration tool we use to configure a source data set, where it's downloaded from, how to download, how to unpack it or pre-process it, and its provenance and citation details
+
+how did this come about
+
+Ben Raymond and myself had independently worked creating toolkits for obtaining and reading remote sensing data, once we worked together at AAD
+I would lean on Ben's methods for obtaining files ... this led to an automation push so that we could simply register a data set of intereset, and let the tools automatically get that for us every day. This meant we had much less time to wait when someone had a question or a research idea requiring a data set, we didn't have to use "last year's" data as an example, we might want to look at last week's, or yesterday's. 
+Each data source requires a bit of care and experimentation to find how to use it, but once that's learned we simply let the data getter do its job and while occasional changes require some maintenance, for the most part each data set is simply up to date and read for us to use when needed. 
+
+When we need a new data set, it falls into the same system, and becomes available for anyone in our broader collaboration group. 
+
+How are these tools accessed
+
+Example of usage
+
+What are key advantages
+
+- we aren't bound to a given format or framework
+- we can easily extend the data library and the toolkit by basic software updates and deployments (we use github)
+- we use standard tools, but aren't completely bound by them (GDAL, NetCDF, R packages, our own C++, as required)
+
+
+Blog post showing how to set up the toolkit from scratch
+
+We can give you access if you'd like to explore, we're interested in folks keen to 
+

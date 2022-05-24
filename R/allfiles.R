@@ -5,7 +5,7 @@
 #' @export
 #' @return \code{data.frame} with columns \code{fullname} with all file paths
 allfiles <- function(...) {
-  raadfiles::get_raad_filenames(all = TRUE)
+  dplyr::mutate(raadfiles::get_raad_filenames(all = TRUE), fullname = file.path(.data$root, .data$file))
 }
 
 

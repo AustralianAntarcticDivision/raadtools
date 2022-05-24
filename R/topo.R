@@ -140,7 +140,8 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
   if (topo[1] == "srtm") stop("srtm is not available")
   
   topo <- match.arg(topo)
-  
+  nowarning <- options(warn = -1)
+  on.exit(options(nowarning), add  = TRUE)
   if (!lon180 & topo %in% c("geboc_08", "ibcso", "etopo2")) {
     tfile <- topofile(topo = topo, polar = FALSE, ...)
     if (returnfiles) return(tfile)
@@ -279,7 +280,7 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
     topopath <- vapour::vapour_vrt(topopath, projection = "EPSG:3857")
   }
   if (topo == "cryosat2") {
-    topopath <- vapour::vapour_vrt(topopath,  extent = c(-2821000, 2819000, -2421000, 2419000 ),
+    topopath <- vapour::vapour_vrt(topopath,  extent = c(-2821000, 2819000, rev(c(-2421000, 2419000)) ),
                                    projection = "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs")
   }
   

@@ -1,6 +1,7 @@
 # raadtools dev
 
-* `readtopo()` and `topofile()` source "ga_srtm" is no longer available (better done with NASADEM_be and gdal warp anyhow). 
+* `readtopo()` and `topofile()` source "ga_srtm" is no longer available (better done with NASADEM_be and gdal warp anyhow).  Also
+ "george_v_terre_adelie" and "srtm" no longer available. 
 
 * Fixed documentation for units in surface currents, thanks Ryan Reisinger. #117
 

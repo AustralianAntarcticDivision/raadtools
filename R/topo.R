@@ -154,20 +154,20 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
         raster::projection(res) <- "OGC:CRS84"
       }
     }
-    if (topo[1] == "smith_sandwell") {
-      raster::projection(res) <- "EPSG:3857"
-    }
+    # if (topo[1] == "smith_sandwell") {
+    #   raster::projection(res) <- "EPSG:3857"
+    # }
   }
   
   ## sources with wrong extent
-  if (topo == "etopo1" || topo == "gebco_08") res <- raster::setExtent(res, raster::extent(-180, 180, -90, 90))
+  ##if (topo == "etopo1" || topo == "gebco_08") res <- raster::setExtent(res, raster::extent(-180, 180, -90, 90))
   ## sources with missing CRS metadata
-  llprojs <- c("etopo2", "kerguelen", "george_v_terre_adelie", "lake_superior")
-  if (topo %in% llprojs)  projection(res) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
+  ##llprojs <- c("etopo2", "kerguelen", "george_v_terre_adelie", "lake_superior")
+  ##if (topo %in% llprojs)  projection(res) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
   ## self-describing, if you always work in lon-lat ...
-  if (topo == "ibcso_bed") projection(res) <- "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
+  ##if (topo == "ibcso_bed") projection(res) <- "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
   
-  if (topo == "cryosat2") projection(res) <- "+proj=stere +lat_0=-90 +lat_ts=-71 +datum=WGS84 +x_0=0 +y_0=0"
+  ##if (topo == "cryosat2") projection(res) <- "+proj=stere +lat_0=-90 +lat_ts=-71 +datum=WGS84 +x_0=0 +y_0=0"
   
   if (!is.null(xylim) && topo == "rema_8m") {
     if (inherits(xylim, "SpatRaster") || inherits(xylim, "BasicRaster")) {
@@ -191,19 +191,8 @@ readtopo <- function(topo = c("gebco_08", "ibcso",
     }
     if (inherits(xylim, "BasicRaster")) {
       if (is.na(raster::projection(xylim))) stop("cannot use xylim raster template that has no projection/crs")
-      if (topo == "cryosat2") {
-        ### special case
-        nowarn <- options(warn = -1)
-        on.exit(options(nowar), add = TRUE)
-        tr <- terra::set.ext(terra::rast(tfile, subds = "z"), terra::ext(-2821000, 2819000, -2421000, 2419000))
-        terra::crs(tr) <- "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
-      } else {
-        tr <- terra::rast(res)
-      }
+      tr <- terra::rast(res)
       if (is.na(terra::crs(tr))) stop(sprintf("problem with topo crs: %s", topo[1]))
-      print(tr)
-      print(xylim)
-      browser()
       res <- raster::raster(terra::project(tr, terra::rast(xylim)))
     }
     
@@ -236,7 +225,7 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
                               "rema_200m",
                               "rema_100m",
                               "rema_8m",
-                              "srtm", "gebco_19", "gebco_21"),
+                              "gebco_19", "gebco_21"),
                      polar = FALSE,
                      lon180 = TRUE,
                      ...) {
@@ -273,8 +262,27 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
                       rema_1km = raadfiles::rema_1km_files()$fullname[1L],
                       rema_8m =   file.path(dirname(dirname(r8m_files$fullname[1])), "rema_mosaic_8m_dem.vrt"))
   
-  
 
+  if (topo == "lake_superior") {
+    topopath <- vapour::vapour_vrt(topopath, extent = c(-92.20042, -83.99958, 45.99958, 49.50042), projection = "OGC:CRS84")
+    
+  }
+  if (topo == "ibcso_bed") {
+    topopath <- vapour::vapour_vrt(topopath, extent = c(  -3333500, 3334000, -3337000, 3333500), 
+                                   projection = "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs ")
+    
+  }
+  if (topo %in% c("gebco_08", "etopo1", "etopo2")) {
+    topopath <- vapour::vapour_vrt(topopath, extent = c(-180, 180, -90, 90), projection = "OGC:CRS84")
+  }
+  if (topo == "smith_sandwell") {
+    topopath <- vapour::vapour_vrt(topopath, projection = "EPSG:3857")
+  }
+  if (topo == "cryosat2") {
+    topopath <- vapour::vapour_vrt(topopath,  extent = c(-2821000, 2819000, -2421000, 2419000 ),
+                                   projection = "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs")
+  }
+  
   
   if (length(topopath) < 1 || is.na(topopath) || is.null(topopath)) stop(sprintf("cannot find %s", topo))
   if (!file.exists(topopath)) warning(sprintf("cannot file %s", topopath))

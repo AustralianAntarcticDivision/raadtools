@@ -1,10 +1,10 @@
-pandoc: 2.11.4
-pkgdown: 1.6.1
+pandoc: 2.14.0.3
+pkgdown: 2.0.3
 pkgdown_sha: ~
 articles:
   chlorophyll: chlorophyll.html
   extract-extent: extract-extent.html
   installraadtools: installraadtools.html
   raad-sea-ice: raad-sea-ice.html
-last_built: 2021-08-31T07:26Z
+last_built: 2022-05-25T12:45Z
 

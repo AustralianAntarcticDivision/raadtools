@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,23 +33,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9022</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -73,7 +69,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/AustralianAntarcticDivision/raadtools/">
+  <a href="https://github.com/AustralianAntarcticDivision/raadtools/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,15 +84,15 @@
 
       
 
-      </header><script src="extract-extent_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Environmental data from an extent with raadtools</h1>
-                        <h4 class="author">Michael Sumner and Jaimie Cleeland</h4>
+                        <h4 data-toc-skip class="author">Michael Sumner and Jaimie Cleeland</h4>
             
-            <h4 class="date">2021-08-31</h4>
+            <h4 data-toc-skip class="date">2022-05-25</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/AustralianAntarcticDivision/raadtools/blob/master/vignettes/extract-extent.Rmd"><code>vignettes/extract-extent.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/AustralianAntarcticDivision/raadtools/blob/HEAD/vignettes/extract-extent.Rmd" class="external-link"><code>vignettes/extract-extent.Rmd</code></a></small>
       <div class="hidden name"><code>extract-extent.Rmd</code></div>
 
     </div>
@@ -104,247 +100,150 @@
     
     
 <p>The <code>raadtools</code> package contains a number of <code>read[something]</code> functions, mostly for gridded time-series remote sensing data.</p>
-<p>All of the read functions have an “xylim” argument, which will take a <code><a href="https://rdrr.io/pkg/raster/man/extent.html">raster::extent(xmin, xmax, ymin, ymax)</a></code>. E.g.</p>
+<p>All of the read functions have an “xylim” argument, which will take a <code>raster::extent(xmin, xmax, ymin, ymax)</code>. E.g.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools">raadtools</a></span><span class="op">)</span></code></pre></div>
-<pre><code>## Loading required package: raster</code></pre>
-<pre><code>## Loading required package: sp</code></pre>
-<pre><code>## global option 'raadfiles.data.roots' set:
-## '/rdsi/PRIVATE/raad/data               2021-06-10 11:27:17
-##  /rdsi/PRIVATE/raad/data_local         2021-06-10 11:33:25
-##  /rdsi/PRIVATE/raad/data_staging       2021-06-10 11:33:28
-##  /rdsi/PRIVATE/raad/data_deprecated    2021-06-10 11:34:11
-##  /rdsi/PUBLIC/raad/data                2021-06-10 11:13:58'</code></pre>
-<pre><code>## Uploading raad file cache as at 2021-08-31 07:31:50 (1099821 files listed)</code></pre>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## Loading required package: raster</span></code></pre>
+<pre><code><span class="co">## Loading required package: sp</span></code></pre>
+<pre><code><span class="co">## global option 'raadfiles.data.roots' set:</span>
+<span class="co">## '/rdsi/PRIVATE/raad/data               </span>
+<span class="co">##  /rdsi/PRIVATE/raad/data_local         </span>
+<span class="co">##  /rdsi/PRIVATE/raad/data_staging       </span>
+<span class="co">##  /rdsi/PRIVATE/raad/data_deprecated    </span>
+<span class="co">##  /rdsi/PUBLIC/raad/data                '</span></code></pre>
+<pre><code><span class="co">## Uploading raad file cache as at 2022-05-25 22:52:34 (1147016 files listed)</span></code></pre>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">raadfiles</span><span class="op">)</span>
-<span class="fu"><a href="../reference/readsst.html">readsst</a></span><span class="op">(</span><span class="st">"2010-01-01"</span>, xylim <span class="op">=</span> <span class="fu">extent</span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">50</span>, <span class="op">-</span><span class="fl">40</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## class      : RasterLayer 
-## dimensions : 40, 240, 9600  (nrow, ncol, ncell)
-## resolution : 0.25, 0.25  (x, y)
-## extent     : 100, 160, -50, -40  (xmin, xmax, ymin, ymax)
-## crs        : +proj=longlat +datum=WGS84 +no_defs 
-## source     : memory
-## names      : Daily.sea.surface.temperature 
-## values     : 4.41, 19.24  (min, max)
-## time       : 2010-01-01</code></pre>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">raadfiles</span><span class="op">)</span>
+<span class="fu"><a href="../reference/readsst.html">readsst</a></span><span class="op">(</span><span class="st">"2010-01-01"</span>, xylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">50</span>, <span class="op">-</span><span class="fl">40</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## class      : RasterLayer </span>
+<span class="co">## dimensions : 40, 240, 9600  (nrow, ncol, ncell)</span>
+<span class="co">## resolution : 0.25, 0.25  (x, y)</span>
+<span class="co">## extent     : 100, 160, -50, -40  (xmin, xmax, ymin, ymax)</span>
+<span class="co">## crs        : +proj=longlat +datum=WGS84 +no_defs </span>
+<span class="co">## source     : memory</span>
+<span class="co">## names      : Daily.sea.surface.temperature </span>
+<span class="co">## values     : 4.41, 19.24  (min, max)</span>
+<span class="co">## time       : 2010-01-01</span></code></pre>
 <p>That extent must make sense for the data set though, so see what this returns first (it will be a longlat-grid in [-180, 180, -90, 90].</p>
 <p>Note that we ran the function above <em>without saving the result anywhere</em>, so we just saw a print-out summary of the result but it is now discarded.</p>
 <p>That is a useful technique to see what a function does, since it will return a layer by default. This can be plotted or used by other functions, and so is the best way to learn about the data source.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools">raadtools</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">raadfiles</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">raadfiles</span><span class="op">)</span>
 <span class="fu"><a href="../reference/readsst.html">readsst</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## class      : RasterLayer 
-## dimensions : 720, 1440, 1036800  (nrow, ncol, ncell)
-## resolution : 0.25, 0.25  (x, y)
-## extent     : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
-## crs        : +proj=longlat +datum=WGS84 +no_defs 
-## source     : memory
-## names      : Daily.sea.surface.temperature 
-## values     : -1.8, 35.11  (min, max)
-## time       : 2021-08-28</code></pre>
+<pre><code><span class="co">## class      : RasterLayer </span>
+<span class="co">## dimensions : 720, 1440, 1036800  (nrow, ncol, ncell)</span>
+<span class="co">## resolution : 0.25, 0.25  (x, y)</span>
+<span class="co">## extent     : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)</span>
+<span class="co">## crs        : +proj=longlat +datum=WGS84 +no_defs </span>
+<span class="co">## source     : memory</span>
+<span class="co">## names      : Daily.sea.surface.temperature </span>
+<span class="co">## values     : -1.8, 32.75  (min, max)</span>
+<span class="co">## time       : 2022-05-22</span></code></pre>
 <p>That works for <code>readssh</code>, <code>readcurr</code>, and <code>readwind</code> just the same, and the date argument can be a single date or a vector of them. In the <code>raster</code> package there are single <code>RasterLayer</code> objects and multi-layer <code>RasterBrick</code> (or <code>RasterStack</code>) objects. Raadtools will usually return a RasterStack or a RasterLayer, and it will record the time-step/s on the data as well (when relevant). After the read function is finished we are back to using the <code>raster</code> package, so familiarity with that package and its documentation is important.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html">vignette</a></span><span class="op">(</span><span class="st">"Raster"</span>, package<span class="op">=</span> <span class="st">"raster"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"Raster"</span>, package<span class="op">=</span> <span class="st">"raster"</span><span class="op">)</span></code></pre></div>
 <p>Some of the functions respect <code>lon180 = FALSE</code> because they have a grid that was originally in <code>[0, 360, -90, 90]</code> and in that case it can be faster to use that domain for the extent rather than the common <code>[-180, 180, -90, 90]</code> one. (Please feel free to ask about this for specific data sets, it’s one of those boring details).</p>
 <p>For ice, and some other data, the grids are not in longlat so <code>xylim</code> needs an extent in that projection. You can always draw one like this, with code that must be run interactively as the plot will wait for you to click twice on the plot (defining a rectangle) before the <code>e</code> object is created.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ice</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readice.html">readice</a></span><span class="op">(</span><span class="op">)</span>  
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">ice</span><span class="op">)</span>
-<span class="va">e</span> <span class="op">&lt;-</span> <span class="fu">drawExtent</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj
-## = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere
-## +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m
-## +no_defs +type=crs</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =
-## prefer_proj): Discarded datum unknown in Proj4 definition</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj
-## = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere
-## +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m
-## +no_defs +type=crs</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =
-## prefer_proj): Discarded datum unknown in Proj4 definition</code></pre>
+<span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ice</span><span class="op">)</span>
+<span class="va">e</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/drawExtent.html" class="external-link">drawExtent</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## Raad file cache is up to date as at 2022-05-25 22:52:34 (1147016 files listed)</span></code></pre>
 <p><img src="extract-extent_files/figure-html/unnamed-chunk-6-1.png" width="700"> Notice that we can also make <code>Extent</code> objects from scratch, and perform operations on them.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_extent</span> <span class="op">&lt;-</span> <span class="fu">extent</span><span class="op">(</span><span class="fl">100</span>, <span class="fl">120</span>, <span class="op">-</span><span class="fl">40</span>, <span class="op">-</span><span class="fl">20</span><span class="op">)</span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">my_extent</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">120</span>, <span class="op">-</span><span class="fl">40</span>, <span class="op">-</span><span class="fl">20</span><span class="op">)</span>
 <span class="va">my_extent</span></code></pre></div>
-<pre><code>## class      : Extent 
-## xmin       : 100 
-## xmax       : 120 
-## ymin       : -40 
-## ymax       : -20</code></pre>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<pre><code><span class="co">## class      : Extent </span>
+<span class="co">## xmin       : 100 </span>
+<span class="co">## xmax       : 120 </span>
+<span class="co">## ymin       : -40 </span>
+<span class="co">## ymax       : -20</span></code></pre>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_extent</span> <span class="op">+</span> <span class="fl">10</span></code></pre></div>
-<pre><code>## class      : Extent 
-## xmin       : 95 
-## xmax       : 125 
-## ymin       : -45 
-## ymax       : -15</code></pre>
+<pre><code><span class="co">## class      : Extent </span>
+<span class="co">## xmin       : 95 </span>
+<span class="co">## xmax       : 125 </span>
+<span class="co">## ymin       : -45 </span>
+<span class="co">## ymax       : -15</span></code></pre>
 <p>otherwise there are functions <code>projectExtent</code> and some others to do it more automatically. It’s not that straightforward because of the polar aspect.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools">raadtools</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">raadfiles</span><span class="op">)</span>
-<span class="va">ice</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readice.html">readice</a></span><span class="op">(</span><span class="op">)</span> </code></pre></div>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj
-## = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere
-## +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m
-## +no_defs +type=crs</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =
-## prefer_proj): Discarded datum unknown in Proj4 definition</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj
-## = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere
-## +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m
-## +no_defs +type=crs</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =
-## prefer_proj): Discarded datum unknown in Proj4 definition</code></pre>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rex</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="op">(</span> <span class="fu">extent</span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">70</span>, <span class="op">-</span><span class="fl">50</span><span class="op">)</span>, crs <span class="op">=</span> <span class="st">"+proj=longlat +datum=WGS84"</span><span class="op">)</span>
-<span class="va">pex</span> <span class="op">&lt;-</span> <span class="fu">projectExtent</span><span class="op">(</span><span class="va">rex</span>, <span class="fu">projection</span><span class="op">(</span><span class="va">ice</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj
-## = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere
-## +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m
-## +no_defs +type=crs
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">raadfiles</span><span class="op">)</span>
+<span class="va">ice</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readice.html">readice</a></span><span class="op">(</span><span class="op">)</span> 
+<span class="va">rex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">70</span>, <span class="op">-</span><span class="fl">50</span><span class="op">)</span>, crs <span class="op">=</span> <span class="st">"+proj=longlat +datum=WGS84"</span><span class="op">)</span>
+<span class="va">pex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/projectRaster.html" class="external-link">projectExtent</a></span><span class="op">(</span><span class="va">rex</span>, <span class="fu"><a href="https://rdrr.io/pkg/raster/man/projection.html" class="external-link">projection</a></span><span class="op">(</span><span class="va">ice</span><span class="op">)</span><span class="op">)</span>
 
-## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =
-## prefer_proj): Discarded datum unknown in Proj4 definition</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj
-## = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere
-## +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m
-## +no_defs +type=crs</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =
-## prefer_proj): Discarded datum unknown in Proj4 definition</code></pre>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## pex is a raster, not just an extent but that's good because</span>
+<span class="co">## pex is a raster, not just an extent but that's good because</span>
 <span class="co">## it also has the CRS (it's nonsense to have an extent without CRS, but that's life)</span>
-<span class="va">ice_ex</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readice.html">readice</a></span><span class="op">(</span><span class="st">"2016-09-01"</span>, xylim <span class="op">=</span> <span class="va">pex</span><span class="op">)</span></code></pre></div>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj
-## = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere
-## +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m
-## +no_defs +type=crs
+<span class="va">ice_ex</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readice.html">readice</a></span><span class="op">(</span><span class="st">"2016-09-01"</span>, xylim <span class="op">=</span> <span class="va">pex</span><span class="op">)</span>
 
-## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =
-## prefer_proj): Discarded datum unknown in Proj4 definition</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj
-## = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere
-## +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m
-## +no_defs +type=crs</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =
-## prefer_proj): Discarded datum unknown in Proj4 definition</code></pre>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">ice_ex</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html">grey</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span>, zlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ice_ex</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span>, zlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="extract-extent_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <p>Please note that the <code>xylim</code> argument just applies <code>crop</code>, so you can avoid it altogether and do it after the fact.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools">raadtools</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">raadfiles</span><span class="op">)</span>
-<span class="fu">crop</span><span class="op">(</span><span class="fu"><a href="../reference/readsst.html">readsst</a></span><span class="op">(</span><span class="op">)</span>,  <span class="fu">extent</span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">50</span>, <span class="op">-</span><span class="fl">40</span><span class="op">)</span>, snap <span class="op">=</span> <span class="st">"out"</span><span class="op">)</span></code></pre></div>
-<pre><code>## class      : RasterLayer 
-## dimensions : 40, 240, 9600  (nrow, ncol, ncell)
-## resolution : 0.25, 0.25  (x, y)
-## extent     : 100, 160, -50, -40  (xmin, xmax, ymin, ymax)
-## crs        : +proj=longlat +datum=WGS84 +no_defs 
-## source     : memory
-## names      : Daily.sea.surface.temperature 
-## values     : 2.81, 14.95  (min, max)
-## time       : 2021-08-28</code></pre>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">raadfiles</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/raster/man/crop.html" class="external-link">crop</a></span><span class="op">(</span><span class="fu"><a href="../reference/readsst.html">readsst</a></span><span class="op">(</span><span class="op">)</span>,  <span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">50</span>, <span class="op">-</span><span class="fl">40</span><span class="op">)</span>, snap <span class="op">=</span> <span class="st">"out"</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## class      : RasterLayer </span>
+<span class="co">## dimensions : 40, 240, 9600  (nrow, ncol, ncell)</span>
+<span class="co">## resolution : 0.25, 0.25  (x, y)</span>
+<span class="co">## extent     : 100, 160, -50, -40  (xmin, xmax, ymin, ymax)</span>
+<span class="co">## crs        : +proj=longlat +datum=WGS84 +no_defs </span>
+<span class="co">## source     : memory</span>
+<span class="co">## names      : Daily.sea.surface.temperature </span>
+<span class="co">## values     : 4.11, 18.83  (min, max)</span>
+<span class="co">## time       : 2022-05-22</span></code></pre>
 <p>(Internally <code>raadtools</code> always uses <code>snap=out</code> since that makes sure the intersection is <em>inclusive</em>, i.e. any overlapping part of a pixel means that pixel is included in the result. By default <code>crop</code> would drop partial overlaps on the edge).</p>
 <p>If there’s a really long time series though it will be better to do that with xylim, and even to pass it out to a file:</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sst</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readsst.html">readsst</a></span><span class="op">(</span><span class="va">dates</span>,  xylim <span class="op">=</span> <span class="fu">extent</span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">50</span>, <span class="op">-</span><span class="fl">40</span><span class="op">)</span>, filename <span class="op">=</span> <span class="st">"mymegasplat.grd"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">sst</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readsst.html">readsst</a></span><span class="op">(</span><span class="va">dates</span>,  xylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">50</span>, <span class="op">-</span><span class="fl">40</span><span class="op">)</span>, filename <span class="op">=</span> <span class="st">"mymegasplat.grd"</span><span class="op">)</span></code></pre></div>
 <p>More details … TBD</p>
-<div id="extending-maps" class="section level2">
-<h2 class="hasAnchor">
-<a href="#extending-maps" class="anchor"></a>Extending maps</h2>
+<div class="section level2">
+<h2 id="extending-maps">Extending maps<a class="anchor" aria-label="anchor" href="#extending-maps"></a>
+</h2>
 <p>With two examples from above.</p>
 <p>Plot the projected data with a graticule, and add a “transect”.</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools">raadtools</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">raadfiles</span><span class="op">)</span>
-<span class="va">ice</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readice.html">readice</a></span><span class="op">(</span><span class="op">)</span> </code></pre></div>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj
-## = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere
-## +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m
-## +no_defs +type=crs</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =
-## prefer_proj): Discarded datum unknown in Proj4 definition</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj
-## = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere
-## +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m
-## +no_defs +type=crs</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =
-## prefer_proj): Discarded datum unknown in Proj4 definition</code></pre>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rex</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="op">(</span> <span class="fu">extent</span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">70</span>, <span class="op">-</span><span class="fl">50</span><span class="op">)</span>, crs <span class="op">=</span> <span class="st">"+proj=longlat +datum=WGS84"</span><span class="op">)</span>
-<span class="va">pex</span> <span class="op">&lt;-</span> <span class="fu">projectExtent</span><span class="op">(</span><span class="va">rex</span>, <span class="fu">projection</span><span class="op">(</span><span class="va">ice</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj
-## = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere
-## +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m
-## +no_defs +type=crs
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">raadfiles</span><span class="op">)</span>
+<span class="va">ice</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readice.html">readice</a></span><span class="op">(</span><span class="op">)</span> 
+<span class="va">rex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">70</span>, <span class="op">-</span><span class="fl">50</span><span class="op">)</span>, crs <span class="op">=</span> <span class="st">"+proj=longlat +datum=WGS84"</span><span class="op">)</span>
+<span class="va">pex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/projectRaster.html" class="external-link">projectExtent</a></span><span class="op">(</span><span class="va">rex</span>, <span class="fu"><a href="https://rdrr.io/pkg/raster/man/projection.html" class="external-link">projection</a></span><span class="op">(</span><span class="va">ice</span><span class="op">)</span><span class="op">)</span>
 
-## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =
-## prefer_proj): Discarded datum unknown in Proj4 definition</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj
-## = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere
-## +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m
-## +no_defs +type=crs</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =
-## prefer_proj): Discarded datum unknown in Proj4 definition</code></pre>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## pex is a raster, not just an extent but that's good because</span>
+<span class="co">## pex is a raster, not just an extent but that's good because</span>
 <span class="co">## it also has the CRS (it's nonsense to have an extent without CRS, but that's life)</span>
-<span class="va">ice_ex</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readice.html">readice</a></span><span class="op">(</span><span class="st">"2016-09-01"</span>, xylim <span class="op">=</span> <span class="va">pex</span><span class="op">)</span></code></pre></div>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj
-## = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere
-## +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m
-## +no_defs +type=crs
+<span class="va">ice_ex</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readice.html">readice</a></span><span class="op">(</span><span class="st">"2016-09-01"</span>, xylim <span class="op">=</span> <span class="va">pex</span><span class="op">)</span>
 
-## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =
-## prefer_proj): Discarded datum unknown in Proj4 definition</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj
-## = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere
-## +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m
-## +no_defs +type=crs</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =
-## prefer_proj): Discarded datum unknown in Proj4 definition</code></pre>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## create a graticule for this region</span>
+<span class="co">## create a graticule for this region</span>
 
-<span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">graticule</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graticule/man/graticule.html">graticule</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, by <span class="op">=</span> <span class="fl">15</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">75</span>, <span class="op">-</span><span class="fl">50</span>, by <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>, proj <span class="op">=</span> <span class="fu">projection</span><span class="op">(</span><span class="va">ice</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj
-## = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere
-## +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m
-## +no_defs +type=crs
-
-## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =
-## prefer_proj): Discarded datum unknown in Proj4 definition</code></pre>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">ice_ex</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html">grey</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span>, zlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">100</span><span class="op">)</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, 
-     addfun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">g</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"firebrick"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">graticule</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graticule/man/graticule.html" class="external-link">graticule</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, by <span class="op">=</span> <span class="fl">15</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">75</span>, <span class="op">-</span><span class="fl">50</span>, by <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>, proj <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/projection.html" class="external-link">projection</a></span><span class="op">(</span><span class="va">ice</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ice_ex</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span>, zlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">100</span><span class="op">)</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, 
+     addfun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">g</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"firebrick"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## add a "transect"</span>
-<span class="va">lons</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, by <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="va">transect</span> <span class="op">&lt;-</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/project.html">project</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">lons</span>, <span class="op">-</span><span class="fl">63</span><span class="op">)</span>, <span class="fu">projection</span><span class="op">(</span><span class="va">ice_ex</span><span class="op">)</span><span class="op">)</span>
+<span class="va">lons</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, by <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="va">transect</span> <span class="op">&lt;-</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/project.html" class="external-link">project</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">lons</span>, <span class="op">-</span><span class="fl">63</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/raster/man/projection.html" class="external-link">projection</a></span><span class="op">(</span><span class="va">ice_ex</span><span class="op">)</span><span class="op">)</span>
 
 
-<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">transect</span>, cex <span class="op">=</span> <span class="fl">0.5</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"dodgerblue"</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">transect</span>, cex <span class="op">=</span> <span class="fl">0.5</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"dodgerblue"</span><span class="op">)</span></code></pre></div>
 <p><img src="extract-extent_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <p>Extract values at specific points.</p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools">raadtools</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">raadfiles</span><span class="op">)</span>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">raadfiles</span><span class="op">)</span>
 <span class="va">iceconc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract.html">extract</a></span><span class="op">(</span><span class="va">ice_ex</span>, <span class="va">transect</span>, method <span class="op">=</span> <span class="st">"bilinear"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">lons</span>, <span class="va">iceconc</span>, main <span class="op">=</span> <span class="st">"ice concentration at latitude -65 between 100E and 160E"</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lons</span>, <span class="va">iceconc</span>, main <span class="op">=</span> <span class="st">"ice concentration at latitude -65 between 100E and 160E"</span><span class="op">)</span></code></pre></div>
 <p><img src="extract-extent_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 <p>Plot mean SST and contour.</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools">raadtools</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">raadfiles</span><span class="op">)</span>
-<span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="st">"2016-01-01"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">31</span>, by <span class="op">=</span> <span class="st">"1 day"</span><span class="op">)</span>
-<span class="va">sst</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readsst.html">readsst</a></span><span class="op">(</span><span class="va">dates</span>,  xylim <span class="op">=</span> <span class="fu">extent</span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">50</span>, <span class="op">-</span><span class="fl">40</span><span class="op">)</span><span class="op">)</span>
-<span class="va">msst</span> <span class="op">&lt;-</span> <span class="fu">calc</span><span class="op">(</span><span class="va">sst</span>, <span class="va">mean</span><span class="op">)</span>
-<span class="va">sdsst</span> <span class="op">&lt;-</span> <span class="fu">calc</span><span class="op">(</span><span class="va">sst</span>, <span class="va">sd</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">msst</span>, col <span class="op">=</span> <span class="fu">viridis</span><span class="fu">::</span><span class="fu"><a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html">viridis</a></span><span class="op">(</span><span class="fl">50</span><span class="op">)</span>, main <span class="op">=</span> <span class="st">"mean SST Jan 2016"</span>,  addfun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/graphics/contour.html">contour</a></span><span class="op">(</span><span class="va">sdsst</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">raadfiles</span><span class="op">)</span>
+<span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2016-01-01"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">31</span>, by <span class="op">=</span> <span class="st">"1 day"</span><span class="op">)</span>
+<span class="va">sst</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readsst.html">readsst</a></span><span class="op">(</span><span class="va">dates</span>,  xylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">50</span>, <span class="op">-</span><span class="fl">40</span><span class="op">)</span><span class="op">)</span>
+<span class="va">msst</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/calc.html" class="external-link">calc</a></span><span class="op">(</span><span class="va">sst</span>, <span class="va">mean</span><span class="op">)</span>
+<span class="va">sdsst</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/calc.html" class="external-link">calc</a></span><span class="op">(</span><span class="va">sst</span>, <span class="va">sd</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">msst</span>, col <span class="op">=</span> <span class="fu">viridis</span><span class="fu">::</span><span class="fu"><a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="external-link">viridis</a></span><span class="op">(</span><span class="fl">50</span><span class="op">)</span>, main <span class="op">=</span> <span class="st">"mean SST Jan 2016"</span>,  addfun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/contour.html" class="external-link">contour</a></span><span class="op">(</span><span class="va">sdsst</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="extract-extent_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 </div>
   </div>
@@ -360,11 +259,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Michael D. Sumner.</p>
+  <p></p>
+<p>Developed by Michael D. Sumner.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -372,6 +273,8 @@
 
   
 
+
+  
 
   </body>
 </html>

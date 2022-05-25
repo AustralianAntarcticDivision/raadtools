@@ -183,7 +183,7 @@
 <span class="co">#&gt;  /rdsi/PRIVATE/raad/data_staging       </span>
 <span class="co">#&gt;  /rdsi/PRIVATE/raad/data_deprecated    </span>
 <span class="co">#&gt;  /rdsi/PUBLIC/raad/data                '</span>
-<span class="co">#&gt; Uploading raad file cache as at 2022-05-25 22:53:32 (1147016 files listed)</span>
+<span class="co">#&gt; Uploading raad file cache as at 2022-05-25 23:06:45 (1147016 files listed)</span>
 <span class="va">ice</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readice.html">readice</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="va">pt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fl">61</span> <span class="op">+</span> <span class="fl">25.7</span><span class="op">/</span><span class="fl">60</span>, <span class="op">-</span><span class="op">(</span><span class="fl">66</span><span class="op">+</span><span class="fl">1.4</span><span class="op">/</span><span class="fl">60</span><span class="op">)</span><span class="op">)</span>
@@ -197,6 +197,7 @@
 <span class="co">#ex &lt;- NULL</span>
 <span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_amsr2_3k_ice.html">read_amsr2_3k_ice</a></span><span class="op">(</span><span class="va">date</span>, xylim <span class="op">=</span>  <span class="va">ex</span><span class="op">)</span>
 <span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_amsr2_ice.html">read_amsr2_ice</a></span><span class="op">(</span><span class="va">date</span>, xylim <span class="op">=</span>  <span class="va">ex</span><span class="op">)</span>
+<span class="co">#&gt; Raad file cache is up to date as at 2022-05-25 23:06:45 (1147016 files listed)</span>
 <span class="va">x3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/crop.html" class="external-link">crop</a></span><span class="op">(</span><span class="fu"><a href="../reference/read_cersat_ice.html">read_cersat_ice</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span>, <span class="va">ex</span><span class="op">)</span>
 <span class="va">x4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readice.html">readice</a></span><span class="op">(</span><span class="va">date</span>, xylim <span class="op">=</span>  <span class="va">ex</span><span class="op">)</span>
 

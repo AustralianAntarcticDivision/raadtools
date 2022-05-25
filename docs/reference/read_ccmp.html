@@ -117,7 +117,7 @@ components, in degrees (0 north, 90 east, 180 south, 270 west)</p></dd>
     <div id="details">
     <h2>Details</h2>
     <p>CCMP wind data is read from files managed by
-<code>ccmp_files</code>. Dates are matched to file names by
+<code><a href="ccmp_files.html">ccmp_files</a></code>. Dates are matched to file names by
 finding the nearest match in time within a short duration. By
 default only one time step is returned with both U and V
 components. Multiple dates can be returned for magnitude or
@@ -162,12 +162,10 @@ data files, <code><a href="https://rdrr.io/pkg/raster/man/raster.html" class="ex
 <span class="r-plt img"><img src="read_ccmp-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co">## faster if we get the file list first</span></span>
-<span class="r-in"><span class="va">ccfiles</span> <span class="op">&lt;-</span> <span class="fu">ccmp_files</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ccmp_files():</span> could not find function "ccmp_files"</span>
+<span class="r-in"><span class="va">ccfiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="ccmp_files.html">ccmp_files</a></span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">earliest</span> <span class="op">&lt;-</span> <span class="fu">read_ccmp</span><span class="op">(</span><span class="va">ccfiles</span><span class="op">$</span><span class="va">date</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">16</span><span class="op">]</span>, xylim <span class="op">=</span> <span class="va">e</span>, magonly <span class="op">=</span> <span class="cn">TRUE</span>, inputfiles <span class="op">=</span> <span class="va">ccfiles</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in read_ccmp(ccfiles$date[1:16], xylim = e, magonly = TRUE, inputfiles = ccfiles):</span> object 'ccfiles' not found</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">earliest</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></span><span class="op">(</span><span class="fl">64</span><span class="op">)</span>, zlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'plot': object 'earliest' not found</span>
+<span class="r-plt img"><img src="read_ccmp-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </div>

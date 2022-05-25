@@ -1,5 +1,7 @@
 # raadtools dev
 
+* New function `read_ccmp()` and `ccmp_files()` for RSS Cross-Calibrated Multi-Platform Ocean Surface Wind Project. 
+
 * Function `topofile()` now returns VRT-augmented text for some sources where missing metadata needs to be added,
  not always just a file path.
  

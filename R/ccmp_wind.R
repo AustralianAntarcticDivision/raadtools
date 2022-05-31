@@ -12,6 +12,7 @@ ccmp_files <- function(time.resolution = "6hourly", ...) {
   ## there are 6hourly for every time step
   files <- dplyr::slice(files, rep(seq_len(nrow(files)), each = 4L))
   files[["date"]] <- files[["date"]] + rep(c(0, 6, 12, 15), length.out = nrow(files)) * 3600
+  files[["band"]] <- rep(1:4, length.out = nrow(files))
   files
 }
 
@@ -90,36 +91,36 @@ read_ccmp <- function (date, time.resolution = c("6hourly"),
     files <- inputfiles
   }
 
-  read_i_u <- function(file, xylim = NULL, lon180 = FALSE) {
-    x <- raster(file, varname = "uwnd")
+  read_i_u <- function(file, xylim = NULL, lon180 = FALSE, band = 1L) {
+    x <- raster(file, varname = "uwnd", band = band)
     if (lon180) x <- raadtools:::.rotate(x)
     if (!is.null(xylim)) x <- crop(x, xylim)
 
     x
   }
-  read_i_v <- function(file, xylim = NULL, lon180 = FALSE) {
-    x <- raster(file, varname = "vwnd")
+  read_i_v <- function(file, xylim = NULL, lon180 = FALSE, band = 1L) {
+    x <- raster(file, varname = "vwnd", band = band)
     if (lon180) x <- raadtools:::.rotate(x)
     if (!is.null(xylim)) x <- crop(x, xylim)
 
     x
   }
-  read_uv <- function(file, xylim = NULL, lon180 = FALSE) {
-    stack(read_i_u(file, xylim = xylim, lon180 = lon180),
-          read_i_v(file, xylim = xylim, lon180 = lon180))
+  read_uv <- function(file, xylim = NULL, lon180 = FALSE, band = 1L) {
+    stack(read_i_u(file, xylim = xylim, lon180 = lon180, band = band),
+          read_i_v(file, xylim = xylim, lon180 = lon180, band = band))
   }
-  read_i_dir <- function(file, xylim = NULL, lon180 = FALSE) {
-    x <- read_uv(file, xylim = xylim, lon180 = lon180)
+  read_i_dir <- function(file, xylim = NULL, lon180 = FALSE, band = 1L) {
+    x <- read_uv(file, xylim = xylim, lon180 = lon180, band = band)
     overlay(x[[1]], x[[2]], fun = function(x, y) (90 - atan2(y, x) * 180/pi) %% 360)
   }
   vlen <- function(x, y) sqrt(x * x + y * y)
-  read_i_mag <- function(file, xylim = NULL, lon180 = FALSE) {
-    x <- read_uv(file, xylim = xylim, lon180 = lon180)
+  read_i_mag <- function(file, xylim = NULL, lon180 = FALSE, band = 1L) {
+    x <- read_uv(file, xylim = xylim, lon180 = lon180, band = band)
     vlen(x[[1]], x[[2]])
   }
 
-  read_i_nobs <-  function(file, xylim = NULL, lon180 = FALSE) {
-    x <- raster(file, varname = "nobs")
+  read_i_nobs <-  function(file, xylim = NULL, lon180 = FALSE, band = 1L) {
+    x <- raster(file, varname = "nobs", band = band)
     if (lon180) x <- raadtools:::.rotate(x)
     if (!is.null(xylim)) x <- crop(x, xylim)
 
@@ -156,7 +157,8 @@ read_ccmp <- function (date, time.resolution = c("6hourly"),
 
   op <- options(warn = -1)
   on.exit(options(op))
-  r0 <- stack(lapply(files$fullname, thefun, xylim = xylim, lon180 = lon180), filename = filename)
+  r0 <- stack(lapply(split(files[c("fullname", "band")], 1:nrow(files)),
+                     function(.x) thefun(.x$fullname, xylim = xylim, lon180 = lon180, band = .x$band)), filename = filename)
   if (nlayers(r0) == nrow(files)) {
     r0 <- setZ(r0, files$date)
   } else {

@@ -54,10 +54,15 @@ setOldClass("trip")
     pb$tick(0) ## ---------------------------------------------
     ## TODO, will have to figure out how to do this
     args <- list(...)
-    if ("xylim" %in% names(args)) {
-      warning("xylim argument ignored (determined automatically from the input data)")
-      args$xylim <- NULL
-    }
+    # nousexylim <- FALSE
+    # if ("xylim" %in% names(args)) {
+    #   if (inherits(args$xylim, "SpatRaster") ||  inherits(args$xylim, "BasicRaster")) {
+    #    nousexylim <- TRUE 
+    #   } else {
+    #     warning("xylim argument ignored (determined automatically from the input data)")
+    #     args$xylim <- NULL
+    #   }
+    # }
     if ("inputfiles" %in% names(args)) {
       warning("inputfiles argument ignored")
       args$inputfiles <- NULL
@@ -80,18 +85,18 @@ setOldClass("trip")
     dummy <- x(inputfiles = files, ...)
     yp <- spTransform(y1, projection(dummy))
     pb$tick(0) ## ---------------------------------------------
-    xylim <- extent(yp)
-    ## expand out a bit for single-location queries
-    if (xmax(xylim) == xmin(xylim) | ymax(xylim) == ymin(xylim)) {
-      xylim <- xylim + res(dummy) * 3
-    }
-    
-    ## never crop
-    xylim <- NULL
-    
+    # xylim <- extent(yp)
+    # ## expand out a bit for single-location queries
+    # if (xmax(xylim) == xmin(xylim) | ymax(xylim) == ymin(xylim)) {
+    #   xylim <- xylim + res(dummy) * 3
+    # }
+    # 
+    # ## never crop
+    # xylim <- NULL
+    # 
     if (notime) {
       ## assume we want topo/bathy values
-      thisx1 <- x(xylim = xylim, ...)
+      thisx1 <- x(...)
       if (resize) thisx1 <- aggregate(thisx1, fact = fact, fun = 'mean')
       return(extract(thisx1, yp, ...))
     }
@@ -139,13 +144,13 @@ setOldClass("trip")
     if (ctstime) {
       ## we need to store start and end values
       resm <- cbind(result, result)
-      thisx1 <- x(date[1L], verbose = FALSE, inputfiles = files, xylim = xylim, ...)  ## inputfiles direct
+      thisx1 <- x(date[1L], verbose = FALSE, inputfiles = files,  ...)  ## inputfiles direct
       #print("first read")
       #print(thisx1)
       if(resize) thisx1 <- aggregate(thisx1, fact = fact, fun = "mean")
       for (i in seq_along(date)[-1]) {
         
-        thisx2 <- x(date[i], verbose = FALSE, inputfiles = files, xylim = xylim,  ...)
+        thisx2 <- x(date[i], verbose = FALSE, inputfiles = files,   ...)
         #print("reading later files")
         #print(thisx2)
         ## TODO check do we have to store the time-value BEFORE aggregating
@@ -174,7 +179,7 @@ setOldClass("trip")
 
       ## TODO, fix up the if/else here with an exception for the first/last for ctstime
       for (i in seq_along(date)) {
-        thisx <- x(date[i], verbose = FALSE, inputfiles = files, xylim = xylim,  ...)
+        thisx <- x(date[i], verbose = FALSE, inputfiles = files,  ...)
        
         if(resize) thisx <- aggregate(thisx, fact = fact, fun = "mean")
         asub <- windex == findex[i]

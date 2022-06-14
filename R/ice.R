@@ -1,3 +1,36 @@
+# The differences between the two projection pairs (EPSG 3411/3412 and EPSG
+# 3413/3976) are minimal - the diagonal distance across a WGS 84/NSIDC Sea Ice
+# Polar Stereographic 25 km grid cell differs about 1 m from the original NSIDC
+# Sea Ice Polar Stereographic grid cell. However, users should note that EPSG
+# codes 3411 and 3412 are deprecated, and NSIDC encourages all new products to
+# use EPSG codes 3413 and 3976.
+# 
+
+
+## note, we might use a date-controlled way to change the SRS to for the older ones (3411 and 3412)
+.north_nsidc_vrt <- '<VRTDataset rasterXSize="304" rasterYSize="448"> 
+  <VRTRasterBand dataType="Byte" band="1" subClass="VRTRawRasterBand"> 
+    <SourceFilename relativetoVRT="0">%s</SourceFilename> 
+      <ImageOffset>300</ImageOffset> 
+      <PixelOffset>1</PixelOffset> 
+      <LineOffset>304</LineOffset> 
+      </VRTRasterBand> 
+      <SRS dataAxisToSRSAxisMapping="1,2">EPSG:3413</SRS>
+      <GeoTransform> -3.8375000000000000e+06,  2.5000000000000000e+04,  0.0000000000000000e+00,  5.8375000000000000e+06,  0.0000000000000000e+00, -2.5000000000000000e+04</GeoTransform>
+      </VRTDataset>'
+
+
+.south_ndsic_vrt <- '<VRTDataset rasterXSize="316" rasterYSize="332"> 
+  <VRTRasterBand dataType="Byte" band="1" subClass="VRTRawRasterBand"> 
+    <SourceFilename relativetoVRT="0">%s</SourceFilename> 
+    <ImageOffset>300</ImageOffset> 
+    <PixelOffset>1</PixelOffset> 
+    <LineOffset>316</LineOffset> 
+  </VRTRasterBand> 
+  <SRS dataAxisToSRSAxisMapping="1,2">EPSG:3976</SRS>
+  <GeoTransform> -3.9500000000000000e+06,  2.5000000000000000e+04,  0.0000000000000000e+00,  4.3500000000000000e+06,  0.0000000000000000e+00, -2.5000000000000000e+04</GeoTransform>
+</VRTDataset>'
+
 #' Area of pixels in sea ice
 #'
 #' Read the NSIDC pixel-area files for either hemisphere. 
@@ -59,7 +92,7 @@ readice_area <- function(product = "nsidc", hemisphere = "south", ...) {
 #' @param date date or dates of data to read, see Details
 #' @param time.resolution time resoution data to read, daily or monthly
 #' @param product choice of sea ice product, see Details
-#' @param hemisphere north or south
+#' @param hemisphere north or south (or both, if 'both' xylim should be an actual raster or terra grid)
 #' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
 #' @param setNA mask zero and values greater than 100 as NA
 #' @param rescale rescale values from integer range?
@@ -68,11 +101,21 @@ readice_area <- function(product = "nsidc", hemisphere = "south", ...) {
 #' @param ... passed to brick, primarily for \code{filename}
 #' @param extension default for product "amsr" is "hdf" but can be "tif" , extension = "hdf"
 #' @param inputfiles input the files data base to speed up initialization
+#' @param resample warper resampling method used when 'xylim' is a full grid
 #' @details For NSIDC data a \code{\link[raster]{ratify}}ied raster is returned if \code{setNA} and 
 #' \code{rescale} are both set to \code{FALSE}.  Use \code{levels(x)} to return the data.frame of values 
 #' and levels (there's no straight-through rule, all numeric values are explicit along with special
 #' values like "Unused"). 
 #' The values used are documented here \url{http://nsidc.org/data/docs/daac/nsidc0051_gsfc_seaice.gd.html}
+#' 
+#' If 'both' is specified for hemisphere or if 'xylim' is a full raster grid,
+#' the warper is applied to VRT versions of the NSIDC files, which allows them to
+#' be combined in one reprojection step. In this case 'xylim' can be specified, to
+#' give a projected grid of any form. ' If not supplied (when hemisphere = 'both')
+#' then longlat raster at 0.25 degrees is assumed. ('xylim' can be specified as '
+#' a target grid and with only north or south hemisphere applied). When the warper
+#' is used, 'setNA' and 'resample' behave the same ' way, though exact results will
+#' be different depending on the value of 'resample'.
 #' @export
 #' @examples 
 #' library(raadtools)
@@ -85,33 +128,66 @@ readice_area <- function(product = "nsidc", hemisphere = "south", ...) {
 readice_daily <- function(date,
                     time.resolution = "daily",
                     product = "nsidc",
-                    hemisphere = c("south", "north"), 
+                    hemisphere = c("south", "north", "both"), 
                     xylim = NULL,
                     setNA = TRUE, rescale = TRUE, 
                     latest = TRUE,
-                    returnfiles = FALSE,  ..., inputfiles = NULL) {
+                    returnfiles = FALSE,  ..., inputfiles = NULL, resample = "bilinear") {
   
 #  time.resolution <- match.arg(time.resolution)
  product <- match.arg(product)
  hemisphere <- match.arg(hemisphere)
+ if (hemisphere == "both" && is.null(xylim)) {
+   message("for both hemispheres, 'xylim' may be specified - assuming global longlat at 0.25 degree")
+   xylim <- raster::raster()
+   raster::res(xylim) <- 0.25
+ }
  if (time.resolution != "daily") stop("readice for non-daily data is defunct, see 'readice_monthly()', 'readice_daily()' and similarly specific functions")
   time.resolution <- match.arg(time.resolution)
   if (!is.null(inputfiles)) {
     files <- inputfiles
   } else {
+    .get_both_hemisphere_files <- function() {
+      north = icefiles(hemisphere = "north")
+      south = icefiles(hemisphere = "south")
+      tibble::tibble(date = north$date, 
+                     vrt_dsn  = split(rbind(north$vrt_dsn, south$vrt_dsn), rep(seq(1, nrow(north)), each = 2L)))
+    }
     ## get file names and dates and full path
     files <- switch(hemisphere, 
-                    north = raadfiles::nsidc_north_daily_files(), 
-                    south = raadfiles::nsidc_south_daily_files())
+                    north = icefiles(hemisphere = "north"), 
+                    south = icefiles(hemisphere = "south"), 
+                    both = .get_both_hemisphere_files())
   }
   if (returnfiles) return(files)
-  # if (product == "amsr" & .Platform$OS.type == "windows") warning("sorry, AMSR2 files are HDF4 so this is unlikely to work on your machine")
   if (missing(date)) {
     if (latest) date <- max(files$date)  else date <- min(files$date)
   }
   date <- timedateFrom(date)
   files <- .processFiles(date, files, time.resolution)
- 
+  dimension <- NULL
+
+  if (inherits(xylim, "SpatRaster")) {
+   # dimension <- dim(xylim)[2:1]
+   # projection <- xylim@ptr$get_crs("wkt")
+   # ex <- xylim@ptr$extent@.xData$vector
+   xylim <- raster::raster(xylim)
+  }
+  if (inherits(xylim, "BasicRaster")) { 
+    dimension <- dim(xylim)[2:1]
+    projection <- comment(raster::crs(xylim))
+    ex <- c(raster::xmin(xylim), raster::xmax(xylim), raster::ymin(xylim), raster::ymax(xylim))
+    
+  }
+  if (!is.null(dimension)) {
+    
+    out <- lapply(files$vrt_dsn, function(.x)  
+      vapour::vapour_warp_raster_dbl(.x, extent = ex, dimension = dimension, projection = projection, resample = resample))    
+    rs <- if (rescale) 1/2.5 else 1
+   if (setNA) out <- lapply(out, function(.x) {.x[.x > 250] <- NA; raster::setValues(xylim[[1]],.x * rs)})
+
+    return(raster::brick(out))
+  }
   read_ice_internal(files, hemisphere, rescale, setNA, xylim, ...) 
 }
 #' @name readice
@@ -232,7 +308,10 @@ read_ice_internal <- function(files, hemisphere, rescale, setNA, xylim = NULL,  
 #' Load metadata and location of files of sea ice data products.
 #'
 #' This function loads the latest cache of stored files for
-#' ice products.
+#' ice products. 
+#' 
+#' The 'fullname' is the path to the raw NSIDC binary file, 'vrt_dsn' a VRT string
+#' describing the fullname as a GDAL DSN string. 
 #' @param time.resolution daily or monthly files?
 #' @param product choice of sea ice product, see \code{\link{readice}}
 #' @param hemisphere north or south
@@ -248,7 +327,6 @@ read_ice_internal <- function(files, hemisphere, rescale, setNA, xylim = NULL,  
 icefiles <- function(time.resolution = "daily", 
                      product = "nsidc", hemisphere =c("south", "north"), ...) {
   
-  datadir <- getOption("default.datadir")
   if (product != "nsidc") stop("readice no longer supports AMSR or SSM/I, see specfic read functions for those")
   if (time.resolution != "daily") stop("readice no longer supports monthly time resolution, see specific read function for monthly data")
   
@@ -257,6 +335,8 @@ icefiles <- function(time.resolution = "daily",
   files <- switch(hemisphere, 
                   north = raadfiles::nsidc_north_daily_files(), 
                   south = raadfiles::nsidc_south_daily_files())
+
+  files$vrt_dsn <- sprintf(switch(hemisphere, north = .north_nsidc_vrt, south = .south_ndsic_vrt), files$fullname)
   files
 
 }

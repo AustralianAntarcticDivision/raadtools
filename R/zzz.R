@@ -10,6 +10,10 @@
   read_rema_tiles <<- memoise::memoize(read_rema_tiles)
   
   options(raadtools.geoid_tile_vrt = NULL)
+  
+  options(raadtools.do_terra = FALSE)
+  options(raadtools.be_terra = FALSE)
+  
 }
 
 

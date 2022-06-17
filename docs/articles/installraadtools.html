@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,23 +33,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9022</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -73,7 +69,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/AustralianAntarcticDivision/raadtools/">
+  <a href="https://github.com/AustralianAntarcticDivision/raadtools/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,75 +84,75 @@
 
       
 
-      </header><script src="installraadtools_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>raadtools installation</h1>
-                        <h4 class="author">Michael Sumner</h4>
+                        <h4 data-toc-skip class="author">Michael Sumner</h4>
             
-            <h4 class="date">2021-08-31</h4>
+            <h4 data-toc-skip class="date">2022-05-25</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/AustralianAntarcticDivision/raadtools/blob/master/vignettes/installraadtools.Rmd"><code>vignettes/installraadtools.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/AustralianAntarcticDivision/raadtools/blob/HEAD/vignettes/installraadtools.Rmd" class="external-link"><code>vignettes/installraadtools.Rmd</code></a></small>
       <div class="hidden name"><code>installraadtools.Rmd</code></div>
 
     </div>
 
     
     
-<div id="installing-the-raadtools-package" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installing-the-raadtools-package" class="anchor"></a>Installing the raadtools package</h1>
+<div class="section level2">
+<h2 id="installing-the-raadtools-package">Installing the raadtools package<a class="anchor" aria-label="anchor" href="#installing-the-raadtools-package"></a>
+</h2>
 <p>NOTE: this is out of date, and currently in review. MDS 2016-09-10</p>
 <p>This document is currently relevant to working on Windows, much of the same stuff will work on Linux but no care has been taken to point out the differences here.</p>
-<div id="setup" class="section level2">
-<h2 class="hasAnchor">
-<a href="#setup" class="anchor"></a>Setup</h2>
+<div class="section level3">
+<h3 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
+</h3>
 <p>To install the <strong>raadtools</strong> package from within the AAD you should be able to run the following code from within R. A relatively recent version of R will be assumed, and definitely no earler than <strong>R 2.15.0</strong> can be expected to work.</p>
 <p>This is the basic full install and configuration, see below for each step in greater detail.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"maptools"</span>, <span class="st">"raster"</span>, <span class="st">"testthat"</span>, <span class="st">"ncdf"</span>, <span class="st">"rgdal"</span>, <span class="st">"rgeos"</span>, <span class="st">"knitr"</span><span class="op">)</span>,
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"maptools"</span>, <span class="st">"raster"</span>, <span class="st">"testthat"</span>, <span class="st">"ncdf"</span>, <span class="st">"rgdal"</span>, <span class="st">"rgeos"</span>, <span class="st">"knitr"</span><span class="op">)</span>,
                  dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"AustralianAntarcticDivision/raadtools"</span><span class="op">)</span></code></pre></div>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"AustralianAntarcticDivision/raadtools"</span><span class="op">)</span></code></pre></div>
 <p>Now to load the package, use the usual package loading code here. If there is a problem with determining the path to the data repository this will provide a message about that.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools">raadtools</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span></code></pre></div>
 <p>If a message reports that your data repository cannot be found, follow the instructions to set it and send this package author your details.</p>
 <p>The instructions go like this, by setting an option called <strong>default.datadir</strong>, note that this only sets this for the current R session and you will have to repeat it each time until a better solution is developed.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>default.datadir <span class="op">=</span> <span class="st">"/path/to/repository/of/data"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>default.datadir <span class="op">=</span> <span class="st">"/path/to/repository/of/data"</span><span class="op">)</span></code></pre></div>
 <p>(The tip of the path there “data” should include files such as “chl”, “wind”, “sst”, etc. i.e. it looks like data/chl, data/wind, data/sst which hold the individual families of the main data types).</p>
 </div>
-<div id="setup-details" class="section level2">
-<h2 class="hasAnchor">
-<a href="#setup-details" class="anchor"></a>Setup details</h2>
+<div class="section level3">
+<h3 id="setup-details">Setup details<a class="anchor" aria-label="anchor" href="#setup-details"></a>
+</h3>
 <p>The remaining text in this section repeats the installation steps above individually, this might be required for customized installations or development.</p>
 <p>If the following step fails you may not have your network settings setup appropriately, so first run <strong>setInternet2</strong> and then try to install <strong>raster</strong> again. (This option can be set for an R installation by choosing “Internet2” when R is installed, and this is what you should do. Otherwise, R is launced with “Rgui.exe” and this can be invoked with the option to setInternet2 by using <strong>Rgui.exe –internet2</strong> which can be set on a Windows shortcut under Properties).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">setInternet2</span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"raster"</span>, <span class="st">"maptools"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"raster"</span>, <span class="st">"maptools"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>The following packages are not essential to run <strong>raadtools</strong> but otherwise some features will not be available. To get the full functionality please do run the following installations as well.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"ncdf"</span>, <span class="st">"rgdal"</span>, <span class="st">"rgeos"</span>, <span class="st">"devtools"</span>, <span class="st">"testthat"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ncdf"</span>, <span class="st">"rgdal"</span>, <span class="st">"rgeos"</span>, <span class="st">"devtools"</span>, <span class="st">"testthat"</span><span class="op">)</span></code></pre></div>
 <p>Finally, install the latest version of the package.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"AustralianAntarcticDivision/raadtools"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"AustralianAntarcticDivision/raadtools"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="development-of-raadtools" class="section level2">
-<h2 class="hasAnchor">
-<a href="#development-of-raadtools" class="anchor"></a>Development of raadtools</h2>
+<div class="section level3">
+<h3 id="development-of-raadtools">Development of raadtools<a class="anchor" aria-label="anchor" href="#development-of-raadtools"></a>
+</h3>
 </div>
-<div id="process-of-committing-changes-to-the-git-source-of-raadtools" class="section level2">
-<h2 class="hasAnchor">
-<a href="#process-of-committing-changes-to-the-git-source-of-raadtools" class="anchor"></a>Process of committing changes to the Git source of raadtools</h2>
+<div class="section level3">
+<h3 id="process-of-committing-changes-to-the-git-source-of-raadtools">Process of committing changes to the Git source of raadtools<a class="anchor" aria-label="anchor" href="#process-of-committing-changes-to-the-git-source-of-raadtools"></a>
+</h3>
 <p>The raadtools package source is hosted on GithHub.</p>
-<p><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="uri">https://github.com/AustralianAntarcticDivision/raadtools</a></p>
-<div id="install-prerequisites-for-building-raadtools" class="section level3">
-<h3 class="hasAnchor">
-<a href="#install-prerequisites-for-building-raadtools" class="anchor"></a>Install prerequisites for building raadtools</h3>
+<p><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link uri">https://github.com/AustralianAntarcticDivision/raadtools</a></p>
+<div class="section level4">
+<h4 id="install-prerequisites-for-building-raadtools">Install prerequisites for building raadtools<a class="anchor" aria-label="anchor" href="#install-prerequisites-for-building-raadtools"></a>
+</h4>
 <ol style="list-style-type: decimal">
 <li>Install the most recent version of R, and set its location in your PATH.</li>
-<li>Install <a href="http://cran.r-project.org/bin/windows/Rtools/">RTools</a> relevant to the latest version of R, and elect that it sets its location in your PATH (the installer can do this).</li>
-<li>Install <a href="http://miktex.org/download">MikTeX</a> and ensure it is in your PATH (later versions do this on install).</li>
+<li>Install <a href="http://cran.r-project.org/bin/windows/Rtools/" class="external-link">RTools</a> relevant to the latest version of R, and elect that it sets its location in your PATH (the installer can do this).</li>
+<li>Install <a href="http://miktex.org/download" class="external-link">MikTeX</a> and ensure it is in your PATH (later versions do this on install).</li>
 <li>Install the full list of package dependencies listed above.</li>
 </ol>
 </div>
@@ -175,11 +171,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Michael D. Sumner.</p>
+  <p></p>
+<p>Developed by Michael D. Sumner.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -187,6 +185,8 @@
 
   
 
+
+  
 
   </body>
 </html>

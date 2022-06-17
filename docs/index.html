@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -32,23 +34,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9022</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -74,7 +70,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/AustralianAntarcticDivision/raadtools/">
+  <a href="https://github.com/AustralianAntarcticDivision/raadtools/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -92,55 +88,55 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="r-tools-for-synoptic-environmental-spatial-data" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#r-tools-for-synoptic-environmental-spatial-data" class="anchor"></a>R Tools for Synoptic Environmental Spatial Data</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="r-tools-for-synoptic-environmental-spatial-data">R Tools for Synoptic Environmental Spatial Data<a class="anchor" aria-label="anchor" href="#r-tools-for-synoptic-environmental-spatial-data"></a>
+</h1></div>
 <p>Tools for reading, plotting and manipulating spatial data used at the Australian Antarctic Division (AAD).</p>
 <p>A common example is to read an environmental layer as a function of date:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools">raadtools</a></span><span class="op">)</span>
-<span class="va">ice</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/readice.html">readice</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"2018-06-01"</span>, <span class="st">"2019-06-01"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">ice</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span>
+<span class="va">ice</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/readice.html">readice</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2018-06-01"</span>, <span class="st">"2019-06-01"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ice</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-eg-1-1.png"><!-- --></p>
-<p>The available data sources are accessed using <strong>read*()</strong> functions for a <a href="http://australianantarcticdivision.github.io/raadtools/reference/index.html">wide variety of data sources</a>.</p>
+<p>The available data sources are accessed using <strong>read*()</strong> functions for a <a href="http://australianantarcticdivision.github.io/raadtools/reference/index.html" class="external-link">wide variety of data sources</a>.</p>
 <p>There are data sets from oceanography, topography, meteorology, altimetry, sea ice, ocean colour, and many other data sources. These are mostly remote sensing but include re-analysis and model output products.</p>
-<p>The package uses the R <a href="https://CRAN.R-project.org/package=raster">raster package</a> and always provides data as a standard raster (RasterLayer, RasterBrick, or RasterStack). Each data set is invdividually handled by a function to ensure the spatial and temporal registration is correct.</p>
-<p>The contents of the data library itself is listed in the <a href="https://github.com/AustralianAntarcticDivision/blueant#data-source-summary">technical configuration</a>.</p>
-<p>If you would like a collection added please make a request via a <a href="https://github.com/AustralianAntarcticDivision/bowerbird/issues/new">Github issue</a> or contact one of the authors directly.</p>
+<p>The package uses the R <a href="https://CRAN.R-project.org/package=raster" class="external-link">raster package</a> and always provides data as a standard raster (RasterLayer, RasterBrick, or RasterStack). Each data set is invdividually handled by a function to ensure the spatial and temporal registration is correct.</p>
+<p>The contents of the data library itself is listed in the <a href="https://github.com/AustralianAntarcticDivision/blueant#data-source-summary" class="external-link">technical configuration</a>.</p>
+<p>If you would like a collection added please make a request via a <a href="https://github.com/AustralianAntarcticDivision/bowerbird/issues/new" class="external-link">Github issue</a> or contact one of the authors directly.</p>
 </div>
-<div id="using-raadtools" class="section level1">
-<h1 class="hasAnchor">
-<a href="#using-raadtools" class="anchor"></a>Using raadtools</h1>
+<div class="section level1">
+<h1 id="using-raadtools">Using raadtools<a class="anchor" aria-label="anchor" href="#using-raadtools"></a>
+</h1>
 <p>There are two main ways to use it.</p>
 <p>The typical use-cases for raadtools are</p>
 <ul>
 <li>read a time series gridded data set as a function of date, optionally with spatial subsetting</li>
 <li>match a data set of longitude, latitude, time to the corresponding value in a time series gridded data set</li>
 </ul>
-<p>Examples of these workflows are outlined in this <a href="https://ropensci.org/blog/2018/11/13/antarctic/">rOpenSci blog post</a>.</p>
+<p>Examples of these workflows are outlined in this <a href="https://ropensci.org/blog/2018/11/13/antarctic/" class="external-link">rOpenSci blog post</a>.</p>
 </div>
-<div id="access-to-raadtools" class="section level1">
-<h1 class="hasAnchor">
-<a href="#access-to-raadtools" class="anchor"></a>Access to raadtools</h1>
-<p>The repository of data used by raadtools is available via the <a href="https://dashboard.rc.nectar.org.au">Nectar research cloud</a> or for local use within the AAD.</p>
+<div class="section level1">
+<h1 id="access-to-raadtools">Access to raadtools<a class="anchor" aria-label="anchor" href="#access-to-raadtools"></a>
+</h1>
+<p>The repository of data used by raadtools is available via the <a href="https://dashboard.rc.nectar.org.au" class="external-link">Nectar research cloud</a> or for local use within the AAD.</p>
 <p>There are two main ways to access raadtools. (If neither of 1 or 2 work for you you, see your local raadtools expert.)</p>
-<div id="1-rstudio-raadtools-server" class="section level2">
-<h2 class="hasAnchor">
-<a href="#1-rstudio-raadtools-server" class="anchor"></a>1. RStudio raadtools server</h2>
+<div class="section level2">
+<h2 id="1-rstudio-raadtools-server">1. RStudio raadtools server<a class="anchor" aria-label="anchor" href="#1-rstudio-raadtools-server"></a>
+</h2>
 <p>If you have access to a “raadtools-RStudio-server” then you need only load the package to get started:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools">raadtools</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span></code></pre></div>
 </div>
-<div id="2-local-computer-within-the-aad-network" class="section level2">
-<h2 class="hasAnchor">
-<a href="#2-local-computer-within-the-aad-network" class="anchor"></a>2. Local computer, within the AAD network</h2>
+<div class="section level2">
+<h2 id="2-local-computer-within-the-aad-network">2. Local computer, within the AAD network<a class="anchor" aria-label="anchor" href="#2-local-computer-within-the-aad-network"></a>
+</h2>
 <p>If it’s not installed, trying installing with</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"AustralianAntarcticDivision/raadtools"</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools">raadtools</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"AustralianAntarcticDivision/raadtools"</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span></code></pre></div>
 <p>Typically you will be provided with access, and won’t be aware of the underlying details, but the repository of data used by raadtools is available under RDSI/PUBLIC/raad and at the AAD in the scientific data collection.</p>
-<p>Anyone with a <a href="https://dashboard.rc.nectar.org.au">Nectar account</a> may run this by creating a VM from our <code>raadclient</code> image. Search the public images for <strong>raadclient</strong> (e.g. ’ raadclient06_20181016’ but choose the latest one) and ensure that the SSH and RStudio port (8787) is open. Use the default <em>rstudio/rstudio</em> account, or create your own.</p>
-<p>You are welcome to make your own copies of data from the collection for your own use, but please respect the citation and usage requests of the data providers <a href="https://github.com/AustralianAntarcticDivision/blueant#data-source-summary">listed in the summary</a>.</p>
+<p>Anyone with a <a href="https://dashboard.rc.nectar.org.au" class="external-link">Nectar account</a> may run this by creating a VM from our <code>raadclient</code> image. Search the public images for <strong>raadclient</strong> (e.g. ’ raadclient06_20181016’ but choose the latest one) and ensure that the SSH and RStudio port (8787) is open. Use the default <em>rstudio/rstudio</em> account, or create your own.</p>
+<p>You are welcome to make your own copies of data from the collection for your own use, but please respect the citation and usage requests of the data providers <a href="https://github.com/AustralianAntarcticDivision/blueant#data-source-summary" class="external-link">listed in the summary</a>.</p>
 <hr>
 <p>Please note that the ‘raadtools’ project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
@@ -150,44 +146,56 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/AustralianAntarcticDivision/raadtools/">https://​github.com/​AustralianAntarcticDivision/​raadtools/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/AustralianAntarcticDivision/raadtools/issues">https://​github.com/​AustralianAntarcticDivision/​raadtools/​issues</a>
-</li>
+<li><a href="https://github.com/AustralianAntarcticDivision/raadtools/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/AustralianAntarcticDivision/raadtools/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
-<div class="developers">
-<h2>Developers</h2>
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li>Michael D. Sumner <br><small class="roles"> Author, maintainer </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html#citation">Citing raadtools</a></li>
 </ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Michael D. Sumner <br><small class="roles"> Author, maintainer </small>  </li>
+<li><a href="authors.html">More about authors...</a></li>
+</ul>
+</div>
+
+
 
   </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Michael D. Sumner.</p>
+  <p></p>
+<p>Developed by Michael D. Sumner.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -195,6 +203,8 @@
 
   
 
+
+  
 
   </body>
 </html>

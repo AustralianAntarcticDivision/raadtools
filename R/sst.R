@@ -59,6 +59,7 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
                       latest = TRUE,
                       returnfiles = FALSE,  ..., inputfiles = NULL) {
   time.resolution <- match.arg(time.resolution)
+  
   varname <- match.arg(varname)
   ## if (time.resolution == "monthly") stop("sorry, no monthly SST at the moment")
   if (is.null(inputfiles)) {
@@ -70,7 +71,18 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
     return(files)
   if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
   
-  date <- timedateFrom(date)
+  if (.do_terra() && time.resolution == "daily") {
+    out <- .read_oisst_daily(date, xylim, subds = varname, lon180 = lon180)
+    if (!.be_terra()) out <-  raster::stack(out)
+    return(out)
+  }
+  
+  if (.do_terra() && time.resolution == "monthly") {
+    out <- .read_oisst_monthly(date, xylim, lon180 = lon180)
+    if (!.be_terra()) out <-  raster::stack(out)
+    return(out)
+  }
+  
   files <- .processFiles(date, files, time.resolution)
   nfiles <- nrow(files)
   ## progress

@@ -40,11 +40,14 @@ table_uvgos <- function(date, xylim = NULL, ..., xy = TRUE, cell = FALSE, na.rm 
   vstack <- read_vgos_daily(date = date, xylim = xylim, ...)
   if (!is.null(res)) {
    rs <- res(ustack)
-   if (res == rs[1L]) break; 
+   if (res == rs[1L]) {
+     
+   }  else {
     fact <- res/mean(rs)
     
     ustack <- raster::aggregate(ustack, fact = fact)
     vstack <- raster::aggregate(vstack, fact = fact)
+   }
   }
   uvalues <- as.vector(raster::values(ustack))
   mask <- TRUE

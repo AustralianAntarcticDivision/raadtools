@@ -15,7 +15,7 @@ readCHL_month <- function(date, xylim = NULL, ..., inputfiles = NULL, latest = T
   }
   date <- raadtools:::timedateFrom(date)
   files <- .processFiles(date, files, "monthly")
-  rl <- lapply(files$fullname[idx], raster::raster, varname = "chlor_a")
+  rl <- lapply(files$fullname, raster::raster, varname = "chlor_a")
   if (!is.null(xylim)) rl <- lapply(rl, raster::crop, raster::extent(xylim))
   raster::setZ(raster::brick(rl), date)
 }

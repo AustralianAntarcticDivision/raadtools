@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,23 +33,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9022</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -73,7 +69,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/AustralianAntarcticDivision/raadtools/">
+  <a href="https://github.com/AustralianAntarcticDivision/raadtools/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,20 +84,20 @@
 
       
 
-      </header><script src="raad-sea-ice_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Sea Ice Concentation Data in raadtools</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/AustralianAntarcticDivision/raadtools/blob/master/vignettes/raad-sea-ice.Rmd"><code>vignettes/raad-sea-ice.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/AustralianAntarcticDivision/raadtools/blob/HEAD/vignettes/raad-sea-ice.Rmd" class="external-link"><code>vignettes/raad-sea-ice.Rmd</code></a></small>
       <div class="hidden name"><code>raad-sea-ice.Rmd</code></div>
 
     </div>
 
     
     
-<p><a href="https://nsidc.org/cryosphere/seaice/data/terminology.html">Sea ice concentration</a> describes the relative amount of area covered by ice. In raadtools there are different resolutions available and each covers the entire ice-affected area of the Southern Ocean. Each product provides a <em>percentage</em> of sea ice concentration, a value from 0 to 100.</p>
+<p><a href="https://nsidc.org/cryosphere/seaice/data/terminology.html" class="external-link">Sea ice concentration</a> describes the relative amount of area covered by ice. In raadtools there are different resolutions available and each covers the entire ice-affected area of the Southern Ocean. Each product provides a <em>percentage</em> of sea ice concentration, a value from 0 to 100.</p>
 <p>The products are</p>
 <ul>
 <li>
@@ -130,125 +126,87 @@
 <tr class="even">
 <td>CERSAT</td>
 <td><code><a href="../reference/read_cersat_ice.html">read_cersat_ice()</a></code></td>
-<td><code><a href="https://rdrr.io/pkg/raadfiles/man/cersat_daily_files.html">raadfiles::cersat_daily_files()</a></code></td>
+<td><code><a href="https://rdrr.io/pkg/raadfiles/man/cersat_daily_files.html" class="external-link">raadfiles::cersat_daily_files()</a></code></td>
 </tr>
 <tr class="odd">
 <td>AMSR-E</td>
 <td><code><a href="../reference/read_amsre_ice.html">read_amsre_ice()</a></code></td>
-<td><code><a href="https://rdrr.io/pkg/raadfiles/man/amsr_daily_files.html">raadfiles::amsre_daily_files()</a></code></td>
+<td><code><a href="https://rdrr.io/pkg/raadfiles/man/amsr_daily_files.html" class="external-link">raadfiles::amsre_daily_files()</a></code></td>
 </tr>
 <tr class="even">
 <td>AMSR2</td>
 <td><code><a href="../reference/read_amsr2_ice.html">read_amsr2_ice()</a></code></td>
-<td><code><a href="https://rdrr.io/pkg/raadfiles/man/amsr_daily_files.html">raadfiles::amsr2_daily_files()</a></code></td>
+<td><code><a href="https://rdrr.io/pkg/raadfiles/man/amsr_daily_files.html" class="external-link">raadfiles::amsr2_daily_files()</a></code></td>
 </tr>
 <tr class="odd">
 <td>AMSR2 (3km)</td>
 <td><code><a href="../reference/read_amsr2_3k_ice.html">read_amsr2_3k_ice()</a></code></td>
-<td><code><a href="https://rdrr.io/pkg/raadfiles/man/amsr_daily_files.html">raadfiles::amsr2_3k_daily_files()</a></code></td>
+<td><code><a href="https://rdrr.io/pkg/raadfiles/man/amsr_daily_files.html" class="external-link">raadfiles::amsr2_3k_daily_files()</a></code></td>
 </tr>
 </tbody>
 </table>
-<p>The documentation for each function is available in R itself or on this site: <a href="http://australianantarcticdivision.github.io/raadtools/reference/index.html" class="uri">http://australianantarcticdivision.github.io/raadtools/reference/index.html</a></p>
+<p>The documentation for each function is available in R itself or on this site: <a href="http://australianantarcticdivision.github.io/raadtools/reference/index.html" class="external-link uri">http://australianantarcticdivision.github.io/raadtools/reference/index.html</a></p>
 <p>Most of the file-getter function are in the package raadfiles, this reflects the historical development of the raadtools package, early habits were established and then the raadfiles package was spun off to manage that part of the process.</p>
-<div id="take-care-with-date-queries" class="section level2">
-<h2 class="hasAnchor">
-<a href="#take-care-with-date-queries" class="anchor"></a>Take care with date queries</h2>
+<div class="section level2">
+<h2 id="take-care-with-date-queries">Take care with date queries<a class="anchor" aria-label="anchor" href="#take-care-with-date-queries"></a>
+</h2>
 <p>Not every day is available in every case. Each function when given a date (or date-time) value will find the nearest available data in time within a certain tolerance. This means that sometimes we would obtain the same layer for slightly different inputs (i.e. 2 consecutive days may not be differentiated). This is a convenience for casual usage. For more rigorous use we should obtain each set of files directly and use the available dates explicitly.</p>
 </div>
-<div id="the-northern-hemisphere" class="section level2">
-<h2 class="hasAnchor">
-<a href="#the-northern-hemisphere" class="anchor"></a>The northern hemisphere</h2>
+<div class="section level2">
+<h2 id="the-northern-hemisphere">The northern hemisphere<a class="anchor" aria-label="anchor" href="#the-northern-hemisphere"></a>
+</h2>
 <p>One function <code><a href="../reference/readice.html">readice()</a></code> has a special argument <code>hemisphere = "south"</code>, which clearly defaults to the Antarctic. This argument is shared with the paired <code><a href="../reference/icefiles.html">icefiles()</a></code> function, so we can explicitly visit the files in use more directly as well. The matching northern hemisphere data is only available for NSIDC 25km, and each day that exists does have an exact counterpart.</p>
 </div>
-<div id="take-care-with-data-interpretation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#take-care-with-data-interpretation" class="anchor"></a>Take care with data interpretation</h2>
+<div class="section level2">
+<h2 id="take-care-with-data-interpretation">Take care with data interpretation<a class="anchor" aria-label="anchor" href="#take-care-with-data-interpretation"></a>
+</h2>
 <p>In raadtools each product can be quite different in terms of the exact meaning and usage of the data provided, generally we leave these as-is so care must be taken not to assume things in common (necessarily). For example, in some cases a special <em>missing</em> value is provided, separate from zero - but generally this is product-specific and data may not be masked completely in terms of land vs. sea (or ice shelf).</p>
 <p>The best way to explore a data set is to read some, plot it, map it against your own data, find others who have used it. The raadtools authors aren’t necessarily experts with every data set but will be happy to help explore the data for different purposes.</p>
 </div>
-<div id="regridding-mapping-aggregation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#regridding-mapping-aggregation" class="anchor"></a>Regridding, mapping, aggregation</h2>
+<div class="section level2">
+<h2 id="regridding-mapping-aggregation">Regridding, mapping, aggregation<a class="anchor" aria-label="anchor" href="#regridding-mapping-aggregation"></a>
+</h2>
 <p>These can be regridded or aggregated temporarily in any way that’s required using spatial tools in R.</p>
 </div>
-<div id="example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
 <p>What follows is a quick example of sea ice concentration around Mawson station comparing these products on 2021-03-24, generated with a few lines of R code.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools">raadtools</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: raster</span>
 <span class="co">#&gt; Loading required package: sp</span>
 <span class="co">#&gt; global option 'raadfiles.data.roots' set:</span>
-<span class="co">#&gt; '/rdsi/PRIVATE/raad/data               2021-06-10 11:27:17</span>
-<span class="co">#&gt;  /rdsi/PRIVATE/raad/data_local         2021-06-10 11:33:25</span>
-<span class="co">#&gt;  /rdsi/PRIVATE/raad/data_staging       2021-06-10 11:33:28</span>
-<span class="co">#&gt;  /rdsi/PRIVATE/raad/data_deprecated    2021-06-10 11:34:11</span>
-<span class="co">#&gt;  /rdsi/PUBLIC/raad/data                2021-06-10 11:13:58'</span>
-<span class="co">#&gt; Uploading raad file cache as at 2021-08-31 07:32:37 (1099821 files listed)</span>
+<span class="co">#&gt; '/rdsi/PRIVATE/raad/data               </span>
+<span class="co">#&gt;  /rdsi/PRIVATE/raad/data_local         </span>
+<span class="co">#&gt;  /rdsi/PRIVATE/raad/data_staging       </span>
+<span class="co">#&gt;  /rdsi/PRIVATE/raad/data_deprecated    </span>
+<span class="co">#&gt;  /rdsi/PUBLIC/raad/data                '</span>
+<span class="co">#&gt; Uploading raad file cache as at 2022-05-25 23:06:45 (1147016 files listed)</span>
 <span class="va">ice</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readice.html">readice</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj</span>
-<span class="co">#&gt; = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere</span>
-<span class="co">#&gt; +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m</span>
-<span class="co">#&gt; +no_defs +type=crs</span>
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =</span>
-<span class="co">#&gt; prefer_proj): Discarded datum unknown in Proj4 definition</span>
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj</span>
-<span class="co">#&gt; = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere</span>
-<span class="co">#&gt; +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m</span>
-<span class="co">#&gt; +no_defs +type=crs</span>
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =</span>
-<span class="co">#&gt; prefer_proj): Discarded datum unknown in Proj4 definition</span>
 
-<span class="va">pt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fl">61</span> <span class="op">+</span> <span class="fl">25.7</span><span class="op">/</span><span class="fl">60</span>, <span class="op">-</span><span class="op">(</span><span class="fl">66</span><span class="op">+</span><span class="fl">1.4</span><span class="op">/</span><span class="fl">60</span><span class="op">)</span><span class="op">)</span>
-<span class="va">xy</span> <span class="op">&lt;-</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/project.html">project</a></span><span class="op">(</span><span class="va">pt</span>, <span class="fu">projection</span><span class="op">(</span><span class="va">ice</span><span class="op">)</span><span class="op">)</span>
+<span class="va">pt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fl">61</span> <span class="op">+</span> <span class="fl">25.7</span><span class="op">/</span><span class="fl">60</span>, <span class="op">-</span><span class="op">(</span><span class="fl">66</span><span class="op">+</span><span class="fl">1.4</span><span class="op">/</span><span class="fl">60</span><span class="op">)</span><span class="op">)</span>
+<span class="va">xy</span> <span class="op">&lt;-</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/project.html" class="external-link">project</a></span><span class="op">(</span><span class="va">pt</span>, <span class="fu"><a href="https://rdrr.io/pkg/raster/man/projection.html" class="external-link">projection</a></span><span class="op">(</span><span class="va">ice</span><span class="op">)</span><span class="op">)</span>
 <span class="va">buf</span> <span class="op">&lt;-</span> <span class="fl">640000</span>
-<span class="va">ex</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html">extent</a></span><span class="op">(</span><span class="va">xy</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">1</span> <span class="op">*</span> <span class="va">buf</span> <span class="op">*</span> <span class="fl">1.852</span>,
-<span class="va">xy</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">1</span> <span class="op">*</span> <span class="va">buf</span> <span class="op">*</span> <span class="fl">1.852</span><span class="op">)</span>
+<span class="va">ex</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="va">xy</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">1</span> <span class="op">*</span> <span class="va">buf</span> <span class="op">*</span> <span class="fl">1.852</span>,
+<span class="va">xy</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">1</span> <span class="op">*</span> <span class="va">buf</span> <span class="op">*</span> <span class="fl">1.852</span><span class="op">)</span>
 <span class="va">x</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>
 <span class="va">date</span> <span class="op">&lt;-</span> <span class="st">"2021-03-24"</span>
 <span class="co">#ex &lt;- NULL</span>
 <span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_amsr2_3k_ice.html">read_amsr2_3k_ice</a></span><span class="op">(</span><span class="va">date</span>, xylim <span class="op">=</span>  <span class="va">ex</span><span class="op">)</span>
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj</span>
-<span class="co">#&gt; = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere</span>
-<span class="co">#&gt; +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m</span>
-<span class="co">#&gt; +no_defs +type=crs</span>
-
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =</span>
-<span class="co">#&gt; prefer_proj): Discarded datum unknown in Proj4 definition</span>
 <span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_amsr2_ice.html">read_amsr2_ice</a></span><span class="op">(</span><span class="va">date</span>, xylim <span class="op">=</span>  <span class="va">ex</span><span class="op">)</span>
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj</span>
-<span class="co">#&gt; = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere</span>
-<span class="co">#&gt; +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m</span>
-<span class="co">#&gt; +no_defs +type=crs</span>
-
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =</span>
-<span class="co">#&gt; prefer_proj): Discarded datum unknown in Proj4 definition</span>
-<span class="va">x3</span> <span class="op">&lt;-</span> <span class="fu">crop</span><span class="op">(</span><span class="fu"><a href="../reference/read_cersat_ice.html">read_cersat_ice</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span>, <span class="va">ex</span><span class="op">)</span>
+<span class="co">#&gt; Raad file cache is up to date as at 2022-05-25 23:06:45 (1147016 files listed)</span>
+<span class="va">x3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/crop.html" class="external-link">crop</a></span><span class="op">(</span><span class="fu"><a href="../reference/read_cersat_ice.html">read_cersat_ice</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span>, <span class="va">ex</span><span class="op">)</span>
 <span class="va">x4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readice.html">readice</a></span><span class="op">(</span><span class="va">date</span>, xylim <span class="op">=</span>  <span class="va">ex</span><span class="op">)</span>
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj</span>
-<span class="co">#&gt; = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere</span>
-<span class="co">#&gt; +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m</span>
-<span class="co">#&gt; +no_defs +type=crs</span>
 
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =</span>
-<span class="co">#&gt; prefer_proj): Discarded datum unknown in Proj4 definition</span>
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj</span>
-<span class="co">#&gt; = prefer_proj): Discarded ellps unknown in Proj4 definition: +proj=stere</span>
-<span class="co">#&gt; +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m</span>
-<span class="co">#&gt; +no_defs +type=crs</span>
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =</span>
-<span class="co">#&gt; prefer_proj): Discarded datum unknown in Proj4 definition</span>
+<span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2413821</span>, <span class="fl">1419113</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/raster/man/image.html" class="external-link">image</a></span><span class="op">(</span><span class="va">x1</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.colors.html" class="external-link">grey.colors</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, axes <span class="op">=</span> <span class="cn">F</span>, xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">""</span>, asp <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/pkg/raster/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">l</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">l</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, lab <span class="op">=</span> <span class="st">"AMSR2 (3km)"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/raster/man/image.html" class="external-link">image</a></span><span class="op">(</span><span class="va">x2</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.colors.html" class="external-link">grey.colors</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, axes <span class="op">=</span> <span class="cn">F</span>, xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">""</span>, asp <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/pkg/raster/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">l</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">l</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, lab <span class="op">=</span> <span class="st">"AMSR2 (6km)"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/raster/man/image.html" class="external-link">image</a></span><span class="op">(</span><span class="va">x3</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.colors.html" class="external-link">grey.colors</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, axes <span class="op">=</span> <span class="cn">F</span>, xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">""</span>, asp <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/pkg/raster/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">l</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">l</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, lab <span class="op">=</span> <span class="st">"CERSAT (12km)"</span><span class="op">)</span>
 
-<span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2413821</span>, <span class="fl">1419113</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/image.html">image</a></span><span class="op">(</span><span class="va">x1</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.colors.html">grey.colors</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, axes <span class="op">=</span> <span class="cn">F</span>, xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">""</span>, asp <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/graphics/text.html">text</a></span><span class="op">(</span><span class="va">l</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">l</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, lab <span class="op">=</span> <span class="st">"AMSR2 (3km)"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/image.html">image</a></span><span class="op">(</span><span class="va">x2</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.colors.html">grey.colors</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, axes <span class="op">=</span> <span class="cn">F</span>, xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">""</span>, asp <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/graphics/text.html">text</a></span><span class="op">(</span><span class="va">l</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">l</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, lab <span class="op">=</span> <span class="st">"AMSR2 (6km)"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/image.html">image</a></span><span class="op">(</span><span class="va">x3</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.colors.html">grey.colors</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, axes <span class="op">=</span> <span class="cn">F</span>, xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">""</span>, asp <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/graphics/text.html">text</a></span><span class="op">(</span><span class="va">l</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">l</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, lab <span class="op">=</span> <span class="st">"CERSAT (12km)"</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/graphics/image.html">image</a></span><span class="op">(</span><span class="va">x4</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.colors.html">grey.colors</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, axes <span class="op">=</span> <span class="cn">F</span>, xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">""</span>, asp <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/graphics/text.html">text</a></span><span class="op">(</span><span class="va">l</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">l</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, lab <span class="op">=</span> <span class="st">"NSIDC (25km)"</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/pkg/raster/man/image.html" class="external-link">image</a></span><span class="op">(</span><span class="va">x4</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.colors.html" class="external-link">grey.colors</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, axes <span class="op">=</span> <span class="cn">F</span>, xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">""</span>, asp <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/pkg/raster/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">l</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">l</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, lab <span class="op">=</span> <span class="st">"NSIDC (25km)"</span><span class="op">)</span></code></pre></div>
 <p><img src="raad-sea-ice_files/figure-html/mawson-example-compare-1.png" width="700"></p>
 </div>
   </div>
@@ -264,11 +222,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Michael D. Sumner.</p>
+  <p></p>
+<p>Developed by Michael D. Sumner.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -276,6 +236,8 @@
 
   
 
+
+  
 
   </body>
 </html>

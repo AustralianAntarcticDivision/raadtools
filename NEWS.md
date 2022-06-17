@@ -1,5 +1,26 @@
 # raadtools dev
 
+* New function `read_ccmp()` and `ccmp_files()` for RSS Cross-Calibrated Multi-Platform Ocean Surface Wind Project. 
+
+* Function `topofile()` now returns VRT-augmented text for some sources where missing metadata needs to be added,
+ not always just a file path.
+ 
+* Function `readtopo()` and `readbathy()` now accept `terra::ext` or
+`raster::extent` or just numeric objects for 'xylim'. Alternatively these can be
+a terra `SpatRaster` or a raster `BasicRaster` (RasterLayer, RasterBrick, or
+RasterStack) as a template target raster for crop and resize, or reprojection to
+new raster grid.  The 'resample' argument controls the kind of sampling when
+regridded or warped. (i.e. if xylim is extent, you get crop(), if it's a grid,
+you get it remodelled to the grid. extent doesn't need crs, grid does).
+
+
+* Now using imports from terra and vapour, primarlily for `topofile()` and `readtopo()` for now. 
+
+* `readtopo()` and `topofile()` source "ga_srtm" is no longer available (better done with NASADEM_be and gdal warp anyhow).  Also
+ "george_v_terre_adelie" and "srtm" no longer available. 
+
+* Fixed documentation for units in surface currents, thanks Ryan Reisinger. #117
+
 * New function `query_grid()` to build a query data frame for `extract(function, ...)` workflows. 
 
 * New function `readCHL_month()` to read NASA's monthly CHL files. 

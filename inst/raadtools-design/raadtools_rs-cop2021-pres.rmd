@@ -1,0 +1,80 @@
+---
+title: "R tools for remote sensing, environmental data"
+author: "Michael Sumner, Australian Antarctic Division"
+date: "2/10/2022"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## R toolkit at the Antarctic Division
+
+- general read functions for oceanographic remote sensing
+- extraction of time series cubes, aggregating in time and polygons
+- extraction of time series for marine animal tracking, voyage tracks
+
+## Components, data library
+
+- configure and auto-download data sets **bowerbird**
+- file indexing, whole-collection file set at fingertips 
+- user tools for extraction, exploring, processing **raadtools**
+
+Key is automating data library for multiple users. Adding tools and workflows to this is relatively easy. 
+
+## File collection and example tools
+
+- index of files for an entire collection (e.g. southern hemisphere sea ice concentration)
+- file-set provides basis for read function
+
+
+## configuring auto-download
+
+- configuration in JSON
+- download primarily done with WGET
+- some post-processsing (unzip, augment meta, various)
+- glued together with R tools
+
+All generic, low-maintenance, low dependencies. 
+
+Tools provided by research cloud RStudio - user in a browser. Our data library is networked to each server. 
+
+
+## overall
+
+- reducing repetitive work required to find, download, wrangle, time-varying spatial data sets.
+
+- curate commonly used products, add to the daily downloader, write a toolkit function
+
+Everyone using our approach can leverage these efforts.
+
+
+## augment existing geo-tools
+
+We use standard geo-tools, geospatial readers, and spatial analysis packages in R. 
+
+As required we write our own wrappers to libraries such as GDAL and NetCDF
+
+All users contribute feedback and can contribute directly to the software and documentation. 
+
+Interest in exploring the reach of our approach, ready-to-use with some straightforward network and cloud computing arrangements. 
+
+## R tools
+
+
+BLOG POST (for much more detail): 
+
+https://ropensci.org/blog/2018/11/13/antarctic/
+
+.
+
+michael.sumner@awe.gov.au
+
+mdsumner@gmail.com
+
+github.com/mdsumner
+
+twitter.com/mdsumner
+
+

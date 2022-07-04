@@ -256,10 +256,8 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
                       gebco_14 = raadfiles::gebco14_files()$fullname,
                       gebco_19 = raadfiles::gebco19_files()$fullname,
                       gebco_21 = raadfiles::gebco21_files()$fullname,
-                      ibcso_is = dplyr::filter(raadfiles::ibcso_files(all = TRUE),
-                                               grepl("_is.*tif$", basename(.data$fullname)))$fullname,
-                      ibcso_bed = dplyr::filter(raadfiles::ibcso_files(all = TRUE),
-                                                grepl("_bed.*grd$", basename(.data$fullname)))$fullname,
+                      ibcso_is = dplyr::filter(raadfiles::ibcso_files(all = FALSE))$fullname,
+                      ibcso_bed = dplyr::filter(raadfiles::ibcso_bed_files(all = FALSE))$fullname,
                       etopo1 = raadfiles::etopo1_files()$fullname,
                       etopo2 = raadfiles::etopo2_files()$fullname,
                       kerguelen = raadfiles::kerguelen_files()$fullname,
@@ -279,11 +277,12 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
     topopath <- vapour::vapour_vrt(topopath, extent = c(-92.20042, -83.99958, 45.99958, 49.50042), projection = "OGC:CRS84")
 
   }
-  if (topo == "ibcso_bed") {
-    topopath <- vapour::vapour_vrt(topopath, extent = c(  -3333500, 3334000, -3337000, 3333500),
-                                   projection = "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs ")
-
-  }
+  ## no longer needed we're using the tif from v2
+  # if (topo == "ibcso_bed") {
+  #   topopath <- vapour::vapour_vrt(topopath, extent = c(  -3333500, 3334000, -3337000, 3333500),
+  #                                  projection = "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs ")
+  # 
+  # }
   if (topo %in% c("gebco_08", "etopo1", "etopo2")) {
     topopath <- vapour::vapour_vrt(topopath, extent = c(-180, 180, -90, 90), projection = "OGC:CRS84")
   }

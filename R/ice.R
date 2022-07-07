@@ -121,7 +121,24 @@ readice_area <- function(product = "nsidc", hemisphere = "south", ...) {
 #' library(raadtools)
 #'  
 #' ice <- readice(latest = TRUE)
-#' @return \code{\link[raster]{raster}} object
+#' 
+#' ## can read one or other hemisphere in native projection
+#' readice(hemisphere = "south")
+#' readice(hemisphere = "north")
+#' ## or we can read both, and get longlat by default
+#' readice(hemisphere = "both")
+#' ## or set our own grid and read to that
+#' ## spex::buffer_extent(extent(c(-.5, .5, -1, 1)* rad * pi), 25000)
+#' tm_ex <- c(-.5, .5, -1, 1) * 20025000 
+#' tm_template <- raster(extent(tm_ex), res = 25000, crs = "+proj=tmerc")
+#' readice(hemisphere = "both", xylim = tm_template)
+#' 
+#' ## this means we can run extract on global ice, and get 0 in the middle
+#' ## extract(readice, data.frame(176, c(-72, 84), as.Date("2020-04-03") + c(0, 100)))
+#' ## [1]  80 NA
+#' ## extract(readice, data.frame(176, c(-72, 84), as.Date("2020-04-03") + c(0, 100)), hemisphere = "both")
+#'  ## [1]  78.0 94.4  ## it's interpolated from the original data
+#' @return \code{\link[raster]{raster}} object 
 #' @seealso \code{\link{icefiles}} for details on the repository of
 #' data files, \code{\link[raster]{raster}} for the return value
 #' @name readice
@@ -137,8 +154,12 @@ readice_daily <- function(date,
 #  time.resolution <- match.arg(time.resolution)
  product <- match.arg(product)
  hemisphere <- match.arg(hemisphere)
+ opt <- getOption("raadtools.both.hemisphere.message")
  if (hemisphere == "both" && is.null(xylim)) {
-   message("for both hemispheres, 'xylim' may be specified - assuming global longlat at 0.25 degree")
+   if (is.null(opt) || !opt) {
+     options("raadtools.both.hemisphere.message" = TRUE)
+     message("for both hemispheres, 'xylim' may be specified - assuming global longlat at 0.25 degree")
+   }
    xylim <- raster::raster()
    raster::res(xylim) <- 0.25
  }

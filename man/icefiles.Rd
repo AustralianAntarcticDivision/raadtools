@@ -27,6 +27,10 @@ data.frame of \code{file} and \code{date}
 This function loads the latest cache of stored files for
 ice products.
 }
+\details{
+The 'fullname' is the path to the raw NSIDC binary file, 'vrt_dsn' a VRT string
+describing the fullname as a GDAL DSN string.
+}
 \examples{
 \dontrun{
 icf <- icefiles()

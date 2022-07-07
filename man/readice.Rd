@@ -10,28 +10,30 @@ readice_daily(
   date,
   time.resolution = "daily",
   product = "nsidc",
-  hemisphere = c("south", "north"),
+  hemisphere = c("south", "north", "both"),
   xylim = NULL,
   setNA = TRUE,
   rescale = TRUE,
   latest = TRUE,
   returnfiles = FALSE,
   ...,
-  inputfiles = NULL
+  inputfiles = NULL,
+  resample = "bilinear"
 )
 
 readice(
   date,
   time.resolution = "daily",
   product = "nsidc",
-  hemisphere = c("south", "north"),
+  hemisphere = c("south", "north", "both"),
   xylim = NULL,
   setNA = TRUE,
   rescale = TRUE,
   latest = TRUE,
   returnfiles = FALSE,
   ...,
-  inputfiles = NULL
+  inputfiles = NULL,
+  resample = "bilinear"
 )
 
 readice_monthly(
@@ -55,7 +57,7 @@ readice_monthly(
 
 \item{product}{choice of sea ice product, see Details}
 
-\item{hemisphere}{north or south}
+\item{hemisphere}{north or south (or both, if 'both' xylim should be an actual raster or terra grid)}
 
 \item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}}
 
@@ -70,6 +72,8 @@ readice_monthly(
 \item{...}{passed to brick, primarily for \code{filename}}
 
 \item{inputfiles}{input the files data base to speed up initialization}
+
+\item{resample}{warper resampling method used when 'xylim' is a full grid}
 
 \item{extension}{default for product "amsr" is "hdf" but can be "tif" , extension = "hdf"}
 }
@@ -97,11 +101,37 @@ For NSIDC data a \code{\link[raster]{ratify}}ied raster is returned if \code{set
 and levels (there's no straight-through rule, all numeric values are explicit along with special
 values like "Unused").
 The values used are documented here \url{http://nsidc.org/data/docs/daac/nsidc0051_gsfc_seaice.gd.html}
+
+If 'both' is specified for hemisphere or if 'xylim' is a full raster grid,
+the warper is applied to VRT versions of the NSIDC files, which allows them to
+be combined in one reprojection step. In this case 'xylim' can be specified, to
+give a projected grid of any form. ' If not supplied (when hemisphere = 'both')
+then longlat raster at 0.25 degrees is assumed. ('xylim' can be specified as '
+a target grid and with only north or south hemisphere applied). When the warper
+is used, 'setNA' and 'resample' behave the same ' way, though exact results will
+be different depending on the value of 'resample'.
 }
 \examples{
 library(raadtools)
  
 ice <- readice(latest = TRUE)
+
+## can read one or other hemisphere in native projection
+readice(hemisphere = "south")
+readice(hemisphere = "north")
+## or we can read both, and get longlat by default
+readice(hemisphere = "both")
+## or set our own grid and read to that
+## spex::buffer_extent(extent(c(-.5, .5, -1, 1)* rad * pi), 25000)
+tm_ex <- c(-.5, .5, -1, 1) * 20025000 
+tm_template <- raster(extent(tm_ex), res = 25000, crs = "+proj=tmerc")
+readice(hemisphere = "both", xylim = tm_template)
+
+## this means we can run extract on global ice, and get 0 in the middle
+## extract(readice, data.frame(176, c(-72, 84), as.Date("2020-04-03") + c(0, 100)))
+## [1]  80 NA
+## extract(readice, data.frame(176, c(-72, 84), as.Date("2020-04-03") + c(0, 100)), hemisphere = "both")
+ ## [1]  78.0 94.4  ## it's interpolated from the original data
 }
 \seealso{
 \code{\link{icefiles}} for details on the repository of

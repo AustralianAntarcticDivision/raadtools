@@ -13,7 +13,8 @@
   
   options(raadtools.do_terra = FALSE)
   options(raadtools.be_terra = FALSE)
-  
+  ## send this message once per session
+  options("raadtools.both.hemisphere.message" = FALSE)
 }
 
 

@@ -1,3 +1,10 @@
+
+nc_rawdata <- function(x, var) {
+  nc <- ncdf4::nc_open(x)
+  on.exit(ncdf4::nc_close(nc))
+  ncdf4::ncvar_get(nc, var)
+}
+
 xrange <- function(x) c(xmin(x), xmax(x))
 yrange <- function(x) c(ymin(x), ymax(x))
 

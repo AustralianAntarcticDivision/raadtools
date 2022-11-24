@@ -13,6 +13,8 @@
 #' @inheritParams readice
 #' @export
 read_amsre_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles = FALSE, inputfiles = NULL) {
+  opt <- options(warn = -1)
+  on.exit(options(opt), add = TRUE)
   files <- if (is.null(inputfiles)) raadfiles::amsre_daily_files() else inputfiles
   if (returnfiles) return(files)
   if (missing(date)) {
@@ -21,6 +23,7 @@ read_amsre_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles =
   files <- .processFiles(date, files, "daily")
   ext <- raster::extent(.antarctic_extent())
   
+
   out <- raster::brick(purrr::map(files$fullname, .readAMSRE))
   raster::projection(out) <- .antarctic_crs()
   
@@ -36,6 +39,8 @@ read_amsre_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles =
 #' @inheritParams readice
 #' @export
 read_amsr2_ice <- function(date, xylim = NULL, latest = TRUE, ..., setNA = TRUE, returnfiles = FALSE, inputfiles = NULL) {
+  opt <- options(warn = -1)
+  on.exit(options(opt), add = TRUE)
   files <- if (is.null(inputfiles)) raadfiles::amsr2_daily_files() else inputfiles
   if (returnfiles) return(files)
   if (missing(date)) {
@@ -60,6 +65,8 @@ read_amsr2_ice <- function(date, xylim = NULL, latest = TRUE, ..., setNA = TRUE,
 #' @export
 read_amsr2_3k_ice <- function(date, xylim = NULL, latest = TRUE, ...,  setNA = TRUE, returnfiles = FALSE, inputfiles = NULL) {
   files <- if (is.null(inputfiles)) raadfiles::amsr2_3k_daily_files() else inputfiles
+  opt <- options(warn = -1)
+  on.exit(options(opt), add = TRUE)
   if (returnfiles) return(files)
   if (missing(date)) {
     date <- if (latest) max(files$date) else min(files$date)
@@ -83,6 +90,8 @@ read_amsr2_3k_ice <- function(date, xylim = NULL, latest = TRUE, ...,  setNA = T
 #' @export
 read_cersat_ice <- function(date, xylim = NULL, latest = TRUE, setNA = TRUE, ..., returnfiles = FALSE, inputfiles = NULL) {
   files <- if (is.null(inputfiles)) raadfiles::cersat_daily_files() else inputfiles
+  opt <- options(warn = -1)
+  on.exit(options(opt), add = TRUE)
   if (returnfiles) return(files)
   if (missing(date)) {
     date <- if (latest) max(files$date) else min(files$date)
@@ -114,6 +123,8 @@ read_cersat_ice <- function(date, xylim = NULL, latest = TRUE, setNA = TRUE, ...
 #' @inheritParams readice
 #' @export
 read_amsr_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles = FALSE, inputfiles = NULL) {
+  opt <- options(warn = -1)
+  on.exit(options(opt), add = TRUE)
   files <- if (is.null(inputfiles)) raadfiles::amsr_daily_files() else inputfiles
   if (returnfiles) return(files)
   if (missing(date)) {
@@ -128,7 +139,8 @@ read_amsr_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles = 
 }
 # 
  .readAMSRE <- function(fname, ext = NULL) {
- 
+   opt <- options(warn = -1)
+   on.exit(options(opt), add = TRUE)
    x <- flip(raster(fname), direction = "y")
    raster::extent(x) <- raster::extent(.antarctic_extent())
    
@@ -141,7 +153,8 @@ read_amsr_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles = 
  }
  
  .readAMSR2 <- function(fname, ext = NULL, setNA = TRUE) {
-   
+   opt <- options(warn = -1)
+   on.exit(options(opt), add = TRUE)
     x <- raster::raster(fname)
     
    if (!is.null(ext)) {

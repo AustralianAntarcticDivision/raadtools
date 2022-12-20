@@ -47,12 +47,14 @@
 #' readice_area()
 #' readice_area(hemisphere = "north")
 readice_area <- function(product = "nsidc", hemisphere = "south", ...) {
-  f <- icefiles(product = product, hemisphere = hemisphere)
+  f <- dplyr::filter(raadfiles::get_raad_filenames(), stringr::str_detect(file, "polar-stereo")) |> 
+    dplyr::transmute(fullname = file.path(root, file))
   template <- readice(product = product, hemisphere = hemisphere)
   ## find dat file
-  fp <- file.path(dirname(dirname(dirname(dirname(dirname(dirname(f$fullname[1])))))), "seaice", "polar-stereo", "tools")
   south <- hemisphere == "south"
-  datfile <- file.path(fp, tail(list.files(fp, pattern = if(south) "pss25area" else "psn25area" ), 1L))
+  patt <- if(south) "pss25area" else "psn25area"
+  
+  datfile <- dplyr::filter(f, stringr::str_detect(fullname, patt)) |> dplyr::pull(fullname)
   # http://nsidc.org/data/polar-stereo/tools_geo_pixel.html#pixel_area
   
   # Grids that determine the area of a given pixel for the 25 km grids for

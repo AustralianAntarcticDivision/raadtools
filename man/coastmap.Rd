@@ -20,26 +20,15 @@ coastmap(
 SpatialPolygonsDataFrame or SpatialPolygons (world1/2)
 }
 \description{
-Coastline data set as SpatialPolygons*
+Coastline data set as SpatialPolygons, currently not supported.
 }
 \details{
 This function reads and returns a coastline polygon data set, either from the
 source or serialized cache (.Rdata). Data source locations are controlled by options.
 
-The following named data sets are available.
+The following named data sets were available.
 
-"world", "world2" - Atlantic and Pacific versions of \code{\link[maptools]{wrld_simpl}} ("world1", "world360" are aliases)
+"world", "world2" - Atlantic and Pacific versions of maptools wrld_simpl ("world1", "world360" are aliases)
 "ant_coast", "ant_coast01", "ant_coast10" - AAD Antartic coast in full, "1 mill", and "10 mill" resolution ("cst00_polygon", "cst01_polygon", and "cst10_polygon" are aliases)
 "Countries_hires" - the "CIA" world map exported from the Manifold GIS data set
-}
-\examples{
-## load the maptools::wrld_simpl data set in [0,360]
-\dontrun{
-w360 <- coastmap("world360")
-}
-
-## load the AAD coast layer in "1 mill" resolution
-\dontrun{
-cst01 <- coastmap("ant_coast10")
-}
 }

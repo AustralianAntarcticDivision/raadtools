@@ -55,7 +55,7 @@ distance_to_ice_edge0 <- function(date, threshold = 15,  xylim = NULL,
                                   hemisphere = "south", returnfiles = FALSE, inputfiles = NULL) {
   ice <- readice(date, hemisphere = hemisphere, inputfiles = inputfiles, setNA = FALSE, xylim = xylim)
   cl <- keepOnlyMostComplexLine(rasterToContour(ice, levels = threshold))
-  pp <- rgdal::project(coordinates(ice), projection(ice), inv = TRUE)
+  pp <- reproj::reproj_xy(coordinates(ice), "+proj=longlat", source = projection(ice))
   pcl <- coordinates(as(cl, "SpatialPointsDataFrame"))
   raster::setZ(raster::distanceFromPoints(ice, pcl), timedateFrom(date))
 }  
@@ -79,7 +79,7 @@ distance_to_ice <- function(date, threshold = 15, xylim = NULL,
   }
   ice <- readice(date, hemisphere = hemisphere, inputfiles = files, setNA = FALSE, xylim = xylim)
   cl <- rasterToContour(ice, levels = threshold)
-  pp <- rgdal::project(coordinates(ice), projection(ice), inv = TRUE)
+  pp <- reproj::reproj_xy(coordinates(ice), "+proj=longlat", source = projection(ice))
   pcl <- coordinates(as(cl, "SpatialPointsDataFrame"))
   raster::setZ(raster::distanceFromPoints(ice, pcl), timedateFrom( date))
 }

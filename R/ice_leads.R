@@ -71,7 +71,7 @@ read_leads_clim_north <- function(xylim = NULL) {
 #' south <- read_leads_clim_south()
 #' 
 #' ## hone in on Mawson
-#' pt <- rgdal::project(cbind(62 + 52/60, -(67 +  36/60)), projection(south))
+#' pt <- reproj::reproj_xy(cbind(62 + 52/60, -(67 +  36/60)), projection(south), source = "+proj=longlat")
 #' lead <- read_leads_clim_south(xylim = extent(pt[1] + c(-1, 1) * 250000, pt[2] + c(-1, 1) * 250000))
 #' plot(lead, col = grey.colors(100))
 #' abline(v = pt[1], h = pt[2])

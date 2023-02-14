@@ -52,8 +52,9 @@ readwrf0 <- function(x, band = 1) {
   grid <- detect_amps_grid_from_filename(x)
   gridspec <- amps_grid_spec(grid)
   #print(band)
-  dat <- suppressWarnings(rgdal::readGDAL(x, band = band, silent = TRUE))
-  dat <- setExtent(raster(dat), gridspec$ex)
+
+  dat <- suppressWarnings(raster::raster(terra::rast(x, lyr = band)))
+  dat <- setExtent(dat, gridspec$ex)
   projection(dat) <- gridspec$proj
   data("amps_metadata", package = "raadtools")
   setNames(dat, sprintf("%s_%s", amps_metadata$GRIB_ELEMENT[band], amps_metadata$GRIB_SHORT_NAME[band]))
@@ -261,7 +262,7 @@ readamps_d1wind <- function(date, time.resolution = "4hourly", xylim = NULL,
   ## we can't hardcode the bands since 202010 ...
   bands <- c(5, 27)
   ## so if total bands is > 254 we use this number
-  if (vapour::vapour_raster_info(files$fullname[ifile])$bands > 254) {
+  if (vapour::vapour_raster_info(files$fullname[1])$bands > 254) {
     bands <- c(33, 40)
   }
   for (ifile in seq_len(nfiles)) {

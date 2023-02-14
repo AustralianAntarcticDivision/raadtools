@@ -6,7 +6,7 @@
 \usage{
 readcurr(
   date,
-  time.resolution = c("daily", "weekly"),
+  time.resolution = c("daily"),
   xylim = NULL,
   lon180 = TRUE,
   magonly = FALSE,

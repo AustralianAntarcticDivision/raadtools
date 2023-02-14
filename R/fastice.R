@@ -84,22 +84,6 @@ readfastice_circum <- function(date, time.resolution = "weekly3",
     r <- flip(raster::raster(x, band = band), "y")
     prj <- "+proj=stere +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m +no_defs"
     ext <- raster::extent(-2691000,  2934000, -2390000,  2310000)
-    #lon <- flip(raster::raster(x, varname = "longitude"), "y")
-    #lat <- flip(raster::raster(x, varname = "latitude"), "y")
-    #idx <- c(1, ncol(lon), ncell(lon) - ncol(lon), ncell(lon))
-    #corner <- cbind(lon[idx], lat[idx])
-    #setExtent(r, spex::buffer_extent(extent(rgdal::project(corner, prj)), 1000))
-    # class      : RasterLayer 
-    # band       : 1  (of  20  bands)
-    # dimensions : 4700, 5625, 26437500  (nrow, ncol, ncell)
-    # resolution : 1000, 1000  (x, y)
-    # extent     : -2691000, 2934000, -2390000, 2310000  (xmin, xmax, ymin, ymax)
-    # crs        : NA 
-    # source     : /rdsi/PUBLIC/raad/data/public.services.aad.gov.au/datasets/science/AAS_4116_Fraser_fastice_circumantarctic/fastice_v2_2/FastIce_70_2000.nc 
-    # names      : Fast.Ice.Time.Series 
-    # z-value    : 2000-03-01 
-    # zvar       : Fast_Ice_Time_series 
-    # 
     projection(r) <- prj
     setExtent(r, ext)
   }

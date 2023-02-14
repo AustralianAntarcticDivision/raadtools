@@ -1,5 +1,10 @@
 # raadtools dev
 
+* Removed rgeos and maptools. 
+
+* Removed rgdal imports, replaced with raster and reproj. 
+
+
 *Function `readice()` has been expanded to allow 'hemisphere = "both"' and for 'xylim' to be a full raster grid (terra or raster format). If 'both' is specified the warper is applied to VRT versions of the NSIDC files, which allows them to be combined in one reprojection step. In this case 'xylim' can be specified, to give a projected grid of any form. If not supplied (when hemisphere = 'both') then longlat raster at 0.25 degrees is assumed. 
 
 * New function `read_ccmp()` and `ccmp_files()` for RSS Cross-Calibrated Multi-Platform Ocean Surface Wind Project. 

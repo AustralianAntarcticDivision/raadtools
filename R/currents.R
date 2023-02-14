@@ -10,6 +10,33 @@ copernicus_get_maxlon <- function(x) {
 }
 
 
+warp_wrapper <- function(dsn, gridinfo, resample = "near") {
+  vapour::vapour_warp_raster_dbl(dsn, extent = gridinfo$extent, 
+                             dimension = gridinfo$dimension, projection = gridinfo$projection, resample = resample)
+}
+read_i <- function(file, gridinfo) {
+  warp_wrapper(file, gridinfo, resample = "near") 
+}
+# read_i_v0 <- function(file, xylim = NULL, lon180 = FALSE) {
+#   warp_wrapper(file, gridinfo, resample = "near") 
+# }
+# read_uv0 <- function(file, xylim = NULL, lon180 = FALSE) {
+#   stack(read_i_u0(file, xylim = xylim, lon180 = lon180), 
+#         read_i_v0(file, xylim = xylim, lon180 = lon180))
+# }
+# read_i_dir0 <- function(file, xylim = NULL, lon180 = FALSE) {
+#   x <- read_uv0(file, xylim = xylim, lon180 = lon180)
+#   overlay(x[[1]], x[[2]], fun = function(x, y) (90 - atan2(y, x) * 180/pi) %% 360)
+# }
+vlen <- function(x, y) sqrt(x * x + y * y)
+# read_i_mag0 <- function(file, xylim = NULL, lon180 = FALSE) {
+#   x <- read_uv0(file, xylim = xylim, lon180 = lon180)
+#   vlen(x[[1]], x[[2]])
+# }
+
+
+
+
 readcurr_polar <- function(date, 
                             xylim = NULL, 
                             latest = TRUE,
@@ -47,33 +74,38 @@ readcurr_polar <- function(date,
 ##' @export
 ##' @importFrom raster filename 
 currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
-  datadir <- getOption("default.datadir")
-  ## ftp.aviso.altimetry.fr/global/delayed-time/grids/madt/all-sat-merged/uv/1993/dt_global_allsat_madt_uv_19930101_20140106.nc
-  ## ftp.aviso.altimetry.fr/global/delayed-time/grids/madt/all-sat-merged/uv/1993/dt_global_allsat_madt_uv_19930102_20140106.nc" 
-  
   time.resolution <- match.arg(time.resolution)
-  # if (time.resolution == "weekly") stop("weekly currents no longer supported")
-  # ftx <- .allfilelist(rda = TRUE, fullname = FALSE)
-  # cfiles0 <- grep("ftp.aviso.altimetry.fr", ftx, value = TRUE)
-  # cfiles1 <- grep("uv", cfiles0, value = TRUE)
-  # cfiles <- grep(".nc$", cfiles1, value = TRUE)
-  # if (length(cfiles) < 1) stop("no files found")
-  # 
-  # doffs <- 1
-  # datepart <- sapply(strsplit(basename(cfiles), "_"), function(x) x[length(x) - doffs])
-  # 
-  # dates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
-  # ## just the last one
-  # nas <- is.na(dates[length(dates)])
-  # if (nas) dates[length(dates)] <- max(dates, na.rm = TRUE) + 24 * 3600
-  # #cfs <- data.frame(file = gsub(paste(datadir, "/", sep = ""), "", cfiles), date = dates,
-  # #                  fullname = cfiles, stringsAsFactors = FALSE)[order(dates), ]
-  # cfs <- data.frame(file = cfiles, date = dates,
-  #                   fullname = file.path(datadir, cfiles), stringsAsFactors = FALSE)[order(dates), ]
-  # ## drop any duplicated, this occurs with the delayed/near-real time update
-  # cfs[!duplicated(cfs$date), ]  
+  if (time.resolution != "daily") warning("only daily available, no weekly - ignoring 'time.resolution'")
   raadfiles::altimetry_daily_files()
 }
+
+
+
+altimetry_daily_ugos_files <- function() {
+  files <- raadfiles::altimetry_daily_files()
+  files$vrt_dsn <- .vrt_dsn(files$fullname, sds = "ugos", bands = 1L)
+  files
+}
+altimetry_daily_vgos_files <- function() {
+  files <- raadfiles::altimetry_daily_files()
+  files$vrt_dsn <- .vrt_dsn(files$fullname, sds = "vgos", bands = 1L)
+  files
+}
+
+# read_altimetry_u <- function(x, extent, dimension) {
+#  vapour::vapour_warp_raster_dbl(x, 
+#                                      extent = vc$extent, dimension = vc$dimension)
+# }
+# read_altimetry_v <- function(x, extent, dimension) {
+#  files <- altimetry_daily_vgos_files() 
+#  i <- 1
+#  vrt <- files$vrt_dsn[i]
+#  vapour::vapour_warp_raster_dbl(vrt, 
+#                                 extent = vc$extent, dimension = vc$dimension)
+#  
+# }
+
+
 
 
 ##' Read AVISO ocean current data 
@@ -132,7 +164,7 @@ currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
 #' x2 <- crds[,1] + values(x[[1]]) * scale
 #' y2 <- crds[,2] + values(x[[1]]) * scale
 #' arrows(x1, y1, x2, y2, length = 0.03)
-readcurr <- function (date, time.resolution = c("daily", "weekly"),
+readcurr <- function (date, time.resolution = c("daily"),
                       xylim = NULL, lon180 = TRUE, 
                       magonly = FALSE,
                       dironly = FALSE,
@@ -140,49 +172,34 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
                       vonly = FALSE,
                       latest = TRUE,
                       returnfiles = FALSE, ..., inputfiles = NULL) {
+  
+  info <- list(extent = c(-180, 180, -90, 90), dimension = c(1440, 720), 
+               projection = "OGC:CRS84")
+  if (is.null(xylim)) {
+    grid <- info
+  } else {
+    grid <- .griddish(info, xylim)
+    gg <- vaster::vcrop(grid$extent, info$dimension, info$extent)
+    grid$dimension <- gg$dimension
+    grid$extent <- gg$extent
+  
+  }
   time.resolution <- match.arg(time.resolution)
   
   if (is.null(inputfiles)) {
-    files <- currentsfiles(time.resolution = time.resolution)
+    files <- dplyr::inner_join(dplyr::rename(altimetry_daily_ugos_files(), ugos_vrt = vrt_dsn), 
+    altimetry_daily_vgos_files() |> dplyr::transmute(date, vgos_vrt = vrt_dsn), "date")
   } else {
     files <- inputfiles
   }
   
-  read_i_u <- function(file, xylim = NULL, lon180 = FALSE) {
-    x <- raster(file, varname = "ugos")
-    if (copernicus_is_atlantic(file) && !lon180) x <- raadtools:::.rotate(x)
-    if (!copernicus_is_atlantic(file) && lon180) x <- raadtools:::.rotate(x)
-    if (!is.null(xylim)) x <- crop(x, xylim)
-    
-    x
-  }
-  read_i_v <- function(file, xylim = NULL, lon180 = FALSE) {
-    x <- raster(file, varname = "vgos")
-    if (copernicus_is_atlantic(file) && !lon180) x <- raadtools:::.rotate(x)
-    if (!copernicus_is_atlantic(file) && lon180) x <- raadtools:::.rotate(x)
-    if (!is.null(xylim)) x <- crop(x, xylim)
-    
-    x
-  }
-  read_uv <- function(file, xylim = NULL, lon180 = FALSE) {
-    stack(read_i_u(file, xylim = xylim, lon180 = lon180), 
-          read_i_v(file, xylim = xylim, lon180 = lon180))
-  }
-  read_i_dir <- function(file, xylim = NULL, lon180 = FALSE) {
-    x <- read_uv(file, xylim = xylim, lon180 = lon180)
-    overlay(x[[1]], x[[2]], fun = function(x, y) (90 - atan2(y, x) * 180/pi) %% 360)
-  }
-  vlen <- function(x, y) sqrt(x * x + y * y)
-  read_i_mag <- function(file, xylim = NULL, lon180 = FALSE) {
-    x <- read_uv(file, xylim = xylim, lon180 = lon180)
-    vlen(x[[1]], x[[2]])
-  }
   
-  thefun <- read_uv  
-  if (magonly) thefun <- read_i_mag
-  if (dironly) thefun <- read_i_dir
-  if (uonly ) thefun <- read_i_u
-  if (vonly) thefun <- read_i_v
+  thefun <- read_i
+ 
+  if (magonly) thefun <- read_i_mag0
+  if (dironly) thefun <- read_i_dir0
+  if (uonly ) thefun <- read_i_u0
+  if (vonly) thefun <- read_i_v0
   
   
 
@@ -203,6 +220,12 @@ readcurr <- function (date, time.resolution = c("daily", "weekly"),
   if ((magonly + dironly + uonly + vonly) > 1) stop("only one of 'magonly', 'dironly', 'uonly' or 'vonly' may be TRUE")
 
   
+  
+  print(files$date)
+  m <- vlen(read_i(files$ugos_vrt, grid), read_i(files$vgos_vrt, grid))
+  
+  #ximage::ximage(matrix(m, grid$dimension[2], byrow = TRUE))
+  return(NULL)
   dots <- list(...)
 
   

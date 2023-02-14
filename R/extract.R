@@ -73,17 +73,19 @@ setOldClass("trip")
     } else {
       files <- x(returnfiles = TRUE, ...)
     }
+  
     if (length(files) == 1L) {
       notime <- TRUE
     }
     pb$tick(0) ## ---------------------------------------------
     ## data.frame input has  assumed structure
     ## we assume y is lon,lat,time
-    y1 <- SpatialPoints(as.matrix(y[,1:2]), CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"))
+    ##y1 <- SpatialPoints(as.matrix(y[,1:2]), CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"))
+    y1 <- as.matrix(y[,1:2])
     pb$tick(0) ## ---------------------------------------------
     
     dummy <- x(inputfiles = files, ...)
-    yp <- spTransform(y1, projection(dummy))
+    yp <- reproj::reproj_xy(y1, projection(dummy), source = "+proj=longlat")
     pb$tick(0) ## ---------------------------------------------
     # xylim <- extent(yp)
     # ## expand out a bit for single-location queries
@@ -161,7 +163,8 @@ setOldClass("trip")
         asub <- windex == findex[i]
         
         ## interpolation in time, controlled in space by "method" for xy
-        if (any(asub)) {resm[asub, ] <- suppressWarnings(extract(stack(thisx1, thisx2), y[asub, ], ...))}
+       
+        if (any(asub)) {resm[asub, ] <- suppressWarnings(extract(stack(thisx1, thisx2), y[asub, , drop = FALSE], ...))}
         ## use date since agggregate smashes the Z
         result[asub] <- .interp(resm[asub,1], resm[asub,2], .calcProportion(date[i-1L], date[i], times[asub]))
         ## setup to do the next loop

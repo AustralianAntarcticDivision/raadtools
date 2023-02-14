@@ -4,7 +4,11 @@
 \alias{sstfiles}
 \title{OISST sea surface temperature files}
 \usage{
-sstfiles(time.resolution = c("daily", "monthly"), ...)
+sstfiles(
+  time.resolution = c("daily", "monthly"),
+  varname = c("sst", "ice", "err", "anom"),
+  ...
+)
 }
 \arguments{
 \item{time.resolution}{time resolution read}
@@ -18,5 +22,5 @@ data.frame of file names and dates
 Load file names and dates of OISST sea surface temperature data
 }
 \details{
-A data frame of file names and datres
+A data frame of file names and dates
 }

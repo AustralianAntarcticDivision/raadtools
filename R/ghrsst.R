@@ -8,13 +8,18 @@
 # 20151113090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc
 
 
+
+
 #' GHRSST L4 files
 #'
 #' Data frame of file names and dates. 
 #' @return data.frame
 #' @export
 ghrsstfiles <- function() {
-  raadfiles::ghrsst_daily_files()
+  files <- raadfiles::ghrsst_daily_files()
+  ## fix the extent, or nah? raadtools did originally
+  files$vrt_dsn <- .vrt_dsn(files$fullname, projection = "OGC:CRS84", sds = "analysed_sst")
+  files
 }
 
 #' Read GHRSST

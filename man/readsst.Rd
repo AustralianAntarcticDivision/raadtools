@@ -57,7 +57,6 @@ returned.
 see Details in raadtools
 }
 \examples{
-\dontrun{
 ## read one time slice and plot it up in preparation for reading a time series
 d <- readsst()
 plot(d)
@@ -68,7 +67,6 @@ ext <- drawExtent()
 ## now read a big chunk of data for this small region
 dts <- seq(as.Date("2001-01-03"), by = "1 week", length = 100)
 sst <- readsst(dts, xylim = ext)
-}
 
 }
 \seealso{

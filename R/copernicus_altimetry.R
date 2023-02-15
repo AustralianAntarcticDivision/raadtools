@@ -1,3 +1,22 @@
+altimetry_daily_varname_files <- function(varname) {
+  files <- raadfiles::altimetry_daily_files()
+  ## FIXME: we have to split via date, because .vrt_dsn() assumes extent is constant
+  filelist <- split(files, as.Date(files$date) >= as.Date("2020-06-04"))
+  
+  ## all of these now work correctly, MDSumner 2023-02-15
+#  plot(read_adt_daily("2020-06-03"))
+#  plot(read_adt_daily("2020-06-03", lon180 = T))
+#  plot(read_adt_daily("2020-06-04", lon180 = T))
+#  plot(read_adt_daily("2020-06-04", lon180 = F))
+  
+  for (i in seq_along(filelist)) {
+    filelist[[i]]$vrt_dsn <- .vrt_dsn(filelist[[i]]$fullname, sds = varname, bands = 1L)
+  }
+
+  dplyr::arrange(do.call(rbind, filelist), "date")
+}
+
+
 #' Altimetry products.
 #'
 #' Functions `read_sla_daily` and so on for "ugosa, adt, ugos, sla, vgos, vgosa, err".
@@ -66,7 +85,7 @@ read_err_daily <- function(date, xylim = NULL, latest = TRUE, returnfiles = FALS
 
 read_copernicus_daily <- function(date, xylim = NULL, latest = TRUE, returnfiles = FALSE, varname, lon180 = FALSE, ..., inputfiles = NULL) {
   if (is.null(inputfiles)){
-    files <- raadfiles::altimetry_daily_files()
+    files <- altimetry_daily_varname_files(varname)
   } else {
     files <- inputfiles
   }
@@ -80,7 +99,6 @@ read_copernicus_daily <- function(date, xylim = NULL, latest = TRUE, returnfiles
   }
   date <- timedateFrom(date)
   files <- .processFiles(date, files, "daily")
-  read0 <- function(x, varname) raster(x)
 
   nfiles <- nrow(files)
   ## progress
@@ -88,20 +106,14 @@ read_copernicus_daily <- function(date, xylim = NULL, latest = TRUE, returnfiles
     format = "  extracting [:bar] :percent in :elapsed",
     total = nfiles, clear = FALSE, width= 60)
   pb$tick(0)
-  read_fun <- function(xfile, ext, msk, rot, varname = "", band = 1) {
-    pb$tick()
-    ## override passed in rot
-    if (copernicus_is_atlantic(xfile) && !lon180) rot <- TRUE
-    if (!copernicus_is_atlantic(xfile) && lon180) rot <- TRUE
-    mask_if_needed(crop_if_needed(rotate_if_needed(raster(xfile, varname = varname, band = band), rot), ext), msk)
-  }
 
-  msk <- NULL
-  rot <- FALSE
-  files$band <- 1
   op <- options(warn = -1)
+  if (is.null(xylim)) {
+    xylim <- c(0, 360, -90, 90)
+    if (lon180) xylim <- c(-180, 180, -90, 90)
+  }
   r0 <- brick(stack(lapply(seq_len(nrow(files)), function(xi)
-    read_fun(files$fullname[xi], ext = xylim, msk = msk, rot = rot, varname = varname, band = files$band[xi]))), ...)
+    read_fun(files$vrt_dsn[xi], ext = xylim,  varname = varname, progress = pb))), ...)
   options(op)
   r0 <- setZ(r0, files$date)
  r0

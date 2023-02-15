@@ -76,21 +76,15 @@ readcurr_polar <- function(date,
 currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
   time.resolution <- match.arg(time.resolution)
   if (time.resolution != "daily") warning("only daily available, no weekly - ignoring 'time.resolution'")
-  raadfiles::altimetry_daily_files()
-}
-
-
-
-altimetry_daily_ugos_files <- function() {
-  files <- raadfiles::altimetry_daily_files()
-  files$vrt_dsn <- .vrt_dsn(files$fullname, sds = "ugos", bands = 1L)
+  #raadfiles::altimetry_daily_files()
+  files <- dplyr::inner_join(dplyr::rename(altimetry_daily_ugos_files(), ugos_vrt = vrt_dsn), 
+                             altimetry_daily_vgos_files() |> dplyr::transmute(date, vgos_vrt = vrt_dsn), "date")
   files
 }
-altimetry_daily_vgos_files <- function() {
-  files <- raadfiles::altimetry_daily_files()
-  files$vrt_dsn <- .vrt_dsn(files$fullname, sds = "vgos", bands = 1L)
-  files
-}
+
+
+
+
 
 # read_altimetry_u <- function(x, extent, dimension) {
 #  vapour::vapour_warp_raster_dbl(x, 
@@ -186,9 +180,9 @@ readcurr <- function (date, time.resolution = c("daily"),
   }
   time.resolution <- match.arg(time.resolution)
   
+  ## put this block into currentsfiles() when happy
   if (is.null(inputfiles)) {
-    files <- dplyr::inner_join(dplyr::rename(altimetry_daily_ugos_files(), ugos_vrt = vrt_dsn), 
-    altimetry_daily_vgos_files() |> dplyr::transmute(date, vgos_vrt = vrt_dsn), "date")
+    files <- currentsfiles()
   } else {
     files <- inputfiles
   }

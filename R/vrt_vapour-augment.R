@@ -1,7 +1,7 @@
 .dump_md <- function(x0, in_band = FALSE) {
   ## split on newlines
   x <- strsplit(x0, "\n")[[1]]
-  s0 <- grep("<Metadata>", x)[1L]
+  s0 <- grep("<Metadata.*>", x)[1L]
   s1 <- grep("</Metadata>", x)[1L]
   e0 <- grep("<VRTRasterBand", x)
   ## abort
@@ -13,12 +13,15 @@
   f1 <- filepaths[1]
   #info <- vapour::vapour_raster_info(f1)
   #if (length(bands) > 1) bands_process <- bands
-  vrt_dsn <- vapour::vapour_vrt(f1, sds = sds, projection = projection, bands = bands, extent = extent)
+  vrt_dsn <- vapour::vapour_vrt(f1, sds = sds, projection = projection, bands = bands, extent = extent, nomd = TRUE)
   ## else blows up the size of the file list (could do later after temporal subset)
+  ## it seems that nomd is not working in GDAL 3.4.3 but is working in GDAL 3.7 ...
+  ## ultimately 3.7 will remove the need to actually serialize the whole thing to VRT
   vrt_dsn <- .dump_md(vrt_dsn)
+  vrt_dsn <- .dump_md(vrt_dsn, TRUE)
   #template <- stringr::str_replace(vrt_dsn, f1, "%s")
-  template <- gsub(f1, "%s", template)
-  sprintf(rep(template, length(filepaths)), filepaths, filepaths, filepaths, filepaths)
+  template <- gsub(f1, "%s", vrt_dsn)
+  sprintf(rep(template, length(filepaths)), filepaths)
   
 }
 

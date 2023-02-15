@@ -1,8 +1,17 @@
 # raadtools dev
 
+* Converting read and files functions to versions that use GDAL more tightly, in vapour there is a function `gdal_raster_data()` which 
+can be given an extent, dimension, resolution, crs, or combination of these (or none of them) and will return the data read by the warper api. The data returned has attributes extent, dimension, projection (crs) so we know what the properties of the data are (so a user can give
+partial or missing specifications of what 'xylim' is (an extent in the native projection this function uses), and we can maintain the behaviour of raadtools up to this point. But, it's faster and simpler.)  Improvements include no longer needing dateline logic, so we can give c(0, 220, -60, 10) or any other longlat extent and gdal sorts it out. raadtools is currently not using any reprojection so this only applies for longlat sources. 
+
+The changes involve using 'vrt_dsn' which is an augmented version of 'fullname', and makes it useable in other contexts. Sometimes we have combinations like "ugos_vrt_dsn" and "vgos_vrt_dsn", but we're working to remove those inconsistencies and simply provide 1 variable for 1 or many time steps as a new basis. 
+
+So far updated are readsst, readcurr and its siblings read_ugos_daily, read_vgos_daily, read_adt_daily, read_err_daily, read_ugosa_daily, read_vgosa_daily, read_sla_daily, and derived versions read_mag_daily and read_dir_daily (trigonometric combinations of read_ugos and read_vgos). This trigonometry on u/v is part of the reason we are avoiding reprojected output, that will require extra thought because currently (haha) all vector quantities are assumed aligned to their native grid and we aren't messing with that. 
+
+
 * Removed rgeos and maptools. 
 
-* Removed rgdal imports, replaced with raster and reproj. 
+* Removed rgdal imports, replaced with raster and reproj.  This has meant there were cases where we were using SpatialPoints and now we just have a matrix x,y - so there were cases where we needed 'drop = FALSE' for when one point was looked up (and R was flattening to a two element vector, interpreted as cell number - in extract(function, matrix) for example). 
 
 
 *Function `readice()` has been expanded to allow 'hemisphere = "both"' and for 'xylim' to be a full raster grid (terra or raster format). If 'both' is specified the warper is applied to VRT versions of the NSIDC files, which allows them to be combined in one reprojection step. In this case 'xylim' can be specified, to give a projected grid of any form. If not supplied (when hemisphere = 'both') then longlat raster at 0.25 degrees is assumed. 

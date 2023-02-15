@@ -81,7 +81,24 @@ read_err_daily <- function(date, xylim = NULL, latest = TRUE, returnfiles = FALS
   read_copernicus_daily(date = date, xylim = xylim, latest  = latest, returnfiles = returnfiles, varname = varname, ..., inputfiles = inputfiles)
 }
 
+vlen <- function(x, y) sqrt(x * x + y * y)
+#' @name read_adt_daily
+#' @export
+read_mag_daily <- function(date, xylim = NULL, latest = TRUE, returnfiles = FALSE, ..., inputfiles = NULL) {
+  u <- read_ugos_daily(date = date, xylim = xylim, latest  = latest, returnfiles = returnfiles,  ..., inputfiles = inputfiles)
+  if (returnfiles) return(u)
+  v <- read_vgos_daily(date = date, xylim = xylim, latest  = latest, returnfiles = returnfiles,  ..., inputfiles = inputfiles)
+  vlen(u, v)
+}
 
+#' @name read_adt_daily
+#' @export
+read_dir_daily <- function(date, xylim = NULL, latest = TRUE, returnfiles = FALSE, ..., inputfiles = NULL) {
+  u <- read_ugos_daily(date = date, xylim = xylim, latest  = latest, returnfiles = returnfiles,  ..., inputfiles = inputfiles)
+  if (returnfiles) return(u)
+  v <- read_vgos_daily(date = date, xylim = xylim, latest  = latest, returnfiles = returnfiles,  ..., inputfiles = inputfiles)
+  (90 - atan2(v, u) * 180/pi) %% 360
+}
 
 read_copernicus_daily <- function(date, xylim = NULL, latest = TRUE, returnfiles = FALSE, varname, lon180 = FALSE, ..., inputfiles = NULL) {
   if (is.null(inputfiles)){

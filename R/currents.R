@@ -77,8 +77,8 @@ currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
   time.resolution <- match.arg(time.resolution)
   if (time.resolution != "daily") warning("only daily available, no weekly - ignoring 'time.resolution'")
   #raadfiles::altimetry_daily_files()
-  files <- dplyr::inner_join(dplyr::rename(altimetry_daily_ugos_files(), ugos_vrt = vrt_dsn), 
-                             altimetry_daily_vgos_files() |> dplyr::transmute(date, vgos_vrt = vrt_dsn), "date")
+  files <- dplyr::inner_join(dplyr::rename(altimetry_daily_varname_files("ugos"), ugos_vrt = vrt_dsn), 
+                             altimetry_daily_varname_files("vgos") |> dplyr::transmute(date, vgos_vrt = vrt_dsn), "date")
   files
 }
 
@@ -187,13 +187,11 @@ readcurr <- function (date, time.resolution = c("daily"),
     files <- inputfiles
   }
   
-  
-  thefun <- read_i
  
-  if (magonly) thefun <- read_i_mag0
-  if (dironly) thefun <- read_i_dir0
-  if (uonly ) thefun <- read_i_u0
-  if (vonly) thefun <- read_i_v0
+  if (magonly) thefun <- read_mag_daily
+  if (dironly) thefun <- read_dir_daily
+  if (uonly ) thefun <- read_ugos_daily
+  if (vonly) thefun <- read_vgos_daily
   
   
 
@@ -206,27 +204,29 @@ readcurr <- function (date, time.resolution = c("daily"),
   nfiles <- nrow(files)
   
   ## prevent reading more than one unless mag/dironly
-  if (nfiles > 1L & !magonly & !dironly & !uonly & !vonly) {
+  if ( !magonly & !dironly & !uonly & !vonly) {
     files <- files[1L,]
+    message("reading u and v as layers is soft deprecated, please use read_ugos_daily() or read_ugos_daily()")
+    message("for reading mag-nitude or dir-ection only, please use read_mag_daily() or read_dir_daily()")
+    
     nfiles <- 1L
-    warning("only one time step can be read at once unless one of 'magonly', 'dironly', 'uonly' or 'vonly' is TRUE")
+  
+    thefun <- function(date, xylim = NULL, latest = TRUE, returnfiles = FALSE, ..., inputfiles = NULL) {
+      u <- read_ugos_daily(date = date, xylim = xylim, latest  = latest, returnfiles = returnfiles,  ..., inputfiles = inputfiles)
+      if (returnfiles) return(u)
+      v <- read_vgos_daily(date = date, xylim = xylim, latest  = latest, returnfiles = returnfiles,  ..., inputfiles = inputfiles)
+      stack(list(u, v))
+    }
   }
   if ((magonly + dironly + uonly + vonly) > 1) stop("only one of 'magonly', 'dironly', 'uonly' or 'vonly' may be TRUE")
 
-  
-  
-  print(files$date)
-  m <- vlen(read_i(files$ugos_vrt, grid), read_i(files$vgos_vrt, grid))
-  
-  #ximage::ximage(matrix(m, grid$dimension[2], byrow = TRUE))
-  return(NULL)
-  dots <- list(...)
 
-  
   
   op <- options(warn = -1)
   on.exit(options(op))
-  r0 <- stack(lapply(files$fullname, thefun, xylim = xylim, lon180 = lon180), filename = filename)
+ 
+  r0 <- lapply(files$date, thefun, xylim = xylim, lon180 = lon180)
+  if (length(r0) == 1) r0 <- r0[[1]] else r0 <- stack(r0)
   if (nlayers(r0) == nrow(files)) {
     r0 <- setZ(r0, files$date)
   } else {
@@ -245,113 +245,5 @@ readcurr <- function (date, time.resolution = c("daily"),
   
 r0
   
-  
-}
-
-# dimensions:
-#   time = 1 ;
-# lat = 720 ;
-# lon = 1440 ;
-# nv = 2 ;
-# variables:
-#   float time(time) ;
-# time:long_name = "Time" ;
-# time:standard_name = "time" ;
-# time:units = "days since 1950-01-01 00:00:00 UTC" ;
-# time:calendar = "julian" ;
-# time:axis = "T" ;
-# float lat(lat) ;
-# lat:long_name = "Latitude" ;
-# lat:standard_name = "latitude" ;
-# lat:units = "degrees_north" ;
-# lat:bounds = "lat_bnds" ;
-# lat:axis = "Y" ;
-# lat:valid_min = -90 ;
-# lat:valid_max = 90 ;
-# float lat_bnds(nv, lat) ;
-# float lon(lon) ;
-# lon:long_name = "Longitude" ;
-# lon:standard_name = "longitude" ;
-# lon:units = "degrees_east" ;
-# lon:bounds = "lon_bnds" ;
-# lon:axis = "X" ;
-# lon:valid_min = 0 ;
-# lon:valid_max = 360 ;
-# float lon_bnds(nv, lon) ;
-# int crs ;
-# crs:grid_mapping_name = "latitude_longitude" ;
-# crs:semi_major_axis = 6371000 ;
-# crs:inverse_flattening = 0 ;
-# int nv(nv) ;
-# int u(lon, lat, time) ;
-# u:_FillValue = -2147483647 ;
-# u:long_name = "Absolute geostrophic velocity: zonal component" ;
-# u:standard_name = "surface_eastward_geostrophic_sea_water_velocity" ;
-# u:units = "m/s" ;
-# u:scale_factor = 1e-04 ;
-# int v(lon, lat, time) ;
-# v:_FillValue = -2147483647 ;
-# v:long_name = "Absolute geostrophic velocity: meridian component" ;
-# v:standard_name = "surface_northward_geostrophic_sea_water_velocity" ;
-# v:units = "m/s" ;
-# v:scale_factor = 1e-04 ;
-# 
-# // global attributes:
-#   :cdm_data_type = "Grid" ;
-# :title = "DT merged Global Ocean Gridded Absolute Geostrophic Velocities SSALTO/Duacs L4 product" ;
-# :summary = "This dataset contains Delayed Time Level-4 absolute geostrophic velocities products from multi-satellite observations over Global Ocean." ;
-# :comment = "Surface product; Absolute Geostrophic Velocities" ;
-# :time_coverage_resolution = "P1D" ;
-# :product_version = "5.0" ;
-# :institution = "CNES, CLS" ;
-# :project = "SSALTO/DUACS" ;
-# :references = "www.aviso.altimetry.fr" ;
-# :contact = "aviso@altimetry.fr" ;
-# :license = "http://www.aviso.altimetry.fr/fileadmin/documents/data/License_Aviso.pdf" ;
-# :platform = "ERS-1, Topex/Poseidon" ;
-# :date_created = "2014-02-28 13:07:00" ;
-# :history = "2014-02-28 13:07:00:creation" ;
-# :Conventions = "CF-1.6" ;
-# :standard_name_vocabulary = "http://cf-pcmdi.llnl.gov/documents/cf-standard-names/standard-name-table/12/cf-standard-name-table.html" ;
-# :geospatial_lat_min = -90 ;
-# :geospatial_lat_max = 90 ;
-# :geospatial_lon_min = 0 ;
-# :geospatial_lon_max = 360 ;
-# :geospatial_vertical_min = "0.0" ;
-# :geospatial_vertical_max = "0.0" ;
-# :geospatial_lat_units = "degrees_north" ;
-# :geospatial_lon_units = "degrees_east" ;
-# :geospatial_lat_resolution = 0.25 ;
-# :geospatial_lon_resolution = 0.25 ;
-
-
-
-.currentsfiles1 <- function(fromCache = TRUE, ...) {
-  # datadir = getOption("default.datadir")
-  # cachefile <- file.path(datadir, "cache", sprintf("currentsfiles_weekly.Rdata"))
-  # if (fromCache) {
-  #   load(cachefile)
-  #   cfs$fullname <- file.path(datadir, cfs$file)
-  #   return(cfs)
-  # }
-  # 
-  ftx <- .allfilelist()
-  cfiles <- grep("aviso_old", ftx, value = TRUE)
-  cfiles1 <- grep("current", cfiles, value = TRUE)
-  cfiles2 <- grep("merged_madt", cfiles1, value = TRUE)
-  cfiles3 <- grep("nc$", cfiles2, value = TRUE)
-  #data.source = file.path(datadir, "current", "aviso", "upd", "7d")
-  #cfiles <- list.files(data.source, pattern = ".nc$", full.names = TRUE)
-  datepart <- sapply(strsplit(basename(cfiles3), "_"), function(x) x[length(x)-1])
-  currentdates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
-  
-  cfs <- data.frame(fullname = cfiles3,  date = currentdates, stringsAsFactors = FALSE)
-  cfs <- cfs[diff(cfs$date) > 0, ]
-  
-  ## drop duplicates, this should prefer upd to nrt
-  cfs <- cfs[!duplicated(cfs$date), ]
-  #save(cfs, file = cachefile)
-  #cfs$fullname <- file.path(datadir, cfs$file)
-  cfs
   
 }

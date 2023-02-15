@@ -8,6 +8,8 @@
 \alias{read_vgos_daily}
 \alias{read_vgosa_daily}
 \alias{read_err_daily}
+\alias{read_mag_daily}
+\alias{read_dir_daily}
 \title{Altimetry products.}
 \usage{
 read_ugosa_daily(
@@ -56,6 +58,24 @@ read_vgosa_daily(
 )
 
 read_err_daily(
+  date,
+  xylim = NULL,
+  latest = TRUE,
+  returnfiles = FALSE,
+  ...,
+  inputfiles = NULL
+)
+
+read_mag_daily(
+  date,
+  xylim = NULL,
+  latest = TRUE,
+  returnfiles = FALSE,
+  ...,
+  inputfiles = NULL
+)
+
+read_dir_daily(
   date,
   xylim = NULL,
   latest = TRUE,

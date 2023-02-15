@@ -54,15 +54,7 @@ setOldClass("trip")
     pb$tick(0) ## ---------------------------------------------
     ## TODO, will have to figure out how to do this
     args <- list(...)
-    # nousexylim <- FALSE
-    # if ("xylim" %in% names(args)) {
-    #   if (inherits(args$xylim, "SpatRaster") ||  inherits(args$xylim, "BasicRaster")) {
-    #    nousexylim <- TRUE 
-    #   } else {
-    #     warning("xylim argument ignored (determined automatically from the input data)")
-    #     args$xylim <- NULL
-    #   }
-    # }
+ 
     if ("inputfiles" %in% names(args)) {
       warning("inputfiles argument ignored")
       args$inputfiles <- NULL
@@ -87,15 +79,7 @@ setOldClass("trip")
     dummy <- x(inputfiles = files, ...)
     yp <- reproj::reproj_xy(y1, projection(dummy), source = "+proj=longlat")
     pb$tick(0) ## ---------------------------------------------
-    # xylim <- extent(yp)
-    # ## expand out a bit for single-location queries
-    # if (xmax(xylim) == xmin(xylim) | ymax(xylim) == ymin(xylim)) {
-    #   xylim <- xylim + res(dummy) * 3
-    # }
-    # 
-    # ## never crop
-    # xylim <- NULL
-    # 
+ 
     if (notime) {
       ## assume we want topo/bathy values
       thisx1 <- x(...)
@@ -187,7 +171,7 @@ setOldClass("trip")
         if(resize) thisx <- aggregate(thisx, fact = fact, fun = "mean")
         asub <- windex == findex[i]
         ## no interpolation in time, controlled by "method" for xy
-        if (any(asub)) {result[asub] <- suppressWarnings(extract(thisx, y[asub, ], ...))}
+        if (any(asub)) {result[asub] <- suppressWarnings(v000 <- extract(thisx, y[asub, , drop = FALSE], ...))}
         
         if (interactive() & verbose) {
           pb$tick(tokens = list(what = time.resolution, ith = i, nn = length(date)))

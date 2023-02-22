@@ -1,5 +1,8 @@
 # raadtools dev
 
+
+* New function `read_par()` contributed by Kimberlee Baldry @KimBaldry.
+
 * Removed rgeos and maptools. 
 
 * Removed rgdal imports, replaced with raster and reproj. 

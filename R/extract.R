@@ -88,10 +88,10 @@ setOldClass("trip")
     }
     pb$tick(0) ## ---------------------------------------------
     times <- try(timedateFrom(y[[3L]]))
-    y <- y1
+    y <- yp
     ## chuck a
     if (inherits(times, "try-error") | any(is.na(times))) {
-      ##.standard.assumeXYT.TimeError()
+      ##.standard.assum
     }
   
     
@@ -171,6 +171,7 @@ setOldClass("trip")
         if(resize) thisx <- aggregate(thisx, fact = fact, fun = "mean")
         asub <- windex == findex[i]
         ## no interpolation in time, controlled by "method" for xy
+        
         if (any(asub)) {result[asub] <- suppressWarnings(v000 <- extract(thisx, y[asub, , drop = FALSE], ...))}
         
         if (interactive() & verbose) {

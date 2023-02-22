@@ -3,18 +3,22 @@
 #' @export
 #' @examples 
 #' readCHL_month()
-readCHL_month <- function(date, xylim = NULL, ..., inputfiles = NULL, latest = TRUE) {
+readCHL_month <- function(date, xylim = NULL, product = "MODISA", ..., inputfiles = NULL, latest = TRUE, returnfiles = FALSE) {
   if (is.null(inputfiles)) {
     ## memoize this call
-    files <- ocfiles("monthly", product = "MODISA", varnam = "CHL", type = "L3m")
+    files <- ocfiles("monthly", product = product, varname = "CHL", type = "L3m")
+    
+
   } else {
     files <- inputfiles
   }
+  if (returnfiles) return(files)
   if (missing(date)) {
     if (latest)  date <- max(files$date) else date <- min(files$date)
   }
   date <- raadtools:::timedateFrom(date)
   files <- .processFiles(date, files, "monthly")
+  
   rl <- lapply(files$fullname, raster::raster, varname = "chlor_a")
   if (!is.null(xylim)) rl <- lapply(rl, raster::crop, raster::extent(xylim))
   raster::setZ(raster::brick(rl), date)

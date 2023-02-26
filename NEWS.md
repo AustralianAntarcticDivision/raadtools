@@ -1,5 +1,6 @@
 # raadtools dev
 
+* raadtools now imports package {reproj}, fixes #135. 
 
 * New function `read_par()` contributed by Kimberlee Baldry @KimBaldry.
 

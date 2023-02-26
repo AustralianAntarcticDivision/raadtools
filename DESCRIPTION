@@ -1,7 +1,7 @@
 Package: raadtools
 Type: Package
 Title: Tools for Synoptic Environmental Spatial Data
-Version: 0.6.0.9025
+Version: 0.6.0.9026
 Authors@R: c(
    person("Michael D.","Sumner", role = c("aut", "cre"), email = "michael.sumner@aad.gov.au"), 
    person("Ben", "Raymond", role = "ctb", email = "ben.raymond@aad.gov.au")
@@ -22,7 +22,8 @@ Imports:
     future,
     furrr,
     vapour (>= 0.8.8.9007),
-    terra (>= 1.5-21)
+    terra (>= 1.5-21),
+    reproj (>= 0.4.3)
 Suggests:
     graticule,
     knitr,

@@ -7,7 +7,7 @@
 read_par(
   date,
   time.resolution = "8D",
-  xlim = NULL,
+  xylim = NULL,
   lon180 = FALSE,
   nobsonly = FALSE,
   latest = TRUE,
@@ -20,6 +20,8 @@ read_par(
 \item{date}{date or dates of data to read,}
 
 \item{time.resolution}{'8D' currently, use the NASA tokens for time period}
+
+\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details}
 
 \item{lon180}{defaults to TRUE, to "rotate" Pacific view \link{0, 360} data to Atlantic view \link{-180, 180}}
 

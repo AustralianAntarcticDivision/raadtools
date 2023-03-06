@@ -210,6 +210,8 @@ readice_daily <- function(date,
   if (!is.null(dimension)) {
     ## with the warper we currently get value 0,250 as they are natively in the netcdf (gdal per se returns them 0,1)
     list_of_fullname <- lapply(files$fullname, function(.x) vapour::vapour_vrt(.x, sds = 1))
+    
+
     out <- lapply(list_of_fullname, function(.x)  
       vapour::vapour_warp_raster_dbl(.x, extent = ex, dimension = dimension, projection = projection, resample = resample))    
     rs <- if (rescale) 1/2.5 else 1
@@ -394,6 +396,10 @@ icefiles <- function(time.resolution = "daily",
                   north = raadfiles::nsidc_north_daily_files(), 
                   south = raadfiles::nsidc_south_daily_files())
 
+  ## a bit of a kludge but saves us from the dates that don't exist in the new NSIDC NetCDF files
+  rawdate <- as.integer(as.Date(files$date))
+  bad <- rawdate %in% bad_nsidc
+  files <- files[!bad, ]
   files$vrt_dsn <- sprintf(switch(hemisphere, north = .north_nsidc_vrt, south = .south_ndsic_vrt), files$fullname)
   files
 

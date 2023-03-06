@@ -1,7 +1,7 @@
 # raadtools dev
 
-* New scheme for NSIDC netcdf files.  We now use these directly, there's no 'vrt_dsn' used. Now depending
-on raadfiles 0.1.3.9041. 
+* New scheme for NSIDC netcdf files.  We now use these directly, there's no use for 'vrt_dsn'. Now depending
+on raadfiles 0.1.3.9041, in raadfiles the dates are culled to be distinct. Here the empty dates (no variable exists in the shell netcdf), we remove those in `icefiles()`. 
 
 
 * raadtools now imports package {reproj}, fixes #135. 

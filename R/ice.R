@@ -173,8 +173,11 @@ readice_daily <- function(date,
     .get_both_hemisphere_files <- function() {
       north = icefiles(hemisphere = "north")
       south = icefiles(hemisphere = "south")
+      #north$fullname <- vapour::vapour_vrt(north$fullname, sds = 1)
+      #south$fullname <- vapour::vapour_vrt(north$fullname, sds = 1)
+      
       tibble::tibble(date = north$date, 
-                     vrt_dsn  = split(rbind(north$vrt_dsn, south$vrt_dsn), rep(seq(1, nrow(north)), each = 2L)))
+                     fullname  = split(rbind(north$fullname, south$fullname), rep(seq(1, nrow(north)), each = 2L)))
     }
     ## get file names and dates and full path
     files <- switch(hemisphere, 
@@ -188,6 +191,8 @@ readice_daily <- function(date,
   }
   date <- timedateFrom(date)
   files <- .processFiles(date, files, time.resolution)
+  
+  
   dimension <- NULL
 
   if (inherits(xylim, "SpatRaster")) {
@@ -203,15 +208,17 @@ readice_daily <- function(date,
     
   }
   if (!is.null(dimension)) {
-    
-    out <- lapply(files$vrt_dsn, function(.x)  
+    ## with the warper we currently get value 0,250 as they are natively in the netcdf (gdal per se returns them 0,1)
+    list_of_fullname <- lapply(files$fullname, function(.x) vapour::vapour_vrt(.x, sds = 1))
+    out <- lapply(list_of_fullname, function(.x)  
       vapour::vapour_warp_raster_dbl(.x, extent = ex, dimension = dimension, projection = projection, resample = resample))    
     rs <- if (rescale) 1/2.5 else 1
-   if (setNA) out <- lapply(out, function(.x) {.x[.x > 250] <- NA; raster::setValues(xylim[[1]],.x * rs)})
+   if (setNA) out <- lapply(out, function(.x) {.x[.x > 250] <- NA; .x[!.x > 0] <- NA;  raster::setValues(xylim[[1]],.x * rs)})
 
-    return(raster::brick(out))
+    return(setZ(raster::brick(out), files$date))
   }
-  read_ice_internal(files, hemisphere, rescale, setNA, xylim, ...) 
+  read_ice_v2(files, setNA, xylim, ...)
+  ##read_ice_internal(files, hemisphere, rescale, setNA, xylim, ...) 
 }
 #' @name readice
 #' @export
@@ -248,11 +255,39 @@ readice_monthly <- function(date,
   }
   date <- timedateFrom(date)
   files <- .processFiles(date, files, time.resolution)
-  
-  read_ice_internal(files, hemisphere, rescale, setNA, xylim,  ...) 
+  #browser()
+  #read_ice_internal(files, hemisphere, rescale, setNA, xylim,  ...) 
+  if (!rescale) message("`rescale = FALSE` is not supported for NSIDC v2")
+#  raster::plot(brick(files$fullname, band = 1))
+  read_ice_v2(files,  setNA, xylim)
 }
 
 
+read_ice_v2 <- function(files, setNA, xylim = NULL, ...) {
+  #out <- raster::brick(files$fullname, band = 1L)
+  suppressWarnings(out <- raster::brick(lapply(files$fullname, raster::raster)))
+  out <- raster::calc(out, fun = 
+   function(x) {
+    x <- x * 100; 
+    if (setNA) {
+    x[!x > 0] <- NA;
+    x[!x <= 100] <- NA}; 
+      x
+  }, ...)
+  # if (setNA && nrow(files) > 1) {
+  #   message("`setNA = FALSE` is not supported for reading multiple dates")
+  # } 
+  # if (setNA && nrow(files) == 1) {
+  #   out[!out > 0] <- NA
+  #   out[!out < 100] <- NA
+  # }
+  # 
+ # browser(0)
+  
+  if (!is.null(xylim)) out <- raster::crop(out, raster::extent(xylim))
+  setZ(out, files$date)
+  
+}
 read_ice_internal <- function(files, hemisphere, rescale, setNA, xylim = NULL,  ...) {
   ## check that files are available
   ## NSIDC projection and grid size for the Southern Hemisphere

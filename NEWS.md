@@ -1,5 +1,9 @@
 # raadtools dev
 
+* New scheme for NSIDC netcdf files.  We now use these directly, there's no 'vrt_dsn' used. Now depending
+on raadfiles 0.1.3.9041. 
+
+
 * raadtools now imports package {reproj}, fixes #135. 
 
 * New function `read_par()` contributed by Kimberlee Baldry @KimBaldry.

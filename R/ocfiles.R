@@ -1,4 +1,5 @@
-##' Load metadata and location of files of ocean colour data products.
+
+  ##' Load metadata and location of files of ocean colour data products.
 ##'
 ##' This function loads the latest cache of stored files for
 ##' NASA ocean colour products.
@@ -42,11 +43,10 @@ ocfiles <- function(time.resolution = c("daily", "weekly", "monthly", "weekly32"
   prod <- switch(product, MODISA = "AQUA_MODIS", SeaWiFS = "SEASTAR_SEAWIFS_GAC", MODIST = "TERRA_MODIS", CZCS = "NIMBUS7_CZCS", VIIRS = "SNPP_VIIRS")
   ## note that there is also JPSS1_VIIRS
   mtag <- paste0(prod, ".*", paste(type, time, varname, sep = "\\."), ".*\\.", ext) ## separator is "." with new naming
-  cfiles3 <- grep(mtag, ftx, value = TRUE)
+  cfiles <- grep(mtag, ftx, value = TRUE)
+
   if (length(cfiles) > 0) {
-      ## I think this is irrelevant with the new files (no bz2s?) but leave it anyway
-      cfiles <- if (bz2.rm)  grep(paste0(ext, "$"), cfiles3, value = TRUE) else cfiles3
-      if (length(cfiles) < 1) stop("no files found for ", paste(product, varname, type, time.resolution, collapse = ", "))
+
       dates <- sub("\\..+", "", sub("^[^\\.]+\\.", "", basename(cfiles))) ## discard before leading separator, and after second (keep date component)
       dates <- as.POSIXct(strptime(dates, "%Y%m%d", tz = "GMT"))
   } else {
@@ -67,8 +67,12 @@ ocfiles <- function(time.resolution = c("daily", "weekly", "monthly", "weekly32"
       tokens <- .filetok(basename(cfiles))
       dates <- as.POSIXct(strptime(paste0(tokens$year, tokens$jday), "%Y%j", tz = "GMT"))
   }
+  if (length(cfiles) < 1) stop("no files found for ", paste(product, varname, type, time.resolution, collapse = ", "))
+  
   tibble::tibble(fullname = cfiles, date = dates)[order(dates), ]
 }
+
+
 
 
 ## This function is from roc

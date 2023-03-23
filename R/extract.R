@@ -187,7 +187,8 @@ setOldClass("trip")
         if(resize) thisx <- aggregate(thisx, fact = fact, fun = "mean")
         asub <- windex == findex[i]
         ## no interpolation in time, controlled by "method" for xy
-        if (any(asub)) {result[asub] <- suppressWarnings(extract(thisx, y[asub, ], ...))}
+
+        if (any(asub)) {result[asub] <- suppressWarnings(extract(thisx, y[asub, , drop = FALSE], ...))}
         
         if (interactive() & verbose) {
           pb$tick(tokens = list(what = time.resolution, ith = i, nn = length(date)))

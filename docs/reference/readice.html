@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9028</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9029</span>
       </span>
     </div>
 
@@ -79,7 +79,7 @@
 <span>  hemisphere <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"south"</span>, <span class="st">"north"</span>, <span class="st">"both"</span><span class="op">)</span>,</span>
 <span>  xylim <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  setNA <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  rescale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  rescale <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  latest <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span>,</span>
@@ -94,7 +94,7 @@
 <span>  hemisphere <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"south"</span>, <span class="st">"north"</span>, <span class="st">"both"</span><span class="op">)</span>,</span>
 <span>  xylim <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  setNA <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  rescale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  rescale <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  latest <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span>,</span>
@@ -240,33 +240,13 @@ data files, <code><a href="https://rdrr.io/pkg/raster/man/raster.html" class="ex
 <span class="r-in"><span><span class="co">## or we can read both, and get longlat by default</span></span></span>
 <span class="r-in"><span><span class="fu">readice</span><span class="op">(</span>hemisphere <span class="op">=</span> <span class="st">"both"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> for both hemispheres, 'xylim' may be specified - assuming global longlat at 0.25 degree</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> class      : RasterBrick </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions : 720, 1440, 1036800, 1  (nrow, ncol, ncell, nlayers)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> resolution : 0.25, 0.25  (x, y)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> extent     : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> crs        : +proj=longlat +datum=WGS84 +no_defs </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> source     : memory</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> names      : X14518 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> min values :    0.4 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> max values :    100 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> time       : 2023-02-01 11:00:00 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'brick': the condition has length &gt; 1</span>
 <span class="r-in"><span><span class="co">## or set our own grid and read to that</span></span></span>
 <span class="r-in"><span><span class="co">## spex::buffer_extent(extent(c(-.5, .5, -1, 1)* rad * pi), 25000)</span></span></span>
 <span class="r-in"><span><span class="va">tm_ex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">.5</span>, <span class="fl">.5</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">20025000</span> </span></span>
 <span class="r-in"><span><span class="va">tm_template</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="va">tm_ex</span><span class="op">)</span>, res <span class="op">=</span> <span class="fl">25000</span>, crs <span class="op">=</span> <span class="st">"+proj=tmerc"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">readice</span><span class="op">(</span>hemisphere <span class="op">=</span> <span class="st">"both"</span>, xylim <span class="op">=</span> <span class="va">tm_template</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> class      : RasterBrick </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions : 1602, 801, 1283202, 1  (nrow, ncol, ncell, nlayers)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> resolution : 25000, 25000  (x, y)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> extent     : -10012500, 10012500, -20025000, 20025000  (xmin, xmax, ymin, ymax)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> crs        : +proj=tmerc +lat_0=0 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> source     : memory</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> names      : X14518 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> min values :    0.4 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> max values :    100 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> time       : 2023-02-01 11:00:00 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'brick': the condition has length &gt; 1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## this means we can run extract on global ice, and get 0 in the middle</span></span></span>
 <span class="r-in"><span><span class="co">## extract(readice, data.frame(176, c(-72, 84), as.Date("2020-04-03") + c(0, 100)))</span></span></span>

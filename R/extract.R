@@ -85,7 +85,7 @@ setOldClass("trip")
     pb$tick(0) ## ---------------------------------------------
     
     dummy <- x(inputfiles = files, ...)
-    yp <- reproj::reproj_xy(y1, projection(dummy), source = "+proj=longlat")
+    y1 <- reproj::reproj_xy(y1, projection(dummy), source = "+proj=longlat")
     pb$tick(0) ## ---------------------------------------------
     # xylim <- extent(yp)
     # ## expand out a bit for single-location queries

@@ -19,7 +19,7 @@ this by default will return the latest data available and for the entire world."
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9028</span>
       </span>
     </div>
 
@@ -76,36 +76,49 @@ this by default will return the latest data available and for the entire world.<
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">table_uvgos</span><span class="op">(</span>
-  <span class="va">date</span>,
-  xylim <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>,
-  xy <span class="op">=</span> <span class="cn">TRUE</span>,
-  cell <span class="op">=</span> <span class="cn">FALSE</span>,
-  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,
-  latest <span class="op">=</span> <span class="cn">TRUE</span>,
-  res <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">table_uvgos</span><span class="op">(</span></span>
+<span>  <span class="va">date</span>,</span>
+<span>  xylim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  xy <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cell <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  latest <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  res <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>date</dt>
 <dd><p>dates to read</p></dd>
+
+
 <dt>xylim</dt>
 <dd><p>extent of data to read</p></dd>
+
+
 <dt>...</dt>
 <dd><p>arguments passed to read functions (only <code>lon180</code> relevant)</p></dd>
+
+
 <dt>xy</dt>
 <dd><p>include coordinates of cell in the output, <code>TRUE</code> by default</p></dd>
+
+
 <dt>cell</dt>
 <dd><p>include cell index in the output, <code>FALSE</code> by default</p></dd>
+
+
 <dt>na.rm</dt>
 <dd><p>by default missing values are removed, set to <code>FALSE</code> to keep all</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>data frame of u, v, x,y (longitude,latitude), cell, and date</p>
+    
+
+<p>data frame of u, v, x,y (longitude,latitude), cell, and date</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -117,11 +130,11 @@ rotation in the transformation (we might write some helpers for this ...).</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">uv</span> <span class="op">&lt;-</span> <span class="fu">table_uvgos</span><span class="op">(</span><span class="st">"2001-01-01"</span>, xylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="fl">60</span>, <span class="fl">120</span>, <span class="op">-</span><span class="fl">60</span>, <span class="op">-</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">uv</span><span class="op">$</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">uv</span><span class="op">$</span><span class="va">y</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"n"</span>, asp <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">scal</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">(</span><span class="va">x</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">nn</span> <span class="op">&lt;-</span> <span class="fl">56</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/arrows.html" class="external-link">arrows</a></span><span class="op">(</span><span class="va">uv</span><span class="op">$</span><span class="va">x</span>, <span class="va">uv</span><span class="op">$</span><span class="va">y</span>, <span class="va">uv</span><span class="op">$</span><span class="va">x</span> <span class="op">+</span> <span class="va">uv</span><span class="op">$</span><span class="va">u</span>, <span class="va">uv</span><span class="op">$</span><span class="va">y</span> <span class="op">+</span> <span class="va">uv</span><span class="op">$</span><span class="va">v</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.colors.html" class="external-link">grey.colors</a></span><span class="op">(</span><span class="va">nn</span><span class="op">)</span><span class="op">[</span><span class="fu">scal</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">uv</span><span class="op">$</span><span class="va">u</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="va">uv</span><span class="op">$</span><span class="va">v</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="va">nn</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span>, length <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">uv</span> <span class="op">&lt;-</span> <span class="fu">table_uvgos</span><span class="op">(</span><span class="st">"2001-01-01"</span>, xylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="fl">60</span>, <span class="fl">120</span>, <span class="op">-</span><span class="fl">60</span>, <span class="op">-</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">uv</span><span class="op">$</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">uv</span><span class="op">$</span><span class="va">y</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"n"</span>, asp <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">scal</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">(</span><span class="va">x</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">nn</span> <span class="op">&lt;-</span> <span class="fl">56</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/arrows.html" class="external-link">arrows</a></span><span class="op">(</span><span class="va">uv</span><span class="op">$</span><span class="va">x</span>, <span class="va">uv</span><span class="op">$</span><span class="va">y</span>, <span class="va">uv</span><span class="op">$</span><span class="va">x</span> <span class="op">+</span> <span class="va">uv</span><span class="op">$</span><span class="va">u</span>, <span class="va">uv</span><span class="op">$</span><span class="va">y</span> <span class="op">+</span> <span class="va">uv</span><span class="op">$</span><span class="va">v</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.colors.html" class="external-link">grey.colors</a></span><span class="op">(</span><span class="va">nn</span><span class="op">)</span><span class="op">[</span><span class="fu">scal</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">uv</span><span class="op">$</span><span class="va">u</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="va">uv</span><span class="op">$</span><span class="va">v</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="va">nn</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span>, length <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="table_uvgos-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -137,7 +150,7 @@ rotation in the transformation (we might write some helpers for this ...).</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

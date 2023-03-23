@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9028</span>
       </span>
     </div>
 
@@ -72,79 +72,110 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">readice_daily</span><span class="op">(</span>
-  <span class="va">date</span>,
-  time.resolution <span class="op">=</span> <span class="st">"daily"</span>,
-  product <span class="op">=</span> <span class="st">"nsidc"</span>,
-  hemisphere <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"south"</span>, <span class="st">"north"</span><span class="op">)</span>,
-  xylim <span class="op">=</span> <span class="cn">NULL</span>,
-  setNA <span class="op">=</span> <span class="cn">TRUE</span>,
-  rescale <span class="op">=</span> <span class="cn">TRUE</span>,
-  latest <span class="op">=</span> <span class="cn">TRUE</span>,
-  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>,
-  inputfiles <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="fu">readice</span><span class="op">(</span>
-  <span class="va">date</span>,
-  time.resolution <span class="op">=</span> <span class="st">"daily"</span>,
-  product <span class="op">=</span> <span class="st">"nsidc"</span>,
-  hemisphere <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"south"</span>, <span class="st">"north"</span><span class="op">)</span>,
-  xylim <span class="op">=</span> <span class="cn">NULL</span>,
-  setNA <span class="op">=</span> <span class="cn">TRUE</span>,
-  rescale <span class="op">=</span> <span class="cn">TRUE</span>,
-  latest <span class="op">=</span> <span class="cn">TRUE</span>,
-  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>,
-  inputfiles <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="fu">readice_monthly</span><span class="op">(</span>
-  <span class="va">date</span>,
-  time.resolution <span class="op">=</span> <span class="st">"monthly"</span>,
-  product <span class="op">=</span> <span class="st">"nsidc"</span>,
-  hemisphere <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"south"</span>, <span class="st">"north"</span><span class="op">)</span>,
-  xylim <span class="op">=</span> <span class="cn">NULL</span>,
-  setNA <span class="op">=</span> <span class="cn">TRUE</span>,
-  rescale <span class="op">=</span> <span class="cn">TRUE</span>,
-  latest <span class="op">=</span> <span class="cn">TRUE</span>,
-  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>,
-  inputfiles <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">readice_daily</span><span class="op">(</span></span>
+<span>  <span class="va">date</span>,</span>
+<span>  time.resolution <span class="op">=</span> <span class="st">"daily"</span>,</span>
+<span>  product <span class="op">=</span> <span class="st">"nsidc"</span>,</span>
+<span>  hemisphere <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"south"</span>, <span class="st">"north"</span>, <span class="st">"both"</span><span class="op">)</span>,</span>
+<span>  xylim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  setNA <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  rescale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  latest <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  inputfiles <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  resample <span class="op">=</span> <span class="st">"bilinear"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">readice</span><span class="op">(</span></span>
+<span>  <span class="va">date</span>,</span>
+<span>  time.resolution <span class="op">=</span> <span class="st">"daily"</span>,</span>
+<span>  product <span class="op">=</span> <span class="st">"nsidc"</span>,</span>
+<span>  hemisphere <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"south"</span>, <span class="st">"north"</span>, <span class="st">"both"</span><span class="op">)</span>,</span>
+<span>  xylim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  setNA <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  rescale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  latest <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  inputfiles <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  resample <span class="op">=</span> <span class="st">"bilinear"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">readice_monthly</span><span class="op">(</span></span>
+<span>  <span class="va">date</span>,</span>
+<span>  time.resolution <span class="op">=</span> <span class="st">"monthly"</span>,</span>
+<span>  product <span class="op">=</span> <span class="st">"nsidc"</span>,</span>
+<span>  hemisphere <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"south"</span>, <span class="st">"north"</span><span class="op">)</span>,</span>
+<span>  xylim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  setNA <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  rescale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  latest <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  inputfiles <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>date</dt>
 <dd><p>date or dates of data to read, see Details</p></dd>
+
+
 <dt>time.resolution</dt>
 <dd><p>time resoution data to read, daily or monthly</p></dd>
+
+
 <dt>product</dt>
 <dd><p>choice of sea ice product, see Details</p></dd>
+
+
 <dt>hemisphere</dt>
-<dd><p>north or south</p></dd>
+<dd><p>north or south (or both, if 'both' xylim should be an actual raster or terra grid)</p></dd>
+
+
 <dt>xylim</dt>
 <dd><p>spatial extents to crop from source data, can be anything accepted by <code><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></code></p></dd>
+
+
 <dt>setNA</dt>
 <dd><p>mask zero and values greater than 100 as NA</p></dd>
+
+
 <dt>rescale</dt>
 <dd><p>rescale values from integer range?</p></dd>
+
+
 <dt>latest</dt>
 <dd><p>if TRUE and date input is missing, return the latest time available otherwise the earliest</p></dd>
+
+
 <dt>returnfiles</dt>
 <dd><p>ignore options and just return the file names and dates</p></dd>
+
+
 <dt>...</dt>
 <dd><p>passed to brick, primarily for <code>filename</code></p></dd>
+
+
 <dt>inputfiles</dt>
 <dd><p>input the files data base to speed up initialization</p></dd>
+
+
+<dt>resample</dt>
+<dd><p>warper resampling method used when 'xylim' is a full grid</p></dd>
+
+
 <dt>extension</dt>
 <dd><p>default for product "amsr" is "hdf" but can be "tif" , extension = "hdf"</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></code> object</p>
+    
+
+<p><code><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></code> object</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -162,6 +193,14 @@ length 1 then the sorted set of unique matches is returned.</p>
 and levels (there's no straight-through rule, all numeric values are explicit along with special
 values like "Unused").
 The values used are documented here <a href="http://nsidc.org/data/docs/daac/nsidc0051_gsfc_seaice.gd.html" class="external-link">http://nsidc.org/data/docs/daac/nsidc0051_gsfc_seaice.gd.html</a></p>
+<p>If 'both' is specified for hemisphere or if 'xylim' is a full raster grid,
+the warper is applied to VRT versions of the NSIDC files, which allows them to
+be combined in one reprojection step. In this case 'xylim' can be specified, to
+give a projected grid of any form. ' If not supplied (when hemisphere = 'both')
+then longlat raster at 0.25 degrees is assumed. ('xylim' can be specified as '
+a target grid and with only north or south hemisphere applied). When the warper
+is used, 'setNA' and 'resample' behave the same ' way, though exact results will
+be different depending on the value of 'resample'.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -171,9 +210,69 @@ data files, <code><a href="https://rdrr.io/pkg/raster/man/raster.html" class="ex
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span></span>
-<span class="r-in"> </span>
-<span class="r-in"><span class="va">ice</span> <span class="op">&lt;-</span> <span class="fu">readice</span><span class="op">(</span>latest <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span> </span></span>
+<span class="r-in"><span><span class="va">ice</span> <span class="op">&lt;-</span> <span class="fu">readice</span><span class="op">(</span>latest <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## can read one or other hemisphere in native projection</span></span></span>
+<span class="r-in"><span><span class="fu">readice</span><span class="op">(</span>hemisphere <span class="op">=</span> <span class="st">"south"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class      : RasterLayer </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions : 332, 316, 104912  (nrow, ncol, ncell)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> resolution : 25000, 25000  (x, y)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> extent     : -3950000, 3950000, -3950000, 4350000  (xmin, xmax, ymin, ymax)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> crs        : +proj=stere +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +rf=298.279411123061 +units=m +no_defs </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> source     : memory</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> names      : layer </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> values     : 0.4, 100  (min, max)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> time       : 2023-02-01 11:00:00 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu">readice</span><span class="op">(</span>hemisphere <span class="op">=</span> <span class="st">"north"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class      : RasterLayer </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions : 448, 304, 136192  (nrow, ncol, ncell)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> resolution : 25000, 25000  (x, y)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> extent     : -3850000, 3750000, -5350000, 5850000  (xmin, xmax, ymin, ymax)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> crs        : +proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +x_0=0 +y_0=0 +a=6378273 +rf=298.279411123061 +units=m +no_defs </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> source     : memory</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> names      : layer </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> values     : 0.4, 100  (min, max)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> time       : 2023-02-01 11:00:00 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="co">## or we can read both, and get longlat by default</span></span></span>
+<span class="r-in"><span><span class="fu">readice</span><span class="op">(</span>hemisphere <span class="op">=</span> <span class="st">"both"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> for both hemispheres, 'xylim' may be specified - assuming global longlat at 0.25 degree</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class      : RasterBrick </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions : 720, 1440, 1036800, 1  (nrow, ncol, ncell, nlayers)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> resolution : 0.25, 0.25  (x, y)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> extent     : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> crs        : +proj=longlat +datum=WGS84 +no_defs </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> source     : memory</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> names      : X14518 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> min values :    0.4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> max values :    100 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> time       : 2023-02-01 11:00:00 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="co">## or set our own grid and read to that</span></span></span>
+<span class="r-in"><span><span class="co">## spex::buffer_extent(extent(c(-.5, .5, -1, 1)* rad * pi), 25000)</span></span></span>
+<span class="r-in"><span><span class="va">tm_ex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">.5</span>, <span class="fl">.5</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">20025000</span> </span></span>
+<span class="r-in"><span><span class="va">tm_template</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="va">tm_ex</span><span class="op">)</span>, res <span class="op">=</span> <span class="fl">25000</span>, crs <span class="op">=</span> <span class="st">"+proj=tmerc"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">readice</span><span class="op">(</span>hemisphere <span class="op">=</span> <span class="st">"both"</span>, xylim <span class="op">=</span> <span class="va">tm_template</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class      : RasterBrick </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions : 1602, 801, 1283202, 1  (nrow, ncol, ncell, nlayers)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> resolution : 25000, 25000  (x, y)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> extent     : -10012500, 10012500, -20025000, 20025000  (xmin, xmax, ymin, ymax)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> crs        : +proj=tmerc +lat_0=0 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> source     : memory</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> names      : X14518 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> min values :    0.4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> max values :    100 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> time       : 2023-02-01 11:00:00 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## this means we can run extract on global ice, and get 0 in the middle</span></span></span>
+<span class="r-in"><span><span class="co">## extract(readice, data.frame(176, c(-72, 84), as.Date("2020-04-03") + c(0, 100)))</span></span></span>
+<span class="r-in"><span><span class="co">## [1]  80 NA</span></span></span>
+<span class="r-in"><span><span class="co">## extract(readice, data.frame(176, c(-72, 84), as.Date("2020-04-03") + c(0, 100)), hemisphere = "both")</span></span></span>
+<span class="r-in"><span> <span class="co">## [1]  78.0 94.4  ## it's interpolated from the original data</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -188,7 +287,7 @@ data files, <code><a href="https://rdrr.io/pkg/raster/man/raster.html" class="ex
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

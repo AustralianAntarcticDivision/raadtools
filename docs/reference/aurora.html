@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9028</span>
       </span>
     </div>
 
@@ -87,21 +87,21 @@ represent</p><table class="table table"><tr><td><code>LONGITUDE_DEGEAST</code></
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co">## These data were obtained like this</span></span>
-<span class="r-in"><span class="va">base</span> <span class="op">&lt;-</span> <span class="st">"http://gcmd.gsfc.nasa.gov/KeywordSearch/RedirectAction.do?target"</span></span>
-<span class="r-in"><span class="va">b1</span> <span class="op">&lt;-</span>   <span class="st">"=F4t70bSf87FLsT1TNxR9TSPS74xbHAdheLQcH5Z5PMmgzJ9t%2Bi%2FEs1e8Fl61"</span></span>
-<span class="r-in"><span class="va">b2</span> <span class="op">&lt;-</span>   <span class="st">"MPhKjo9qxb2f9wyA%0D%0AoE1kjJ8AMcpFlMMRH7Z6umgNLsGMnWPeQdU7mZHMp%2"</span></span>
-<span class="r-in"><span class="va">b3</span> <span class="op">&lt;-</span>   <span class="st">"FtqMpahIrde%2F%2B9%2FZWAkIFrh2bhIiNfl4I9J%0D%0A5KBX9g5Wf7I9JdOgqY"</span></span>
-<span class="r-in"><span class="va">b4</span> <span class="op">&lt;-</span>   <span class="st">"bDdpj0iM1K%2BA%3D%3D"</span></span>
-<span class="r-in"><span class="va">aurora2013</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">base</span>, <span class="va">b1</span>, <span class="va">b2</span>, <span class="va">b3</span>, <span class="va">b4</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">aurora2013</span><span class="op">$</span><span class="va">DATE_TIME_UTC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="va">aurora2013</span><span class="op">$</span><span class="va">DATE_TIME_UTC</span>, tz <span class="op">=</span> <span class="st">"GMT"</span><span class="op">)</span></span>
-<span class="r-in"><span class="co">## get a daily sample</span></span>
-<span class="r-in"><span class="va">aurora</span> <span class="op">&lt;-</span> <span class="va">aurora2013</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LONGITUDE_DEGEAST"</span>, <span class="st">"LATITUDE_DEGNORTH"</span>, <span class="st">"DATE_TIME_UTC"</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">aurora</span> <span class="op">&lt;-</span> <span class="va">aurora</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html" class="external-link">duplicated</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span> <span class="va">aurora</span><span class="op">$</span><span class="va">DATE_TIME_UTC</span>, <span class="st">"%Y-%j"</span><span class="op">)</span><span class="op">)</span>, <span class="op">]</span></span>
-<span class="r-in"><span class="va">aurora</span> <span class="op">&lt;-</span> <span class="va">aurora</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">aurora</span><span class="op">$</span><span class="va">DATE_TIME_UTC</span><span class="op">)</span>, <span class="op">]</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">aurora</span>, file <span class="op">=</span> <span class="st">"aurora.rda"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co">## These data were obtained like this</span></span></span>
+<span class="r-in"><span><span class="va">base</span> <span class="op">&lt;-</span> <span class="st">"http://gcmd.gsfc.nasa.gov/KeywordSearch/RedirectAction.do?target"</span></span></span>
+<span class="r-in"><span><span class="va">b1</span> <span class="op">&lt;-</span>   <span class="st">"=F4t70bSf87FLsT1TNxR9TSPS74xbHAdheLQcH5Z5PMmgzJ9t%2Bi%2FEs1e8Fl61"</span></span></span>
+<span class="r-in"><span><span class="va">b2</span> <span class="op">&lt;-</span>   <span class="st">"MPhKjo9qxb2f9wyA%0D%0AoE1kjJ8AMcpFlMMRH7Z6umgNLsGMnWPeQdU7mZHMp%2"</span></span></span>
+<span class="r-in"><span><span class="va">b3</span> <span class="op">&lt;-</span>   <span class="st">"FtqMpahIrde%2F%2B9%2FZWAkIFrh2bhIiNfl4I9J%0D%0A5KBX9g5Wf7I9JdOgqY"</span></span></span>
+<span class="r-in"><span><span class="va">b4</span> <span class="op">&lt;-</span>   <span class="st">"bDdpj0iM1K%2BA%3D%3D"</span></span></span>
+<span class="r-in"><span><span class="va">aurora2013</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">base</span>, <span class="va">b1</span>, <span class="va">b2</span>, <span class="va">b3</span>, <span class="va">b4</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">aurora2013</span><span class="op">$</span><span class="va">DATE_TIME_UTC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="va">aurora2013</span><span class="op">$</span><span class="va">DATE_TIME_UTC</span>, tz <span class="op">=</span> <span class="st">"GMT"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## get a daily sample</span></span></span>
+<span class="r-in"><span><span class="va">aurora</span> <span class="op">&lt;-</span> <span class="va">aurora2013</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LONGITUDE_DEGEAST"</span>, <span class="st">"LATITUDE_DEGNORTH"</span>, <span class="st">"DATE_TIME_UTC"</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">aurora</span> <span class="op">&lt;-</span> <span class="va">aurora</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html" class="external-link">duplicated</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span> <span class="va">aurora</span><span class="op">$</span><span class="va">DATE_TIME_UTC</span>, <span class="st">"%Y-%j"</span><span class="op">)</span><span class="op">)</span>, <span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">aurora</span> <span class="op">&lt;-</span> <span class="va">aurora</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">aurora</span><span class="op">$</span><span class="va">DATE_TIME_UTC</span><span class="op">)</span>, <span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">aurora</span>, file <span class="op">=</span> <span class="st">"aurora.rda"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -116,7 +116,7 @@ represent</p><table class="table table"><tr><td><code>LONGITUDE_DEGEAST</code></
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

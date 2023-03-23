@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9028</span>
       </span>
     </div>
 
@@ -72,65 +72,80 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">readtopo</span><span class="op">(</span>
-  topo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gebco_08"</span>, <span class="st">"ibcso"</span>, <span class="st">"etopo1"</span>, <span class="st">"etopo2"</span>, <span class="st">"kerguelen"</span>, <span class="st">"smith_sandwell"</span>,
-    <span class="st">"gebco_14"</span>, <span class="st">"macrie1100m"</span>, <span class="st">"macrie2100m"</span>, <span class="st">"cryosat2"</span>, <span class="st">"lake_superior"</span>, <span class="st">"ramp"</span>,
-    <span class="st">"ibcso_is"</span>, <span class="st">"ibcso_bed"</span>, <span class="st">"rema_1km"</span>, <span class="st">"rema_200m"</span>, <span class="st">"rema_100m"</span>, <span class="st">"rema_8m"</span>, <span class="st">"gebco_19"</span>,
-    <span class="st">"gebco_21"</span><span class="op">)</span>,
-  polar <span class="op">=</span> <span class="cn">FALSE</span>,
-  lon180 <span class="op">=</span> <span class="cn">TRUE</span>,
-  xylim <span class="op">=</span> <span class="cn">NULL</span>,
-  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>,
-  resample <span class="op">=</span> <span class="st">"bilinear"</span>
-<span class="op">)</span>
-
-<span class="fu">readbathy</span><span class="op">(</span>
-  topo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gebco_08"</span>, <span class="st">"ibcso"</span>, <span class="st">"etopo1"</span>, <span class="st">"etopo2"</span>, <span class="st">"kerguelen"</span>, <span class="st">"smith_sandwell"</span>,
-    <span class="st">"gebco_14"</span>, <span class="st">"macrie1100m"</span>, <span class="st">"macrie2100m"</span>, <span class="st">"cryosat2"</span>, <span class="st">"lake_superior"</span>, <span class="st">"ramp"</span>,
-    <span class="st">"ibcso_is"</span>, <span class="st">"ibcso_bed"</span>, <span class="st">"rema_1km"</span>, <span class="st">"rema_200m"</span>, <span class="st">"rema_100m"</span>, <span class="st">"rema_8m"</span>, <span class="st">"gebco_19"</span>,
-    <span class="st">"gebco_21"</span><span class="op">)</span>,
-  polar <span class="op">=</span> <span class="cn">FALSE</span>,
-  lon180 <span class="op">=</span> <span class="cn">TRUE</span>,
-  xylim <span class="op">=</span> <span class="cn">NULL</span>,
-  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>,
-  resample <span class="op">=</span> <span class="st">"bilinear"</span>
-<span class="op">)</span>
-
-<span class="fu">topofile</span><span class="op">(</span>
-  topo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gebco_08"</span>, <span class="st">"ibcso"</span>, <span class="st">"etopo1"</span>, <span class="st">"etopo2"</span>, <span class="st">"kerguelen"</span>, <span class="st">"smith_sandwell"</span>,
-    <span class="st">"gebco_14"</span>, <span class="st">"macrie1100m"</span>, <span class="st">"macrie2100m"</span>, <span class="st">"cryosat2"</span>, <span class="st">"lake_superior"</span>, <span class="st">"ramp"</span>,
-    <span class="st">"ibcso_is"</span>, <span class="st">"ibcso_bed"</span>, <span class="st">"rema_1km"</span>, <span class="st">"rema_200m"</span>, <span class="st">"rema_100m"</span>, <span class="st">"rema_8m"</span>, <span class="st">"gebco_19"</span>,
-    <span class="st">"gebco_21"</span><span class="op">)</span>,
-  polar <span class="op">=</span> <span class="cn">FALSE</span>,
-  lon180 <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">read_rema_tiles</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">readtopo</span><span class="op">(</span></span>
+<span>  topo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gebco_08"</span>, <span class="st">"ibcso"</span>, <span class="st">"etopo1"</span>, <span class="st">"etopo2"</span>, <span class="st">"kerguelen"</span>, <span class="st">"smith_sandwell"</span>,</span>
+<span>    <span class="st">"gebco_14"</span>, <span class="st">"macrie1100m"</span>, <span class="st">"macrie2100m"</span>, <span class="st">"cryosat2"</span>, <span class="st">"lake_superior"</span>, <span class="st">"ramp"</span>,</span>
+<span>    <span class="st">"ibcso_is"</span>, <span class="st">"ibcso_bed"</span>, <span class="st">"rema_1km"</span>, <span class="st">"rema_200m"</span>, <span class="st">"rema_100m"</span>, <span class="st">"rema_8m"</span>, <span class="st">"gebco_19"</span>,</span>
+<span>    <span class="st">"gebco_21"</span><span class="op">)</span>,</span>
+<span>  polar <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  lon180 <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  xylim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  resample <span class="op">=</span> <span class="st">"bilinear"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">readbathy</span><span class="op">(</span></span>
+<span>  topo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gebco_08"</span>, <span class="st">"ibcso"</span>, <span class="st">"etopo1"</span>, <span class="st">"etopo2"</span>, <span class="st">"kerguelen"</span>, <span class="st">"smith_sandwell"</span>,</span>
+<span>    <span class="st">"gebco_14"</span>, <span class="st">"macrie1100m"</span>, <span class="st">"macrie2100m"</span>, <span class="st">"cryosat2"</span>, <span class="st">"lake_superior"</span>, <span class="st">"ramp"</span>,</span>
+<span>    <span class="st">"ibcso_is"</span>, <span class="st">"ibcso_bed"</span>, <span class="st">"rema_1km"</span>, <span class="st">"rema_200m"</span>, <span class="st">"rema_100m"</span>, <span class="st">"rema_8m"</span>, <span class="st">"gebco_19"</span>,</span>
+<span>    <span class="st">"gebco_21"</span><span class="op">)</span>,</span>
+<span>  polar <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  lon180 <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  xylim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  resample <span class="op">=</span> <span class="st">"bilinear"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">topofile</span><span class="op">(</span></span>
+<span>  topo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gebco_08"</span>, <span class="st">"ibcso"</span>, <span class="st">"etopo1"</span>, <span class="st">"etopo2"</span>, <span class="st">"kerguelen"</span>, <span class="st">"smith_sandwell"</span>,</span>
+<span>    <span class="st">"gebco_14"</span>, <span class="st">"macrie1100m"</span>, <span class="st">"macrie2100m"</span>, <span class="st">"cryosat2"</span>, <span class="st">"lake_superior"</span>, <span class="st">"ramp"</span>,</span>
+<span>    <span class="st">"ibcso_is"</span>, <span class="st">"ibcso_bed"</span>, <span class="st">"rema_1km"</span>, <span class="st">"rema_200m"</span>, <span class="st">"rema_100m"</span>, <span class="st">"rema_8m"</span>, <span class="st">"gebco_19"</span>,</span>
+<span>    <span class="st">"gebco_21"</span><span class="op">)</span>,</span>
+<span>  polar <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  lon180 <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">read_rema_tiles</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>topo</dt>
 <dd><p>Data source, see Details.</p></dd>
+
+
 <dt>polar</dt>
 <dd><p>Flag for returning the polar version of the IBCSO data.</p></dd>
+
+
 <dt>lon180</dt>
 <dd><p>Flag for returning data in Atlantic -180, 180 rather than Pacific 0, 360 view.</p></dd>
+
+
 <dt>xylim</dt>
 <dd><p>spatial extents or raster grid to crop from source data, see Details</p></dd>
+
+
 <dt>returnfiles</dt>
 <dd><p>Return just the relevant file name</p></dd>
+
+
 <dt>...</dt>
 <dd><p>reserved for future use, ignored currently</p></dd>
+
+
 <dt>resample</dt>
 <dd><p>method to use for GDAL warper resampling (currently via terra), the 'method' argument to 'project()'</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <dl><dt></dt>
+    
+
+<dl><dt></dt>
 <dd><p><code>topofile</code> returns a character string of the full path to a file name</p></dd>
 
 <dt></dt>
@@ -204,7 +219,7 @@ The following data sets are available using the argument <code>topo</code>.</p><
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

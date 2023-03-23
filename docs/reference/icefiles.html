@@ -18,7 +18,7 @@ ice products."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/li
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9028</span>
       </span>
     </div>
 
@@ -74,36 +74,52 @@ ice products.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">icefiles</span><span class="op">(</span>
-  time.resolution <span class="op">=</span> <span class="st">"daily"</span>,
-  product <span class="op">=</span> <span class="st">"nsidc"</span>,
-  hemisphere <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"south"</span>, <span class="st">"north"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">icefiles</span><span class="op">(</span></span>
+<span>  time.resolution <span class="op">=</span> <span class="st">"daily"</span>,</span>
+<span>  product <span class="op">=</span> <span class="st">"nsidc"</span>,</span>
+<span>  hemisphere <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"south"</span>, <span class="st">"north"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>time.resolution</dt>
 <dd><p>daily or monthly files?</p></dd>
+
+
 <dt>product</dt>
 <dd><p>choice of sea ice product, see <code><a href="readice.html">readice</a></code></p></dd>
+
+
 <dt>hemisphere</dt>
 <dd><p>north or south</p></dd>
+
+
 <dt>...</dt>
 <dd><p>reserved for future use, currently ignored</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>data.frame of <code>file</code> and <code>date</code></p>
+    
+
+<p>data.frame of <code>file</code> and <code>date</code></p>
+
+
+    </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>The 'fullname' is the path to the raw NSIDC binary file, 'vrt_dsn' a VRT string
+describing the fullname as a GDAL DSN string.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">icf</span> <span class="op">&lt;-</span> <span class="fu">icefiles</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">icf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/ncell.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">icf</span><span class="op">)</span>, <span class="op">]</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">icf</span> <span class="op">&lt;-</span> <span class="fu">icefiles</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">icf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">icf</span><span class="op">)</span>, <span class="op">]</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -118,7 +134,7 @@ ice products.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

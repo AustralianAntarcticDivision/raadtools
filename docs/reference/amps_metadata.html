@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9028</span>
       </span>
     </div>
 
@@ -79,23 +79,24 @@ represent</p><table class="table table"><tr><td><code>Band</code></td><td>the ba
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">amps_metadata</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">amps_metadata</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 254 × 8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Band  GRIB_COMMENT           GRIB_ELEMENT GRIB_FORECAST_SECONDS GRIB_REF_TIME</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1     undefined[-]           var176       0sec                  1445774400se…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2     undefined[-]           var177       0sec                  1445774400se…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 3     Icecover(ice           ICEC         0sec                  1445774400se…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 4     Landcover(land         LAND         0sec                  1445774400se…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 5     u-componentofwind[m/s] UGRD         0sec                  1445774400se…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 6     u-componentofwind[m/s] UGRD         0sec                  1445774400se…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 7     u-componentofwind[m/s] UGRD         0sec                  1445774400se…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 8     u-componentofwind[m/s] UGRD         0sec                  1445774400se…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 9     u-componentofwind[m/s] UGRD         0sec                  1445774400se…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 10    u-componentofwind[m/s] UGRD         0sec                  1445774400se…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 244 more rows, and 3 more variables: GRIB_SHORT_NAME &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   GRIB_UNIT &lt;chr&gt;, GRIB_VALID_TIME &lt;chr&gt;</span></span>
-<span class="r-in"><span class="co">## u_wind_at_900 &lt;- read  ## unfinished</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Band  GRIB_COMMENT           GRIB_E…¹ GRIB_…² GRIB_…³ GRIB_…⁴ GRIB_…⁵ GRIB_…⁶</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1     undefined[-]           var176   0sec    144577… 0-SFC   [-]     144577…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2     undefined[-]           var177   0sec    144577… 0-SFC   [-]     144577…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 3     Icecover(ice           ICEC     0sec    144577… 1-SFC   [propo… 144577…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 4     Landcover(land         LAND     0sec    144577… 1-SFC   [propo… 144577…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 5     u-componentofwind[m/s] UGRD     0sec    144577… 10-HTGL [m/s]   144577…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 6     u-componentofwind[m/s] UGRD     0sec    144577… 1000-I… [m/s]   144577…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 7     u-componentofwind[m/s] UGRD     0sec    144577… 975-IS… [m/s]   144577…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 8     u-componentofwind[m/s] UGRD     0sec    144577… 950-IS… [m/s]   144577…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 9     u-componentofwind[m/s] UGRD     0sec    144577… 925-IS… [m/s]   144577…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 10    u-componentofwind[m/s] UGRD     0sec    144577… 900-IS… [m/s]   144577…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 244 more rows, and abbreviated variable names ¹​GRIB_ELEMENT,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ²​GRIB_FORECAST_SECONDS, ³​GRIB_REF_TIME, ⁴​GRIB_SHORT_NAME, ⁵​GRIB_UNIT,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ⁶​GRIB_VALID_TIME</span></span>
+<span class="r-in"><span><span class="co">## u_wind_at_900 &lt;- read  ## unfinished</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -110,7 +111,7 @@ represent</p><table class="table table"><tr><td><code>Band</code></td><td>the ba
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

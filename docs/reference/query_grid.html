@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9028</span>
       </span>
     </div>
 
@@ -72,17 +72,22 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">query_grid</span><span class="op">(</span><span class="va">lon</span>, <span class="va">lat</span>, <span class="va">date</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">query_grid</span><span class="op">(</span><span class="va">lon</span>, <span class="va">lat</span>, <span class="va">date</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>lon</dt>
 <dd><p>vector of longitudes in the grid</p></dd>
+
+
 <dt>lat</dt>
 <dd><p>vector of latitudes in the grid</p></dd>
+
+
 <dt>date</dt>
 <dd><p>vector of dates in the grid</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -95,17 +100,15 @@ fine resolution or long series.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">lon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">110</span>, <span class="fl">120</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">lat</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">60</span>, <span class="op">-</span><span class="fl">40</span>, by <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2002-03-03"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"5 days"</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">qd</span> <span class="op">&lt;-</span> <span class="fu">query_grid</span><span class="op">(</span>lon <span class="op">=</span> <span class="va">lon</span>, lat <span class="op">=</span> <span class="va">lat</span>, date <span class="op">=</span> <span class="va">dts</span><span class="op">)</span></span>
-<span class="r-in"><span class="co">## use bilinear to ensure we get an interpolate value in the grid</span></span>
-<span class="r-in"><span class="va">qd</span><span class="op">$</span><span class="va">sst</span> <span class="op">&lt;-</span> <span class="fu"><a href="extract.html">extract</a></span><span class="op">(</span><span class="va">readsst</span>, <span class="va">qd</span>, method <span class="op">=</span> <span class="st">"bilinear"</span><span class="op">)</span></span>
-<span class="r-in"><span class="co">## ssha</span></span>
-<span class="r-in"><span class="va">qd</span><span class="op">$</span><span class="va">ssha</span> <span class="op">&lt;-</span> <span class="fu"><a href="extract.html">extract</a></span><span class="op">(</span><span class="va">readssh</span>, <span class="va">qd</span>, ssha <span class="op">=</span> <span class="cn">TRUE</span>, method <span class="op">=</span> <span class="st">"bilinear"</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Discarded ellps unknown in Proj4 definition: +proj=longlat +a=6378136.3 +rf=298.257 +no_defs +type=crs</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Discarded datum unknown in Proj4 definition</span>
-<span class="r-in"><span class="va">qd</span><span class="op">$</span><span class="va">wind_mag</span> <span class="op">&lt;-</span> <span class="fu"><a href="extract.html">extract</a></span><span class="op">(</span><span class="va">readwind</span>, <span class="va">qd</span>, magonly <span class="op">=</span> <span class="cn">TRUE</span>, method <span class="op">=</span> <span class="st">"bilinear"</span><span class="op">)</span> </span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">lon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">110</span>, <span class="fl">120</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lat</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">60</span>, <span class="op">-</span><span class="fl">40</span>, by <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2002-03-03"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"5 days"</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">qd</span> <span class="op">&lt;-</span> <span class="fu">query_grid</span><span class="op">(</span>lon <span class="op">=</span> <span class="va">lon</span>, lat <span class="op">=</span> <span class="va">lat</span>, date <span class="op">=</span> <span class="va">dts</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## use bilinear to ensure we get an interpolate value in the grid</span></span></span>
+<span class="r-in"><span><span class="va">qd</span><span class="op">$</span><span class="va">sst</span> <span class="op">&lt;-</span> <span class="fu"><a href="extract.html">extract</a></span><span class="op">(</span><span class="va">readsst</span>, <span class="va">qd</span>, method <span class="op">=</span> <span class="st">"bilinear"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## ssha</span></span></span>
+<span class="r-in"><span><span class="va">qd</span><span class="op">$</span><span class="va">ssha</span> <span class="op">&lt;-</span> <span class="fu"><a href="extract.html">extract</a></span><span class="op">(</span><span class="va">readssh</span>, <span class="va">qd</span>, ssha <span class="op">=</span> <span class="cn">TRUE</span>, method <span class="op">=</span> <span class="st">"bilinear"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">qd</span><span class="op">$</span><span class="va">wind_mag</span> <span class="op">&lt;-</span> <span class="fu"><a href="extract.html">extract</a></span><span class="op">(</span><span class="va">readwind</span>, <span class="va">qd</span>, magonly <span class="op">=</span> <span class="cn">TRUE</span>, method <span class="op">=</span> <span class="st">"bilinear"</span><span class="op">)</span> </span></span>
 </code></pre></div>
     </div>
   </div>
@@ -120,7 +123,7 @@ fine resolution or long series.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

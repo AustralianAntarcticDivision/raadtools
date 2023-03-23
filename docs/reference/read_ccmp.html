@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9028</span>
       </span>
     </div>
 
@@ -72,47 +72,66 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">read_ccmp</span><span class="op">(</span>
-  <span class="va">date</span>,
-  time.resolution <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"6hourly"</span><span class="op">)</span>,
-  xylim <span class="op">=</span> <span class="cn">NULL</span>,
-  lon180 <span class="op">=</span> <span class="cn">FALSE</span>,
-  magonly <span class="op">=</span> <span class="cn">FALSE</span>,
-  dironly <span class="op">=</span> <span class="cn">FALSE</span>,
-  uonly <span class="op">=</span> <span class="cn">FALSE</span>,
-  vonly <span class="op">=</span> <span class="cn">FALSE</span>,
-  nobsonly <span class="op">=</span> <span class="cn">FALSE</span>,
-  latest <span class="op">=</span> <span class="cn">TRUE</span>,
-  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>,
-  inputfiles <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_ccmp</span><span class="op">(</span></span>
+<span>  <span class="va">date</span>,</span>
+<span>  time.resolution <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"6hourly"</span><span class="op">)</span>,</span>
+<span>  xylim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lon180 <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  magonly <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  dironly <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  uonly <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  vonly <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  nobsonly <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  latest <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  inputfiles <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>date</dt>
 <dd><p>date or dates of data to read, see Details</p></dd>
+
+
 <dt>time.resolution</dt>
 <dd><p>time resolution (6hourly)</p></dd>
+
+
 <dt>xylim</dt>
 <dd><p>spatial extents to crop from source data, can be anything accepted by <code><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></code>, see Details</p></dd>
+
+
 <dt>magonly</dt>
 <dd><p>return just the magnitude from the U and V
 components</p></dd>
+
+
 <dt>dironly</dt>
 <dd><p>return just the direction from the U and V, in degrees N=0, E=90, S=180, W=270</p></dd>
+
+
 <dt>uonly</dt>
 <dd><p>return just the U component of velocity</p></dd>
+
+
 <dt>vonly</dt>
 <dd><p>return just the V component of velocity
 components, in degrees (0 north, 90 east, 180 south, 270 west)</p></dd>
+
+
 <dt>latest</dt>
 <dd><p>if TRUE (and date not supplied) return the latest time available, otherwise the earliest</p></dd>
+
+
 <dt>returnfiles</dt>
 <dd><p>ignore options and just return the file names and dates</p></dd>
+
+
 <dt>...</dt>
 <dd><p>passed to brick, primarily for <code>filename</code></p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -137,34 +156,28 @@ data files, <code><a href="https://rdrr.io/pkg/raster/man/raster.html" class="ex
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co">## read a single time slice, direction only</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">read_ccmp</span><span class="op">(</span>dironly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## get a local extent for a zoom plot and plot the directions [0,360) as an image with arrows</span></span>
-<span class="r-in"><span class="va">e</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/projectRaster.html" class="external-link">projectExtent</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="fl">130</span>, <span class="fl">150</span>, <span class="op">-</span><span class="fl">50</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span>, crs <span class="op">=</span> <span class="st">"+proj=longlat"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/raster/man/projection.html" class="external-link">projection</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/crop.html" class="external-link">crop</a></span><span class="op">(</span><span class="fu">read_ccmp</span><span class="op">(</span><span class="op">)</span>, <span class="va">e</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">crds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/xyFromCell.html" class="external-link">coordinates</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">scale</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></span>
-<span class="r-in"><span class="va">vlen</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="va">x</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">vlen</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/crop.html" class="external-link">crop</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">e</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x1</span> <span class="op">&lt;-</span> <span class="va">crds</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">y1</span> <span class="op">&lt;-</span> <span class="va">crds</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">x2</span> <span class="op">&lt;-</span> <span class="va">crds</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/getValues.html" class="external-link">values</a></span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">*</span> <span class="va">scale</span></span>
-<span class="r-in"><span class="va">y2</span> <span class="op">&lt;-</span> <span class="va">crds</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/getValues.html" class="external-link">values</a></span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">*</span> <span class="va">scale</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/arrows.html" class="external-link">arrows</a></span><span class="op">(</span><span class="va">x1</span>, <span class="va">y1</span>, <span class="va">x2</span>, <span class="va">y2</span>, length <span class="op">=</span> <span class="fl">0.02</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>zero-length arrow is of indeterminate angle and so skipped</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>zero-length arrow is of indeterminate angle and so skipped</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>zero-length arrow is of indeterminate angle and so skipped</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>zero-length arrow is of indeterminate angle and so skipped</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>zero-length arrow is of indeterminate angle and so skipped</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>zero-length arrow is of indeterminate angle and so skipped</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## read a single time slice, direction only</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">read_ccmp</span><span class="op">(</span>dironly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## get a local extent for a zoom plot and plot the directions [0,360) as an image with arrows</span></span></span>
+<span class="r-in"><span><span class="va">e</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/projectRaster.html" class="external-link">projectExtent</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="fl">130</span>, <span class="fl">150</span>, <span class="op">-</span><span class="fl">50</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span>, crs <span class="op">=</span> <span class="st">"+proj=longlat"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/raster/man/projection.html" class="external-link">projection</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/crop.html" class="external-link">crop</a></span><span class="op">(</span><span class="fu">read_ccmp</span><span class="op">(</span><span class="op">)</span>, <span class="va">e</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">crds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/coordinates.html" class="external-link">coordinates</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">scale</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></span></span>
+<span class="r-in"><span><span class="va">vlen</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="va">x</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">vlen</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/crop.html" class="external-link">crop</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">e</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="va">crds</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">y1</span> <span class="op">&lt;-</span> <span class="va">crds</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="va">crds</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/values.html" class="external-link">values</a></span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">*</span> <span class="va">scale</span></span></span>
+<span class="r-in"><span><span class="va">y2</span> <span class="op">&lt;-</span> <span class="va">crds</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/values.html" class="external-link">values</a></span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">*</span> <span class="va">scale</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/arrows.html" class="external-link">arrows</a></span><span class="op">(</span><span class="va">x1</span>, <span class="va">y1</span>, <span class="va">x2</span>, <span class="va">y2</span>, length <span class="op">=</span> <span class="fl">0.02</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="read_ccmp-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## faster if we get the file list first</span></span>
-<span class="r-in"><span class="va">ccfiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="ccmp_files.html">ccmp_files</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">earliest</span> <span class="op">&lt;-</span> <span class="fu">read_ccmp</span><span class="op">(</span><span class="va">ccfiles</span><span class="op">$</span><span class="va">date</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">16</span><span class="op">]</span>, xylim <span class="op">=</span> <span class="va">e</span>, magonly <span class="op">=</span> <span class="cn">TRUE</span>, inputfiles <span class="op">=</span> <span class="va">ccfiles</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">earliest</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></span><span class="op">(</span><span class="fl">64</span><span class="op">)</span>, zlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## faster if we get the file list first</span></span></span>
+<span class="r-in"><span><span class="va">ccfiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="ccmp_files.html">ccmp_files</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">earliest</span> <span class="op">&lt;-</span> <span class="fu">read_ccmp</span><span class="op">(</span><span class="va">ccfiles</span><span class="op">$</span><span class="va">date</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">16</span><span class="op">]</span>, xylim <span class="op">=</span> <span class="va">e</span>, magonly <span class="op">=</span> <span class="cn">TRUE</span>, inputfiles <span class="op">=</span> <span class="va">ccfiles</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">earliest</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></span><span class="op">(</span><span class="fl">64</span><span class="op">)</span>, zlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="read_ccmp-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -180,7 +193,7 @@ data files, <code><a href="https://rdrr.io/pkg/raster/man/raster.html" class="ex
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

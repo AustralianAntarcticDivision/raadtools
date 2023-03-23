@@ -18,7 +18,7 @@ these products, which are available from http://webdav.data.aad.gov.au/data/envi
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9028</span>
       </span>
     </div>
 
@@ -74,19 +74,26 @@ these products, which are available from <a href="http://webdav.data.aad.gov.au/
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">derivaadcfiles</span><span class="op">(</span><span class="va">products</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">derivaadcfiles</span><span class="op">(</span><span class="va">products</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>products</dt>
 <dd><p>which derived product</p></dd>
+
+
 <dt>...</dt>
 <dd><p>reserved for future use, currently ignored</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>data.frame of <code>file</code> and <code>date</code></p>
+    
+
+<p>data.frame of <code>file</code> and <code>date</code></p>
+
+
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -95,7 +102,7 @@ these products, which are available from <a href="http://webdav.data.aad.gov.au/
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="op">(</span><span class="va">prods</span> <span class="op">&lt;-</span> <span class="fu"><a href="derivaadcproducts.html">derivaadcproducts</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="op">(</span><span class="va">prods</span> <span class="op">&lt;-</span> <span class="fu"><a href="derivaadcproducts.html">derivaadcproducts</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [1] "bathymetry"                                       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [2] "bathymetry_slope"                                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [3] "benthic_regionalisation"                          </span>
@@ -225,15 +232,15 @@ these products, which are available from <a href="http://webdav.data.aad.gov.au/
 <span class="r-out co"><span class="r-pr">#&gt;</span> [127] "t_50_winter_climatology"                          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [128] "vertical_velocity_250"                            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [129] "vertical_velocity_500"                            </span>
-<span class="r-in"><span class="fu"><a href="readderivaadc.html">readderivaadc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">prods</span>, <span class="fl">1L</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="readderivaadc.html">readderivaadc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">prods</span>, <span class="fl">1L</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class      : RasterLayer </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> dimensions : 501, 3601, 1804101  (nrow, ncol, ncell)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> resolution : 0.1, 0.1  (x, y)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> extent     : -180.05, 180.05, -80.05, -29.95  (xmin, xmax, ymin, ymax)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> crs        : +proj=longlat +datum=WGS84 +no_defs </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> source     : distance_shelf.nc </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> names      : rdsiPUBLICraaddatawebdav.data.aad.gov.audataenvironmentalderivedantarcticnetcdfdistance_shelf </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> zvar       : distance </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> source     : bathymetry_slope.nc </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> names      : rdsiPUBLICraaddatawebdav.data.aad.gov.audataenvironmentalderivedantarcticnetcdfbathymetry_slope </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> zvar       : slope </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
@@ -249,7 +256,7 @@ these products, which are available from <a href="http://webdav.data.aad.gov.au/
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

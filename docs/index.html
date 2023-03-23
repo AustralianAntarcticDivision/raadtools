@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9028</span>
       </span>
     </div>
 
@@ -94,9 +94,9 @@
 <p>Tools for reading, plotting and manipulating spatial data used at the Australian Antarctic Division (AAD).</p>
 <p>A common example is to read an environmental layer as a function of date:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span>
-<span class="va">ice</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/readice.html">readice</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2018-06-01"</span>, <span class="st">"2019-06-01"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ice</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span></span>
+<span><span class="va">ice</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/readice.html">readice</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2018-06-01"</span>, <span class="st">"2019-06-01"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ice</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-eg-1-1.png"><!-- --></p>
 <p>The available data sources are accessed using <strong>read*()</strong> functions for a <a href="http://australianantarcticdivision.github.io/raadtools/reference/index.html" class="external-link">wide variety of data sources</a>.</p>
 <p>There are data sets from oceanography, topography, meteorology, altimetry, sea ice, ocean colour, and many other data sources. These are mostly remote sensing but include re-analysis and model output products.</p>
@@ -121,19 +121,19 @@
 <p>The repository of data used by raadtools is available via the <a href="https://dashboard.rc.nectar.org.au" class="external-link">Nectar research cloud</a> or for local use within the AAD.</p>
 <p>There are two main ways to access raadtools. (If neither of 1 or 2 work for you you, see your local raadtools expert.)</p>
 <div class="section level2">
-<h2 id="1-rstudio-raadtools-server">1. RStudio raadtools server<a class="anchor" aria-label="anchor" href="#1-rstudio-raadtools-server"></a>
+<h2 id="id_1-rstudio-raadtools-server">1. RStudio raadtools server<a class="anchor" aria-label="anchor" href="#id_1-rstudio-raadtools-server"></a>
 </h2>
 <p>If you have access to a “raadtools-RStudio-server” then you need only load the package to get started:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="2-local-computer-within-the-aad-network">2. Local computer, within the AAD network<a class="anchor" aria-label="anchor" href="#2-local-computer-within-the-aad-network"></a>
+<h2 id="id_2-local-computer-within-the-aad-network">2. Local computer, within the AAD network<a class="anchor" aria-label="anchor" href="#id_2-local-computer-within-the-aad-network"></a>
 </h2>
 <p>If it’s not installed, trying installing with</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"AustralianAntarcticDivision/raadtools"</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"AustralianAntarcticDivision/raadtools"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span></span></code></pre></div>
 <p>Typically you will be provided with access, and won’t be aware of the underlying details, but the repository of data used by raadtools is available under RDSI/PUBLIC/raad and at the AAD in the scientific data collection.</p>
 <p>Anyone with a <a href="https://dashboard.rc.nectar.org.au" class="external-link">Nectar account</a> may run this by creating a VM from our <code>raadclient</code> image. Search the public images for <strong>raadclient</strong> (e.g. ’ raadclient06_20181016’ but choose the latest one) and ensure that the SSH and RStudio port (8787) is open. Use the default <em>rstudio/rstudio</em> account, or create your own.</p>
 <p>You are welcome to make your own copies of data from the collection for your own use, but please respect the citation and usage requests of the data providers <a href="https://github.com/AustralianAntarcticDivision/blueant#data-source-summary" class="external-link">listed in the summary</a>.</p>
@@ -195,7 +195,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

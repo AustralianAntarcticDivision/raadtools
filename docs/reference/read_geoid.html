@@ -18,7 +18,7 @@ virtual raster from the source files, and return as a RasterLayer."><!-- mathjax
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9028</span>
       </span>
     </div>
 
@@ -74,19 +74,24 @@ virtual raster from the source files, and return as a RasterLayer.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">read_geoid</span><span class="op">(</span>xylim <span class="op">=</span> <span class="cn">NULL</span>, force <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_geoid</span><span class="op">(</span>xylim <span class="op">=</span> <span class="cn">NULL</span>, force <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>xylim</dt>
 <dd><p>an extent, in longlat, or an object that provides one</p></dd>
+
+
 <dt>force</dt>
 <dd><p>if TRUE ignore cached virtual saved file, and recompute (try this if it otherwise fails)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>RasterLayer, longitude latitue grid of geoid level</p>
+    
+
+<p>RasterLayer, longitude latitue grid of geoid level</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -99,9 +104,9 @@ pre-computed geoid undulation point value located at the SW corner of each cell.
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">geoid</span> <span class="op">&lt;-</span> <span class="fu">read_geoid</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">geoid</span> <span class="op">&lt;-</span> <span class="fu">read_geoid</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -116,7 +121,7 @@ pre-computed geoid undulation point value located at the SW corner of each cell.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

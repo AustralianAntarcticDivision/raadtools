@@ -19,7 +19,7 @@ http://nsidc.org/data/polar-stereo/tools_geo_pixel.html#pixel_area.'><!-- mathja
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9028</span>
       </span>
     </div>
 
@@ -76,21 +76,28 @@ Only 25km product is supported. Tool name "psn25area_v3.dat and pss25area_v3.dat
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">readice_area</span><span class="op">(</span>product <span class="op">=</span> <span class="st">"nsidc"</span>, hemisphere <span class="op">=</span> <span class="st">"south"</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">readice_area</span><span class="op">(</span>product <span class="op">=</span> <span class="st">"nsidc"</span>, hemisphere <span class="op">=</span> <span class="st">"south"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>product</dt>
 <dd><p>"nsidc" the 25km NSIDC passive microwave</p></dd>
+
+
 <dt>hemisphere</dt>
 <dd><p>south (default) or north</p></dd>
+
+
 <dt>...</dt>
 <dd><p>ignored</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>raster with the area of the cells in m^2</p>
+    
+
+<p>raster with the area of the cells in m^2</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -99,10 +106,26 @@ Only 25km product is supported. Tool name "psn25area_v3.dat and pss25area_v3.dat
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">readice_area</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in file(datfile, open = "rb"):</span> invalid 'description' argument</span>
-<span class="r-in"><span class="fu">readice_area</span><span class="op">(</span>hemisphere <span class="op">=</span> <span class="st">"north"</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in file(datfile, open = "rb"):</span> invalid 'description' argument</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">readice_area</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class      : RasterLayer </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions : 332, 316, 104912  (nrow, ncol, ncell)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> resolution : 25000, 25000  (x, y)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> extent     : -3950000, 3950000, -3950000, 4350000  (xmin, xmax, ymin, ymax)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> crs        : +proj=stere +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +rf=298.279411123061 +units=m +no_defs </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> source     : memory</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> names      : NSIDC_true_area_m2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> values     : 444053000, 664449000  (min, max)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu">readice_area</span><span class="op">(</span>hemisphere <span class="op">=</span> <span class="st">"north"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class      : RasterLayer </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions : 448, 304, 136192  (nrow, ncol, ncell)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> resolution : 25000, 25000  (x, y)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> extent     : -3850000, 3750000, -5350000, 5850000  (xmin, xmax, ymin, ymax)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> crs        : +proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +x_0=0 +y_0=0 +a=6378273 +rf=298.279411123061 +units=m +no_defs </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> source     : memory</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> names      : NSIDC_true_area_m2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> values     : 382659000, 664449000  (min, max)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </div>
@@ -117,7 +140,7 @@ Only 25km product is supported. Tool name "psn25area_v3.dat and pss25area_v3.dat
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

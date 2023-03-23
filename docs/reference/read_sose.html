@@ -21,7 +21,7 @@ returned."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9028</span>
       </span>
     </div>
 
@@ -80,17 +80,17 @@ returned.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">read_sose</span><span class="op">(</span>
-  <span class="va">date</span>,
-  time.resolution <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"monthly"</span><span class="op">)</span>,
-  varname <span class="op">=</span> <span class="st">""</span>,
-  level <span class="op">=</span> <span class="fl">1L</span>,
-  setNA <span class="op">=</span> <span class="cn">TRUE</span>,
-  latest <span class="op">=</span> <span class="cn">TRUE</span>,
-  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>,
-  inputfiles <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_sose</span><span class="op">(</span></span>
+<span>  <span class="va">date</span>,</span>
+<span>  time.resolution <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"monthly"</span><span class="op">)</span>,</span>
+<span>  varname <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  level <span class="op">=</span> <span class="fl">1L</span>,</span>
+<span>  setNA <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  latest <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  inputfiles <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -98,12 +98,17 @@ returned.</p>
     <dl><dt>varname</dt>
 <dd><p>variable to return from the data files, default is whatever first value
 from <code><a href="sose_monthly_varnames.html">sose_monthly_varnames()</a></code></p></dd>
+
+
 <dt>level, </dt>
 <dd><p>defaults to 1L - there are 52</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></code> object</p>
+    
+
+<p><code><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></code> object</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -112,12 +117,12 @@ from <code><a href="sose_monthly_varnames.html">sose_monthly_varnames()</a></cod
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">read_sose</span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"Uvel"</span>, level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">read_sose</span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"SeaIceArea"</span>, level <span class="op">=</span> <span class="fl">1</span>, latest <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">read_sose</span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"Chl"</span>, level <span class="op">=</span> <span class="fl">10</span>, latest <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">read_sose</span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"Uvel"</span>, level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">read_sose</span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"SeaIceArea"</span>, level <span class="op">=</span> <span class="fl">1</span>, latest <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">read_sose</span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"Chl"</span>, level <span class="op">=</span> <span class="fl">10</span>, latest <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -132,7 +137,7 @@ from <code><a href="sose_monthly_varnames.html">sose_monthly_varnames()</a></cod
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

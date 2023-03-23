@@ -19,7 +19,7 @@ algorithms, but the original MODIS and SeaWIFs products are also available via t
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9028</span>
       </span>
     </div>
 
@@ -76,35 +76,46 @@ algorithms, but the original MODIS and SeaWIFs products are also available via t
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">readCHL_month</span><span class="op">(</span><span class="va">date</span>, xylim <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span>, inputfiles <span class="op">=</span> <span class="cn">NULL</span>, latest <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">readchla</span><span class="op">(</span>
-  <span class="va">date</span>,
-  product <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MODISA"</span>, <span class="st">"SeaWiFS"</span><span class="op">)</span>,
-  xylim <span class="op">=</span> <span class="cn">NULL</span>,
-  algorithm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"johnson"</span>, <span class="st">"nasa"</span><span class="op">)</span>,
-  latest <span class="op">=</span> <span class="cn">TRUE</span>,
-  grid <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">readCHL_month</span><span class="op">(</span><span class="va">date</span>, xylim <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span>, inputfiles <span class="op">=</span> <span class="cn">NULL</span>, latest <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">readchla</span><span class="op">(</span></span>
+<span>  <span class="va">date</span>,</span>
+<span>  product <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MODISA"</span>, <span class="st">"SeaWiFS"</span><span class="op">)</span>,</span>
+<span>  xylim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  algorithm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"johnson"</span>, <span class="st">"nasa"</span><span class="op">)</span>,</span>
+<span>  latest <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  grid <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>date</dt>
 <dd><p>date or dates of data to read, see Details</p></dd>
+
+
 <dt>xylim</dt>
 <dd><p>spatial extents to crop from source data, can be anything accepted by <code><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></code>, ignored if grid is provided
 @param algorithm johnson or nasa</p></dd>
+
+
 <dt>latest</dt>
 <dd><p>if TRUE (and date not supplied) return the latest time available, otherwise the earliest</p></dd>
+
+
 <dt>product</dt>
 <dd><p>choice of product, see Details</p></dd>
+
+
 <dt>grid</dt>
 <dd><p>template raster object for output</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></code> object</p>
+    
+
+<p><code><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></code> object</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -131,7 +142,7 @@ data files, <code><a href="https://rdrr.io/pkg/raster/man/raster.html" class="ex
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">readCHL_month</span><span class="op">(</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">readCHL_month</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class      : RasterBrick </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> dimensions : 2160, 4320, 9331200, 1  (nrow, ncol, ncell, nlayers)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> resolution : 0.08333333, 0.08333334  (x, y)</span>
@@ -139,14 +150,14 @@ data files, <code><a href="https://rdrr.io/pkg/raster/man/raster.html" class="ex
 <span class="r-out co"><span class="r-pr">#&gt;</span> crs        : +proj=longlat +datum=WGS84 +no_defs </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> source     : memory</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> names      : Chlorophyll.Concentration..OCI.Algorithm </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> min values :                              0.009239071 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> max values :                                 99.98312 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> time       : 2022-04-01 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> min values :                              0.001764934 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> max values :                                 86.11175 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> time       : 2023-01-01 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">readchla</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2003-01-01"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2003-06-01"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">         xylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">150</span>, <span class="op">-</span><span class="fl">70</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">readchla</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2003-01-01"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2003-06-01"</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>         xylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">150</span>, <span class="op">-</span><span class="fl">70</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -161,7 +172,7 @@ data files, <code><a href="https://rdrr.io/pkg/raster/man/raster.html" class="ex
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

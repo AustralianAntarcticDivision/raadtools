@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9028</span>
       </span>
     </div>
 
@@ -87,10 +87,12 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Remotely Sensed Ocean Colour (Chlorophyll) in raadtools</h1>
-                        <h4 data-toc-skip class="author">Michael D. Sumner</h4>
+      <h1 data-toc-skip>Remotely Sensed Ocean Colour (Chlorophyll) in
+raadtools</h1>
+                        <h4 data-toc-skip class="author">Michael D.
+Sumner</h4>
             
-            <h4 data-toc-skip class="date">2022-05-25</h4>
+            <h4 data-toc-skip class="date">2023-03-23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AustralianAntarcticDivision/raadtools/blob/HEAD/vignettes/chlorophyll.Rmd" class="external-link"><code>vignettes/chlorophyll.Rmd</code></a></small>
       <div class="hidden name"><code>chlorophyll.Rmd</code></div>
@@ -99,36 +101,44 @@
 
     
     
-<p>The function <code>readchla</code> can be used to read a mean value of remotely sensed chlorophyll-a for an arbitrary set of dates (days) within a region, either from the MODISA (2002-) or SeaWiFS (1997-2012) platform and with the Johnson 2013 or NASA algorithm.</p>
-<p>For example, provide a vector of dates, and a spatial extent (longlat) to produce a raster map at the native resolution of the Level-3 Mapped product for given product.</p>
+<p>The function <code>readchla</code> can be used to read a mean value
+of remotely sensed chlorophyll-a for an arbitrary set of dates (days)
+within a region, either from the MODISA (2002-) or SeaWiFS (1997-2012)
+platform and with the Johnson 2013 or NASA algorithm.</p>
+<p>For example, provide a vector of dates, and a spatial extent
+(longlat) to produce a raster map at the native resolution of the
+Level-3 Mapped product for given product.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span>
-<span class="co">#&gt; Loading required package: raster</span>
-<span class="co">#&gt; Loading required package: sp</span>
-<span class="co">#&gt; global option 'raadfiles.data.roots' set:</span>
-<span class="co">#&gt; '/rdsi/PRIVATE/raad/data               </span>
-<span class="co">#&gt;  /rdsi/PRIVATE/raad/data_local         </span>
-<span class="co">#&gt;  /rdsi/PRIVATE/raad/data_staging       </span>
-<span class="co">#&gt;  /rdsi/PRIVATE/raad/data_deprecated    </span>
-<span class="co">#&gt;  /rdsi/PUBLIC/raad/data                '</span>
-<span class="co">#&gt; Uploading raad file cache as at 2022-05-25 23:04:58 (1147016 files listed)</span>
-<span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2010-01-01"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"1 day"</span>, length <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
-<span class="va">ext</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="fl">140</span>, <span class="fl">150</span>, <span class="op">-</span><span class="fl">60</span>, <span class="op">-</span><span class="fl">40</span><span class="op">)</span>
-<span class="va">modis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readchla.html">readchla</a></span><span class="op">(</span><span class="va">dates</span>, <span class="va">ext</span>, product <span class="op">=</span> <span class="st">"MODISA"</span><span class="op">)</span>
-<span class="va">seawifs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readchla.html">readchla</a></span><span class="op">(</span><span class="va">dates</span>, <span class="va">ext</span>, product <span class="op">=</span> <span class="st">"SeaWiFS"</span><span class="op">)</span>
-
-<span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="va">chlp</span> <span class="op">&lt;-</span> <span class="fu">palr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/palr/man/chl_pal.html" class="external-link">chlPal</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; Warning: 'palr::chlPal' is deprecated.</span>
-<span class="co">#&gt; Use 'chl_pal' instead.</span>
-<span class="co">#&gt; See help("Deprecated")</span>
-<span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">modis</span>, col <span class="op">=</span><span class="va">chlp</span><span class="op">$</span><span class="va">cols</span>, breaks <span class="op">=</span> <span class="va">chlp</span><span class="op">$</span><span class="va">breaks</span>, legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">seawifs</span>, col <span class="op">=</span><span class="va">chlp</span><span class="op">$</span><span class="va">cols</span>, breaks <span class="op">=</span> <span class="va">chlp</span><span class="op">$</span><span class="va">breaks</span>, legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AustralianAntarcticDivision/raadtools" class="external-link">raadtools</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: raster</span></span>
+<span><span class="co">#&gt; Loading required package: sp</span></span>
+<span><span class="co">#&gt; global option 'raadfiles.data.roots' set:</span></span>
+<span><span class="co">#&gt; '/rdsi/PRIVATE/raad/data               </span></span>
+<span><span class="co">#&gt;  /rdsi/PRIVATE/raad/data_local         </span></span>
+<span><span class="co">#&gt;  /rdsi/PRIVATE/raad/data_staging       </span></span>
+<span><span class="co">#&gt;  /rdsi/PRIVATE/raad/data_deprecated    </span></span>
+<span><span class="co">#&gt;  /rdsi/PUBLIC/raad/data                '</span></span>
+<span><span class="co">#&gt; Uploading raad file cache as at 2023-03-23 12:05:02 (1205841 files listed)</span></span>
+<span><span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2010-01-01"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"1 day"</span>, length <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="va">ext</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="fl">140</span>, <span class="fl">150</span>, <span class="op">-</span><span class="fl">60</span>, <span class="op">-</span><span class="fl">40</span><span class="op">)</span></span>
+<span><span class="va">modis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readchla.html">readchla</a></span><span class="op">(</span><span class="va">dates</span>, <span class="va">ext</span>, product <span class="op">=</span> <span class="st">"MODISA"</span><span class="op">)</span></span>
+<span><span class="va">seawifs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readchla.html">readchla</a></span><span class="op">(</span><span class="va">dates</span>, <span class="va">ext</span>, product <span class="op">=</span> <span class="st">"SeaWiFS"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">chlp</span> <span class="op">&lt;-</span> <span class="fu">palr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/palr/man/chl_pal.html" class="external-link">chlPal</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: 'palr::chlPal' is deprecated.</span></span>
+<span><span class="co">#&gt; Use 'chl_pal' instead.</span></span>
+<span><span class="co">#&gt; See help("Deprecated")</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">modis</span>, col <span class="op">=</span><span class="va">chlp</span><span class="op">$</span><span class="va">cols</span>, breaks <span class="op">=</span> <span class="va">chlp</span><span class="op">$</span><span class="va">breaks</span>, legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">seawifs</span>, col <span class="op">=</span><span class="va">chlp</span><span class="op">$</span><span class="va">cols</span>, breaks <span class="op">=</span> <span class="va">chlp</span><span class="op">$</span><span class="va">breaks</span>, legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="chlorophyll_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></code></pre></div>
-<p>There is a fairly complex stack of infrastructure underneath this function to make this possible.</p>
-<p>The L3 RRS bin data is downloaded and processed for Johnson and NASA chlorophyll, and stored in sparse form as a table with bin number and chlorophyll-a values.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></span></code></pre></div>
+<p>There is a fairly complex stack of infrastructure underneath this
+function to make this possible.</p>
+<p>The L3 RRS bin data is downloaded and processed for Johnson and NASA
+chlorophyll, and stored in sparse form as a table with bin number and
+chlorophyll-a values.</p>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -146,7 +156,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

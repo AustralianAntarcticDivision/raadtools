@@ -18,7 +18,7 @@ readamps_d1wind reads the "d1" level wind (defaults to 1).'><!-- mathjax --><scr
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9028</span>
       </span>
     </div>
 
@@ -74,25 +74,27 @@ readamps_d1wind reads the "d1" level wind (defaults to 1).'><!-- mathjax --><scr
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">readamps_d1wind</span><span class="op">(</span>
-  <span class="va">date</span>,
-  time.resolution <span class="op">=</span> <span class="st">"4hourly"</span>,
-  xylim <span class="op">=</span> <span class="cn">NULL</span>,
-  magonly <span class="op">=</span> <span class="cn">FALSE</span>,
-  dironly <span class="op">=</span> <span class="cn">FALSE</span>,
-  uonly <span class="op">=</span> <span class="cn">FALSE</span>,
-  vonly <span class="op">=</span> <span class="cn">FALSE</span>,
-  latest <span class="op">=</span> <span class="cn">TRUE</span>,
-  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,
-  level <span class="op">=</span> <span class="fl">1</span>,
-  <span class="va">...</span>,
-  inputfiles <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">readamps_d1wind</span><span class="op">(</span></span>
+<span>  <span class="va">date</span>,</span>
+<span>  time.resolution <span class="op">=</span> <span class="st">"4hourly"</span>,</span>
+<span>  xylim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  magonly <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  dironly <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  uonly <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  vonly <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  latest <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  level <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  inputfiles <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="value">
     <h2>Value</h2>
-    <p>Raster</p>
+    
+
+<p>Raster</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -140,23 +142,21 @@ GRIB_VALID_TIME=  1445774400 sec UTC
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">af</span> <span class="op">&lt;-</span> <span class="fu">amps_d1files</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu">readamps_d1wind</span><span class="op">(</span>latest <span class="op">=</span> <span class="cn">TRUE</span>, inputfiles <span class="op">=</span> <span class="va">af</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .check_dsn_single(x):</span> object 'ifile' not found</span>
-<span class="r-in"><span class="co">#w &lt;- readamps_d2wind(latest = TRUE)</span></span>
-<span class="r-in"><span class="va">vlen</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">a</span> <span class="op">*</span> <span class="va">a</span> <span class="op">+</span> <span class="va">b</span> <span class="op">*</span> <span class="va">b</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">vlen</span><span class="op">(</span><span class="va">w</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="va">w</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'plot': object 'w' not found</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## arrow jigger</span></span>
-<span class="r-in"><span class="va">arr</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">sub</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/ncell.html" class="external-link">ncell</a></span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>, <span class="va">scale</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"> <span class="va">cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/xyFromCell.html" class="external-link">coordinates</a></span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>; <span class="va">cr1</span> <span class="op">&lt;-</span> <span class="va">cr</span>;</span>
-<span class="r-in"> <span class="va">cr1</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">cr</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/getValues.html" class="external-link">values</a></span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">*</span><span class="va">scale</span>;</span>
-<span class="r-in"> <span class="va">cr1</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">cr1</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/getValues.html" class="external-link">values</a></span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">*</span><span class="va">scale</span><span class="op">)</span>;</span>
-<span class="r-in"> <span class="fu"><a href="https://rdrr.io/r/graphics/segments.html" class="external-link">segments</a></span><span class="op">(</span><span class="va">cr</span><span class="op">[</span><span class="va">sub</span>,<span class="fl">1</span><span class="op">]</span>, <span class="va">cr</span><span class="op">[</span><span class="va">sub</span>,<span class="fl">2</span><span class="op">]</span>, <span class="va">cr1</span><span class="op">[</span><span class="va">sub</span>,<span class="fl">1</span><span class="op">]</span>, <span class="va">cr1</span><span class="op">[</span><span class="va">sub</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"><span class="fu">arr</span><span class="op">(</span><span class="va">w</span>, <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/ncell.html" class="external-link">ncell</a></span><span class="op">(</span><span class="va">w</span><span class="op">)</span>, <span class="fl">10000</span><span class="op">)</span>, scale <span class="op">=</span> <span class="fl">15000</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'obj' in selecting a method for function 'coordinates': object 'w' not found</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">af</span> <span class="op">&lt;-</span> <span class="fu">amps_d1files</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu">readamps_d1wind</span><span class="op">(</span>latest <span class="op">=</span> <span class="cn">TRUE</span>, inputfiles <span class="op">=</span> <span class="va">af</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">#w &lt;- readamps_d2wind(latest = TRUE)</span></span></span>
+<span class="r-in"><span><span class="va">vlen</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">a</span> <span class="op">*</span> <span class="va">a</span> <span class="op">+</span> <span class="va">b</span> <span class="op">*</span> <span class="va">b</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">vlen</span><span class="op">(</span><span class="va">w</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="va">w</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## arrow jigger</span></span></span>
+<span class="r-in"><span><span class="va">arr</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">sub</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">ncell</a></span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>, <span class="va">scale</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span> <span class="va">cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/coordinates.html" class="external-link">coordinates</a></span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>; <span class="va">cr1</span> <span class="op">&lt;-</span> <span class="va">cr</span>;</span></span>
+<span class="r-in"><span> <span class="va">cr1</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">cr</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/values.html" class="external-link">values</a></span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">*</span><span class="va">scale</span>;</span></span>
+<span class="r-in"><span> <span class="va">cr1</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">cr1</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/values.html" class="external-link">values</a></span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">*</span><span class="va">scale</span><span class="op">)</span>;</span></span>
+<span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/graphics/segments.html" class="external-link">segments</a></span><span class="op">(</span><span class="va">cr</span><span class="op">[</span><span class="va">sub</span>,<span class="fl">1</span><span class="op">]</span>, <span class="va">cr</span><span class="op">[</span><span class="va">sub</span>,<span class="fl">2</span><span class="op">]</span>, <span class="va">cr1</span><span class="op">[</span><span class="va">sub</span>,<span class="fl">1</span><span class="op">]</span>, <span class="va">cr1</span><span class="op">[</span><span class="va">sub</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="fu">arr</span><span class="op">(</span><span class="va">w</span>, <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">ncell</a></span><span class="op">(</span><span class="va">w</span><span class="op">)</span>, <span class="fl">10000</span><span class="op">)</span>, scale <span class="op">=</span> <span class="fl">15000</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="readamps_d1wind-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </div>
@@ -171,7 +171,7 @@ GRIB_VALID_TIME=  1445774400 sec UTC
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

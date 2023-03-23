@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">raadtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9028</span>
       </span>
     </div>
 
@@ -72,30 +72,41 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">read_amsre_ice</span><span class="op">(</span>
-  <span class="va">date</span>,
-  xylim <span class="op">=</span> <span class="cn">NULL</span>,
-  latest <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>,
-  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,
-  inputfiles <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_amsre_ice</span><span class="op">(</span></span>
+<span>  <span class="va">date</span>,</span>
+<span>  xylim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  latest <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  returnfiles <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  inputfiles <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>date</dt>
 <dd><p>date or dates of data to read, see Details</p></dd>
+
+
 <dt>xylim</dt>
 <dd><p>spatial extents to crop from source data, can be anything accepted by <code><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></code></p></dd>
+
+
 <dt>latest</dt>
 <dd><p>if TRUE and date input is missing, return the latest time available otherwise the earliest</p></dd>
+
+
 <dt>...</dt>
 <dd><p>passed to brick, primarily for <code>filename</code></p></dd>
+
+
 <dt>returnfiles</dt>
 <dd><p>ignore options and just return the file names and dates</p></dd>
+
+
 <dt>inputfiles</dt>
 <dd><p>input the files data base to speed up initialization</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -118,7 +129,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

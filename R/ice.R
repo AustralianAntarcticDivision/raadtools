@@ -149,10 +149,15 @@ readice_daily <- function(date,
                     product = "nsidc",
                     hemisphere = c("south", "north", "both"), 
                     xylim = NULL,
-                    setNA = TRUE, rescale = TRUE, 
+                    setNA = TRUE, rescale = FALSE, 
                     latest = TRUE,
                     returnfiles = FALSE,  ..., inputfiles = NULL, resample = "bilinear") {
   
+  if (rescale) {
+    yes <- getOption("raadtools.message.rescale")
+    if (yes) message("since v2 of NSIDC 25km sea ice, 'rescale' no longer has meaning, ignored (data are returned in range 0,100)")
+    options(raadtools.message.rescale = FALSE)
+  }
 #  time.resolution <- match.arg(time.resolution)
  product <- match.arg(product)
  hemisphere <- match.arg(hemisphere)
@@ -202,8 +207,8 @@ readice_daily <- function(date,
    xylim <- raster::raster(xylim)
   }
   if (inherits(xylim, "BasicRaster")) { 
-    dimension <- dim(xylim)[2:1]
-    projection <- comment(raster::crs(xylim))
+    #dimension <- dim(xylim)[2:1]
+    #projection <- comment(raster::crs(xylim))
     ex <- c(raster::xmin(xylim), raster::xmax(xylim), raster::ymin(xylim), raster::ymax(xylim))
     
   }
@@ -213,8 +218,9 @@ readice_daily <- function(date,
     
 
     out <- lapply(list_of_fullname, function(.x)  
-      vapour::vapour_warp_raster_dbl(.x, extent = ex, dimension = dimension, projection = projection, resample = resample))    
-    rs <- if (rescale) 1/2.5 else 1
+      vapour::vapour_warp_raster_dbl(.x, extent = ex, dimension = dimension, projection = projection, resample = resample))   
+   # browser()
+    rs <-  100  ## we've lost the ability to not scale with netcdf
    if (setNA) out <- lapply(out, function(.x) {.x[.x > 250] <- NA; .x[!.x > 0] <- NA;  raster::setValues(xylim[[1]],.x * rs)})
 
     return(setZ(raster::brick(out), files$date))
@@ -285,7 +291,7 @@ read_ice_v2 <- function(files, setNA, xylim = NULL, ...) {
   # }
   # 
  # browser(0)
-  
+
   if (!is.null(xylim)) out <- raster::crop(out, raster::extent(xylim))
   setZ(out, files$date)
   

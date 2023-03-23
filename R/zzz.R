@@ -9,7 +9,7 @@
   }
   read_rema_tiles <<- memoise::memoize(read_rema_tiles)
   
-  options(raadtools.geoid_tile_vrt = NULL)
+  options(raadtools.geoid_tile_vrt = NULL, raadtools.message.rescale = TRUE)
   
   ## send this message once per session
   options("raadtools.both.hemisphere.message" = FALSE)

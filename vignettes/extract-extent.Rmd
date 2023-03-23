@@ -8,8 +8,10 @@ output:
     fig_height: 9
 vignette: >
   %\VignetteIndexEntry{Environmental data from an extent with raadtools}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -88,9 +90,8 @@ library(raadfiles)
 ice <- readice() 
 rex <- raster( extent(100, 160, -70, -50), crs = "+proj=longlat +datum=WGS84")
 pex <- projectExtent(rex, projection(ice))
+res(pex) <- 25000
 
-## pex is a raster, not just an extent but that's good because
-## it also has the CRS (it's nonsense to have an extent without CRS, but that's life)
 ice_ex <- readice("2016-09-01", xylim = pex)
 
 plot(ice_ex, col = grey(seq(0, 1, length = 100)), zlim = c(1, 100))
@@ -130,9 +131,8 @@ library(raadfiles)
 ice <- readice() 
 rex <- raster( extent(100, 160, -70, -50), crs = "+proj=longlat +datum=WGS84")
 pex <- projectExtent(rex, projection(ice))
+res(pex) <- 25000
 
-## pex is a raster, not just an extent but that's good because
-## it also has the CRS (it's nonsense to have an extent without CRS, but that's life)
 ice_ex <- readice("2016-09-01", xylim = pex)
 
 ## create a graticule for this region

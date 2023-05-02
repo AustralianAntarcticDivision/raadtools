@@ -188,7 +188,7 @@ readcurr <- function (date, time.resolution = c("daily"),
   
   if (is.null(inputfiles)) {
     files <- dplyr::inner_join(dplyr::rename(altimetry_daily_ugos_files(), ugos_vrt = vrt_dsn), 
-    altimetry_daily_vgos_files() |> dplyr::transmute(date, vgos_vrt = vrt_dsn), "date")
+    altimetry_daily_vgos_files() %>% dplyr::transmute(date, vgos_vrt = vrt_dsn), "date")
   } else {
     files <- inputfiles
   }

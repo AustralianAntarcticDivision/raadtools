@@ -1,5 +1,7 @@
 # raadtools dev
 
+* Fix readcurr. 
+
 * NSIDC netcdf files needed to disable 'rescale'. We don't currently control that. 
 
 * New scheme for NSIDC netcdf files.  We now use these directly, there's no use for 'vrt_dsn'. Now depending

@@ -73,9 +73,13 @@ readchla <- function(date, product = c("MODISA", "SeaWiFS"),
   
   if (!algorithm == "nasa") warning("only 'nasa' algorithm is currently supported")
   product <- match.arg(product)
-  date <- timedateFrom(date)
+  
   files <- ocfiles("daily", product = product, varname = "CHL", type = "L3m")
+  if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
+  date <- timedateFrom(date)
+  
   files <- files[match(as.Date(date), as.Date(files$date)), ]
+  files <- dplyr::arrange(dplyr::distinct(files), date)
   if (nrow(files) < 1) {
     warning("no data available in Southern Ocean for these date/s")
     return(NULL)

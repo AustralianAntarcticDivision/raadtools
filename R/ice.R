@@ -6,6 +6,16 @@
 # use EPSG codes 3413 and 3976.
 # 
 
+.get_both_hemisphere_files <- function() {
+  north = icefiles(hemisphere = "north")
+  south = icefiles(hemisphere = "south")
+  #north$fullname <- vapour::vapour_vrt(north$fullname, sds = 1)
+  #south$fullname <- vapour::vapour_vrt(north$fullname, sds = 1)
+  
+  tibble::tibble(date = north$date, 
+                 fullname  = split(rbind(north$fullname, south$fullname), rep(seq(1, nrow(north)), each = 2L)))
+}
+
 
 ## note, we might use a date-controlled way to change the SRS to for the older ones (3411 and 3412)
 .north_nsidc_vrt <- '<VRTDataset rasterXSize="304" rasterYSize="448"> 
@@ -153,6 +163,8 @@ readice_daily <- function(date,
                     latest = TRUE,
                     returnfiles = FALSE,  ..., inputfiles = NULL, resample = "bilinear") {
   
+  dimension <- NULL
+  
   if (rescale) {
     yes <- getOption("raadtools.message.rescale")
     if (yes) message("since v2 of NSIDC 25km sea ice, 'rescale' no longer has meaning, ignored (data are returned in range 0,100)")
@@ -169,21 +181,15 @@ readice_daily <- function(date,
    }
    xylim <- raster::raster()
    raster::res(xylim) <- 0.25
+   dimension <- dim(xylim)[2:1]
+   projection <- "OGC:CRS84"
  }
  if (time.resolution != "daily") stop("readice for non-daily data is defunct, see 'readice_monthly()', 'readice_daily()' and similarly specific functions")
   time.resolution <- match.arg(time.resolution)
   if (!is.null(inputfiles)) {
     files <- inputfiles
   } else {
-    .get_both_hemisphere_files <- function() {
-      north = icefiles(hemisphere = "north")
-      south = icefiles(hemisphere = "south")
-      #north$fullname <- vapour::vapour_vrt(north$fullname, sds = 1)
-      #south$fullname <- vapour::vapour_vrt(north$fullname, sds = 1)
-      
-      tibble::tibble(date = north$date, 
-                     fullname  = split(rbind(north$fullname, south$fullname), rep(seq(1, nrow(north)), each = 2L)))
-    }
+
     ## get file names and dates and full path
     files <- switch(hemisphere, 
                     north = icefiles(hemisphere = "north"), 
@@ -198,20 +204,20 @@ readice_daily <- function(date,
   files <- .processFiles(date, files, time.resolution)
   
   
-  dimension <- NULL
 
   if (inherits(xylim, "SpatRaster")) {
-   # dimension <- dim(xylim)[2:1]
-   # projection <- xylim@ptr$get_crs("wkt")
-   # ex <- xylim@ptr$extent@.xData$vector
+   dimension <- dim(xylim)[2:1]
+   projection <- xylim@ptr$get_crs("wkt")
+   ex <- xylim@ptr$extent@.xData$vector
    xylim <- raster::raster(xylim)
   }
   if (inherits(xylim, "BasicRaster")) { 
-    #dimension <- dim(xylim)[2:1]
-    #projection <- comment(raster::crs(xylim))
+   dimension <- dim(xylim)[2:1]
+   projection <- comment(raster::crs(xylim))
     ex <- c(raster::xmin(xylim), raster::xmax(xylim), raster::ymin(xylim), raster::ymax(xylim))
     
   }
+
   if (!is.null(dimension)) {
     ## with the warper we currently get value 0,250 as they are natively in the netcdf (gdal per se returns them 0,1)
     list_of_fullname <- lapply(files$fullname, function(.x) vapour::vapour_vrt(.x, sds = 1))

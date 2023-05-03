@@ -1,0 +1,174 @@
+---
+title: "Welcome to raadtools"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+## raadtools
+
+
+The raadtools package has access to large data library of general remote sensing and environmental data.
+
+There are functions `read[_x]` that read a variable as a function of date. All output uses raster package layers.
+
+## Example
+
+Read SST and sea ice as raster layers, functions use date or dates (with options).
+
+```{r raadtools}
+library(raadtools)
+
+## read latest sea ice (southern hemi is default)
+(icelatest <- readice())
+
+## read latest SST
+readsst()
+
+## read a specific set of dates
+readice(as.Date("2022-09-15") + c(0, 30, 60))
+
+## read the earliest (latest is default)
+readsst(latest = FALSE)
+```
+
+Files are available that each function uses, the relationship is informal but most 'read\[\_x\]' functions have a 'returnfiles' option. The file sets are used by the read functions, but allow us to delve around the raadtools interface as needed.
+
+```{r files}
+## discover all the dates and file paths
+icefiles()
+## same as readice(returnfiles = TRUE)
+
+sstfiles()
+```
+
+We have a specialist `extract` method that works on signature `(x = function, y = dataframe_xyt)`.
+
+```{r extract-in-tie}
+## read values from a set of lon,lat points
+lats <- seq(-72, -53, by = 3)
+dates <- seq(getZ(icelatest)[1], by = "-3 months", length.out = 24)
+pts <- data.frame(lon = 150, expand.grid(lat = lats, date = dates))
+
+
+pts$sst <- raadtools::extract(readsst, pts)  ## just assumed data.frame(lon, lat, time) 
+
+pts$ice <- raadtools::extract(readice, pts)
+```
+
+Finally, a simple plot to show the extracted time series from the function,dataframe signature. 
+
+
+```{r plot}
+library(ggplot2)
+library(tidyr)
+
+
+ggplot(pivot_longer(pts, -c(lon, date, lat)) , aes(date, value, col = lat)) + geom_point() + facet_wrap(~name, scales = "free")
+
+```
+
+
+Package doc is hosted here, where we see the various 'read[x]' functions and the various '[x]files' functions that provide the file catalogue: http://australianantarcticdivision.github.io/raadtools/
+
+
+## Typical uses
+
+Very commonly used functions are 'readsst()', 'readghrsst()', 'readice()', 'read_amsr()', 'readtopo()', 'readssh()', 'readssha()', 'readcurr()', 
+'readwind()', and 'readchla()'. These cover the very widely used remote sensing streams from passive microwave, AVHRR, altimetry, ocean colour sensors, and various modelled outputs. There are several variant products and most functions offer a  few alternatives (currents for example includes u or v or magnitude or direction as output variable). 
+
+Mostly these file functions are controlled by the 'raadfiles' package, which was split off from raadtools itself to separate the task of file finding and network search configuration from the read tools. 
+
+
+Very common examples include files from passive microwave sensors
+
+```{r ice}
+raadfiles::nsidc_north_monthly_files()
+
+(nsidc <- raadfiles::nsidc_south_daily_files())
+
+raadfiles::amsr2_3k_daily_files()
+```
+
+from AVHRR and blended models
+
+```{r sst}
+raadfiles::oisst_daily_files()
+
+(ghrsst <- raadfiles::ghrsst_daily_files())
+```
+
+
+the altimetry NetCDF files include surface currents, sea surface height, and anomalies - so we separate the file finding from the variable selection (but this is an incomplete process so far for raadtools)
+
+```{r alti}
+raadfiles::altimetry_daily_files()
+```
+
+
+there is ocean colour, standard products as well as some lower levels, and we have integrated some derived products and pipelines for various projects
+
+```{r oc}
+raadtools::ocfiles("daily", product = "VIIRS", varname = "CHL", type = "L3m")
+
+rrs <- raadtools::ocfiles("daily", product = "MODISA", varname = "RRS", type = "L3b")
+
+```
+
+
+These file sets include the date for the file (usually it's the start date, we don't have interval semantics in our catalogue but do infer these for some tasks in raadtools)
+
+```{r date}
+range(ghrsst$date)
+range(rrs$date)
+range(nsidc$date)
+```
+
+The underlying time series simply reflect what's in the collection, we only deal with gaps or intervals downstream in some limited ways. 
+
+```{r date-dff}
+range(diff(ghrsst$date))
+range(diff(rrs$date))
+range(diff(nsidc$date))
+
+
+```
+
+(As an aside, the nsidc temporal coverage is not entirely accurate, there were temporal gaps and these were reflected in the original binary files - the series started as every two days, later became daily, and there was  a few weeks gap ). The NetCDF files have an empty shell for missing data, and when there were multiple sensors they have multiple variables - so there can be 0, 1, 2, or 3 variables. It's a different scene to the original binary files and we haven't finished aligment to it yet). 
+
+
+## How raadtools works
+
+There is a simple "all-files" catalogue, we can see it like this: 
+
+```{r allfiles}
+f <- allfiles()
+```
+
+There is a column 'root' and 'file', this is simply so that different systems can place the same data on a different network home (it looks different on Mac, Windows, on RDS, and at the Kingston HQ). 
+
+
+This catalogue is grepped by each read function, to get its correct set of files, that is how the specific file sets above are created.  
+
+Then the read(date, ) hones in on the right set of files and we are squarely into "R spatial" context, with raadtools having no further role. 
+
+### The stack
+
+Behind raadtools is the 'raster' package, this is now a legacy raster datacube facility in R. It is still supported, and we have not moved to its successors. What we have done is use GDAL more directly when ...
+
+
+- global ice, with simple vrt we can drive two files through the warper for a single grid anywhere on earth (not two incompatible polar grids), this was necessary for animal tracking which is what we originally implemented it for
+- SST and some others can specify a target grid, for any map projection output
+
+
+
+
+### Entire workflow example
+
+This blogpost works through setting up the file system from scratch. 
+
+https://ropensci.org/blog/2018/11/13/antarctic/
+
+
+

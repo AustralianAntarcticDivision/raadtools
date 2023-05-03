@@ -1,5 +1,5 @@
 ---
-title: "Gener data source examples"
+title: "General data source examples"
 author: "Michael Sumner, Ben Raymond"
 date: "28/07/2017"
 output:

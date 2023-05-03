@@ -92,7 +92,7 @@ readchla <- function(date, product = c("MODISA", "SeaWiFS"),
   wdata <- vapour::gdal_raster_data(.vrt_ds0( files$fullname, "chlor_a"), target_ext = ex, target_res = res(template), resample = "average")
   
   out <- setValues(template, wdata[[1]])
-  return(out)
+  return(setZ(out, date[1]))
   # d <- readchla_mean(date, product = product, xylim = xylim, latest = latest)
   # if (nrow(d) < 1) {
   #   warning("no data available in Southern Ocean for these date/s")

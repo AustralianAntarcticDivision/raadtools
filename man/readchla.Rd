@@ -3,7 +3,7 @@
 \name{readchla}
 \alias{readchla}
 \alias{readCHL_month}
-\title{Read Chlorophyll-a for the Southern Ocean}
+\title{Read Chlorophyll-a, NASA algorithm}
 \usage{
 readCHL_month(date, xylim = NULL, ..., inputfiles = NULL, latest = TRUE)
 
@@ -11,7 +11,7 @@ readchla(
   date,
   product = c("MODISA", "SeaWiFS"),
   xylim = NULL,
-  algorithm = c("johnson", "nasa"),
+  algorithm = c("nasa"),
   latest = TRUE,
   grid = NULL
 )
@@ -20,9 +20,10 @@ readchla(
 \item{date}{date or dates of data to read, see Details}
 
 \item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, ignored if grid is provided
-@param algorithm johnson or nasa}
+@param algorithm nasa only}
 
-\item{latest}{if TRUE (and date not supplied) return the latest time available, otherwise the earliest}
+\item{latest}{if TRUE (and date not supplied) return the latest time available, otherwise the earliest
+Note that reaCHL_month reads the NASA algorith L3m products.}
 
 \item{product}{choice of product, see Details}
 
@@ -32,16 +33,7 @@ readchla(
 \code{\link[raster]{raster}} object
 }
 \description{
-Ocean colour Chlorophyll-a data. Default is to read from the Johnson Improved
-chlorophyll-a estimates using Southern Ocean-specific calibration
-algorithms, but the original MODIS and SeaWIFs products are also available via the argument \code{product}.
-}
-\details{
-Dates are matched to file names by finding the nearest match in
-time within a short duration. If \code{date} is greater than
-length 1 then the sorted set of unique matches is returned.
-
-The code that creates these derived files is at \href{https://github.com/AustralianAntarcticDivision/raad-deriv}{raad-deriv}.
+Ocean colour Chlorophyll-a data, provide an input of daily dates and these will be averaged into one layer.
 }
 \examples{
 readCHL_month()
@@ -49,15 +41,6 @@ readCHL_month()
 d <- readchla(c("2003-01-01", c("2003-06-01")),
          xylim = extent(100, 150, -70, -30))
 }
-}
-\references{
-Johnson, R, PG Strutton, SW Wright, A McMinn, and KM
-Meiners (2013) Three improved satellite chlorophyll algorithms for
-the Southern Ocean, J. Geophys. Res. Oceans, 118,
-doi:10.1002/jgrc.20270
-\url{http://onlinelibrary.wiley.com/doi/10.1002/jgrc.20270/full}
-
-Note that reaCHL_month reads the NASA algorith L3m products.
 }
 \seealso{
 readCHL_month

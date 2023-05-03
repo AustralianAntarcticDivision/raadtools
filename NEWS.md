@@ -1,5 +1,7 @@
 # raadtools dev
 
+* readchla() now returns a mean from all input dates, and no longer supports Johnson alg. 
+
 * Fix readcurr. 
 
 * NSIDC netcdf files needed to disable 'rescale'. We don't currently control that. 

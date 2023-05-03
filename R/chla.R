@@ -22,68 +22,90 @@ readCHL_month <- function(date, xylim = NULL, ..., inputfiles = NULL, latest = T
 
 
 
+#Default is to read from the Johnson Improved
+# chlorophyll-a estimates using Southern Ocean-specific calibration
+# algorithms, but the original MODIS and SeaWIFs products are also available via the argument \code{product}.
+#
+# Dates are matched to file names by finding the nearest match in
+# time within a short duration. If \code{date} is greater than
+# length 1 then the sorted set of unique matches is returned.
+##
+# The code that creates these derived files is at [raad-deriv](https://github.com/AustralianAntarcticDivision/raad-deriv).
+# 
+# 
 
-##' Read Chlorophyll-a for the Southern Ocean
-##'
-##' Ocean colour Chlorophyll-a data. Default is to read from the Johnson Improved
-##' chlorophyll-a estimates using Southern Ocean-specific calibration
-##' algorithms, but the original MODIS and SeaWIFs products are also available via the argument \code{product}.
-##'
-##' Dates are matched to file names by finding the nearest match in
-##' time within a short duration. If \code{date} is greater than
-##' length 1 then the sorted set of unique matches is returned.
-##'
-##' The code that creates these derived files is at [raad-deriv](https://github.com/AustralianAntarcticDivision/raad-deriv).
-##' @param date date or dates of data to read, see Details
-##' @param product choice of product, see Details
+# @references  Johnson, R, PG Strutton, SW Wright, A McMinn, and KM
+# Meiners (2013) Three improved satellite chlorophyll algorithms for
+# the Southern Ocean, J. Geophys. Res. Oceans, 118,
+# doi:10.1002/jgrc.20270
+# \url{http://onlinelibrary.wiley.com/doi/10.1002/jgrc.20270/full}
+#
 
-##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, ignored if grid is provided
-##'  @param algorithm johnson or nasa
-##' @param grid template raster object for output
-##' @param latest if TRUE (and date not supplied) return the latest time available, otherwise the earliest
-##' @references  Johnson, R, PG Strutton, SW Wright, A McMinn, and KM
-##' Meiners (2013) Three improved satellite chlorophyll algorithms for
-##' the Southern Ocean, J. Geophys. Res. Oceans, 118,
-##' doi:10.1002/jgrc.20270
-##' \url{http://onlinelibrary.wiley.com/doi/10.1002/jgrc.20270/full}
+#' Read Chlorophyll-a, NASA algorithm
 ##'
-##' Note that reaCHL_month reads the NASA algorith L3m products. 
-##' 
-##' @seealso readCHL_month
-##' @export
-##' @return \code{\link[raster]{raster}} object
-##' @seealso \code{\link{chlafiles}} for details on the repository of
-##' data files, \code{\link[raster]{raster}} for the return value
-##' @examples
-##' \dontrun{
-##' d <- readchla(c("2003-01-01", c("2003-06-01")),
-##'          xylim = extent(100, 150, -70, -30))
-##' }
+#' Ocean colour Chlorophyll-a data, provide an input of daily dates and these will be averaged into one layer. 
+#' @param date date or dates of data to read, see Details
+#' @param product choice of product, see Details
+
+#' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, ignored if grid is provided
+#'  @param algorithm nasa only
+#' @param grid template raster object for output
+#' @param latest if TRUE (and date not supplied) return the latest time available, otherwise the earliest
+#' Note that reaCHL_month reads the NASA algorith L3m products. 
+#' 
+#' @seealso readCHL_month
+#' @export
+#' @return \code{\link[raster]{raster}} object
+#' @seealso \code{\link{chlafiles}} for details on the repository of
+#' data files, \code{\link[raster]{raster}} for the return value
+#' @examples
+#' \dontrun{
+#' d <- readchla(c("2003-01-01", c("2003-06-01")),
+#'          xylim = extent(100, 150, -70, -30))
+#' }
 #' @export
 readchla <- function(date, product = c("MODISA", "SeaWiFS"),
                      xylim = NULL,
-                     algorithm = c("johnson", "nasa"),
+                     algorithm = c("nasa"),
 
                      latest = TRUE, 
                      grid = NULL) {
+  
+  if (!algorithm == "nasa") warning("only 'nasa' algorithm is currently supported")
   product <- match.arg(product)
-  d <- readchla_mean(date, product = product, xylim = xylim, latest = latest)
-  if (nrow(d) < 1) {
+  date <- timedateFrom(date)
+  files <- ocfiles("daily", product = product, varname = "CHL", type = "L3m")
+  files <- files[match(as.Date(date), as.Date(files$date)), ]
+  if (nrow(files) < 1) {
     warning("no data available in Southern Ocean for these date/s")
-   return(NULL)
+    return(NULL)
   }
-  algorithm <- match.arg(algorithm)
-  thename <- sprintf("chla_%s", algorithm)
-  d <- d[, c("bin_num", thename)]
-  names(d) <- c("bin_num", "value")
-  NROWS <- product2nrows(product)
-  gridmap <- raster::raster(raster::extent(-180, 180, -90, 90), ncol = NROWS * 2, nrow = NROWS, crs = "+proj=longlat +datum=WGS84 +no_defs")
-  ## this hack is to align with assumption from here
-  ## https://github.com/AustralianAntarcticDivision/ocean_colour/blob/master/seawifs_daily_bins_init.R#L37
-  gridmap <- raster::crop(gridmap, raster::extent(-180, 180, -90, -30), snap = "out")
-  if (!is.null(xylim)) gridmap <- crop(gridmap, xylim)
-  if (!is.null(grid)) gridmap <- grid
-  bin_chl(d$bin_num, d$value, NROWS, gridmap)
+  template <- raster(files$fullname[1], varname = "chlor_a")  
+  if (!is.null(xylim)) {
+      template <- crop(template, extent(xylim))
+  }
+  ex <- c(xmin(template), xmax(template), ymin(template), ymax(template))
+  wdata <- vapour::gdal_raster_data(.vrt_ds0( files$fullname, "chlor_a"), target_ext = ex, target_res = res(template), resample = "average")
+  
+  out <- setValues(template, wdata[[1]])
+  return(out)
+  # d <- readchla_mean(date, product = product, xylim = xylim, latest = latest)
+  # if (nrow(d) < 1) {
+  #   warning("no data available in Southern Ocean for these date/s")
+  #  return(NULL)
+  # }
+  # algorithm <- match.arg(algorithm)
+  # thename <- sprintf("chla_%s", algorithm)
+  # d <- d[, c("bin_num", thename)]
+  # names(d) <- c("bin_num", "value")
+  # NROWS <- product2nrows(product)
+  # gridmap <- raster::raster(raster::extent(-180, 180, -90, 90), ncol = NROWS * 2, nrow = NROWS, crs = "+proj=longlat +datum=WGS84 +no_defs")
+  # ## this hack is to align with assumption from here
+  # ## https://github.com/AustralianAntarcticDivision/ocean_colour/blob/master/seawifs_daily_bins_init.R#L37
+  # gridmap <- raster::crop(gridmap, raster::extent(-180, 180, -90, -30), snap = "out")
+  # if (!is.null(xylim)) gridmap <- crop(gridmap, xylim)
+  # if (!is.null(grid)) gridmap <- grid
+  # bin_chl(d$bin_num, d$value, NROWS, gridmap)
 
 }
 
@@ -139,7 +161,7 @@ readchla_mean <- function(date,
 }
 
 
-##' @export
+#' @export
 readchla_old <- function(date, time.resolution = c("weekly", "monthly"),
                          product = c("johnson", "oceancolor"),
                          platform = c("MODISA", "SeaWiFS"),
@@ -200,16 +222,16 @@ readchla_old <- function(date, time.resolution = c("weekly", "monthly"),
   return(r)
 }
 
-##' Chlorophyll-a for the Southern Ocean
+#' Chlorophyll-a for the Southern Ocean
 ##'
-##' This function generates a list of available chlorophyll-a files, including SeaWiFS and MODIS.
-##' @title Chlorophyll-a
-##' @param time.resolution weekly (8day) or monthly
-##' @param product choice of chla product, see \code{readchla}
-##' @param platform (modis[a] or seawifs)
-##' @param ... reserved for future use, currently ignored
-##' @return data.frame
-##' @export
+#' This function generates a list of available chlorophyll-a files, including SeaWiFS and MODIS.
+#' @title Chlorophyll-a
+#' @param time.resolution weekly (8day) or monthly
+#' @param product choice of chla product, see \code{readchla}
+#' @param platform (modis[a] or seawifs)
+#' @param ... reserved for future use, currently ignored
+#' @return data.frame
+#' @export
 chlafiles <- function(time.resolution = c("weekly", "monthly"),
                       product = c("johnson", "oceancolor"),
                       platform = c("MODISA", "SeaWiFS"), ...) {

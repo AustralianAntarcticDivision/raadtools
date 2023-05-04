@@ -92,6 +92,9 @@ readfronts <- function(date,
   
   r <- if (length(l) > 1) raster::brick(raster::stack(l)) else l[[1L]]
   
+  
+  on.exit(sink(NULL), add = TRUE)
+  sink(tempfile())
   ## lots of cells are wasted with nodata and with float32 becoming 64
   v <- raster::values(r)
   mode(v) <- "integer"

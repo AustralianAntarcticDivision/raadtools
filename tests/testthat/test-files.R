@@ -33,4 +33,5 @@ test_that("file set/s sensible", {
     db <- listoffuns[[i]]()
     db %>% expect_s3_class("data.frame")
   }
+  
 })

@@ -1,4 +1,4 @@
-setOldClass("trip")
+#setOldClass("trip")
 .read.generic  <- function(x, y, ...) {
   ## read function "x", takes "y" as Date, POSIXct, character
   x(y, ...)
@@ -243,10 +243,10 @@ longlat_coords <- function(x) {
   }
   as.data.frame(coordinates(x))
 }
-.trip.extract <- function(x, y, ...) {
-  xyt <- longlat_coords(y)
-  xyt[["time"]] <- y[[y@TOR.columns[1L]]]
-  extract(x, xyt, ...)
-}
-setMethod("extract", signature(x = 'function', y = 'trip'), .trip.extract)
-
+# .trip.extract <- function(x, y, ...) {
+#   xyt <- longlat_coords(y)
+#   xyt[["time"]] <- y[[y@TOR.columns[1L]]]
+#   extract(x, xyt, ...)
+# }
+# setMethod("extract", signature(x = 'function', y = 'trip'), .trip.extract)
+# 

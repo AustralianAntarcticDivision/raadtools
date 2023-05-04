@@ -9,7 +9,8 @@ test_that("we get values", {
   #  expect_that(extract(readchla, aurora), is_a("numeric"))
   expect_equivalent(extract(readssh, aurora[c(1, 5, 10, 15), ]), 
               c( 0.5424,  0.4929, -0.6060, -1.2465))
-    expect_that(extract(readwind, aurora[c(1, 5, 10, 15), ], magonly = TRUE), is_a("numeric"))
+  ## warning about tzone
+    expect_that(extract(readwind, aurora[c(1, 5, 10, 15), ], magonly = TRUE), is_a("numeric")) %>% expect_warning() 
     ##expect_that(extract(readprod, aurora), is_a("numeric"))
 })
 
@@ -35,7 +36,8 @@ d <- structure(list(X1 = c(-21.6151966875637, -21.6151966875637, -21.61519668756
 
 test_that("another example works", {
   #  expect_that(extract(readchla, d), is_a("numeric"))
-        expect_that(extract(readice, d[c(1, 5, 10, 11, 15), ]), is_a("numeric"))
+  ## warning about tzone
+        expect_that(extract(readice, d[c(1, 5, 10, 11, 15), ]), is_a("numeric")) %>% expect_warning() 
     ##expect_that(extract(readwind, d, magonly = TRUE), is_a("numeric"))
     ##expect_that(extract(readprod, d), is_a("numeric"))
 })

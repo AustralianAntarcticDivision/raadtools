@@ -1,3 +1,16 @@
+keepOnlyMostComplexLine <- function(x) {
+  for (iObj in seq_len(nrow(x))) {
+    if (inherits(x, "SpatialLinesDataFrame")) {
+      wmax <- which.max(sapply(x[iObj, ]@lines[[1]]@Lines, function(x) nrow(x@coords)))
+      x@lines[[iObj]]@Lines <- x@lines[[iObj]]@Lines[wmax]
+    }
+    if (inherits(x, "SpatialPolygonsDataFrame")) {
+      wmax <- which.max(sapply(x[iLine, ]@lines[[1]]@Lines, function(x) nrow(x@coords)))
+      x@lines[[iLine]]@Lines <- x@lines[[iLine]]@Lines[wmax]
+    }
+  }
+  x
+}
 
 #' Distance to a sea ice 'edge'. 
 #' 

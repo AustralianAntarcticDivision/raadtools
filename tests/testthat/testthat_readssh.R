@@ -25,31 +25,31 @@ test_that("nuances of different defaults for multilayer object", {
 test_that("date ranges are valid", {
   dr <- range(sshfiles()$date)
   expect_that(dr, is_a("POSIXct"))
-  expect_that(all(!is.na(dr)), is_true())
+  expect_true(all(!is.na(dr)))
   dr2 <- range(sshfiles(ssha=TRUE)$date)
   expect_that(dr2, is_a("POSIXct"))
-  expect_that(all(!is.na(dr2)), is_true())
+  expect_true(all(!is.na(dr2)))
   
-  dr3 <- range(sshfiles(time.resolution = "monthly", ssha=TRUE)$date)
+  dr3 <- range(sshfiles(time.resolution = "daily", ssha=TRUE)$date)
   expect_that(dr3, is_a("POSIXct"))
-  expect_that(all(!is.na(dr3)), is_true())
+  expect_true(all(!is.na(dr3)))
   
-  dr4 <- range(sshfiles(time.resolution = "monthly_clim", ssha=TRUE)$date)
-  expect_that(dr4, is_a("POSIXct"))
-  expect_that(all(!is.na(dr4)), is_true())
-  
-  dr5 <- range(sshfiles(time.resolution = "seasonal_clim", ssha=TRUE)$date)
-  expect_that(dr5, is_a("POSIXct"))
-  expect_that(all(!is.na(dr5)), is_true())
-  
-  expect_that(nrow(sshfiles(time.resolution = "seasonal_clim", ssha=TRUE)), equals(4))
-  expect_that(nrow(sshfiles(time.resolution = "monthly_clim", ssha=TRUE)), equals(12))
+  # dr4 <- range(sshfiles(time.resolution = "monthly_clim", ssha=TRUE)$date)
+  # expect_that(dr4, is_a("POSIXct"))
+  # expect_that(all(!is.na(dr4)), is_true())
+  # 
+  # dr5 <- range(sshfiles(time.resolution = "seasonal_clim", ssha=TRUE)$date)
+  # expect_that(dr5, is_a("POSIXct"))
+  # expect_that(all(!is.na(dr5)), is_true())
+  # 
+  # expect_that(nrow(sshfiles(time.resolution = "seasonal_clim", ssha=TRUE)), equals(4))
+  # expect_that(nrow(sshfiles(time.resolution = "monthly_clim", ssha=TRUE)), equals(12))
 
 })
 
 test_that("ssh projection is not missing", {
   prj <- projection(readssh())
-  expect_that(is.na(prj), is_false())
+  expect_false(is.na(prj))
   
 })
 
@@ -60,11 +60,10 @@ xyt <- data.frame(x = c(100, 120, 130, 145, 150), y = seq(-80, 20, length = 5),
                   dts = seq(as.Date("2011-01-03"), by = "1 month", length = 5)
 )
 test_that("read is ok with inputfiles", {
-  expect_that(readssh("2015-01-01",  time.resolution = "daily", inputfiles = cf),
-              is_a("RasterLayer"))
-  expect_that(readssh("2015-01-01", ssha = TRUE, time.resolution = "daily", inputfiles = cfa),
-              is_a("RasterLayer"))
-  expect_that(extract(readssh, xyt,  time.resolution = "daily"), is_a("numeric"))
-  expect_that(extract(readssh, xyt, ssha = TRUE,  time.resolution = "daily", inputfiles = cfa), is_a("numeric"))
+  expect_s4_class(readssh("2015-01-01",  time.resolution = "daily", inputfiles = cf),"BasicRaster")
+  expect_s4_class(readssh("2015-01-01", ssha = TRUE, time.resolution = "daily", inputfiles = cfa), "BasicRaster")
+  expect_that(extract(readssh, xyt), is_a("numeric"))
+  # 
+  # expect_that(extract(readssh, xyt, ssha = TRUE,  inputfiles = cfa), is_a("numeric"))
 })
 

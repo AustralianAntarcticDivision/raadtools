@@ -20,7 +20,7 @@ test_that("requested files only are returned as a data.frame", {
     ffs <- readice(returnfiles = TRUE)
     expect_that(ffs, is_a("data.frame"))
 
-    expect_true(all(names(ffs) %in% c("date", "root", "fullname")))
+    expect_true(all(names(ffs) %in% c("date",  "fullname", "vrt_dsn")))
     expect_true(all(file.exists(ffs$fullname[sample(nrow(ffs), 100)])))
     expect_that(sum(is.na(ffs$date)), equals(0))
 
@@ -33,7 +33,7 @@ test_that("spatial crop works as expected", {
 })
 
 test_that("ice data is returned as a raster object", {
-          expect_that(readice("2000-01-01"), is_a("RasterStack"))
+          expect_s4_class(readice("2000-01-01"), "BasicRaster")
       })
 
 test_that("dates not available within 1.5 days give error", {
@@ -49,7 +49,7 @@ test_that("input data can be Date",
           )
 
 test_that("input data can be POSIXct",
-          expect_that(readice(as.POSIXct("2000-01-01")), is_a("RasterStack"))
+          expect_that(readice(as.POSIXct("2000-01-01")), is_a("BasicRaster"))
           )
 
 x <- readice(); y <- readice(rescale = FALSE);
@@ -67,7 +67,7 @@ test_that("missing values are greater in number for setNA",
 
 ## first test for readmulti
 test_that("valid multi dates is returned as a raster object", {
-         expect_that(readice(c("2000-01-01", "2000-01-10")), is_a("RasterStack"))
+         expect_that(readice(c("2000-01-01", "2000-01-10")), is_a("BasicRaster"))
 })
 
 b1 <- readice("1997-04-06")
@@ -82,18 +82,18 @@ test_that("multi read gives the same data as single", {
 
 x <- c("1997-04-06", "2005-10-11", "1997-04-06")
 test_that("multi read on duplicated dates give only non-dupes", {
-    expect_that(nlayers(readice(x)), equals(length(x) - 1L))
+    expect_that(nlayers(readice(x)), equals(length(x) - 1L)) %>% expect_warning()
 })
 
 x <- as.POSIXct(c("1997-04-06", "2005-10-11", "1997-04-09"), tz = "UTC")
 test_that("multi read on out of order dates sorts them", {
-    expect_that(format(getZ(readice(x))), equals(format(sort(x))))
+    expect_that(format(getZ(readice(x))), equals(format(sort(x))))  %>% expect_warning()
 })
 
 
 test_that("ice projection is not missing", {
   prj <- projection(readice())
-  expect_that(is.na(prj), is_false())
+  expect_false(is.na(prj))
   
 })
 
@@ -106,8 +106,8 @@ test_that("read is", {
   expect_error(readice("2015-01-01", product = "amsr", time.resolution = "daily", inputfiles = cf))
   expect_that(read_amsr_ice("2015-01-01", inputfiles = cf),
             is_a("RasterBrick"))
-  expect_that(extract(read_amsr_ice, xyt), is_a("numeric"))
-  expect_that(extract(read_amsr_ice, xyt, product = "amsr"), is_a("numeric"))
+  expect_that(extract(read_amsr_ice, xyt), is_a("numeric"))  %>% expect_warning()
+  expect_that(extract(read_amsr_ice, xyt, product = "amsr"), is_a("numeric"))  %>% expect_warning()
 })
 
 

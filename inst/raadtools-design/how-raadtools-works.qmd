@@ -10,7 +10,7 @@ editor_options:
 
 The raadtools package has access to data library of general remote sensing and environmental data.
 
-There are functions `read[_x]` that read a variable as a function of date. All output uses raster package layers.
+There are functions `read[_x]` that read a variable as a function of date. All output uses [raster package](https://CRAN.R-project.org/package=raster) layers. 
 
 ## Example
 
@@ -128,7 +128,32 @@ range(diff(nsidc$date))
 
 (As an aside, the nsidc temporal coverage is not entirely accurate, there were temporal gaps and these were reflected in the original binary files - the series started as every two days, later became daily, and there was a few weeks gap ). The NetCDF files have an empty shell for missing data, and when there were multiple sensors they have multiple variables - so there can be 0, 1, 2, or 3 variables. It's a different scene to the original binary files and we haven't finished aligment to it yet).
 
-## How raadtools works
+## How the data library works
+
+Every read function has a counterpart "files" function, for example `readghrsst()` uses `ghrsstfiles()` which returns every file in the set with its date-time index. 
+
+```{r ghrsst}
+(ghrsst <- ghrsstfiles())
+range(ghrsst$date)
+range(diff(ghrsst$date))
+
+```
+
+This source is daily, and there is a file for each day. Other sources have time steps within each file, and some have non-regular or non-complete time series and these are dealt with generally by having a "files function" in separate package raadfiles which returns only the files, and a "files index function" in raadtools that better understands the underlying time series. For example, monthly OISST is a single file so raadfiles returns a one row file catalogue, but there are ~300 month steps so ` raadtools::sstfiles(time.resolution = "monthly")` expands a copy of the file path out for every monthly time step. In this way we've incrementally separated the tools from the catalogue, and tried to keep intermediate layers (files vs. time steps) in sensible compartments. 
+
+We expect that new schemes such as STAC have already superseded our methods so we would prefer to migrate to more general catalogues rather than extend our own. 
+
+The raadtools package is just a set of read functions on a spatial framework in R, these function encode information about a very wide variety of disparate files and include information to augment the NetCDF, HDF5,  and GDAL libraries via R functions.  This information is being separated from the existing R functions into a more generally useable set of file names mapped to required augmentation. One way to do this is to create GDAL *DSNs*, these are strings that GDAL understands directly as if they were a simple and completely well-described file. (There are various of these in GDAL, from VRT files, to in-memory VRT text, to XML variants, and more simply *URIs* that indicate to GDAL how to deal with them - i.e. a variable in NetCDF file in a zip at a url endpoint). 
+
+
+
+The actual data sources are understood at a provider level by the tools bowerbird and blueant. 
+
+## Data synchronization
+
+Bowerbird and blueant provide the real value behind raadtools. This is a set of tools that automatically scan online sources, compare checksums to the current data library, and download any sources that are not yet available. The configurations include exclusion and inclusion filters, recursive source scanning, ability to unzip or otherwise unpack sources on download, how to navigate various APIs and virtualized web source links. These configurations look a lot more like recent systems such as STAC and will easily integrate with those. 
+
+
 
 ## Data sources
 

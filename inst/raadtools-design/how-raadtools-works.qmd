@@ -69,6 +69,10 @@ ggplot(pivot_longer(pts, -c(lon, date, lat)) , aes(date, value, col = lat)) + ge
 
 Package doc is hosted here, where we see the various 'read\[x\]' functions and the various '\[x\]files' functions that provide the file catalogue: http://australianantarcticdivision.github.io/raadtools/
 
+
+When raadtools was born it was clear that time series grid subsetting had these three main modes, 1) read a spatial subset of a given time 2) read a spatio-temporal subset, and 3) look up values for points or lines at discrete or continuous time/s. The raster package provide 1, and 2 without any further infrastructure. (Things have moved on a lot since then in R and other software). 
+
+
 ## Typical uses
 
 Very commonly used functions are 'readsst()', 'readghrsst()', 'readice()', 'read_amsr()', 'readtopo()', 'readssh()', 'readssha()', 'readcurr()', 'readwind()', and 'readchla()'. These cover the very widely used remote sensing streams from passive microwave, AVHRR, altimetry, ocean colour sensors, and various modelled outputs. There are several variant products and most functions offer a few alternatives (currents for example includes u or v or magnitude or direction as output variable).
@@ -180,6 +184,55 @@ Some examples where raadtools uses GDAL more directly:
 -   SST and some others can specify a target grid, for any map projection output
 
 #### Global sea ice
+
+One example of the ongoing migration to more standardized systems is the use of the GDAL warper to integrated north and south polar sea ice in a simple step. 
+
+Traditionally, we coud read either north or south. 
+
+```{r nsidc1}
+south <- readice()
+north <- readice(hemisphere = "north")
+print(south)
+print(north)
+
+```
+
+And, we can't easily regrid these because the R raster stack is not well suited to lazy warping. So, we combined the sources by creating inline VRT that includes both the north and the south sources of a given date. 
+
+```{r}
+ice <- readice(hemisphere = "both")
+plot(ice)
+```
+
+This is nice, and is somewhat similar to the product within the OISST sources. 
+
+```{r oisst-ice}
+oisst.ice <- readsst(varname = "ice")
+plot(oisst.ice)
+getZ(oisst.ice)
+getZ(south)
+```
+
+(The dates may or may not be the same because these sources aren't the same they won't be in synch). 
+
+The nice feature of this generalization to using the warper is that we can also specify any grid. 
+
+```{r}
+rad <- 6378137 * pi
+template <- raster(extent(c(-1, 1, -1, 1) * rad), res = 25000, crs = "+proj=laea +lon_0=165")
+ice <- readice(hemisphere = "both", xylim = template)
+plot(ice)
+g <- graticule::graticule(lons = seq(-180, 165, by = 15), lats = seq(-75, 75, by = 15), xlim = c(-180, 180), proj = projection(ice), nverts = 150)
+plot(g, add = TRUE)
+
+```
+
+That's not exactly practical (sea ice on a global grid), but demonstrates that we can generate any grid we want on demand quite efficiently and for any source. 
+
+The main reason that `readice()` was reengineered to return a global grid in longlat rather than two polar sources was for lookup purposes, it's much simpler to  ask for a region on a common grid to look up track data than it is to switch between poles for different locations. 
+
+
+
 
 ### Entire workflow example
 

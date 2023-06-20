@@ -1,5 +1,7 @@
 # raadtools dev
 
+* This package now does the date/band expansion for SOSE (to help free raadfiles from dependencies). 
+
 * readchla() now returns a mean from all input dates, and no longer supports Johnson alg. 
 
 * Fix readcurr. 

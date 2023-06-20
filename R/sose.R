@@ -43,6 +43,16 @@ read_sose <-  function (date, time.resolution = c("monthly"),
   time.resolution <- match.arg(time.resolution)
   if (is.null(inputfiles)) {
     files <- raadfiles::sose_monthly_files(varname = varname)
+    ## expand file  list by dates in file
+    nc <- RNetCDF::open.nc(files$fullname[1L])
+    dates <- RNetCDF::var.get.nc(nc, "time")
+    unit <- RNetCDF::att.get.nc(nc, "time", "units")
+    cal <- RNetCDF::utcal.nc(unit, dates)
+    dates <- ISOdatetime(cal[,1], cal[,2], cal[,3], cal[,4], cal[,5], cal[,6], tz = "UTC")
+    
+    
+    files <- tibble::tibble(fullname = files$fullname[1], date = dates, band = 1:length(dates))
+    
   } else {
     files <- inputfiles
   }

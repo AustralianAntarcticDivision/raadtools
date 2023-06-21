@@ -71,12 +71,12 @@ Classified surface type:
 ## read a particular date, it's circumpolar grid with 7 discrete numerc classes
 fice <- readfastice("2015-10-01")
 ## hone in on Davis
-ex <- raster(extent(70.0, 86, -73, -60), crs = "+proj=longlat +datum=WGS84")
-davis_ice <- crop(fice, projectExtent(ex, projection(fice)))
+ex <- c(1742836L, 3315135L, 129376L, 1136611L)
+davis_ice <- crop(fice, extent(c(1742836L, 3315135L, 129376L, 1136611L)))
 plot(davis_ice >= 4) #, col = c("brown", "white", grey(c(0.2, 0.5, 0.8))), breaks = c(0, 1, 3, 4, 5, 6))
 
 ## compare 5 years change
-davis_ice2 <- crop(readfastice("2010-10-01"), projectExtent(ex, projection(fice)))
+davis_ice2 <- crop(readfastice("2010-10-01"), extent(ex))
 par(mfrow = c(2, 1))
 plot(davis_ice >= 4)
 plot(davis_ice2 >= 4) 

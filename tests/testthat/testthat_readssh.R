@@ -57,7 +57,7 @@ test_that("ssh projection is not missing", {
 cf <- sshfiles(time.resolution = "daily", ssha = FALSE)
 cfa <- sshfiles(time.resolution = "daily", ssha = TRUE)
 xyt <- data.frame(x = c(100, 120, 130, 145, 150), y = seq(-80, 20, length = 5),   
-                  dts = seq(as.Date("2011-01-03"), by = "1 month", length = 5)
+                  dts = as.POSIXct(seq(as.Date("2011-01-03"), by = "1 month", length = 5), tz = "UTC")
 )
 test_that("read is ok with inputfiles", {
   expect_s4_class(readssh("2015-01-01",  time.resolution = "daily", inputfiles = cf),"BasicRaster")

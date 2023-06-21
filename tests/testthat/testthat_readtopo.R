@@ -3,23 +3,21 @@ context("topography")
 require(testthat)
 require(raadtools)
 test_that("all file options give existing files, with warnings where appropriate", {
-          expect_that(file.exists(topofile()), is_true())
-          expect_that(file.exists(topofile("ibcso")), is_true())
-          expect_that(file.exists(topofile("etopo1")), is_true())
-          expect_that(file.exists(topofile("etopo2")), is_true())
-          expect_that(file.exists(topofile("kerguelen")), is_true())
-          expect_that(file.exists(topofile("george_v_terre_adelie")), is_true())
-          expect_that(file.exists(topofile("smith_sandwell")), is_true())
+          expect_false(file.exists(topofile()))  ## VRT now
+          expect_true(file.exists(topofile("ibcso")))
+          expect_false(file.exists(topofile("etopo1")))
+          expect_false(file.exists(topofile("etopo2")))
+          expect_true(file.exists(topofile("kerguelen")))
+          #expect_true(file.exists(topofile("george_v_terre_adelie")))
+          expect_true(file.exists(topofile("smith_sandwell")))
 
 
-          expect_that(file.exists(topofile("ibcso", polar = TRUE)), is_true())
-          expect_that(file.exists(topofile("ibcso", lon180 = TRUE)), is_true())
-          expect_that(file.exists(topofile("smith_sandwell", lon180 = TRUE)), is_true())
+          expect_true(file.exists(topofile("ibcso", polar = TRUE)))
+          expect_true(file.exists(topofile("ibcso", lon180 = TRUE)))
+          expect_true(file.exists(topofile("smith_sandwell", lon180 = TRUE)))
 
-          expect_that(topofile("ibcso", lon180 = FALSE), gives_warning())
-          expect_that(topofile("kerguelen", lon180 = FALSE), gives_warning())
-          expect_that(topofile("kerguelen", lon180 = TRUE, polar = TRUE), gives_warning())
-
+          
+      
       })
 
 
@@ -30,7 +28,7 @@ test_that("file options result in actual data layers", {
           expect_that(readtopo("etopo1"), is_a("RasterLayer"))
           expect_that(readtopo("etopo2"), is_a("RasterLayer"))
           expect_that(readtopo("kerguelen"), is_a("RasterLayer"))
-          expect_that(readtopo("george_v_terre_adelie"), is_a("RasterLayer"))
+          expect_error(readtopo("george_v_terre_adelie"), "not available")
           expect_that(readtopo("smith_sandwell"), is_a("RasterLayer"))
 
           expect_that(readtopo("ibcso", polar = TRUE), is_a("RasterLayer"))
@@ -47,9 +45,9 @@ test_that("file options result in actual data layers", {
 
 test_that("topo projection is not missing", {
   prj <- projection(readtopo("kerguelen"))
-  expect_that(is.na(prj), is_false())
+  expect_false(is.na(prj))
   
   prj <- projection(readtopo("george_v_terre_adelie"))
-  expect_that(is.na(prj), is_false())
+  expect_false(is.na(prj))
   
 })

@@ -9,7 +9,7 @@ test_that("sst data is returned as a raster object", {
       })
 
 test_that("multiple dates return a multilayer object", {
-          expect_that(nlayers(readsst(c("2000-01-01", "2003-01-10", "1998-08-01"))) > 1L, is_true() )
+          expect_true(nlayers(readsst(c("2000-01-01", "2003-01-10", "1998-08-01"))) > 1L)
 
         
           expect_that(tmon <- readsst(c("2000-01-01", "2003-01-10", "1998-08-01"), time.resolution = "monthly"),  gives_warning("dates out of order"))
@@ -46,7 +46,7 @@ test_that("input crop extent works for a time series", {
 
 test_that("object projection is not missing", {
   prj <- projection(readsst())
-  expect_that(is.na(prj), is_false())
+  expect_false(is.na(prj))
 
 })
 

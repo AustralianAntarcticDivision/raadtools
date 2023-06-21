@@ -45,7 +45,7 @@ test_that("dates not available within 1.5 days give error", {
 ##})
 
 test_that("input data can be Date",
-          expect_that(readice(as.Date("2000-01-01")), is_a("RasterStack"))
+          expect_that(readice(as.Date("2000-01-01")), is_a("RasterLayer"))
           )
 
 test_that("input data can be POSIXct",

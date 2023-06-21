@@ -132,6 +132,7 @@ set_utc_format <- function(x) {
   ##
   deltatime <- abs(difftime(querydate, refdate, units = "days"))
   deltatest <- deltatime > daytest
+
   if (all(deltatest)) {
     message(sprintf("\nnearest available date is %s", as.Date(refdate)))
     stop(sprintf("no data file within %.1f days of %s", daytest, format(querydate)))

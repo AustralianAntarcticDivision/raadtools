@@ -15,6 +15,13 @@ sstfiles <- function(time.resolution = c("daily","monthly"), ...) {
     files <- raadfiles::oisst_daily_files()
   } else {
     files <- raadfiles::oisst_monthly_files()
+    ## we have to do this for raadfiles now since 0.1.4
+    r <- raster::stack(files$fullname[1], quick = TRUE)
+    
+    files <- files[rep(1L, raster::nlayers(r)), ]
+    # files <- files[rep(1L, raster::nlayers(r)), ]
+    
+    files$date <- as.POSIXct(strptime(names(r), "X%Y.%m.%d"), tz  = "UTC")
   }
   files
 }

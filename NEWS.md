@@ -1,6 +1,7 @@
 # raadtools dev
 
-* This package now does the date/band expansion for SOSE (to help free raadfiles from dependencies). 
+* This package now does the date/band expansion for SOSE (to help free raadfiles from dependencies), fasticefiles() is no longer exported but there is a new function `fraser_fasticefiles()` to get the files. 
+
 
 * readchla() now returns a mean from all input dates, and no longer supports Johnson alg. 
 

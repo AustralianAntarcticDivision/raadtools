@@ -1,13 +1,29 @@
 
-#' fasticefiles
-#' 
-#' 
-#' @importFrom raadfiles fasticefiles
-#' @export
-#' @inherit raadfiles::fasticefiles
-#' @name fasticefiles
-NULL
 
+#' Fast ice files
+#' 
+#' Provided by Alex Fraser
+#'
+#' This function wraps a raadfiles function `fasticefiles`, but expands the file list out to individual bands. 
+#' @param ... ignored
+#'
+#' @return
+#' @export
+#' @importFrom raadfiles fasticefiles
+#' @examples
+#' fraser_fasticefiles()
+fraser_fasticefiles <- function(...) {
+  files <- raadfiles::fasticefiles("circum_fast_ice")
+  on.exit(sink(NULL), add = TRUE)
+  sink(tempfile())
+  time <- lapply(files$fullname, function(x) raster::getZ(raster::brick(x)))
+  files <- files[rep(seq_len(nrow(files)), lengths(time)), ]
+  files$date <- as.POSIXct(as.Date("1970-01-01") + unlist(time), tz = "UTC")
+  files$band <- unlist(lapply(lengths(time), seq_len))
+  
+  return(tibble::tibble(fullname = files$fullname,
+                        date = files$date, band = files$band))
+}
 #' Fast ice data
 #'
 #' High-resolution mapping of circum-Antarctic landfast sea ice distribution, 2000–2018. 
@@ -50,12 +66,12 @@ NULL
 #' ## read a particular date, it's circumpolar grid with 7 discrete numerc classes
 #' fice <- readfastice("2015-10-01")
 #' ## hone in on Davis
-#' ex <- raster(extent(70.0, 86, -73, -60), crs = "+proj=longlat +datum=WGS84")
-#' davis_ice <- crop(fice, projectExtent(ex, projection(fice)))
+#' ex <- c(1742836L, 3315135L, 129376L, 1136611L)
+#' davis_ice <- crop(fice, extent(c(1742836L, 3315135L, 129376L, 1136611L)))
 #' plot(davis_ice >= 4) #, col = c("brown", "white", grey(c(0.2, 0.5, 0.8))), breaks = c(0, 1, 3, 4, 5, 6))
 #' 
 #' ## compare 5 years change
-#' davis_ice2 <- crop(readfastice("2010-10-01"), projectExtent(ex, projection(fice)))
+#' davis_ice2 <- crop(readfastice("2010-10-01"), extent(ex))
 #' par(mfrow = c(2, 1))
 #' plot(davis_ice >= 4)
 #' plot(davis_ice2 >= 4) 
@@ -63,13 +79,26 @@ readfastice <- function(date, product = c("circum_fast_ice", "binary_fast_ice"),
                         xylim = NULL, latest = TRUE, returnfiles = FALSE, ..., 
                         inputfiles = NULL) {
  product <- match.arg(product)
+ if (is.null(inputfiles)) {
+   files <- fraser_fasticefiles()
+ } else {
+   files <- NULL
+ }
+ if (returnfiles) return(files)
+ if (missing(date)) {
+   if (latest) {
+     date <- max(files$date)
+   } else {
+     date <- min(files$date)
+   }
+ }
   if (product == "circum_fast_ice") {
     
-    out <- readfastice_circum(date, xylim = xylim, latest = latest, returnfiles = returnfiles, inputfiles = inputfiles)
+    out <- readfastice_circum(date, xylim = xylim, latest = latest, returnfiles = returnfiles, inputfiles = files)
   }
   if (product == "binary_fast_ice") {
     out <- 
-  readfastice_binary(date, xylim = xylim, latest = latest, returnfiles = returnfiles, inputfiles = inputfiles)   
+  readfastice_binary(date, xylim = xylim, latest = latest, returnfiles = returnfiles, inputfiles = files)   
   }
 out
   }

@@ -12,6 +12,8 @@ The raadtools package has access to data library of general remote sensing and e
 
 There are functions `read[_x]` that read a variable as a function of date. All output uses [raster package](https://CRAN.R-project.org/package=raster) layers. 
 
+The package runs on any computer that has network access to the data library, this relationship is not formalized beyond "software can find the files for a given data source", and the data sources are not bound together - one or many of the sources can be available while others are not. The data library location can be configured as a network path, and the installation knows where to look for common cases (we use sshfs in nectar, and a shared network location at the AAD for example). The data library exists separately from raadtools itself and is configured and built using other packages (bowerbird and blueant). 
+
 ## Example
 
 Read SST and sea ice as raster layers, functions use date or dates (with options).

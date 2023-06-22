@@ -36,11 +36,11 @@ test_that("date ranges are valid", {
   
   # dr4 <- range(sshfiles(time.resolution = "monthly_clim", ssha=TRUE)$date)
   # expect_that(dr4, is_a("POSIXct"))
-  # expect_that(all(!is.na(dr4)), is_true())
+  # expect_true(all(!is.na(dr4)))
   # 
   # dr5 <- range(sshfiles(time.resolution = "seasonal_clim", ssha=TRUE)$date)
   # expect_that(dr5, is_a("POSIXct"))
-  # expect_that(all(!is.na(dr5)), is_true())
+  # expect_true(all(!is.na(dr5)))
   # 
   # expect_that(nrow(sshfiles(time.resolution = "seasonal_clim", ssha=TRUE)), equals(4))
   # expect_that(nrow(sshfiles(time.resolution = "monthly_clim", ssha=TRUE)), equals(12))

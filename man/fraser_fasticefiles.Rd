@@ -9,6 +9,9 @@ fraser_fasticefiles(...)
 \arguments{
 \item{...}{ignored}
 }
+\value{
+RasterLayer
+}
 \description{
 Provided by Alex Fraser
 }

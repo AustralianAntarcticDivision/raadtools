@@ -216,7 +216,6 @@ topofile <- function(topo = c("gebco_08",  "ibcso",
 
 
   if (length(topopath) < 1 || is.na(topopath) || is.null(topopath)) stop(sprintf("cannot find %s", topo))
-  if (!file.exists(topopath)) warning(sprintf("cannot file %s", topopath))
   topopath[1L]
 }
 

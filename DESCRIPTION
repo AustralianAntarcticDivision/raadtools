@@ -12,18 +12,21 @@ Depends:
 Imports:
     dplyr (>= 0.7.0),
     methods,
-    orsifronts,
     ncdf4,
     progress,
     purrr,
     raadfiles (>= 0.1.4),
     sp,
     tibble,
-    future,
     furrr,
     vapour (>= 0.8.8.9007),
     terra (>= 1.5-21),
-    reproj (>= 0.4.3)
+    reproj (>= 0.4.3),
+    ncmeta,
+    RNetCDF,
+    memoise,
+    fs,
+    stringr
 Suggests:
     graticule,
     knitr,

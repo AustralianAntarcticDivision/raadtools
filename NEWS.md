@@ -220,4 +220,4 @@ means that fewer temp files will be created unnecessarily
 * package scaffolding
 
 
-See ONEWS
+See inst/ONEWS

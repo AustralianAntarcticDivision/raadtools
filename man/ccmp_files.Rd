@@ -7,8 +7,16 @@
 ccmp_files(time.resolution = "6hourly", ...)
 }
 \arguments{
-\item{...}{}
+\item{time.resolution}{time resoution data to read, daily or monthly}
+
+\item{...}{passed in to brick, primarily for \code{filename}}
+}
+\value{
+data frame of file paths
 }
 \description{
 Title
+}
+\examples{
+ccmp_files()
 }

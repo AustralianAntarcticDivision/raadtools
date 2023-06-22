@@ -6,14 +6,14 @@
 readCHL_month <- function(date, xylim = NULL, ..., inputfiles = NULL, latest = TRUE) {
   if (is.null(inputfiles)) {
     ## memoize this call
-    files <- ocfiles("monthly", product = "MODISA", varnam = "CHL", type = "L3m")
+    files <- ocfiles("monthly", product = "MODISA", varname = "CHL", type = "L3m")
   } else {
     files <- inputfiles
   }
   if (missing(date)) {
     if (latest)  date <- max(files$date) else date <- min(files$date)
   }
-  date <- raadtools:::timedateFrom(date)
+  date <- timedateFrom(date)
   files <- .processFiles(date, files, "monthly")
   rl <- lapply(files$fullname, raster::raster, varname = "chlor_a")
   if (!is.null(xylim)) rl <- lapply(rl, raster::crop, raster::extent(xylim))
@@ -64,7 +64,7 @@ readCHL_month <- function(date, xylim = NULL, ..., inputfiles = NULL, latest = T
 #'          xylim = extent(100, 150, -70, -30))
 #' }
 #' @export
-readchla <- function(date, product = c("MODISA", "SeaWiFS"),
+readchla <- function(date, product = c("MODISA", "SeaWiFS", "VIIRS"),
                      xylim = NULL,
                      algorithm = c("nasa"),
 

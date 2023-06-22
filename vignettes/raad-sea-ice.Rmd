@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(raadtools)
 ```
 
 [Sea ice concentration](https://nsidc.org/cryosphere/seaice/data/terminology.html) describes the relative amount of area covered by ice. In raadtools there are different resolutions available and each covers the entire ice-affected area of the Southern Ocean. Each product provides a *percentage* of sea ice concentration, a value from 0 to 100. 
@@ -80,10 +81,10 @@ library(raadtools)
 ice <- readice()
 
 pt <- cbind(61 + 25.7/60, -(66+1.4/60))
-xy <- rgdal::project(pt, projection(ice))
+xy <- reproj::reproj_xy(pt, projection(ice), source = "OGC:CRS84")
 buf <- 640000
-ex <- raster::extent(xy[,1] + c(-0.5, 1) * 1 * buf * 1.852,
-xy[,2] + c(-0.5, 1) * 1 * buf * 1.852)
+ex <- raster::extent(xy[1] + c(-0.5, 1) * 1 * buf * 1.852,
+xy[2] + c(-0.5, 1) * 1 * buf * 1.852)
 x <- NULL
 par(mfrow = c(2, 2), mar = rep(0, 4))
 date <- "2021-03-24"

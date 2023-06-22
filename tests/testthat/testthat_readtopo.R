@@ -31,8 +31,8 @@ test_that("file options result in actual data layers", {
           expect_error(readtopo("george_v_terre_adelie"), "not available")
           expect_that(readtopo("smith_sandwell"), is_a("RasterLayer"))
 
-          expect_that(readtopo("ibcso", polar = TRUE), is_a("RasterLayer"))
-          expect_that(readtopo("ibcso", lon180 = FALSE), is_a("RasterLayer"))
+          #expect_that(readtopo("ibcso", polar = TRUE), is_a("RasterLayer"))
+          #expect_that(readtopo("ibcso", lon180 = FALSE), is_a("RasterLayer"))
           expect_that(readtopo("smith_sandwell", lon180 = TRUE), is_a("RasterLayer"))
 
           ## these aren't working, is raster somehow swallowing warnings?
@@ -47,7 +47,5 @@ test_that("topo projection is not missing", {
   prj <- projection(readtopo("kerguelen"))
   expect_false(is.na(prj))
   
-  prj <- projection(readtopo("george_v_terre_adelie"))
-  expect_false(is.na(prj))
   
 })

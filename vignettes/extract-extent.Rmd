@@ -17,7 +17,9 @@ editor_options:
 
 ```{r,include=FALSE}
 ## included only to make the vignette work (temporary hack)
-options(default.datadir = "/rdsi/PRIVATE")
+#options(default.datadir = "/rdsi/PRIVATE")
+
+library(raadtools)
 ```
 The `raadtools` package contains a number of `read[something]` functions, mostly for gridded time-series remote sensing data. 
 
@@ -143,7 +145,7 @@ plot(ice_ex, col = grey(seq(0, 1, length = 100)), zlim = c(1, 100), axes = FALSE
 
 ## add a "transect"
 lons <- seq(100, 160, by = 1)
-transect <- rgdal::project(cbind(lons, -63), projection(ice_ex))
+transect <- reproj::reproj_xy(cbind(lons, -63), projection(ice_ex), source = "OGC:CRS84")
 
 
 points(transect, cex = 0.5, pch = 19, col = "dodgerblue")

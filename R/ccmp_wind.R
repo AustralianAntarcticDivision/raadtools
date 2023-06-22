@@ -1,12 +1,11 @@
 #' Title
 #'
-#' @param time.resolution
-#' @param ...
-#'
-#' @return
-#' @export
+#' @inheritParams readsst
+#' @return data frame of file paths
+#' @export 
 #'
 #' @examples
+#' ccmp_files()
 ccmp_files <- function(time.resolution = "6hourly", ...) {
   files <- raadfiles::ccmp_6hourly_files()
   ## there are 6hourly for every time step
@@ -93,14 +92,14 @@ read_ccmp <- function (date, time.resolution = c("6hourly"),
 
   read_i_u <- function(file, xylim = NULL, lon180 = FALSE, band = 1L) {
     x <- raster(file, varname = "uwnd", band = band)
-    if (lon180) x <- raadtools:::.rotate(x)
+    if (lon180) x <- .rotate(x)
     if (!is.null(xylim)) x <- crop(x, xylim)
 
     x
   }
   read_i_v <- function(file, xylim = NULL, lon180 = FALSE, band = 1L) {
     x <- raster(file, varname = "vwnd", band = band)
-    if (lon180) x <- raadtools:::.rotate(x)
+    if (lon180) x <- .rotate(x)
     if (!is.null(xylim)) x <- crop(x, xylim)
 
     x
@@ -121,7 +120,7 @@ read_ccmp <- function (date, time.resolution = c("6hourly"),
 
   read_i_nobs <-  function(file, xylim = NULL, lon180 = FALSE, band = 1L) {
     x <- raster(file, varname = "nobs", band = band)
-    if (lon180) x <- raadtools:::.rotate(x)
+    if (lon180) x <- .rotate(x)
     if (!is.null(xylim)) x <- crop(x, xylim)
 
     x

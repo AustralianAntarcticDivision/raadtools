@@ -20,8 +20,9 @@ sstfiles <- function(time.resolution = c("daily","monthly"), ...) {
     
     files <- files[rep(1L, raster::nlayers(r)), ]
     # files <- files[rep(1L, raster::nlayers(r)), ]
-    
+    files$band <- 1:nrow(files)
     files$date <- as.POSIXct(strptime(names(r), "X%Y.%m.%d"), tz  = "UTC")
+    files <- files[c("date", "fullname", "band", "root")]
   }
   files
 }

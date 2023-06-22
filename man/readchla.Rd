@@ -9,7 +9,7 @@ readCHL_month(date, xylim = NULL, ..., inputfiles = NULL, latest = TRUE)
 
 readchla(
   date,
-  product = c("MODISA", "SeaWiFS"),
+  product = c("MODISA", "SeaWiFS", "VIIRS"),
   xylim = NULL,
   algorithm = c("nasa"),
   latest = TRUE,

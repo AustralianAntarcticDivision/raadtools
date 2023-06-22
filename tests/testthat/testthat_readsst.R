@@ -9,7 +9,7 @@ test_that("sst data is returned as a raster object", {
       })
 
 test_that("multiple dates return a multilayer object", {
-          expect_true(nlayers(readsst(c("2000-01-01", "2003-01-10", "1998-08-01"))) > 1L)
+          expect_true(nlayers(readsst(c("2000-01-01", "2003-01-10", "1998-08-01"))) > 1L) %>% expect_warning()
 
         
           expect_that(tmon <- readsst(c("2000-01-01", "2003-01-10", "1998-08-01"), time.resolution = "monthly"),  gives_warning("dates out of order"))
@@ -18,8 +18,8 @@ test_that("multiple dates return a multilayer object", {
 
 d <- readsst(c("2000-01-01", "2003-01-10"))
 test_that("readsst multi read returns data in -180,180", {
-    expect_that(xmin(d) < 0, is_true())
-    expect_that(xmax(d) < 190, is_true())
+    expect_true(xmin(d) < 0)
+    expect_true(xmax(d) < 190)
 
 })
 
@@ -28,8 +28,8 @@ test_that("readsst latest works", {
 })
 d <- readsst(c("2003-01-10"))
 test_that("readsst single read returns data in -180,180", {
-    expect_that(xmin(d) < 0, is_true())
-    expect_that(xmax(d) < 190, is_true())
+    expect_true(xmin(d) < 0)
+    expect_true(xmax(d) < 190)
 
 })
 

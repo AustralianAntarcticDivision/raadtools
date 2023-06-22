@@ -21,7 +21,7 @@ ocfiles <- function(time.resolution = c("daily", "weekly", "monthly", "weekly32"
                     ...) {
 
   #ftx <- .allfilelist()
-  ftx <- dplyr::transmute(raadtools:::allfiles() %>% dplyr::filter(stringr::str_detect(file, "oceandata.sci.gsfc.nasa.gov")), fullname = fs::path(root, file))$fullname
+  ftx <- dplyr::transmute(allfiles() %>% dplyr::filter(stringr::str_detect(file, "oceandata.sci.gsfc.nasa.gov")), fullname = fs::path(root, file))$fullname
   time.resolution <- match.arg(time.resolution)
   product <- match.arg(product)
   ext <- match.arg(ext)

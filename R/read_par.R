@@ -1,6 +1,6 @@
 #' Read PAR from NASA ocean colour. 
 #' 
-#' Currently using MODISA 4km Mapped L2m, see [raadfiles::read_par()] for the actual source files. 
+#' Currently using MODISA 4km Mapped L2m, see [raadfiles::par_files()] for the actual source files. 
 #' 
 #' @param time.resolution '8D' currently, use the NASA tokens for time period 
 #' @inheritParams readsst
@@ -27,7 +27,7 @@ read_par <- function (date, time.resolution = "8D",
   read_i <- function(file, xylim = NULL, lon180 = FALSE, band = 1L) {
     x <- raster(file, varname = "par")
     x <- setExtent(x, extent(-180, 180, -90, 90))
-    if (lon180) x <- raadtools:::.rotate(x)
+    if (lon180) x <- .rotate(x)
     if (!is.null(xylim)) x <- crop(x, xylim)
 
     x

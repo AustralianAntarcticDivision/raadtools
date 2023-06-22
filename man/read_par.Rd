@@ -37,7 +37,7 @@ read_par(
 raster object
 }
 \description{
-Currently using MODISA 4km Mapped L2m, see \code{\link[raadfiles:read_par]{raadfiles::read_par()}} for the actual source files.
+Currently using MODISA 4km Mapped L2m, see \code{\link[raadfiles:par]{raadfiles::par_files()}} for the actual source files.
 }
 \examples{
 read_par(latest = FALSE)

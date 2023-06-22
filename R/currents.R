@@ -11,16 +11,16 @@ copernicus_get_maxlon <- function(x) {
 
 read_i_u <- function(file, xylim = NULL, lon180 = FALSE) {
   x <- raster(file, varname = "ugos")
-  if (copernicus_is_atlantic(file) && !lon180) x <- raadtools:::.rotate(x)
-  if (!copernicus_is_atlantic(file) && lon180) x <- raadtools:::.rotate(x)
+  if (copernicus_is_atlantic(file) && !lon180) x <- .rotate(x)
+  if (!copernicus_is_atlantic(file) && lon180) x <- .rotate(x)
   if (!is.null(xylim)) x <- crop(x, xylim)
   
   x
 }
 read_i_v <- function(file, xylim = NULL, lon180 = FALSE) {
   x <- raster(file, varname = "vgos")
-  if (copernicus_is_atlantic(file) && !lon180) x <- raadtools:::.rotate(x)
-  if (!copernicus_is_atlantic(file) && lon180) x <- raadtools:::.rotate(x)
+  if (copernicus_is_atlantic(file) && !lon180) x <- .rotate(x)
+  if (!copernicus_is_atlantic(file) && lon180) x <- .rotate(x)
   if (!is.null(xylim)) x <- crop(x, xylim)
   
   x
@@ -48,7 +48,7 @@ readcurr_polar <- function(date,
                             returnfiles = FALSE, ..., inputfiles = NULL) {
   
   if (is.null(inputfiles)) {
-    files <- raadfiles:::altimetry_currents_polar_files()
+    files <- raadfiles::altimetry_currents_polar_files()
   } else {
     files <- inputfiles
   }

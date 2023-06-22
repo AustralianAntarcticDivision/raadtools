@@ -6,7 +6,7 @@ library(raadtools)
 test_that("we get ocean colour files", {
   ocd <- ocfiles()
   #ocw <- ocfiles(time.resolution = "weekly")
-  expect_that(ocd, is_a("data.frame"))
+  expect_is(ocd, "data.frame")
   #expect_that(nrow(ocd) > nrow(ocw), is_true())
   
   ocdS <- ocfiles(product = "SeaWiFS", varname = "RRS")

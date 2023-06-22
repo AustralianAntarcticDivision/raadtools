@@ -7,7 +7,7 @@
 #' This function wraps a raadfiles function `fasticefiles`, but expands the file list out to individual bands. 
 #' @param ... ignored
 #'
-#' @return
+#' @return RasterLayer
 #' @export
 #' @importFrom raadfiles fasticefiles
 #' @examples

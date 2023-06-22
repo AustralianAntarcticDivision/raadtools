@@ -175,5 +175,5 @@ set_utc_format <- function(x) {
 ##' @return the vector \code{x} converted (if necessary) to \code{POSIXct}
 ##' @export
 timedateFrom <- function(x, ...) {
-  as.POSIXct(x, tz = "GMT", ...)
+  as.POSIXct(x, tz = "UTC", ...)
 }

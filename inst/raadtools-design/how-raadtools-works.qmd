@@ -33,8 +33,7 @@ The package runs cross platform on Linux, Mac, and Windows, on any computer that
 
 We don't have strong plans to re-engineer the raadtools package or change what it does, its replacement could be a mix of tools, or it could become a higher level tool that sits upon a lower-level set of resources. 
 
-
-There is an ongoing effort to separate the resources in raadtools that know about data sets from the tools that read and manipulated data: this in combination with the data source configurations provided by bowerbird and blueant provides a langage-agnostic resource about a large body of data suitable for Antarctic. 
+There is an ongoing effort to separate the resources in raadtools that know about data sets from the tools that read and manipulated data: this in combination with the data source configurations provided by bowerbird and blueant provides a language-agnostic resource about a large body of data suitable for Antarctic. 
 
 
 ### Legacy details
@@ -49,6 +48,8 @@ The documentation and hosting of raadtools is somewhat static, because it relies
 
 
 ## Example
+
+This section shows examples to make clear the three main ways of using a time series raster dataset, which are 1) read a spatial subset of a given time 2) read a spatio-temporal subset, and 3) look up values for points or lines at discrete or continuous time/s. The raster package provided 1, and 2 without any further infrastructure once we could read the actual files we needed. The actual read facility is provided by the HDF5/NetCDF4 libraries, or by the GDAL library and raster was able to do either.  (Things have moved on a lot since then in R and other software).
 
 Read SST and sea ice as raster layers, functions use date or dates (with options).
 
@@ -105,9 +106,8 @@ ggplot(pivot_longer(pts, -c(lon, date, lat)) , aes(date, value, col = lat)) + ge
 
 Package documentation is hosted here, where we see the various 'read\[x\]' functions and the various '\[x\]files' functions that provide the file catalogue: http://australianantarcticdivision.github.io/raadtools/
 
-When raadtools was born it was clear that time series grid subsetting had these three main modes, 1) read a spatial subset of a given time 2) read a spatio-temporal subset, and 3) look up values for points or lines at discrete or continuous time/s. The raster package provide 1, and 2 without any further infrastructure. (Things have moved on a lot since then in R and other software).
 
-## Typical uses
+## Typical datasets/variables
 
 Very commonly used functions are 'readsst()', 'readghrsst()', 'readice()', 'read_amsr()', 'readtopo()', 'readssh()', 'readssha()', 'readcurr()', 'readwind()', and 'readchla()'. These cover the very widely used remote sensing streams from passive microwave, AVHRR, altimetry, ocean colour sensors, and various modelled outputs. There are several variant products and most functions offer a few alternatives (currents for example includes u or v or magnitude or direction as output variable).
 
@@ -164,7 +164,20 @@ range(diff(nsidc$date))
 
 ```
 
-(As an aside, the NSIDC temporal coverage is not entirely accurate, there were temporal gaps and these were reflected in the original binary files - the series started as every two days, later became daily, and there was a few weeks gap ). The NetCDF files have an empty shell for missing data, and when there were multiple sensors they have multiple variables - so there can be 0, 1, 2, or 3 variables. It's a different scene to the original binary files and we haven't finished aligment to it yet).
+(As an aside, the NSIDC temporal coverage is not entirely accurate, there were temporal gaps and these were reflected in the original binary files - the series started as every two days, later became daily, and there was a few weeks gap ). The NetCDF files have an empty shell for missing data, and when there were multiple sensors they have multiple variables - so there can be 0, 1, 2, or 3 variables. It's a different scene to the original binary files and we haven't finished alignment to it yet).
+
+
+Finally, there are some simpler data sources such as "GEBCO" bathymetry/topography, and we have versions of these from older NetCDF downloads and more recent moves to COGs online: 
+
+```{r cogs}
+topofile("gebco_14")
+
+topofile("gebco_23")
+
+readtopo()
+```
+
+
 
 ## How the data library works
 
@@ -198,7 +211,7 @@ This catalogue is loaded in memory as a table, and simply searched for text matc
 
 Then the function `read[x](date/s, )` hones in on the right set of files and we are squarely into "R spatial" context, with raadtools having no further role.
 
-### The stack
+### The software stack
 
 Behind raadtools is the [raster](https://CRAN.R-project.org/package=raster) package, this is (now legacy) raster datacube facility in R. It is still supported, and we have not moved to its successors. What we have done is use GDAL more directly in some key areas, and we've stalled raadtools development for a while to explore a deeper dive into our dependencies, GDAL, PROJ, and GEOS.
 
@@ -206,6 +219,8 @@ Some examples where raadtools uses GDAL more directly:
 
 -   global ice, with simple vrt we can drive two files through the warper for a single grid anywhere on earth (not two incompatible polar grids), this was necessary for animal tracking which is what we originally implemented it for
 -   SST and some others can specify a target grid, for any map projection output
+- to read global bathymetry/topography, we have wrapped COG facilities for the modern data source for GEBCO
+
 
 #### Global sea ice
 
@@ -260,3 +275,9 @@ The main reason that `readice()` was reengineered to return a global grid in lon
 This blogpost works through setting up the file system from scratch. It simple downloads a short time series of sea ice, and a global bathymetry, lets the administrator choose where to build the collection and sets of the synchronization. Then raadtools is configured to find the (somewhat small) data library, and uses the functions that are supported by that smallish collection to run some examples.
 
 https://ropensci.org/blog/2018/11/13/antarctic/
+
+
+
+## Cross-language support from raadtools
+
+We have been working to remove our dependence on these R functions, they 

@@ -6,13 +6,47 @@ editor_options:
   chunk_output_type: console
 ---
 
-## raadtools
+## raadtools: R user package
 
-The raadtools package has access to data library of general remote sensing and environmental data.
+The raadtools package provides access to a wide range of earth observation, satellite remote sensing, and modelled datasets.
 
-There are functions `read[_x]` that read a variable as a function of date. All output uses [raster package](https://CRAN.R-project.org/package=raster) layers. 
+The package is an R library of functions that handle user queries for reading variables as a function of time and space. There is a mix of  *time series*, *time-depth*, and *time-static* **variables** of various types within datasets. Function design is focussed on variables, with options for reading subsets in time and space. Functions use the pattern `read[_x]` meaning to read a slice from variable `[x]`, with further optional user-supplied arguments. 
 
-The package runs on any computer that has network access to the data library, this relationship is not formalized beyond "software can find the files for a given data source", and the data sources are not bound together - one or many of the sources can be available while others are not. The data library location can be configured as a network path, and the installation knows where to look for common cases (we use sshfs in nectar, and a shared network location at the AAD for example). The data library exists separately from raadtools itself and is configured and built using other packages (bowerbird and blueant). 
+The first argument is a (vector of) date-time/s, and the second an extent in space. If no options are given, functions default to returning the entire spatial extent of the latest-available time step.  Each function has a few other standard arguments and some that are variable-specific, we mention some of these details in example below. 
+
+When raadtools is installed  it will automatically find the data library on suitably networked Nectar VMs or on machines within the AAD network, this configuration can be controlled at run time for custom setup.  
+
+raadtools reflects many systems and idioms from the 2013-2015 period of "data cubes in R", we list the most important of these in "Legacy details". 
+
+The actual data sources are understood at a provider level by the packages bowerbird and blueant.
+
+## bowerbird: data synchronization
+
+The package bowerbird and blueant provide the data library behind raadtools. This is a set of tools that automatically scan online sources, compare checksums to the current data library, and download any sources that are not yet available. The configurations include exclusion and inclusion filters, recursive source scanning, ability to unzip or otherwise unpack sources on download, how to navigate various APIs and virtualized web source links.
+
+The raadtools package uses software idioms that have been somewhat superseded, but the data library that raadtools understands is very current. We can consider "files" being replaced by "sources" (i.e. descriptors that refer to sources of data, might be URLs, files, or other connections).  These configurations look a lot more like recent systems such as STAC and the collections will easily integrate with those.
+
+
+The package runs cross platform on Linux, Mac, and Windows, on any computer that has network access to the data library, this relationship is not formalized beyond "software can find the files for a given data source", and the data sources are not bound together - one or many of the sources can be available while others are not. The data library location can be configured as a network path, and the installation knows where to look for common cases (we use sshfs in nectar, and a shared network location at the AAD for example). The data library exists separately from raadtools itself and is configured and built using other packages (bowerbird and blueant).
+
+## Future of raadtools
+
+We don't have strong plans to re-engineer the raadtools package or change what it does, its replacement could be a mix of tools, or it could become a higher level tool that sits upon a lower-level set of resources. 
+
+
+There is an ongoing effort to separate the resources in raadtools that know about data sets from the tools that read and manipulated data: this in combination with the data source configurations provided by bowerbird and blueant provides a langage-agnostic resource about a large body of data suitable for Antarctic. 
+
+
+### Legacy details
+
+All output uses [raster package](https://CRAN.R-project.org/package=raster) layers.  (response: terra, xarray, stars)
+
+Functions always return the native grid of the dataset, this might be global in longlat, global in Mercator, or southern hemisphere Polar Stereographic, local region in Lambert Azimuthal Area or local UTM, or any other of the myriad of options. (response: dynamic gridding by GDAL warper or ECMF).  
+
+Functions for variable read are the central core of raadtools. This contrasts with a tool like Digital Earth Australia that has registered descriptions of data sets to load. 
+
+The documentation and hosting of raadtools is somewhat static, because it relies on a large data library and we haven't abstracted the parts needed for the documentation to be separate from a fully functioning installation (so no continuous integration on github, for example). 
+
 
 ## Example
 
@@ -69,11 +103,9 @@ ggplot(pivot_longer(pts, -c(lon, date, lat)) , aes(date, value, col = lat)) + ge
 
 ```
 
-Package doc is hosted here, where we see the various 'read\[x\]' functions and the various '\[x\]files' functions that provide the file catalogue: http://australianantarcticdivision.github.io/raadtools/
+Package documentation is hosted here, where we see the various 'read\[x\]' functions and the various '\[x\]files' functions that provide the file catalogue: http://australianantarcticdivision.github.io/raadtools/
 
-
-When raadtools was born it was clear that time series grid subsetting had these three main modes, 1) read a spatial subset of a given time 2) read a spatio-temporal subset, and 3) look up values for points or lines at discrete or continuous time/s. The raster package provide 1, and 2 without any further infrastructure. (Things have moved on a lot since then in R and other software). 
-
+When raadtools was born it was clear that time series grid subsetting had these three main modes, 1) read a spatial subset of a given time 2) read a spatio-temporal subset, and 3) look up values for points or lines at discrete or continuous time/s. The raster package provide 1, and 2 without any further infrastructure. (Things have moved on a lot since then in R and other software).
 
 ## Typical uses
 
@@ -81,7 +113,7 @@ Very commonly used functions are 'readsst()', 'readghrsst()', 'readice()', 'read
 
 Mostly these file functions are controlled by the 'raadfiles' package, which was split off from raadtools itself to separate the task of file finding and network search configuration from the read tools.
 
-Very common examples include files from passive microwave sensors
+These are files from passive microwave sensors for polar-aligned sea ice concentrations. 
 
 ```{r ice}
 raadfiles::nsidc_north_monthly_files()
@@ -132,11 +164,11 @@ range(diff(nsidc$date))
 
 ```
 
-(As an aside, the nsidc temporal coverage is not entirely accurate, there were temporal gaps and these were reflected in the original binary files - the series started as every two days, later became daily, and there was a few weeks gap ). The NetCDF files have an empty shell for missing data, and when there were multiple sensors they have multiple variables - so there can be 0, 1, 2, or 3 variables. It's a different scene to the original binary files and we haven't finished aligment to it yet).
+(As an aside, the NSIDC temporal coverage is not entirely accurate, there were temporal gaps and these were reflected in the original binary files - the series started as every two days, later became daily, and there was a few weeks gap ). The NetCDF files have an empty shell for missing data, and when there were multiple sensors they have multiple variables - so there can be 0, 1, 2, or 3 variables. It's a different scene to the original binary files and we haven't finished aligment to it yet).
 
 ## How the data library works
 
-Every read function has a counterpart "files" function, for example `readghrsst()` uses `ghrsstfiles()` which returns every file in the set with its date-time index. 
+Every read function has a counterpart "files" function, for example `readghrsst()` uses `ghrsstfiles()` which returns every file in the set with its date-time index.
 
 ```{r ghrsst}
 (ghrsst <- ghrsstfiles())
@@ -145,24 +177,14 @@ range(diff(ghrsst$date))
 
 ```
 
-This source is daily, and there is a file for each day. Other sources have time steps within each file, and some have non-regular or non-complete time series and these are dealt with generally by having a "files function" in separate package raadfiles which returns only the files, and a "files index function" in raadtools that better understands the underlying time series. For example, monthly OISST is a single file so raadfiles returns a one row file catalogue, but there are ~300 month steps so ` raadtools::sstfiles(time.resolution = "monthly")` expands a copy of the file path out for every monthly time step. In this way we've incrementally separated the tools from the catalogue, and tried to keep intermediate layers (files vs. time steps) in sensible compartments. 
+This source is daily, and there is a file for each day. Other sources have time steps within each file, and some have non-regular or non-complete time series and these are dealt with generally by having a "files function" in separate package raadfiles which returns only the files, and a "files index function" in raadtools that better understands the underlying time series. For example, monthly OISST is a single file so raadfiles returns a one row file catalogue, but there are \~300 month steps so `raadtools::sstfiles(time.resolution = "monthly")` expands a copy of the file path out for every monthly time step. In this way we've incrementally separated the tools from the catalogue, and tried to keep intermediate layers (files vs. time steps) in sensible compartments.
 
-We expect that new schemes such as STAC have already superseded our methods so we would prefer to migrate to more general catalogues rather than extend our own. 
+We expect that new schemes such as STAC have already superseded our methods so we would prefer to migrate to more general catalogues rather than extend our own.
 
-The raadtools package is just a set of read functions on a spatial framework in R, these function encode information about a very wide variety of disparate files and include information to augment the NetCDF, HDF5,  and GDAL libraries via R functions.  This information is being separated from the existing R functions into a more generally useable set of file names mapped to required augmentation. One way to do this is to create GDAL *DSNs*, these are strings that GDAL understands directly as if they were a simple and completely well-described file. (There are various of these in GDAL, from VRT files, to in-memory VRT text, to XML variants, and more simply *URIs* that indicate to GDAL how to deal with them - i.e. a variable in NetCDF file in a zip at a url endpoint). 
-
-
-
-The actual data sources are understood at a provider level by the tools bowerbird and blueant. 
-
-## Data synchronization
-
-Bowerbird and blueant provide the real value behind raadtools. This is a set of tools that automatically scan online sources, compare checksums to the current data library, and download any sources that are not yet available. The configurations include exclusion and inclusion filters, recursive source scanning, ability to unzip or otherwise unpack sources on download, how to navigate various APIs and virtualized web source links. These configurations look a lot more like recent systems such as STAC and will easily integrate with those. 
-
+The raadtools package is just a set of read functions on a spatial framework in R, these function encode information about a very wide variety of disparate files and include information to augment the NetCDF, HDF5, and GDAL libraries via R functions. This information is being separated from the existing R functions into a more generally useable set of file names mapped to required augmentation. One way to do this is to create GDAL *DSNs*, these are strings that GDAL understands directly as if they were a simple and completely well-described file. (There are various of these in GDAL, from VRT files, to in-memory VRT text, to XML variants, and more simply *URIs* that indicate to GDAL how to deal with them - i.e. a variable in NetCDF file in a zip at a url endpoint).
 
 
 ## Data sources
-
 
 There is a simple "all-files" catalogue, we can see it like this:
 
@@ -187,9 +209,9 @@ Some examples where raadtools uses GDAL more directly:
 
 #### Global sea ice
 
-One example of the ongoing migration to more standardized systems is the use of the GDAL warper to integrated north and south polar sea ice in a simple step. 
+One example of the ongoing migration to more standardized systems is the use of the GDAL warper to integrated north and south polar sea ice in a simple step.
 
-Traditionally, we coud read either north or south. 
+Traditionally, we coud read either north or south.
 
 ```{r nsidc1}
 south <- readice()
@@ -199,14 +221,14 @@ print(north)
 
 ```
 
-And, we can't easily regrid these because the R raster stack is not well suited to lazy warping. So, we combined the sources by creating inline VRT that includes both the north and the south sources of a given date. 
+And, we can't easily regrid these because the R raster stack is not well suited to lazy warping. So, we combined the sources by creating inline VRT that includes both the north and the south sources of a given date.
 
 ```{r}
 ice <- readice(hemisphere = "both")
 plot(ice)
 ```
 
-This is nice, and is somewhat similar to the product within the OISST sources. 
+This is nice, and is somewhat similar to the product within the OISST sources.
 
 ```{r oisst-ice}
 oisst.ice <- readsst(varname = "ice")
@@ -215,9 +237,9 @@ getZ(oisst.ice)
 getZ(south)
 ```
 
-(The dates may or may not be the same because these sources aren't the same they won't be in synch). 
+(The dates may or may not be the same because these sources aren't the same they won't be in synch).
 
-The nice feature of this generalization to using the warper is that we can also specify any grid. 
+The nice feature of this generalization to using the warper is that we can also specify any grid.
 
 ```{r}
 rad <- 6378137 * pi
@@ -229,12 +251,9 @@ plot(g, add = TRUE)
 
 ```
 
-That's not exactly practical (sea ice on a global grid), but demonstrates that we can generate any grid we want on demand quite efficiently and for any source. 
+That's not exactly practical (sea ice on a global grid), but demonstrates that we can generate any grid we want on demand quite efficiently and for any source.
 
-The main reason that `readice()` was reengineered to return a global grid in longlat rather than two polar sources was for lookup purposes, it's much simpler to  ask for a region on a common grid to look up track data than it is to switch between poles for different locations. 
-
-
-
+The main reason that `readice()` was reengineered to return a global grid in longlat rather than two polar sources was for lookup purposes, it's much simpler to ask for a region on a common grid to look up track data than it is to switch between poles for different locations.
 
 ### Entire workflow example
 

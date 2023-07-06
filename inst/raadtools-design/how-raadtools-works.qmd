@@ -10,9 +10,7 @@ editor_options:
 
 The raadtools package provides access to a wide range of earth observation, satellite remote sensing, and modelled datasets.
 
-The package is an R library of functions that handle user queries for reading variables as a function of time and space. There is a mix of *time series*, *time-depth*, and *time-static* **variables** of various types within datasets. Function design is focussed on variables, with options for reading subsets in time and space. Functions use the pattern `read[_x]` meaning to read a slice from variable `[x]`, with further optional user-supplied arguments.
-
-The first argument is a (vector of) date-time/s, and the second an extent in space. If no options are given, functions default to returning the entire spatial extent of the latest-available time step. Each function has a few other standard arguments and some that are variable-specific, we mention some of these details in example below.
+The package is an R library of functions that handle user queries for reading variables as a function of time and space. There is a mix of *time series*, *time-depth*, and *time-static* **variables** of various types within datasets.
 
 When raadtools is installed it will automatically find the data library on suitably networked Nectar VMs or on machines within the AAD network, this configuration can be controlled at run time for custom setup.
 

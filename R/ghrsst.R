@@ -57,7 +57,7 @@ xylim <- force(xylim)
   pb$tick(0)
   read_fun <- function(xfile, ext, varname = "", band = 1) {
     pb$tick()
-    crop_if_needed(setExtent(raster(xfile, varname = varname), extent(-180, 180, -90, 90)), ext)
+    crop_if_needed(raster::raster(terra::rast(xfile, varname)), ext)
   }
    r0 <- stack(lapply(seq_len(nfiles), function(xi) read_fun(files$fullname[xi], ext = xylim, varname = varname)))
   if (is.na(projection(r0))) projection(r0) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"

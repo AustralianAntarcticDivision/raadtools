@@ -1,5 +1,8 @@
 # raadtools dev
 
+* Now reading GHRSST COGs, so using terra internally to ensure data is scaled correctly.  Now dep on raadfiles 0.1.4.9003. 
+
+
 * Add nuyina data set. 
 
 

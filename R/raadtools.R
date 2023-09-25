@@ -127,4 +127,19 @@ NULL
 NULL
 
 
+#' Voyage track data from the Nuyina
+#'
+#' This is a sample of the Nuyina underway in 2023. 
+#' 
+#' @name nuyina
+#' @docType data
+#' @title Nuyina underway track
+#' @format \code{aurora} A data frame with 9 columns.  The columns represent 
+#' longitude latitude date_time_utc air_pressure port_longwave_irradiance port_air_temperature precipitation_rate sea_water_salinity sea_water_temperature
+#' @references
+#' see data-raw for extraction
+#' @examples
+#' range(nuyina$date_time_utc)
+#' @keywords data
+NULL
 

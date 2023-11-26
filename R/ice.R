@@ -279,7 +279,10 @@ readice_monthly <- function(date,
 
 read_ice_v2 <- function(files, setNA, xylim = NULL, ...) {
   #out <- raster::brick(files$fullname, band = 1L)
-  suppressWarnings(out <- raster::brick(lapply(files$fullname, raster::raster)))
+  l <- suppressWarnings(lapply(files$fullname, raster::raster))
+  crs <- raster::projection(l[[1]])
+  suppressWarnings(out <- raster::brick(l))
+  projection(out) <- crs
   out <- raster::calc(out, fun = 
    function(x) {
     x <- x * 100; 

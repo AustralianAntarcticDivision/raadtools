@@ -3,13 +3,14 @@
 #' @export
 #' @examples 
 #' readCHL_month()
-readCHL_month <- function(date, xylim = NULL, ..., inputfiles = NULL, latest = TRUE) {
+readCHL_month <- function(date, xylim = NULL, returnfiles = FALSE, ..., inputfiles = NULL, latest = TRUE) {
   if (is.null(inputfiles)) {
     ## memoize this call
     files <- ocfiles("monthly", product = "MODISA", varname = "CHL", type = "L3m")
   } else {
     files <- inputfiles
   }
+  if (returnfiles) return(files)
   if (missing(date)) {
     if (latest)  date <- max(files$date) else date <- min(files$date)
   }

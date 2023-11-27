@@ -1,5 +1,9 @@
 # raadtools dev
 
+* Fixed readCHL_month() to work with extract. 
+
+* Modified time delta for matching files to "monthly". 
+
 * Now reading GHRSST COGs, so using terra internally to ensure data is scaled correctly.  Now dep on raadfiles 0.1.4.9003. 
 
 

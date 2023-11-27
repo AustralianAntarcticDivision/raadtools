@@ -160,7 +160,7 @@ set_utc_format <- function(x) {
   date <- dedupedates$date
   
   .matchFiles(date, fdate[findex], findex, 
-              daytest = switch(timeres, "4hourly" = 1/6, "12hourly" = 1/2, "3hourly" = 1/8, "6hourly" = 0.25, daily = 1.5, weekly = 4, monthly = 15, weekly3 = 26, "8daily" = 5, "8D" = 5))
+              daytest = switch(timeres, "4hourly" = 1/6, "12hourly" = 1/2, "3hourly" = 1/8, "6hourly" = 0.25, daily = 1.5, weekly = 4, monthly = 28, weekly3 = 26, "8daily" = 5, "8D" = 5))
 
 }
 

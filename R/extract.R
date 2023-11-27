@@ -83,7 +83,7 @@
     ##y1 <- SpatialPoints(as.matrix(y[,1:2]), CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"))
     y1 <- as.matrix(y[,1:2])
     pb$tick(0) ## ---------------------------------------------
-    
+
     dummy <- x(inputfiles = files, ...)
     y1 <- reproj::reproj_xy(y1, projection(dummy), source = "+proj=longlat")
     pb$tick(0) ## ---------------------------------------------
@@ -141,7 +141,7 @@
       total = length(date), clear = FALSE, width= 80)
     pb$tick(0, tokens = list(what = time.resolution, ith = 1, nn = length(date)))
     
-    
+
     ## interpolate in time?
     if (ctstime) {
       ## we need to store start and end values
@@ -182,6 +182,7 @@
 
       ## TODO, fix up the if/else here with an exception for the first/last for ctstime
       for (i in seq_along(date)) {
+        
         thisx <- x(date[i], verbose = FALSE, inputfiles = files,  ...)
        
         if(resize) thisx <- aggregate(thisx, fact = fact, fun = "mean")

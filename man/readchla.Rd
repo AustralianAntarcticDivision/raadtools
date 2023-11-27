@@ -5,7 +5,14 @@
 \alias{readCHL_month}
 \title{Read Chlorophyll-a, NASA algorithm}
 \usage{
-readCHL_month(date, xylim = NULL, ..., inputfiles = NULL, latest = TRUE)
+readCHL_month(
+  date,
+  xylim = NULL,
+  returnfiles = FALSE,
+  ...,
+  inputfiles = NULL,
+  latest = TRUE
+)
 
 readchla(
   date,

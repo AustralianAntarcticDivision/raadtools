@@ -1,5 +1,7 @@
 # raadtools dev
 
+* Fixed matching files bug for 8 day intervals. 
+
 * Fixed readCHL_month() to work with extract. 
 
 * Modified time delta for matching files to "monthly". 

@@ -1,7 +1,7 @@
 Package: raadtools
 Type: Package
 Title: Tools for Synoptic Environmental Spatial Data
-Version: 0.6.0.9036
+Version: 0.6.0.9037
 Authors@R: c(
    person("Michael D.","Sumner", role = c("aut", "cre"), email = "michael.sumner@aad.gov.au"), 
    person("Ben", "Raymond", role = "ctb", email = "ben.raymond@aad.gov.au")
@@ -26,7 +26,9 @@ Imports:
     RNetCDF,
     memoise,
     fs,
-    stringr
+    stringr, 
+    duckdb, 
+    DBI
 Suggests:
     graticule,
     knitr,

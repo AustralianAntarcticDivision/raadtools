@@ -64,6 +64,7 @@ set_utc_format <- function(x) {
 ## files
 .processFiles <- function(dt, f, tr) {
   findex <- .processDates(dt, f$date, tr)
+
   f[findex, ]
 }
 
@@ -137,6 +138,7 @@ set_utc_format <- function(x) {
     message(sprintf("\nnearest available date is %s", as.Date(refdate)))
     stop(sprintf("no data file within %.1f days of %s", daytest, format(querydate)))
   }
+  
   if (any(deltatest)) {
     warning(sprintf("%i input dates have no corresponding data file within %f days of available files", sum(deltatest), daytest))
     index <- index[!deltatest]

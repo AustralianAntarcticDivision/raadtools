@@ -1,7 +1,7 @@
 Package: raadtools
 Type: Package
 Title: Tools for Synoptic Environmental Spatial Data
-Version: 0.6.0.9037
+Version: 0.6.0.9038
 Authors@R: c(
    person("Michael D.","Sumner", role = c("aut", "cre"), email = "michael.sumner@aad.gov.au"), 
    person("Ben", "Raymond", role = "ctb", email = "ben.raymond@aad.gov.au")
@@ -15,7 +15,7 @@ Imports:
     ncdf4,
     progress,
     purrr,
-    raadfiles (>= 0.1.4.9003),
+    raadfiles (>= 0.1.4.9009),
     sp,
     tibble,
     furrr,

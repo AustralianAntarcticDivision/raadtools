@@ -1,5 +1,7 @@
 # raadtools dev
 
+* `readtopo()` now defaults to GEBCO 2023. 
+
 * Replace old form of time_since_melt with fancy new duckdb process. 
 
 * Fixed matching files bug for 8 day intervals. 

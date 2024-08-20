@@ -14,8 +14,8 @@
 ##' @return data.frame of \code{file} and \code{date}
 ocfiles <- function(time.resolution = c("daily", "weekly", "monthly", "weekly32"),
                     product = c("MODISA", "SeaWiFS", "VIIRS"), 
-                    varname = c("RRS", "CHL", "POC", "KD490", "NPP_PAR", "SNPP_CHL", "SNPP_RRS"), 
-                    type = c("L3b", "L3m"),
+                    varname = c("CHL", "RRS", "POC", "KD490", "NPP_PAR", "SNPP_CHL", "SNPP_RRS"), 
+                    type = c("L3m", "L3b"),
                     bz2.rm = TRUE, 
                     ext = c("nc", "main"), 
                     ...) {

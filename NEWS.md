@@ -1,5 +1,7 @@
 # raadtools dev
 
+* `ocfiles()` now sets type to "L3m" by default (was L3b), and varname to "CHL" (was RRS). 
+
 * `readtopo()` now defaults to GEBCO 2023. 
 
 * Replace old form of time_since_melt with fancy new duckdb process. 

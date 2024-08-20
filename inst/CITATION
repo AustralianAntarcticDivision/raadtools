@@ -1,15 +1,11 @@
-citHeader("When citing the 'raadtools', 'bowerbird', or 'blueant' packages in publications please include:")
+utils::citHeader("To cite raadtools/bowerbird:")
 
-bibentry(
-  bibtype="Manual",
-  title = "The raadtools and bowerbird framework for acquistion and analysis of earth observation data.",
-  author = c(
-   person("Michael D.","Sumner", role = c("aut", "cre")), 
-   person("Ben", "Raymond", role = "ctb")
-   ),
+bibentry(bibtype = "Manual",
+  author = "Sumner, M. D. and Raymond, B.",
+  title = "The raadtools and bowerbird framework for acquistion and analysis of earth observation data",
+  year = "2024",
   note = "R package",
-  year  = 2024,
-  url = c("https://github.com/AustralianAntarcticDivision/raadtools,https://github.com/ropensci/bowerbird"))
-  
-  
-  
+  ##doi = "",
+  url = "https://github.com/AustralianAntarcticDivision/raadtools, https://github.com/ropensci/bowerbird",
+  textVersion = "Sumner MD, Raymond B (2024) The raadtools and bowerbird framework for acquistion and analysis of earth observation data. R package. https://github.com/AustralianAntarcticDivision/raadtools, https://github.com/ropensci/bowerbird"
+)

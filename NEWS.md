@@ -1,4 +1,4 @@
-# raadtools 0.7.0
+# raadtools dev
 
 * Added a consolidated CITATION for raadtools, blueant, and bowerbird. 
 

@@ -12,6 +12,14 @@ used at the Australian Antarctic Division (AAD).
 read functions like \code{\link{readsst}} will read a data set by date-time vector, with a
 set of shared arguments that work the same and documented against this dummy function.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/AustralianAntarcticDivision/raadtools}
+  \item Report bugs at \url{https://github.com/AustralianAntarcticDivision/raadtools/issues}
+}
+
+}
 \author{
 Michael D. Sumner \email{michael.sumner@aad.gov.au}
 

@@ -6,7 +6,7 @@
 
 * `readtopo()` now defaults to GEBCO 2023. 
 
-* Replace old form of time_since_melt with fancy new duckdb process. 
+* Replace old form of time_since_melt with fancy new duckdb process and checked it's working with extract().  
 
 * Fixed matching files bug for 8 day intervals. 
 

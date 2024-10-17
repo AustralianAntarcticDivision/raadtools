@@ -5,7 +5,7 @@
 \alias{extract,function,data.frame-method}
 \title{extract}
 \usage{
-\S4method{extract}{`function`,data.frame}(x, y, ctstime = FALSE, fact = NULL, verbose = TRUE, ...)
+\S4method{extract}{function,data.frame}(x, y, ctstime = FALSE, fact = NULL, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A raadtools read function.}

@@ -119,8 +119,14 @@ readderivice <- function(date,
 
   date <- timedateFrom(date)
   files <- .processFiles(date, files, time.resolution)
-  
-  out <- raster::stack(lapply(files$date, calc_time_since_melt, trx = cfiles0))
+
+  ## doesn't matter which file for "time_since_melt"
+  if (product == "time_since_melt") {
+    
+    out <- raster::stack(lapply(files$date, calc_time_since_melt, trx = files$fullname[1L]))
+  } else {
+   print("only product 'time_since_melt' currently supported ")    
+  }
   setZ(out, files$date)
 }
 

@@ -99,7 +99,10 @@
     if (notime) {
       ## assume we want topo/bathy values
       thisx1 <- x(...)
-      if (resize) thisx1 <- aggregate(thisx1, fact = fact, fun = 'mean')
+      if (resize) {
+        thisx1 <- terra::aggregate(terra::rast(thisx1), fact = fact, fun = 'mean')
+        thisx1 <- raster::raster(thisx1)
+      }
       return(extract(thisx1, yp, ...))
     }
     pb$tick(0) ## ---------------------------------------------

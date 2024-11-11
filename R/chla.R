@@ -36,7 +36,7 @@ read_chla_daily <-  function (date, time.resolution = c("daily"),
                       latest = TRUE,
                       returnfiles = FALSE,  ..., inputfiles = NULL) {
   time.resolution <- match.arg(time.resolution)
-  
+
   #varname <- match.arg(varname)
  if (is.null(inputfiles)) {
     files <- .multi_era_chlafiles()
@@ -67,7 +67,7 @@ read_chla_daily <-  function (date, time.resolution = c("daily"),
   
   if (!"band" %in% names(files)) files$band <- 1
   
-  
+
   r0 <- brick(stack(lapply(seq_len(nrow(files)), function(xi) read_fun(files$fullname[xi], ext = xylim,  rot = rot, varname = varname, band = files$band[xi]))),
               ...)
   if (is.na(projection(r0))) projection(r0) <- "+proj=longlat +datum=WGS84"

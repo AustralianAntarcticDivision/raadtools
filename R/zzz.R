@@ -8,7 +8,7 @@
     raster::rasterOptions(maxmemory = 4e9)
   }
   read_rema_tiles <<- memoise::memoize(read_rema_tiles)
-  
+  .multi_era_chlafiles <<- memoise::memoize(.multi_era_chlafiles)
   options(raadtools.geoid_tile_vrt = NULL, raadtools.message.rescale = TRUE)
   
   ## send this message once per session

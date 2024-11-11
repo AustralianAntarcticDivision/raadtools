@@ -84,7 +84,12 @@
     y1 <- as.matrix(y[,1:2])
     pb$tick(0) ## ---------------------------------------------
 
-    dummy <- x(inputfiles = files, ...)
+    dummy <- try(x(inputfiles = files, ...), silent = TRUE)
+    if (inherits(dummy, "try-error")) {
+      listargs <- list(...)
+      listargs$latest <- FALSE  ## deal with case when latest files are missing ...
+      dummy <- do.call(x, listargs)
+    }
     y1 <- reproj::reproj_xy(y1, projection(dummy), source = "+proj=longlat")
     pb$tick(0) ## ---------------------------------------------
     # xylim <- extent(yp)

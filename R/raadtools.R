@@ -6,7 +6,6 @@
 #'
 #' Maintainer: Michael D. Sumner \email{michael.sumner@@aad.gov.au}
 #' @name raadtools-package
-#' @docType package
 #' @keywords package
 #' @import methods
 #' @importFrom raster overlay
@@ -15,7 +14,7 @@
 #' @details
 #'    read functions like \code{\link{readsst}} will read a data set by date-time vector, with a 
 #'  set of shared arguments that work the same and documented against this dummy function. 
-NULL
+"_PACKAGE"
 
 #' raadtools
 #' 

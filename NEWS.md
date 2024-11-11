@@ -1,5 +1,7 @@
 # raadtools dev
 
+* New function `read_chla_daily()` for use with `extract()`. 
+
 * Added a consolidated CITATION for raadtools, blueant, and bowerbird. 
 
 * `ocfiles()` now sets type to "L3m" by default (was L3b), and varname to "CHL" (was RRS). 

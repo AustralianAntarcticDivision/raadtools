@@ -16,23 +16,35 @@ readCHL_month(
 
 readchla(
   date,
-  product = c("MODISA", "SeaWiFS", "VIIRS"),
+  product = c("any", "MODISA", "SeaWiFS", "VIIRS"),
   xylim = NULL,
   algorithm = c("nasa"),
   latest = TRUE,
-  grid = NULL
+  grid = NULL,
+  ...,
+  returnfiles = FALSE,
+  inputfiles = NULL
 )
 }
 \arguments{
 \item{date}{date or dates of data to read, see Details}
 
-\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, ignored if grid is provided
-@param algorithm nasa only}
+\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, ignored if grid is provided}
 
-\item{latest}{if TRUE (and date not supplied) return the latest time available, otherwise the earliest
-Note that reaCHL_month reads the NASA algorith L3m products.}
+\item{returnfiles}{ignore options and just return the file names and dates}
+
+\item{...}{currently ignored
+Note that reaCHL_month reads the NASA algorithm L3m products.
+
+Note that this function cannot be used with 'extract()', for that use \code{read_chla_daily()}.}
+
+\item{inputfiles}{input the files data base to speed up initialization}
+
+\item{latest}{if TRUE (and date not supplied) return the latest time available, otherwise the earliest}
 
 \item{product}{choice of product, see Details}
+
+\item{algorithm}{nasa only}
 
 \item{grid}{template raster object for output}
 }

@@ -1,3 +1,84 @@
+.multi_era_chlafiles <- function() {
+  f1 <- try(ocfiles("daily", product = "MODISA", type = "L3m"), silent = TRUE)
+  f2 <- try(ocfiles("daily", product = "VIIRS", type = "L3m"), silent = TRUE)
+  f3 <- try(ocfiles("daily", product = "SeaWiFS", type = "L3m"), silent = TRUE)
+  files <- NULL
+  if (!inherits(f1, "try-error")) files <- rbind(files, f1)
+  if (!inherits(f2, "try-error")) files <- rbind(files, f2)
+  if (!inherits(f3, "try-error")) files <- rbind(files, f3)
+  if (is.null(files)) stop("no ocfiles found!")
+  
+  dplyr::arrange(dplyr::distinct(files, date, .keep_all = TRUE), date)
+  }
+
+
+#' Read daily chlorphyll-a
+#' 
+#' Data is read as daily files in a way consistent with other read functions that can 
+#' be used by `extract()`. (`readchla` for example cannot be used this way as it returns a mean value for the period asked for). 
+#' 
+#' This function will read from the entire era available to SeaWiFS, MODISA, and VIIRS. 
+#' 
+#' To read from particular eras use the output of `ocfiles()` for inputfiles  argument. 
+#' 
+#' @inheritParams readsst
+#' 
+#' @return
+#' @export
+#'
+#' @examples
+#' read_chla_daily(latest = FALSE) ## we should see SeaWiFS
+#' read_chla_daily() ## we should see MODISA (or VIIRS)
+read_chla_daily <-  function (date, time.resolution = c("daily"),
+                      xylim = NULL, lon180 = TRUE,
+                      varname = c("chlor_a"),
+                      setNA = TRUE,
+                      latest = TRUE,
+                      returnfiles = FALSE,  ..., inputfiles = NULL) {
+  time.resolution <- match.arg(time.resolution)
+  
+  #varname <- match.arg(varname)
+ if (is.null(inputfiles)) {
+    files <- .multi_era_chlafiles()
+  } else {
+    files <- inputfiles
+  }
+  if (returnfiles)
+    return(files)
+  if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
+  
+  
+  
+  
+  files <- .processFiles(date, files, time.resolution)
+  nfiles <- nrow(files)
+  read_fun <- function(xfile, ext, rot, varname = "", band = 1) {
+    r <- terra::rast(xfile, varname)
+    terra::ext(r) <- terra::ext(-180, 180, -90, 90)  ## slight noise in the source
+    if(!is.null(rot) && rot) r <- terra::rotate(r, left = FALSE)
+    if(!is.null(ext)) r <- terra::crop(r, terra::ext(ext))
+    raster::raster(r)
+  }
+  
+  ## TODO determine if we need to rotate, or just shift, or not anything
+  rot <- !lon180
+  msk <- NULL
+
+  
+  if (!"band" %in% names(files)) files$band <- 1
+  
+  
+  r0 <- brick(stack(lapply(seq_len(nrow(files)), function(xi) read_fun(files$fullname[xi], ext = xylim,  rot = rot, varname = varname, band = files$band[xi]))),
+              ...)
+  if (is.na(projection(r0))) projection(r0) <- "+proj=longlat +datum=WGS84"
+  
+  if (nfiles == 1) r0 <- r0[[1L]]
+  r0 <- setZ(r0, files$date)
+  
+  r0
+  
+}
+
 
 #' @name readchla
 #' @export
@@ -49,10 +130,16 @@ readCHL_month <- function(date, xylim = NULL, returnfiles = FALSE, ..., inputfil
 #' @param product choice of product, see Details
 
 #' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, ignored if grid is provided
-#'  @param algorithm nasa only
+#' @param algorithm nasa only
 #' @param grid template raster object for output
 #' @param latest if TRUE (and date not supplied) return the latest time available, otherwise the earliest
-#' Note that reaCHL_month reads the NASA algorith L3m products. 
+#' @param returnfiles 	ignore options and just return the file names and dates
+#' @param inputfiles 	input the files data base to speed up initialization 
+#' @param ... currently ignored
+#' Note that reaCHL_month reads the NASA algorithm L3m products. 
+#' 
+#' Note that this function cannot be used with 'extract()', for that use `read_chla_daily()`. 
+#' 
 #' 
 #' @seealso readCHL_month
 #' @export
@@ -65,17 +152,24 @@ readCHL_month <- function(date, xylim = NULL, returnfiles = FALSE, ..., inputfil
 #'          xylim = extent(100, 150, -70, -30))
 #' }
 #' @export
-readchla <- function(date, product = c("MODISA", "SeaWiFS", "VIIRS"),
+readchla <- function(date, product = c("any", "MODISA", "SeaWiFS", "VIIRS"),
                      xylim = NULL,
                      algorithm = c("nasa"),
 
                      latest = TRUE, 
-                     grid = NULL) {
+                     grid = NULL, ..., returnfiles = FALSE, inputfiles = NULL) {
   
   if (!algorithm == "nasa") warning("only 'nasa' algorithm is currently supported")
   product <- match.arg(product)
   
-  files <- ocfiles("daily", product = product, varname = "CHL", type = "L3m")
+  if (is.null(inputfiles)) {
+    files <- ocfiles("daily", product = product, varname = "CHL", type = "L3m")
+  } else {
+    files <- inputfiles
+  }
+  if (returnfiles) return(files)
+
+  
   if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
   date <- timedateFrom(date)
   

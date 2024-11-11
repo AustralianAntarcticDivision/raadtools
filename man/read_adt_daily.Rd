@@ -84,7 +84,24 @@ a raster layer
 Functions \code{read_sla_daily} and so on for "ugosa, adt, ugos, sla, vgos, vgosa, err".
 }
 \details{
-sla is sea level anomaly, for the raw files see \code{raadfiles::altimetry_daily_files}
+The labels 'u', 'v' are used by another function \code{readcurr()} which reads the 'ugos' and 'vgos' components and corresponds to an older
+but analogous dataset.
+
+'ugos' is Absolute geostrophic velocity: zonal component, 'surface_geostrophic_eastward_sea_water_velocity' in m/s.
+
+'vgos' is Absolute geostrophic velocity: meridian component, 'surface_geostrophic_northward_sea_water_velocity' in m/s.
+
+'ugosa' is Geostrophic velocity anomalies: zonal component, 'surface_geostrophic_eastward_sea_water_velocity_assuming_sea_level_for_geoid' in m/s.
+
+'vgosa' is Geostrophic velocity anomalies: meridian component, 'surface_geostrophic_northward_sea_water_velocity_assuming_sea_level_for_geoid' in m/s.
+
+'adt' is Absolute dynamic topography, 'sea_surface_height_above_geoid' in metres
+
+'sla' is Sea level anomaly, 'sea_surface_height_above_sea_level' in metres.
+
+For the raw files see \code{raadfiles::altimetry_daily_files} and for example do
+
+'files <- read_sla_daily(returnfiles = TRUE); ncdf4::nc_open(files$fullname\link{1})' which will give a full NetCDF metadata print out of the source files (all the variables are in each file).
 }
 \examples{
 a <- read_adt_daily(sort(Sys.Date() - 1:50),

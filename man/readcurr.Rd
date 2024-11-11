@@ -60,6 +60,10 @@ components. Multiple dates can be returned for magnitude or
 direction, U or V only.
 }
 \details{
+These labels 'u', 'v', 'mag', and 'dir' correspond to arguments 'uonly', 'vonly', 'magonly', and 'dironly' which exist
+to have the function return only the 'u' or 'v' layer (by default both are returned which can only work for a single time step).
+'magonly' and 'dironly' are special cases calculated from 'u' and 'v', the magnitude and direction of the field respectively in m/s and degrees from north.
+
 This is the "DT merged all satellites Global Ocean Gridded SSALTO/DUACS Sea Surface Height L4 product and derived variables"
 See References.
 }

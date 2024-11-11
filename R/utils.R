@@ -64,15 +64,18 @@ set_utc_format <- function(x) {
 ## files
 .processFiles <- function(dt, f, tr) {
   findex <- .processDates(dt, f$date, tr)
+ 
+  f <- f[findex, ]
+  
   op <- getOption("raadtools.check.file.exists")
   ## first column that is "fullname" or "ufullname"
-  nm <- grep("fullname$", names(files))
+  nm <- grep("fullname$", names(f))
   if (isTRUE(op) && length(nm) > 0) {
     exists <- fs::file_exists(f[[nm[1]]])
     f <- f[exists, ]
     if (nrow(f) < 1) stop("no files exist for this dataset!")
   }
-  f[findex, ]
+  f
 }
 
 # .fastNCvar <- function(x, varname) {

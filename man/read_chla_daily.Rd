@@ -2,11 +2,37 @@
 % Please edit documentation in R/chla.R
 \name{read_chla_daily}
 \alias{read_chla_daily}
+\alias{read_chla_weekly}
+\alias{read_chla_monthly}
 \title{Read daily chlorphyll-a}
 \usage{
 read_chla_daily(
   date,
-  time.resolution = c("daily"),
+  time.resolution = "daily",
+  xylim = NULL,
+  lon180 = TRUE,
+  varname = c("chlor_a"),
+  setNA = TRUE,
+  latest = TRUE,
+  returnfiles = FALSE,
+  ...,
+  inputfiles = NULL
+)
+
+read_chla_weekly(
+  date,
+  xylim = NULL,
+  lon180 = TRUE,
+  varname = c("chlor_a"),
+  setNA = TRUE,
+  latest = TRUE,
+  returnfiles = FALSE,
+  ...,
+  inputfiles = NULL
+)
+
+read_chla_monthly(
+  date,
   xylim = NULL,
   lon180 = TRUE,
   varname = c("chlor_a"),
@@ -38,6 +64,9 @@ read_chla_daily(
 \item{...}{passed in to brick, primarily for \code{filename}}
 
 \item{inputfiles}{input the files data base to speed up initialization}
+}
+\value{
+raster object
 }
 \description{
 Data is read as daily files in a way consistent with other read functions that can

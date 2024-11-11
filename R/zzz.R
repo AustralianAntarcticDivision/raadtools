@@ -13,6 +13,7 @@
   
   ## send this message once per session
   options("raadtools.both.hemisphere.message" = FALSE)
+  options("raadtools.check.file.exists" = TRUE)
 }
 
 

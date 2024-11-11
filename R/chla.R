@@ -1,7 +1,7 @@
-.multi_era_chlafiles <- function() {
-  f1 <- try(ocfiles("daily", product = "MODISA", type = "L3m"), silent = TRUE)
-  f2 <- try(ocfiles("daily", product = "VIIRS", type = "L3m"), silent = TRUE)
-  f3 <- try(ocfiles("daily", product = "SeaWiFS", type = "L3m"), silent = TRUE)
+.multi_era_chlafiles <- function(time.resolution = "daily") {
+  f1 <- try(ocfiles(time.resolution, product = "MODISA", type = "L3m"), silent = TRUE)
+  f2 <- try(ocfiles(time.resolution, product = "VIIRS", type = "L3m"), silent = TRUE)
+  f3 <- try(ocfiles(time.resolution, product = "SeaWiFS", type = "L3m"), silent = TRUE)
   files <- NULL
   if (!inherits(f1, "try-error")) files <- rbind(files, f1)
   if (!inherits(f2, "try-error")) files <- rbind(files, f2)
@@ -23,20 +23,20 @@
 #' 
 #' @inheritParams readsst
 #' 
-#' @return
+#' @return raster object
 #' @export
-#'
+#' @aliases read_chla_weekly read_chla_monthly
 #' @examples
 #' read_chla_daily(latest = FALSE) ## we should see SeaWiFS
 #' read_chla_daily() ## we should see MODISA (or VIIRS)
-read_chla_daily <-  function (date, time.resolution = c("daily"),
+read_chla_daily <-  function (date, time.resolution = "daily",
                       xylim = NULL, lon180 = TRUE,
                       varname = c("chlor_a"),
                       setNA = TRUE,
                       latest = TRUE,
                       returnfiles = FALSE,  ..., inputfiles = NULL) {
-  time.resolution <- match.arg(time.resolution)
-
+  #time.resolution <- match.arg(time.resolution)
+  
   #varname <- match.arg(varname)
  if (is.null(inputfiles)) {
     files <- .multi_era_chlafiles()
@@ -79,6 +79,32 @@ read_chla_daily <-  function (date, time.resolution = c("daily"),
   
 }
 
+
+#' @name read_chla_daily
+#' @export
+read_chla_weekly <-  function (date, 
+                              xylim = NULL, lon180 = TRUE,
+                              varname = c("chlor_a"),
+                              setNA = TRUE,
+                              latest = TRUE,
+                              returnfiles = FALSE,  ..., inputfiles = NULL) {
+ files <- .multi_era_chlafiles("weekly")
+ read_chla_daily(date, "weekly", xylim = xylim, lon180 = lon180, varname = varname, setNA = setNA, latest = latest, returnfiles = returnfiles, 
+                 inputfiles = files, ...)
+}
+  
+#' @name read_chla_daily
+#' @export
+read_chla_monthly <-  function (date, 
+                               xylim = NULL, lon180 = TRUE,
+                               varname = c("chlor_a"),
+                               setNA = TRUE,
+                               latest = TRUE,
+                               returnfiles = FALSE,  ..., inputfiles = NULL) {
+  files <- .multi_era_chlafiles("monthly")
+  read_chla_daily(date, "monthly", xylim = xylim, lon180 = lon180, varname = varname, setNA = setNA, latest = latest, returnfiles = returnfiles, 
+                  inputfiles = files, ...)
+}
 
 #' @name readchla
 #' @export

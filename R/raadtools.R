@@ -4,6 +4,12 @@
 #' used at the Australian Antarctic Division (AAD).
 #' @author Michael D. Sumner \email{michael.sumner@@aad.gov.au}
 #'
+#' Options
+#' 
+#' There is an option 'raadtools.check.file.exists' that is TRUE by default, set to FALSE might make very long time series requests a  bit faster.
+#' 
+#' `options(raadtools.check.file.exists = FALSE)`
+#' 
 #' Maintainer: Michael D. Sumner \email{michael.sumner@@aad.gov.au}
 #' @name raadtools-package
 #' @keywords package

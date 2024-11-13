@@ -39,5 +39,5 @@ readfsle(
 data.frame
 }
 \description{
-Daily files
+Daily files This dataset contains Backward-in-time FSLE product deduced from DT merged Global Ocean Gridded Absolute Geostrophic Velocities SSALTO/Duacs L4 product (version 2018).
 }

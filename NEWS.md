@@ -1,5 +1,9 @@
 # raadtools dev
 
+* Added Park fronts to 'frontsmap()'. 
+
+* Some more doc in places. 
+
 * New function `read_chla_daily()` for use with `extract()`. 
 
 * Added a consolidated CITATION for raadtools, blueant, and bowerbird. 

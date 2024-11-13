@@ -4,7 +4,7 @@
 \alias{frontsmap}
 \title{Fronts map data for the Southern Ocean}
 \usage{
-frontsmap(map = c("orsi"))
+frontsmap(map = c("park", "orsi"))
 }
 \arguments{
 \item{map}{name of map to load}
@@ -16,7 +16,9 @@ SpatialLinesDataFrame
 Load spatial map of fronts data.
 }
 \details{
-Currently ORSI is the only supported layer.
+Currently ORSI or PARK is the only supported layers.
+
+"park" = Southern Ocean fronts as determined by Park and Durand, doi: 10.17882/59800
 
 "orsi" - the ORSI fronts derived from the files provided by the
 WOCE Atlas, see References

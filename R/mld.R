@@ -40,7 +40,8 @@
 #' Ocean before 2002 (when Argo started), there is not much, so the results will
 #' be strongly dominated by the climatology (World ocean Atlas).
 #
-#' Unfortunately there is no good answer for time variability of MLD.
+#' Strong suggestion to use Bluelink for MLD instead: https://gist.github.com/mdsumner/32d718dbb5667904a605cea92757b335
+#' 
 #' @param date date to extract, can only be a climatology month
 #' @param xylim extent specification
 #' @param returnfiles return the file details only

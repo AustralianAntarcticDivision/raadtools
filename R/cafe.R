@@ -2,7 +2,10 @@
 
 #' Read 'cafe' MODIS monthly data
 #'
+#' I don't remember what these are but they were at https://orca.science.oregonstate.edu/
+#' 
 #' Files are found with `raadfiles::cafe_monthly_files()`.
+#' 
 #' @inheritParams raadtools
 #' @inheritDotParams raadtools
 #' @name readcafe

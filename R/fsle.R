@@ -4,7 +4,7 @@
 
 #' Backward-in-time Finite-Size Lyapunov Exponents
 #'
-#' Daily files
+#' Daily files This dataset contains Backward-in-time FSLE product deduced from DT merged Global Ocean Gridded Absolute Geostrophic Velocities SSALTO/Duacs L4 product (version 2018).
 #' @param date date or dates of data to read, see Details
 #' @param time.resolution time resolution to read (only daily)
 #' @param varname either `fsle_max` or `theta_max``

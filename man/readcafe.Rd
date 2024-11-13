@@ -40,6 +40,9 @@ readcafe(
 \item{inputfiles}{input the files data base to speed up initialization}
 }
 \description{
+I don't remember what these are but they were at https://orca.science.oregonstate.edu/
+}
+\details{
 Files are found with \code{raadfiles::cafe_monthly_files()}.
 }
 \examples{

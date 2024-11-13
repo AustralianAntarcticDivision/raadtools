@@ -1,5 +1,6 @@
 #' Circumpolar ROMS files. 
 #' 
+#' These were an experiment provided by Stuart Corney of UTAS, consider deprecated. 
 #' 
 #' @param ... ignored
 #'

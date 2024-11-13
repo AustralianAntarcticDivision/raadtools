@@ -25,8 +25,8 @@ rapid_responsefiles <- function(product = c("aqua", "terra"), ...) {
     dplyr::filter(stringr::str_detect(.data$file, product)) %>% 
     dplyr::filter(stringr::str_detect(.data$file, "tif$"))
   
- files %>% dplyr::transmute(date = as.POSIXct(as.Date(stringr::str_extract(.data$file, "[0-9]{7}"), "%Y%j"), tz = "GMT"), 
-                     fullname = file.path(.data$root, .data$file))
+ files %>% dplyr::transmute(date = as.POSIXct(as.Date(stringr::str_extract(.data$file, "[0-9]{7}"), "%Y%j"), tz = "UTC"), 
+                     fullname = file.path(.data$root, .data$file)) |> dplyr::arrange(.data$date)
 }
 
 ##' Read MODIS Rapid Response RGB images
@@ -44,10 +44,11 @@ readrapid_response <- function(date, product = c("aqua", "terra"), latest = TRUE
   files <- rapid_responsefiles(product = product)
   ## something's wrong with the files
   if (returnfiles) return(files)
-  
+
   if (missing(date)){
     date <-  if (latest)  max(files$date) else min(files$date)
   }
+
   files <- .processFiles(date, files, "daily")
   
   nfiles <- nrow(files)

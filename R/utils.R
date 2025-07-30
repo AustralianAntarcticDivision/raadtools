@@ -71,9 +71,15 @@ set_utc_format <- function(x) {
   ## first column that is "fullname" or "ufullname"
   nm <- grep("fullname$", names(f))
   if (isTRUE(op) && length(nm) > 0) {
+    ## but they might be /vsi protocol ...
+    if (grep("^/vsi", f[[nm[1]]])) {
+      
+    } else {
     exists <- fs::file_exists(f[[nm[1]]])
     f <- f[exists, ]
+   
     if (nrow(f) < 1) stop("no files exist for this dataset!")
+    }
   }
   f
 }

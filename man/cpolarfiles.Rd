@@ -13,7 +13,7 @@ cpolarfiles(...)
 data frame of fullname, date
 }
 \description{
-Circumpolar ROMS files.
+These were an experiment provided by Stuart Corney of UTAS, consider deprecated.
 }
 \examples{
 cpolarfiles()

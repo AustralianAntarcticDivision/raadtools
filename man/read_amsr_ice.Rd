@@ -8,8 +8,8 @@ read_amsr_ice(
   date,
   xylim = NULL,
   latest = TRUE,
-  ...,
   returnfiles = FALSE,
+  ...,
   inputfiles = NULL
 )
 }
@@ -20,9 +20,9 @@ read_amsr_ice(
 
 \item{latest}{if TRUE and date input is missing, return the latest time available otherwise the earliest}
 
-\item{...}{passed to brick, primarily for \code{filename}}
-
 \item{returnfiles}{ignore options and just return the file names and dates}
+
+\item{...}{passed to brick, primarily for \code{filename}}
 
 \item{inputfiles}{input the files data base to speed up initialization}
 }

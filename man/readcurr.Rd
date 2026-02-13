@@ -88,8 +88,13 @@ direction (in degrees relative to North) of the velocity vectors.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 
-\code{readcurr} is superseded by \code{\link{read_copernicus_current_daily}},
-which returns terra \code{SpatRaster} objects.
+\code{readcurr} is superseded by the CMEMS current readers:
+\itemize{
+\item \code{\link{read_cmems_ugos_daily}} - U component
+\item \code{\link{read_cmems_vgos_daily}} - V component
+\item \code{\link{read_cmems_current_speed_daily}} - current speed
+\item \code{\link{read_cmems_current_direction_daily}} - current direction
+}
 
 Current data is read from files managed by
 \code{\link{currentsfiles}}. Dates are matched to file names by
@@ -131,7 +136,8 @@ arrows(x1, y1, x2, y2, length = 0.03)
 \url{http://marine.copernicus.eu}
 }
 \seealso{
-\code{\link{read_copernicus_current_daily}} for modern terra-based reader
+\code{\link{read_cmems_ugos_daily}}, \code{\link{read_cmems_vgos_daily}},
+\code{\link{read_cmems_current_speed_daily}}, \code{\link{read_cmems_current_direction_daily}}
 
 \code{\link{icefiles}} for details on the repository of
 data files, \code{\link[raster]{raster}} for the return value

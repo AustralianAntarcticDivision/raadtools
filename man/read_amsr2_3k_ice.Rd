@@ -7,10 +7,10 @@
 read_amsr2_3k_ice(
   date,
   xylim = NULL,
-  latest = TRUE,
-  ...,
   setNA = TRUE,
+  latest = TRUE,
   returnfiles = FALSE,
+  ...,
   inputfiles = NULL
 )
 }
@@ -19,13 +19,13 @@ read_amsr2_3k_ice(
 
 \item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}}
 
-\item{latest}{if TRUE and date input is missing, return the latest time available otherwise the earliest}
-
-\item{...}{passed to brick, primarily for \code{filename}}
-
 \item{setNA}{mask zero and values greater than 100 as NA}
 
+\item{latest}{if TRUE and date input is missing, return the latest time available otherwise the earliest}
+
 \item{returnfiles}{ignore options and just return the file names and dates}
+
+\item{...}{passed to brick, primarily for \code{filename}}
 
 \item{inputfiles}{input the files data base to speed up initialization}
 }

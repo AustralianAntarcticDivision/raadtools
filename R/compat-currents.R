@@ -1,5 +1,5 @@
 # R/compat-currents.R
-# Legacy shim for readcurr() - dispatches to terra-native reader
+# Legacy shim for readcurr() - dispatches to terra-native CMEMS readers
 # Returns raster::brick() for backward compatibility
 
 #' Read ocean current data
@@ -7,8 +7,13 @@
 #' @description
 #' `r lifecycle::badge("superseded")`
 #'
-#' \code{readcurr} is superseded by \code{\link{read_copernicus_current_daily}},
-#' which returns terra \code{SpatRaster} objects.
+#' \code{readcurr} is superseded by the CMEMS current readers:
+#' \itemize{
+#'   \item \code{\link{read_cmems_ugos_daily}} - U component
+#'   \item \code{\link{read_cmems_vgos_daily}} - V component
+#'   \item \code{\link{read_cmems_current_speed_daily}} - current speed
+#'   \item \code{\link{read_cmems_current_direction_daily}} - current direction
+#' }
 #'
 #' @param date date or dates of data to read
 #' @param xylim spatial extents to crop
@@ -24,7 +29,8 @@
 #'
 #' @return \code{RasterBrick} or \code{RasterLayer}, or tibble if \code{returnfiles = TRUE}
 #'
-#' @seealso \code{\link{read_copernicus_current_daily}} for modern terra-based reader
+#' @seealso \code{\link{read_cmems_ugos_daily}}, \code{\link{read_cmems_vgos_daily}},
+#'   \code{\link{read_cmems_current_speed_daily}}, \code{\link{read_cmems_current_direction_daily}}
 #'
 #' @export
 readcurr <- function(date,
@@ -39,28 +45,76 @@ readcurr <- function(date,
                      ...,
                      inputfiles = NULL) {
 
+  # Validate flags
+  flags <- c(magonly, dironly, uonly, vonly)
+  if (sum(flags) > 1) {
+    stop("only one of 'magonly', 'dironly', 'uonly', 'vonly' may be TRUE")
+  }
+
   if (isTRUE(getOption("raadtools.shim.warn", TRUE))) {
-    .Deprecated("read_copernicus_current_daily", package = "raadtools",
+    new_fn <- if (magonly) "read_cmems_current_speed_daily"
+              else if (dironly) "read_cmems_current_direction_daily"
+              else if (uonly) "read_cmems_ugos_daily"
+              else if (vonly) "read_cmems_vgos_daily"
+              else "read_cmems_ugos_daily/read_cmems_vgos_daily"
+
+    .Deprecated(new_fn, package = "raadtools",
       msg = paste0(
         "'readcurr' is deprecated. ",
-        "Use 'read_copernicus_current_daily' for terra-native output.\n",
+        "Use '", new_fn, "' for terra-native output.\n",
         "Set options(raadtools.shim.warn = FALSE) to suppress this warning."
       ))
   }
 
-  r <- read_copernicus_current_daily(
-    date = date,
-    xylim = xylim,
-    lon180 = lon180,
-    magonly = magonly,
-    dironly = dironly,
-    uonly = uonly,
-    vonly = vonly,
-    latest = latest,
-    returnfiles = returnfiles,
-    inputfiles = inputfiles,
-    ...
-  )
+  # Dispatch based on flags
+  if (magonly) {
+    r <- read_cmems_current_speed_daily(
+      date = date, xylim = xylim, lon180 = lon180,
+      latest = latest, returnfiles = returnfiles, inputfiles = inputfiles, ...
+    )
+  } else if (dironly) {
+    r <- read_cmems_current_direction_daily(
+      date = date, xylim = xylim, lon180 = lon180,
+      latest = latest, returnfiles = returnfiles, inputfiles = inputfiles, ...
+    )
+  } else if (uonly) {
+    r <- read_cmems_ugos_daily(
+      date = date, xylim = xylim, lon180 = lon180,
+      latest = latest, returnfiles = returnfiles, inputfiles = inputfiles, ...
+    )
+  } else if (vonly) {
+    r <- read_cmems_vgos_daily(
+      date = date, xylim = xylim, lon180 = lon180,
+      latest = latest, returnfiles = returnfiles, inputfiles = inputfiles, ...
+    )
+  } else {
+    # Both U and V - single date only
+    if (returnfiles) {
+      return(read_cmems_ugos_daily(returnfiles = TRUE, inputfiles = inputfiles))
+    }
+
+    # Handle date
+    files <- inputfiles %||% raadfiles::altimetry_daily_files()
+    if (missing(date)) {
+      date <- if (latest) max(files$date) else min(files$date)
+    }
+    date <- timedateFrom(date)
+
+    # Check for multiple dates
+    if (length(date) > 1) {
+      warning("only one date can be read at a time unless 'magonly', 'dironly', 'uonly' or 'vonly' is TRUE; using first date")
+      date <- date[1]
+    }
+
+    u <- read_cmems_ugos_daily(date, xylim = xylim, lon180 = lon180,
+                                latest = latest, inputfiles = inputfiles, ...)
+    v <- read_cmems_vgos_daily(date, xylim = xylim, lon180 = lon180,
+                                latest = latest, inputfiles = inputfiles, ...)
+
+    r <- c(u, v)
+    names(r) <- c("U", "V")
+    terra::time(r) <- rep(terra::time(u), 2)
+  }
 
   if (returnfiles) return(r)
 

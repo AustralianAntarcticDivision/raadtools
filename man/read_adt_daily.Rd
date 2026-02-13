@@ -13,6 +13,7 @@
 read_ugosa_daily(
   date,
   xylim = NULL,
+  lon180 = TRUE,
   latest = TRUE,
   returnfiles = FALSE,
   ...,
@@ -22,6 +23,7 @@ read_ugosa_daily(
 read_ugos_daily(
   date,
   xylim = NULL,
+  lon180 = TRUE,
   latest = TRUE,
   returnfiles = FALSE,
   ...,
@@ -31,6 +33,7 @@ read_ugos_daily(
 read_sla_daily(
   date,
   xylim = NULL,
+  lon180 = TRUE,
   latest = TRUE,
   returnfiles = FALSE,
   ...,
@@ -40,6 +43,7 @@ read_sla_daily(
 read_vgos_daily(
   date,
   xylim = NULL,
+  lon180 = TRUE,
   latest = TRUE,
   returnfiles = FALSE,
   ...,
@@ -49,6 +53,7 @@ read_vgos_daily(
 read_vgosa_daily(
   date,
   xylim = NULL,
+  lon180 = TRUE,
   latest = TRUE,
   returnfiles = FALSE,
   ...,
@@ -58,6 +63,7 @@ read_vgosa_daily(
 read_err_daily(
   date,
   xylim = NULL,
+  lon180 = TRUE,
   latest = TRUE,
   returnfiles = FALSE,
   ...,
@@ -68,6 +74,8 @@ read_err_daily(
 \item{date}{date or dates of data to read,}
 
 \item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details}
+
+\item{lon180}{defaults to TRUE, to "rotate" Pacific view \link{0, 360} data to Atlantic view \link{-180, 180}}
 
 \item{latest}{if TRUE (and date not supplied) return the latest time available}
 

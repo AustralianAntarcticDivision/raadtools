@@ -17,21 +17,21 @@ read_par(
 )
 }
 \arguments{
-\item{date}{date or dates of data to read,}
+\item{date}{date or dates of data to read}
 
 \item{time.resolution}{'8D' currently, use the NASA tokens for time period}
 
-\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details}
+\item{xylim}{spatial extents to crop from source data}
 
-\item{lon180}{defaults to TRUE, to "rotate" Pacific view \link{0, 360} data to Atlantic view \link{-180, 180}}
+\item{lon180}{if TRUE (default), convert Pacific (0,360) to Atlantic (-180,180) view}
 
-\item{latest}{if TRUE (and date not supplied) return the latest time available}
+\item{latest}{if TRUE and date missing, return latest available}
 
-\item{returnfiles}{ignore options and just return the file names and dates}
+\item{returnfiles}{if TRUE, return the file catalog instead of data}
 
-\item{inputfiles}{input the files data base to speed up initialization}
+\item{inputfiles}{optional pre-filtered file catalog}
 
-\item{...}{passed in to brick, primarily for \code{filename}}
+\item{...}{passed to underlying reader}
 }
 \value{
 raster object

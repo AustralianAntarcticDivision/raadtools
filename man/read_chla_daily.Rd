@@ -44,26 +44,26 @@ read_chla_monthly(
 )
 }
 \arguments{
-\item{date}{date or dates of data to read,}
+\item{date}{date or dates of data to read}
 
-\item{time.resolution}{time resoution data to read, daily or monthly}
+\item{time.resolution}{time resolution: "daily" or "monthly"}
 
-\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details}
+\item{xylim}{spatial extents to crop from source data}
 
-\item{lon180}{defaults to TRUE, to "rotate" Pacific view \link{0, 360} data to Atlantic view \link{-180, 180}}
+\item{lon180}{if TRUE (default), convert Pacific (0,360) to Atlantic (-180,180) view}
 
 \item{varname}{variable to return from the data files, default is
 "sst" or "anom", "err", "ice"}
 
-\item{setNA}{mask out land values (only applies to monthly time.resolution)}
+\item{setNA}{mask out land values (ignored in new implementation, kept for API compatibility}
 
-\item{latest}{if TRUE (and date not supplied) return the latest time available}
+\item{latest}{if TRUE and date missing, return latest available}
 
-\item{returnfiles}{ignore options and just return the file names and dates}
+\item{returnfiles}{if TRUE, return the file catalog instead of data}
 
-\item{...}{passed in to brick, primarily for \code{filename}}
+\item{...}{passed to underlying reader}
 
-\item{inputfiles}{input the files data base to speed up initialization}
+\item{inputfiles}{optional pre-filtered file catalog}
 }
 \value{
 raster object

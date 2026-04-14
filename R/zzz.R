@@ -10,7 +10,7 @@
   read_rema_tiles <<- memoise::memoize(read_rema_tiles)
   .multi_era_chlafiles <<- memoise::memoize(.multi_era_chlafiles)
   options(raadtools.geoid_tile_vrt = NULL, raadtools.message.rescale = TRUE)
-  
+  allfiles <<- memoise::memoize(allfiles, ~memoise::timeout(24 * 3600))
   ## send this message once per session
   options("raadtools.both.hemisphere.message" = FALSE)
   options("raadtools.check.file.exists" = TRUE)

@@ -2,18 +2,8 @@
 % Please edit documentation in R/chla.R
 \name{readchla}
 \alias{readchla}
-\alias{readCHL_month}
 \title{Read Chlorophyll-a, NASA algorithm}
 \usage{
-readCHL_month(
-  date,
-  xylim = NULL,
-  returnfiles = FALSE,
-  ...,
-  inputfiles = NULL,
-  latest = TRUE
-)
-
 readchla(
   date,
   product = c("any", "MODISA", "SeaWiFS", "VIIRS"),
@@ -29,24 +19,21 @@ readchla(
 \arguments{
 \item{date}{date or dates of data to read, see Details}
 
-\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, ignored if grid is provided}
-
-\item{returnfiles}{ignore options and just return the file names and dates}
-
-\item{...}{currently ignored
-Note that reaCHL_month reads the NASA algorithm L3m products.
-
-Note that this function cannot be used with 'extract()', for that use \code{read_chla_daily()}.}
-
-\item{inputfiles}{input the files data base to speed up initialization}
-
-\item{latest}{if TRUE (and date not supplied) return the latest time available, otherwise the earliest}
-
 \item{product}{choice of product, see Details}
+
+\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, ignored if grid is provided}
 
 \item{algorithm}{nasa only}
 
+\item{latest}{if TRUE (and date not supplied) return the latest time available, otherwise the earliest}
+
 \item{grid}{template raster object for output}
+
+\item{...}{currently ignored}
+
+\item{returnfiles}{ignore options and just return the file names and dates}
+
+\item{inputfiles}{input the files data base to speed up initialization}
 }
 \value{
 \code{\link[raster]{raster}} object
@@ -55,7 +42,6 @@ Note that this function cannot be used with 'extract()', for that use \code{read
 Ocean colour Chlorophyll-a data, provide an input of daily dates and these will be averaged into one layer.
 }
 \examples{
-readCHL_month()
 \dontrun{
 d <- readchla(c("2003-01-01", c("2003-06-01")),
          xylim = extent(100, 150, -70, -30))

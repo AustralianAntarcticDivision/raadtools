@@ -12,145 +12,9 @@
   }
 
 
-#' Read daily chlorphyll-a
-#' 
-#' Data is read as daily files in a way consistent with other read functions that can 
-#' be used by `extract()`. (`readchla` for example cannot be used this way as it returns a mean value for the period asked for). 
-#' 
-#' This function will read from the entire era available to SeaWiFS, MODISA, and VIIRS. 
-#' 
-#' To read from particular eras use the output of `ocfiles()` for inputfiles  argument. 
-#' 
-#' @inheritParams readsst
-#' 
-#' @return raster object
-#' @export
-#' @aliases read_chla_weekly read_chla_monthly
-#' @examples
-#' read_chla_daily(latest = FALSE) ## we should see SeaWiFS
-#' read_chla_daily() ## we should see MODISA (or VIIRS)
-read_chla_daily <-  function (date, time.resolution = "daily",
-                      xylim = NULL, lon180 = TRUE,
-                      varname = c("chlor_a"),
-                      setNA = TRUE,
-                      latest = TRUE,
-                      returnfiles = FALSE,  ..., inputfiles = NULL) {
-  #time.resolution <- match.arg(time.resolution)
-  
-  #varname <- match.arg(varname)
- if (is.null(inputfiles)) {
-    files <- .multi_era_chlafiles()
-  } else {
-    files <- inputfiles
-  }
-  if (returnfiles)
-    return(files)
-  if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
-  
-  
-  
-  
-  files <- .processFiles(date, files, time.resolution)
-  nfiles <- nrow(files)
-  read_fun <- function(xfile, ext, rot, varname = "", band = 1) {
-    r <- terra::rast(xfile, varname)
-    terra::ext(r) <- terra::ext(-180, 180, -90, 90)  ## slight noise in the source
-    if(!is.null(rot) && rot) r <- terra::rotate(r, left = FALSE)
-    if(!is.null(ext)) r <- terra::crop(r, terra::ext(ext))
-    raster::raster(r)
-  }
-  
-  ## TODO determine if we need to rotate, or just shift, or not anything
-  rot <- !lon180
-  msk <- NULL
-
-  
-  if (!"band" %in% names(files)) files$band <- 1
-  
-
-  r0 <- brick(stack(lapply(seq_len(nrow(files)), function(xi) read_fun(files$fullname[xi], ext = xylim,  rot = rot, varname = varname, band = files$band[xi]))),
-              ...)
-  if (is.na(projection(r0))) projection(r0) <- "+proj=longlat +datum=WGS84"
-  
-  if (nfiles == 1) r0 <- r0[[1L]]
-  r0 <- setZ(r0, files$date)
-  
-  r0
-  
-}
-
-
-#' @name read_chla_daily
-#' @export
-read_chla_weekly <-  function (date, 
-                              xylim = NULL, lon180 = TRUE,
-                              varname = c("chlor_a"),
-                              setNA = TRUE,
-                              latest = TRUE,
-                              returnfiles = FALSE,  ..., inputfiles = NULL) {
- files <- .multi_era_chlafiles("weekly")
- read_chla_daily(date, "weekly", xylim = xylim, lon180 = lon180, varname = varname, setNA = setNA, latest = latest, returnfiles = returnfiles, 
-                 inputfiles = files, ...)
-}
-  
-#' @name read_chla_daily
-#' @export
-read_chla_monthly <-  function (date, 
-                               xylim = NULL, lon180 = TRUE,
-                               varname = c("chlor_a"),
-                               setNA = TRUE,
-                               latest = TRUE,
-                               returnfiles = FALSE,  ..., inputfiles = NULL) {
-  files <- .multi_era_chlafiles("monthly")
-  read_chla_daily(date, "monthly", xylim = xylim, lon180 = lon180, varname = varname, setNA = setNA, latest = latest, returnfiles = returnfiles, 
-                  inputfiles = files, ...)
-}
-
-#' @name readchla
-#' @export
-#' @examples 
-#' readCHL_month()
-readCHL_month <- function(date, xylim = NULL, returnfiles = FALSE, ..., inputfiles = NULL, latest = TRUE) {
-  if (is.null(inputfiles)) {
-    ## memoize this call
-    files <- ocfiles("monthly", product = "MODISA", varname = "CHL", type = "L3m")
-  } else {
-    files <- inputfiles
-  }
-  if (returnfiles) return(files)
-  if (missing(date)) {
-    if (latest)  date <- max(files$date) else date <- min(files$date)
-  }
-  date <- timedateFrom(date)
-  files <- .processFiles(date, files, "monthly")
-  rl <- lapply(files$fullname, raster::raster, varname = "chlor_a")
-  if (!is.null(xylim)) rl <- lapply(rl, raster::crop, raster::extent(xylim))
-  raster::setZ(raster::brick(rl), date)
-}
-
-
-
-#Default is to read from the Johnson Improved
-# chlorophyll-a estimates using Southern Ocean-specific calibration
-# algorithms, but the original MODIS and SeaWIFs products are also available via the argument \code{product}.
-#
-# Dates are matched to file names by finding the nearest match in
-# time within a short duration. If \code{date} is greater than
-# length 1 then the sorted set of unique matches is returned.
-##
-# The code that creates these derived files is at [raad-deriv](https://github.com/AustralianAntarcticDivision/raad-deriv).
-# 
-# 
-
-# @references  Johnson, R, PG Strutton, SW Wright, A McMinn, and KM
-# Meiners (2013) Three improved satellite chlorophyll algorithms for
-# the Southern Ocean, J. Geophys. Res. Oceans, 118,
-# doi:10.1002/jgrc.20270
-# \url{http://onlinelibrary.wiley.com/doi/10.1002/jgrc.20270/full}
-#
 
 #' Read Chlorophyll-a, NASA algorithm
-##'
+#' 
 #' Ocean colour Chlorophyll-a data, provide an input of daily dates and these will be averaged into one layer. 
 #' @param date date or dates of data to read, see Details
 #' @param product choice of product, see Details
@@ -162,11 +26,6 @@ readCHL_month <- function(date, xylim = NULL, returnfiles = FALSE, ..., inputfil
 #' @param returnfiles 	ignore options and just return the file names and dates
 #' @param inputfiles 	input the files data base to speed up initialization 
 #' @param ... currently ignored
-#' Note that reaCHL_month reads the NASA algorithm L3m products. 
-#' 
-#' Note that this function cannot be used with 'extract()', for that use `read_chla_daily()`. 
-#' 
-#' 
 #' @seealso readCHL_month
 #' @export
 #' @return \code{\link[raster]{raster}} object

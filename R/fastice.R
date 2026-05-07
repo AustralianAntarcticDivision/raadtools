@@ -119,7 +119,7 @@ readfastice_circum <- function(date, time.resolution = "weekly3",
   if (!is.null(inputfiles)) {
     files <- inputfiles
   } else {
-    files <- raadfiles::fasticefiles("circum_fast_ice")
+    files <- fraser_fasticefiles()
   }
   if (returnfiles) return(files)
   

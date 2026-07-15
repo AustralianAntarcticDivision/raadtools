@@ -1,5 +1,7 @@
 # raadtools dev
 
+* Update sstfiles and readsst for monthly to use new file. 
+
 * Make fasticefiles native to raadtools. 
 
 * Added Park fronts to 'frontsmap()'. 

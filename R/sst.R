@@ -98,10 +98,11 @@ readsst <-  function (date, time.resolution = c("daily", "monthly"),
   rot <- lon180
   msk <- NULL
   if (time.resolution == "monthly") {
-    if (setNA) {
-      msk <- crop_if_needed(rotate_if_needed(raster(file.path(dirname(files$fullname[1]), "lsmask.nc")), rot), xylim)
-      msk[msk < 1] <- NA_real_
-    }
+    ## do nothing, montly now has valid nodata
+    # if (setNA) {
+    #   msk <- crop_if_needed(rotate_if_needed(raster(file.path(dirname(files$fullname[1]), "lsmask.nc")), rot), xylim)
+    #   msk[msk < 1] <- NA_real_
+    # }
     #r0 <- stack(files$fullname[1], bands = files$band)
   } 
   

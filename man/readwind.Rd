@@ -42,7 +42,7 @@ components}
 \item{returnfiles}{ignore options and just return the file names and dates}
 
 \item{...}{
-  Arguments passed on to \code{\link[=raadtools]{raadtools}}
+  Arguments passed on to \code{\link{raadtools}}
   \describe{
     \item{\code{setNA}}{mask out land values (only applies to monthly time.resolution)}
   }}

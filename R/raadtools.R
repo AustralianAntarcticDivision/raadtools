@@ -15,8 +15,9 @@
 #' @keywords package
 #' @import methods
 #' @importFrom raster overlay
-#' @importFrom sp as.image.SpatialGridDataFrame bbox CRS GridTopology  proj4string<- SpatialPoints SpatialPointsDataFrame spChFIDs spTransform 
-#' @importFrom raster brick crop deratify extent<- extract getZ nlayers projection projection<- raster res resample rotate setZ stack writeRaster xmax xmin ymax ymin
+#' @importFrom sp as.image.SpatialGridDataFrame bbox coordinates CRS GridTopology  proj4string<- SpatialPoints SpatialPointsDataFrame spChFIDs spTransform 
+#' @importFrom dplyr bind_rows
+#' @importFrom raster brick crop deratify extent<- extract getZ nlayers projection projection<- raster rasterToContour res resample rotate setZ stack writeRaster xmax xmin ymax ymin
 #' @importFrom raster atan2 flip t
 #' @importFrom terra crs rast project crop rotate ext setValues xmin xmax ymin ymax
 #' @details

@@ -7,7 +7,7 @@ Authors@R: c(
    person("Ben", "Raymond", role = "ctb", email = "ben.raymond@aad.gov.au")
    )
 Depends:
-    raster,
+    terra (>= 1.9.50),
     R (>= 4.1.0)
 Imports:
     dplyr (>= 0.7.0),
@@ -20,7 +20,7 @@ Imports:
     tibble,
     furrr,
     vapour (>= 0.8.8.9007),
-    terra (>= 1.9.50),
+    raster,
     reproj (>= 0.4.3),
     ncmeta,
     RNetCDF,

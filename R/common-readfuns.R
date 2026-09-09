@@ -1,36 +1,23 @@
-## The readers are being converted from raster to terra one at a time, so for
-## as long as that takes these three are handed both kinds of object. They
-## dispatch on what they were given rather than assuming, which is what lets a
-## reader be converted on its own instead of in a flag day with its five
-## neighbours.
+## Shared by the readers: rotate, crop and mask, each only when asked for.
 ##
-## When the last caller returns a SpatRaster, the raster branches go.
+## These dispatched on the class of x while the readers were being converted
+## one at a time. Every caller returns a SpatRaster now, so the raster
+## branches are gone. .rotate() in utils.R stays, because fronts.R and
+## currents.R still call it directly.
 
 crop_if_needed <- function(x, ext = NULL) {
   if (is.null(ext)) return(x)
-  if (inherits(x, "SpatRaster")) {
-    terra::crop(x, .as_ext(ext), snap = "out")
-  } else {
-    raster::crop(x, ext, snap = "out")
-  }
+  terra::crop(x, .as_ext(ext), snap = "out")
 }
 
 mask_if_needed <- function(x, msk = NULL) {
   if (is.null(msk)) return(x)
-  if (inherits(x, "SpatRaster")) {
-    terra::mask(x, msk)
-  } else {
-    raster::mask(x, msk)
-  }
+  terra::mask(x, msk)
 }
 
 rotate_if_needed <- function(x, rot = FALSE) {
   if (!rot) return(x)
-  if (inherits(x, "SpatRaster")) {
-    terra::rotate(x)
-  } else {
-    .rotate(x)
-  }
+  terra::rotate(x)
 }
 
 ## One layer from one file, rotated, cropped and masked as asked.

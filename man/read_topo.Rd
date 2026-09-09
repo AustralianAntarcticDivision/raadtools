@@ -34,29 +34,29 @@ read_bathy(
 )
 
 readtopo(
-  topo = c("gebco_23", "gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
-    "smith_sandwell", "gebco_14", "macrie1100m", "macrie2100m", "cryosat2",
-    "lake_superior", "ramp", "ibcso_is", "ibcso_bed", "rema_1km", "rema_200m",
-    "rema_100m", "rema_8m", "gebco_19", "gebco_21"),
-  polar = FALSE,
-  lon180 = TRUE,
+  topo = c("gebco_23", "gebco_21", "gebco_19", "gebco_14", "gebco_08", "etopo1",
+    "etopo2", "ibcso", "ibcso_is", "ibcso_bed", "smith_sandwell", "kerguelen",
+    "cryosat2", "ramp", "rema_8m", "rema_100m", "rema_200m", "rema_1km", "lake_superior",
+    "macrie1100m", "macrie2100m"),
   xylim = NULL,
+  lon180 = TRUE,
+  polar = FALSE,
+  resample = "bilinear",
   returnfiles = FALSE,
-  ...,
-  resample = "bilinear"
+  ...
 )
 
 readbathy(
-  topo = c("gebco_23", "gebco_08", "ibcso", "etopo1", "etopo2", "kerguelen",
-    "smith_sandwell", "gebco_14", "macrie1100m", "macrie2100m", "cryosat2",
-    "lake_superior", "ramp", "ibcso_is", "ibcso_bed", "rema_1km", "rema_200m",
-    "rema_100m", "rema_8m", "gebco_19", "gebco_21"),
-  polar = FALSE,
-  lon180 = TRUE,
+  topo = c("gebco_23", "gebco_21", "gebco_19", "gebco_14", "gebco_08", "etopo1",
+    "etopo2", "ibcso", "ibcso_is", "ibcso_bed", "smith_sandwell", "kerguelen",
+    "cryosat2", "ramp", "rema_8m", "rema_100m", "rema_200m", "rema_1km", "lake_superior",
+    "macrie1100m", "macrie2100m"),
   xylim = NULL,
+  lon180 = TRUE,
+  polar = FALSE,
+  resample = "bilinear",
   returnfiles = FALSE,
-  ...,
-  resample = "bilinear"
+  ...
 )
 }
 \arguments{

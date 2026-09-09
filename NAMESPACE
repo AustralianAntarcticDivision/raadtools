@@ -58,6 +58,7 @@ export(read_geoid)
 export(read_leads_clim)
 export(read_leads_clim_north)
 export(read_leads_clim_south)
+export(read_mld_climatology)
 export(read_ncep2_wind_6hourly)
 export(read_nsidc_ice_daily)
 export(read_nsidc_ice_monthly)
@@ -116,67 +117,78 @@ export(topofile)
 export(windfiles)
 exportMethods(extract)
 import(methods)
-importFrom(dplyr,"%>%")
-importFrom(dplyr,.data)
-importFrom(dplyr,arrange)
-importFrom(dplyr,filter)
-importFrom(dplyr,mutate)
-importFrom(raadfiles,amps_d1files)
-importFrom(raadfiles,amps_d2files)
-importFrom(raadfiles,amps_model_files)
-importFrom(raadfiles,fraser_fasticefiles)
-importFrom(raadfiles,nsidc_north_monthly_files)
-importFrom(raadfiles,nsidc_south_monthly_files)
-importFrom(raster,"extent<-")
-importFrom(raster,"projection<-")
-importFrom(raster,atan2)
-importFrom(raster,brick)
-importFrom(raster,crop)
-importFrom(raster,deratify)
-importFrom(raster,extract)
-importFrom(raster,filename)
-importFrom(raster,flip)
-importFrom(raster,getZ)
-importFrom(raster,mask)
-importFrom(raster,merge)
-importFrom(raster,nlayers)
-importFrom(raster,overlay)
-importFrom(raster,projection)
-importFrom(raster,raster)
-importFrom(raster,res)
-importFrom(raster,resample)
-importFrom(raster,rotate)
-importFrom(raster,setExtent)
-importFrom(raster,setZ)
-importFrom(raster,stack)
-importFrom(raster,subset)
-importFrom(raster,t)
-importFrom(raster,writeRaster)
-importFrom(raster,xmax)
-importFrom(raster,xmin)
-importFrom(raster,ymax)
-importFrom(raster,ymin)
-importFrom(sp,"proj4string<-")
-importFrom(sp,CRS)
-importFrom(sp,GridTopology)
-importFrom(sp,SpatialPoints)
-importFrom(sp,SpatialPointsDataFrame)
-importFrom(sp,as.image.SpatialGridDataFrame)
-importFrom(sp,bbox)
-importFrom(sp,spChFIDs)
-importFrom(sp,spTransform)
-importFrom(terra,crop)
-importFrom(terra,crs)
-importFrom(terra,ext)
-importFrom(terra,project)
-importFrom(terra,rast)
-importFrom(terra,rotate)
-importFrom(terra,setValues)
-importFrom(terra,xmax)
-importFrom(terra,xmin)
-importFrom(terra,ymax)
-importFrom(terra,ymin)
-importFrom(tibble,as_tibble)
-importFrom(tibble,tibble)
+importFrom(dplyr,
+  "%>%",
+  .data,
+  arrange,
+  filter,
+  mutate
+)
+importFrom(raadfiles,
+  amps_d1files,
+  amps_d2files,
+  amps_model_files,
+  fraser_fasticefiles,
+  nsidc_north_monthly_files,
+  nsidc_south_monthly_files
+)
+importFrom(raster,
+  "extent<-",
+  "projection<-",
+  atan2,
+  brick,
+  crop,
+  deratify,
+  extract,
+  filename,
+  flip,
+  getZ,
+  mask,
+  merge,
+  nlayers,
+  overlay,
+  projection,
+  raster,
+  res,
+  resample,
+  rotate,
+  setExtent,
+  setZ,
+  stack,
+  t,
+  writeRaster,
+  xmax,
+  xmin,
+  ymax,
+  ymin
+)
+importFrom(sp,
+  "proj4string<-",
+  CRS,
+  GridTopology,
+  SpatialPoints,
+  SpatialPointsDataFrame,
+  as.image.SpatialGridDataFrame,
+  bbox,
+  spChFIDs,
+  spTransform
+)
+importFrom(terra,
+  crop,
+  crs,
+  ext,
+  project,
+  rast,
+  rotate,
+  setValues,
+  xmax,
+  xmin,
+  ymax,
+  ymin
+)
+importFrom(tibble,
+  as_tibble,
+  tibble
+)
 importFrom(vapour,vapour_vrt)
 importMethodsFrom(raster,extent)

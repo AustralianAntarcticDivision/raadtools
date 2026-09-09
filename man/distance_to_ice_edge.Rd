@@ -28,21 +28,21 @@ distance_to_ice(
 )
 }
 \arguments{
-\item{date}{date or dates of data to read, see Details}
+\item{date}{date or dates of data to read}
 
 \item{threshold}{the sea ice concentration threshold to contour at}
 
-\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}}
+\item{xylim}{spatial extents to crop, or a raster template for warping}
 
 \item{hemisphere}{"north" or "south", default is "south"}
 
-\item{returnfiles}{ignore options and just return the file names and dates}
+\item{returnfiles}{if TRUE, return file catalog}
 
-\item{inputfiles}{input the files data base to speed up initialization}
+\item{inputfiles}{optional pre-filtered file catalog}
 
-\item{latest}{if TRUE and date input is missing, return the latest time available otherwise the earliest}
+\item{latest}{if TRUE and date missing, return latest available}
 
-\item{...}{passed to brick, primarily for \code{filename}}
+\item{...}{passed to underlying reader}
 }
 \value{
 raster layer with distances to this date's sea ice edge

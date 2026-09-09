@@ -41,7 +41,6 @@ read_i_mag <- function(file, xylim = NULL, lon180 = FALSE) {
 vlen <- function(x, y) sqrt(x * x + y * y)
 
 
-
 readcurr_polar <- function(date, 
                             xylim = NULL, 
                             latest = TRUE,
@@ -85,7 +84,6 @@ currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
 }
 
 
-
 altimetry_daily_ugos_files <- function() {
   files <- raadfiles::altimetry_daily_files()
   files$vrt_dsn <- .vrt_ds0(files$fullname, sds = "ugos")
@@ -115,139 +113,6 @@ altimetry_daily_vgos_files <- function() {
   sprintf("NetCDF:%s:%s", x, sds)
 }
 
-##' Read AVISO ocean current data 
-##'
-##' Current data is read from files managed by
-##' \code{\link{currentsfiles}}. Dates are matched to file names by
-##' finding the nearest match in time within a short duration. By
-##' default only one time step is returned with both U and V
-##' components. Multiple dates can be returned for magnitude or
-##' direction, U or V only. 
-##' 
-##' These labels 'u', 'v', 'mag', and 'dir' correspond to arguments 'uonly', 'vonly', 'magonly', and 'dironly' which exist
-##' to have the function return only the 'u' or 'v' layer (by default both are returned which can only work for a single time step). 
-##' 'magonly' and 'dironly' are special cases calculated from 'u' and 'v', the magnitude and direction of the field respectively in m/s and degrees from north. 
-##'
-##' This is the "DT merged all satellites Global Ocean Gridded SSALTO/DUACS Sea Surface Height L4 product and derived variables"
-##'  See References.
-##'
-##' @param date date or dates of data to read, see Details
-##' @param time.resolution time resolution to read
-##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
-##' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
-##' @param magonly return just the magnitude from the U and V
-##' components
-##' @param dironly return just the direction from the U and V, in degrees N=0, E=90, S=180, W=270
-##' @param uonly return just the U component of velocity
-##' @param vonly return just the V component of velocity
-##' components, in degrees (0 north, 90 east, 180 south, 270 west)
-##' @param latest if TRUE (and date not supplied) return the latest time available, otherwise the earliest
-##' @param returnfiles ignore options and just return the file names and dates
-##' @param ... passed to brick, primarily for \code{filename}
-##' @export
-##' @note These data for daily files are stored in longitude/latitude projection on the sphere between longitudes in the Pacific
-##' view \[0, 360\], the default behaviour is to reset this to Atlantic
-##' view \[-180, 180\] with \code{lon180}. 
-##'
-##' @return \code{\link[raster]{raster}} object with the "U"
-##' (meridional/horizontal/X) and "V" (zonal/vertical/Y) components of velocity in
-##' m/s. Setting either of the (mutually exclusive) \code{magonly}
-##' and \code{dironly} arguments returns the magnitude (in m/s) or
-##' direction (in degrees relative to North) of the velocity vectors.
-##' @seealso \code{\link{icefiles}} for details on the repository of
-##' data files, \code{\link[raster]{raster}} for the return value
-# imports should not be necessary here
-##' @importFrom raster t flip atan2
-##' @export
-##' @references \url{http://marine.copernicus.eu}
-##' @examples
-#' ## read a single time slice, and plot the directions [0,360) as an image with arrows
-#' x <- readcurr(dironly = TRUE)
-#' ## get a local extent for a zoom plot
-#' e <- extent(projectExtent(raster(extent(130, 150, -50, -30), crs = "+proj=longlat"), projection(x)))
-#' x <- crop(readcurr(), e)
-#' crds <- coordinates(x)
-#' scale <- 1.5
-#' vlen <- function(x) sqrt(x[[1]]^2 + x[[2]]^2)
-#' plot(vlen(crop(x, e)))
-#' x1 <- crds[,1]
-#' y1 <- crds[,2]
-#' x2 <- crds[,1] + values(x[[1]]) * scale
-#' y2 <- crds[,2] + values(x[[1]]) * scale
-#' arrows(x1, y1, x2, y2, length = 0.03)
-readcurr <- function (date, time.resolution = c("daily"),
-                      xylim = NULL, lon180 = TRUE, 
-                      magonly = FALSE,
-                      dironly = FALSE,
-                      uonly = FALSE,
-                      vonly = FALSE,
-                      latest = TRUE,
-                      returnfiles = FALSE, ..., inputfiles = NULL) {
-  
-  time.resolution <- match.arg(time.resolution)
-  
-  if (is.null(inputfiles)) {
-    files <- currentsfiles(time.resolution = time.resolution)
-  } else {
-    files <- inputfiles
-  }
-  thefun <- read_i_uv
- 
-  if (magonly) thefun <- read_i_mag
-  if (dironly) thefun <- read_i_dir
-  if (uonly ) thefun <- read_i_u
-  if (vonly) thefun <- read_i_v
-  
-  
-
-  if (returnfiles)
-    return(files)
-  if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
-  date <- timedateFrom(date)
-  files <- .processFiles(date, files, time.resolution)
-  
-  nfiles <- nrow(files)
-  
-  ## prevent reading more than one unless mag/dironly
-  if (nfiles > 1L & !magonly & !dironly & !uonly & !vonly) {
-    files <- files[1L,]
-    nfiles <- 1L
-    warning("only one time step can be read at once unless one of 'magonly', 'dironly', 'uonly' or 'vonly' is TRUE")
-  }
-  if ((magonly + dironly + uonly + vonly) > 1) stop("only one of 'magonly', 'dironly', 'uonly' or 'vonly' may be TRUE")
-
-  
-
-  #ximage::ximage(matrix(m, grid$dimension[2], byrow = TRUE))
- # return(NULL)
-  dots <- list(...)
-
-  
-  
-  op <- options(warn = -1)
-  on.exit(options(op))
-  
-  r0 <- stack(lapply(files$fullname, thefun, xylim = xylim, lon180 = lon180), filename = filename)
-  if (nlayers(r0) == nrow(files)) {
-    r0 <- setZ(r0, files$date)
-  } else {
-    if (nlayers(r0) == 2 & nrow(files) == 1) {
-      r0 <- setZ(r0, rep(files$date, 2))
-    }
-  }
-  
-  if ("filename" %in% names(dots)) {
-    
-     r0 <- writeRaster(r0, filename = dots[["filename"]])
-    
-  }
-  
-  projection(r0) <- "+proj=longlat +a=6371000 +b=6371000 +no_defs"
-  
-r0
-  
-  
-}
 
 # dimensions:
 #   time = 1 ;
@@ -324,7 +189,6 @@ r0
 # :geospatial_lon_units = "degrees_east" ;
 # :geospatial_lat_resolution = 0.25 ;
 # :geospatial_lon_resolution = 0.25 ;
-
 
 
 .currentsfiles1 <- function(fromCache = TRUE, ...) {

@@ -42,7 +42,7 @@ readsal(
 \item{readall}{FALSE by default}
 }
 \value{
-\code{\link[raster]{raster}} object
+SpatRaster, or a data.frame of files if \code{returnfiles = TRUE}
 }
 \description{
 SMAP surface salinity data read from files managed by

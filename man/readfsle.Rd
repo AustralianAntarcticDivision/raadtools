@@ -21,7 +21,7 @@ readfsle(
 
 \item{time.resolution}{time resolution to read (only daily)}
 
-\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details}
+\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[terra]{ext}}, see Details}
 
 \item{latest}{if TRUE and input date is missing return the latest time available, otherwise the earliest}
 
@@ -31,12 +31,12 @@ readfsle(
 
 \item{verbose}{print messages on progress etc.}
 
-\item{...}{passed to brick, primarily for \code{filename}}
+\item{...}{\code{filename} to write the result to, otherwise ignored}
 
 \item{inputfiles}{input the files data base to speed up initialization}
 }
 \value{
-data.frame
+SpatRaster, or a data.frame of files if \code{returnfiles = TRUE}
 }
 \description{
 Daily files This dataset contains Backward-in-time FSLE product deduced from DT merged Global Ocean Gridded Absolute Geostrophic Velocities SSALTO/Duacs L4 product (version 2018).

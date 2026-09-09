@@ -39,7 +39,7 @@ readghrsst(
 \item{inputfiles}{input the files data base to speed up initialization}
 }
 \value{
-RasterStack or RasterLayer
+SpatRaster, or a data.frame of files if \code{returnfiles = TRUE}
 }
 \description{
 SST in Kelvin

@@ -19,6 +19,7 @@ Imports:
     sp,
     tibble,
     vapour (>= 0.8.8.9007),
+    xyt,
     raster,
     reproj (>= 0.4.3),
     ncmeta,
@@ -45,5 +46,5 @@ BugReports: https://github.com/AustralianAntarcticDivision/raadtools/issues
 Description: Tools for reading, plotting and manipulating spatial data,
     particularly from remote sensing and model output.
 License: GPL-3
-Remotes: AustralianAntarcticDivision/raadfiles
+Remotes: AustralianAntarcticDivision/raadfiles, AustralianAntarcticDivision/xyt
 Config/roxygen2/version: 8.1.0

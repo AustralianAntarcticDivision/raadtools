@@ -61,11 +61,7 @@ readsst(
 
 \item{returnfiles}{if TRUE, return the file catalog instead of data}
 
-\item{...}{
-  Arguments passed on to \code{\link[=raadtools]{raadtools}}
-  \describe{
-    \item{\code{}}{}
-  }}
+\item{...}{passed in to brick, primarily for \code{filename}}
 
 \item{inputfiles}{optional pre-filtered file catalog}
 

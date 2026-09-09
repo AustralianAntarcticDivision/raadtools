@@ -31,11 +31,7 @@ readcafe(
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 
-\item{...}{
-  Arguments passed on to \code{\link[=raadtools]{raadtools}}
-  \describe{
-    \item{\code{}}{}
-  }}
+\item{...}{passed in to brick, primarily for \code{filename}}
 
 \item{inputfiles}{input the files data base to speed up initialization}
 }

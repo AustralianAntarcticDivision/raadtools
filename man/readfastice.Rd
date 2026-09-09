@@ -6,7 +6,7 @@
 \usage{
 readfastice(
   date,
-  product = c("circum_fast_ice", "binary_fast_ice"),
+  product = c("circum_fast_ice"),
   xylim = NULL,
   latest = TRUE,
   returnfiles = FALSE,
@@ -52,19 +52,6 @@ Classified surface type:
 \item 5: manual fast ice edge
 \item 6: auto fast ice edge
 }
-}
-
-\section{Old binary product}{
-
-\itemize{
-\item 0: Southern Ocean, pack ice or icebergs, corresponding to light blue in the PNG files.
-\item 1: Antarctic continent (including ice shelves), as defined using the Mosaic of Antarctica product, corresponding to white in the PNG files.
-\item 2: Fast ice, as classified from a single 20-day MODIS composite image, corresponding to dark blue in the PNG files
-\item 3: Fast ice, as classified using a single 20-day AMSR-E composite image, corresponding to yellow in the PNG files
-\item 4: Fast ice, as classified using the previous or next 20-day MODIS composite images, corresponding to red in the PNG files
-}
-
-\url{http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=modis_20day_fast_ice}
 }
 
 \examples{

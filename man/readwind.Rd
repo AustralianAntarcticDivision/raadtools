@@ -57,7 +57,7 @@ components}
 \item{returnfiles}{if TRUE, return file catalog}
 
 \item{...}{
-  Arguments passed on to \code{\link[=raadtools]{raadtools}}
+  Arguments passed on to \code{\link{raadtools}}
   \describe{
     \item{\code{setNA}}{mask out land values (only applies to monthly time.resolution)}
   }}

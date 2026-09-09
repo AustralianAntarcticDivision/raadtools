@@ -48,6 +48,15 @@ Read NOAA Optimum Interpolation Sea Surface Temperature (OISST) v2.1 monthly dat
 Monthly files contain the same variables as daily files. Date matching uses
 a 28-day tolerance window.
 }
+\examples{
+\dontrun{
+# latest monthly SST
+sst <- read_oisst_monthly()
+
+# specific months
+sst <- read_oisst_monthly(c("2023-01-01", "2023-06-01"))
+}
+}
 \seealso{
 \code{\link{read_oisst_daily}} for daily data
 }

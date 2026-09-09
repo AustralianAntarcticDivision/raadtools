@@ -105,6 +105,21 @@ The following datasets are available via the \code{topo} argument:
 \item{macrie1100m, macrie2100m}{Macquarie Ridge 100m grids}
 }
 }
+\examples{
+\dontrun{
+# Read GEBCO 2023
+bathy <- read_topo("gebco_23")
+
+# Crop to region
+bathy <- read_topo("gebco_23", xylim = c(100, 150, -60, -40))
+
+# Warp to template raster
+template <- terra::rast(nrows = 100, ncols = 100,
+                        xmin = 100, xmax = 150, ymin = -60, ymax = -40,
+                        crs = "EPSG:4326")
+bathy <- read_topo("gebco_23", xylim = template)
+}
+}
 \seealso{
 \code{\link{topofile}} for file paths only
 }

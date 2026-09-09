@@ -23,13 +23,13 @@ read_leads_clim_south <- function(xylim = NULL) {
   file <- raadfiles::iceclim_south_leadsfiles()$fullname[1L]
   ## this is all you need, derived with interrogation of lon/lat arrays below
   sink(tempfile()); on.exit(sink(NULL), add = TRUE)
-  r <- flip(raster::raster(file, varname = "LeadFrequency"), "y")
-    prj <- "+proj=stere +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m +no_defs"
-  ext <- raster::extent(-3950000, 3950000, -3950000, 4350000 )
-  projection(r) <- prj
-  r <- setExtent(r, ext)
+  .shim_notice("read_leads_clim_south")
+  r <- terra::flip(.rast_nc(file, subds = "LeadFrequency"), direction = "vertical")
+  prj <- "+proj=stere +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m +no_defs"
+  terra::crs(r) <- prj
+  terra::ext(r) <- terra::ext(-3950000, 3950000, -3950000, 4350000)
   if (!is.null(xylim)) {
-    r <- raster::crop(r, xylim)
+    r <- terra::crop(r, .as_ext(xylim))
   }
   r[r > 254] <- NA
   r
@@ -41,15 +41,21 @@ read_leads_clim_south <- function(xylim = NULL) {
 read_leads_clim_north <- function(xylim = NULL) {
   file <- raadfiles::iceclim_north_leadsfiles()$fullname[1L]
   sink(tempfile()); on.exit(sink(NULL), add = TRUE)
+  .shim_notice("read_leads_clim_north")
 
-  r <- flip(raster::raster(file, varname = "LeadFrequency"), "y")
+  r <- terra::flip(.rast_nc(file, subds = "LeadFrequency"), direction = "vertical")
 
+  ## NOTE: this is the SOUTH grid, applied to a north file. lat_0 is -90 and
+  ## the extent is the psn25 south one, where the Arctic product wants
+  ## lat_0 = 90, lat_ts = 70, lon_0 = -45 (EPSG:3411) and its own extent.
+  ## Carried over unchanged because converting to terra should not also
+  ## change where the data lands; see the note in the commit that converted
+  ## this file.
   prj <- "+proj=stere +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m +no_defs"
-  ext <- raster::extent(-3950000, 3950000, -3950000, 4350000 )
-  projection(r) <- prj
-  r <- setExtent(r, ext)
+  terra::crs(r) <- prj
+  terra::ext(r) <- terra::ext(-3950000, 3950000, -3950000, 4350000)
   if (!is.null(xylim)) {
-    r <- raster::crop(r, xylim)
+    r <- terra::crop(r, .as_ext(xylim))
   }
   r[r > 254] <- NA
   r
@@ -67,12 +73,12 @@ read_leads_clim_north <- function(xylim = NULL) {
 #' @export
 #' @examples 
 #' read_leads_clim()
-#' read_leads_clim_north(xylim = extent(c(-1, 1, -1, 1) * 50000))
+#' read_leads_clim_north(xylim = terra::ext(c(-1, 1, -1, 1) * 50000))
 #' south <- read_leads_clim_south()
 #' 
 #' ## hone in on Mawson
-#' pt <- reproj::reproj_xy(cbind(62 + 52/60, -(67 +  36/60)), projection(south), source = "+proj=longlat")
-#' lead <- read_leads_clim_south(xylim = extent(pt[1] + c(-1, 1) * 250000, pt[2] + c(-1, 1) * 250000))
+#' pt <- reproj::reproj_xy(cbind(62 + 52/60, -(67 +  36/60)), terra::crs(south), source = "+proj=longlat")
+#' lead <- read_leads_clim_south(xylim = terra::ext(pt[1] + c(-1, 1) * 250000, pt[2] + c(-1, 1) * 250000))
 #' plot(lead, col = grey.colors(100))
 #' abline(v = pt[1], h = pt[2])
 read_leads_clim <- function(hemisphere = c("south", "north"), 

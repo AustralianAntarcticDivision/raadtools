@@ -1,7 +1,7 @@
 #' Read Earth Gravitation Model
 #'
 #' Global 2.5 Minute Geoid Undulations, a big raster from multiple files. We just create a temporary
-#' virtual raster from the source files, and return as a RasterLayer.
+#' virtual raster from the source files, and return as a SpatRaster.
 #'
 #' Each file is an ESRI GRID raster data set of 2.5-minute geoid undulation values covering a 45 x 45 degree area.
 #' Each raster file has a 2.5-minute cell size and is a subset of the global 2.5 x 2.5-minute grid of pre-computed
@@ -12,13 +12,14 @@
 #' @param xylim an extent, in longlat, or an object that provides one
 #' @param force if TRUE ignore cached virtual saved file, and recompute (try this if it otherwise fails)
 #'
-#' @return RasterLayer, longitude latitue grid of geoid level
+#' @return SpatRaster, longitude latitue grid of geoid level
 #' @export
 #' @examples
 #' \dontrun{
 #' geoid <- read_geoid()
 #' }
 read_geoid <- function(xylim = NULL, force = FALSE) {
+  .shim_notice("read_geoid")
 
   test <- system("gdalinfo", ignore.stdout = TRUE, ignore.stderr = TRUE)
   if (test == 127) stop("cannot read Geoid files on this system (ask the authors of raadtools)")
@@ -31,10 +32,10 @@ read_geoid <- function(xylim = NULL, force = FALSE) {
     system(sprintf("gdalbuildvrt %s %s", geoid_tile_vrt, paste(tiles$fullname, collapse = " ")), ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   }
-  r <- raster::raster(geoid_tile_vrt)
+  r <- .rast_nc(geoid_tile_vrt)
   ## so far so good, let's update the option
   options(raadtools.geoid_tile_vrt = geoid_tile_vrt)
-  if (!is.null(xylim)) r <- raster::crop(r, xylim)
+  if (!is.null(xylim)) r <- terra::crop(r, .as_ext(xylim))
   names(r) <- "EGM2008"
   r
 }

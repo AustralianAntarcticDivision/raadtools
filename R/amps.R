@@ -91,8 +91,11 @@
 }
 
 .amps_files <- function(inputfiles, lister, time.resolution) {
-  if (!is.null(inputfiles)) return(inputfiles)
-  lister(time.resolution = time.resolution)
+  files <- if (!is.null(inputfiles)) inputfiles else lister(time.resolution = time.resolution)
+  ## .processFiles() indexes the catalogue with findInterval(), which needs the
+  ## dates sorted; not every catalogue, or every hand-built inputfiles, is.
+  if (is.unsorted(files$date)) files <- files[order(files$date), ]
+  files
 }
 
 .amps_date <- function(date, files, latest) {
@@ -112,7 +115,10 @@ amps_d1_icefiles <- function(data.source = "", time.resolution = "12hourly", ...
   files <- amps_model_files(data.source = data.source, time.resolution = time.resolution,  ...)
   ## TODO normalize file set
   ## we want the most files with the highest preference
-  filter(files, grepl("f000", basename(fullname)), as.integer(hour) == 0)
+  ##
+  ## arrange(): amps_model_files() does not come back in date order, and every
+  ## reader indexes its catalogue with findInterval(), which needs one.
+  arrange(filter(files, grepl("f000", basename(fullname)), as.integer(hour) == 0), date)
 }
 
 #' Read AMPS sea ice cover

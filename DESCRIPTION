@@ -30,6 +30,7 @@ Imports:
     duckdb, 
     DBI
 Suggests:
+    lifecycle,
     graticule,
     knitr,
     rgdal,

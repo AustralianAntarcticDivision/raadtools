@@ -125,7 +125,7 @@ read_oisst_daily <- function(date,
 #'
 #' @export
 #' @examples
-#' \dontrun
+#' \dontrun{
 #' # latest monthly SST
 #' sst <- read_oisst_monthly()
 #'

@@ -46,7 +46,7 @@
 #'
 #' @export
 #' @examples
-#' \dontrun
+#' \dontrun{
 #' # Read GEBCO 2023
 #' bathy <- read_topo("gebco_23")
 #'

@@ -13,14 +13,13 @@ context("files")
 # ghrsstfiles
 # icefiles
 # ocfiles
-# oc_sochla_files
 # rapid_responsefiles
 # sshfiles
 # sstfiles
 # windfiles
 fnames <- c("amps_d1files", "chlafiles", "cpolarfiles", "currentsfiles", 
              "fasticefiles", "ghrsstfiles", 
-            "icefiles", "ocfiles", "oc_sochla_files", "rapid_responsefiles", 
+            "icefiles", "ocfiles", "rapid_responsefiles", 
             "sshfiles", "sstfiles", "windfiles")
 
 fnames2 <- c("derivaadcfiles", "derivicefiles")

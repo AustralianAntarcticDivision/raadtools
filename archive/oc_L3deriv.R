@@ -168,3 +168,42 @@ oc_sochla_files <- function(time.resolution = c("daily"),
 chla_johnsonfiles <- function(...) {
   .Defunct("oc_sochla_files")
 }
+
+
+## readchla_mean() was the only consumer of the bins above.
+readchla_mean <- function(date,
+#                     algorithm = c("johnson", "oceancolor"),
+                     product = c("MODISA", "SeaWiFS"),
+                     xylim = NULL,
+                     returnfiles = FALSE,
+                     latest = TRUE,
+                     verbose = TRUE,
+                     ...) {
+  largs <- list(...)
+  if ("time.resolution" %in% names(largs)) stop("time.resolution is not supported, enter the dates directly - underlying temporal resolution is daily")
+
+  files <- oc_sochla_files(product = product)
+
+  if (missing(date)) {
+      date <- if (latest) max(files$date) else min(files$date)
+  }
+
+  ## here read_oc_sochla should take the bins it needs
+  ## removed dep on sosoc/croc 2018-09-19
+  init <- .init_bin(product2nrows(product))
+  if (is.null(xylim)) {
+    bin_sub <- NULL
+  } else {
+    ## removed dep on sosoc/croc 2018-09-19
+    bin_sub <- tibble::tibble(bin_num = .crop_init(init, xylim))
+  }
+ # bins <- purrr::map_df(date, read_oc_sochla, bins = bin_sub, product = product) %>%
+
+   bins <- read_oc_sochla(date, bins = bin_sub, product = product, inputfiles = files) %>%
+    dplyr::select(-"date") %>%
+    dplyr::group_by_at("bin_num") %>%
+    dplyr::summarize_all(mean)
+
+  bins
+
+}

@@ -4,11 +4,11 @@
 
 ```
 raadtools/
-├── R/
-│   ├── read-oc.R     # NEW: terra-native readers
-│   └── compat-oc.R   # NEW: backward-compatible shims
-└── tests/testthat/
-    └── test-read-oc.R
+|-- R/
+|   |-- read-oc.R     # NEW: terra-native readers
+|   \-- compat-oc.R   # NEW: backward-compatible shims
+\-- tests/testthat/
+    \-- test-read-oc.R
 ```
 
 ## New functions
@@ -35,7 +35,7 @@ raadtools/
 
 2. In `chla.R`:
    - **KEEP**: `ocfiles()` - file catalog, works fine
-   - **KEEP**: `.multi_era_chlafiles()` → renamed to `.multi_era_ocfiles()` in read-oc.R
+   - **KEEP**: `.multi_era_chlafiles()` -> renamed to `.multi_era_ocfiles()` in read-oc.R
    - **COMMENT OUT**: `read_chla_daily()`, `read_chla_weekly()`, `read_chla_monthly()`
    - **DELETE**: `readCHL_month()` - redundant
 
@@ -44,33 +44,21 @@ raadtools/
 
 4. Run tests: `devtools::test(filter = "read-oc")`
 
-## What stays in chla.R (for now)
+## What is left of chla.R
 
-These functions are **specialized** and should eventually move to a separate
-package for L3 bin / Southern Ocean ocean colour work:
+Everything specialised has gone. As of 2026-09-09:
 
 ```r
-# L3 bin infrastructure (elegant sinusoidal DGGS!)
-.init_bin()
-.lat2_row()
-.lonlat2_bin()
-.crop_init()
-bin_chl()
-
-# Southern Ocean derived products
-readchla_mean()
-read_oc_sochla()
-read_oc_sochla_day()
-oc_sochla_files()
-
-# Legacy averaging function
-readchla()       # uses vapour VRT for on-the-fly averaging
-chlafiles()      # for old johnson product
-readchla_old()   # defunct
+readchla()       # thin front door onto read_oc_chl_daily()
+readchla_old()   # static legacy johnson/oceancolor collection, terra-native
+chlafiles()      # the file catalogue readchla_old() reads
 ```
 
-These are niche tools for binned data and Southern Ocean ecosystem work.
-Consider extracting to `sochla` or `oceancolour` package.
+The L3 bin infrastructure (`.init_bin()`, `.lat2_row()`, `.lonlat2_bin()`,
+`.crop_init()`) and the Southern Ocean derived products (`readchla_mean()`,
+`read_oc_sochla()`, `read_oc_sochla_day()`, `oc_sochla_files()`) are retired
+to `archive/oc_L3deriv.R`; nothing produces those `.rds` files any more.
+`bin_chl()` was already dead and was deleted.
 
 ## Sensor coverage
 

@@ -18,7 +18,6 @@ Imports:
     raadfiles (>= 0.1.4.9022),
     sp,
     tibble,
-    furrr,
     vapour (>= 0.8.8.9007),
     raster,
     reproj (>= 0.4.3),

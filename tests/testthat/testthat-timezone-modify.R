@@ -18,7 +18,7 @@ test_that("date time underlying values don't change", {
   expect_equal(ffw(getZ(readwind(latest = FALSE))[1]), ref[3])
   expect_equal(ffw(getZ(readcurr(latest = FALSE))[1]), ref[4])
   expect_equal(ffw(getZ(readamps_d1wind(latest = FALSE))[1]), ref[5])
-  expect_equal(ffw(oc_sochla_files()$date[1]), ref[6])
+  ## oc_sochla_files() retired 2026-09-09, see archive/
   expect_equal(ffw(getZ(readssh(latest = FALSE))), ref[7])
 
 })

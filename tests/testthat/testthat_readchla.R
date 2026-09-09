@@ -1,12 +1,12 @@
 require(testthat)
 require(raadtools)
 chl <- readchla()
-test_that("a raster layer is returned", {
-    expect_that(chl, is_a("RasterLayer"))})
+test_that("a SpatRaster is returned", {
+  expect_s4_class(chl, "SpatRaster")
+  expect_equal(terra::nlyr(chl), 1L)
+})
 
 
 test_that("chla projection is not missing", {
-  prj <- projection(chl)
-  expect_false(is.na(prj))
-
+  expect_true(nzchar(terra::crs(chl)))
 })

@@ -121,6 +121,93 @@ read_nsidc_ice_daily <- function(date,
 }
 
 
+#' Read NSIDC CDR daily sea ice concentration
+#'
+#' Read the NOAA/NSIDC Climate Data Record of passive microwave sea ice
+#' concentration (G02202 V6, 25km) for a single hemisphere.
+#'
+#' @details
+#' The CDR is what \code{\link{readice}} and \code{\link{icefiles}} reach for
+#' by default. \code{\link{read_nsidc_ice_daily}} reads NSIDC-0051 v2 instead,
+#' which is the historical default.
+#'
+#' A CDR file holds eight subdatasets and concentration is not the first of
+#' them - band 1 is \code{cdr_seaice_conc_interp_spatial_flag}. This reader
+#' addresses \code{cdr_seaice_conc} by name, so a positional read cannot
+#' silently return a flag layer.
+#'
+#' Values are sea ice concentration as a fraction (0-1). When
+#' \code{setNA = TRUE}, any residual flag value (above 1) is masked; open
+#' water is a legitimate 0 and is kept.
+#'
+#' The projection is taken from the file. The CDR grids are the same 25km polar
+#' stereographic grids as NSIDC-0051, and only if the file declares no CRS at
+#' all does this reader fall back to EPSG:3976 (south) or EPSG:3413 (north).
+#'
+#' @inheritParams read_nsidc_ice_daily
+#'
+#' @return \code{SpatRaster} with time dimension, or tibble if \code{returnfiles = TRUE}.
+#'
+#' @seealso \code{\link{read_nsidc_ice_daily}} for NSIDC-0051 v2,
+#'   \code{\link{icefiles}} for the file listing
+#'
+#' @export
+#' @examples
+#' \dontrun{
+#' ice <- read_nsidc_cdr_daily()
+#' ice_n <- read_nsidc_cdr_daily("2023-03-15", hemisphere = "north")
+#' }
+read_nsidc_cdr_daily <- function(date,
+                                 hemisphere = c("south", "north"),
+                                 xylim = NULL,
+                                 setNA = TRUE,
+                                 latest = TRUE,
+                                 returnfiles = FALSE,
+                                 ...,
+                                 inputfiles = NULL) {
+
+  hemisphere <- match.arg(hemisphere)
+
+  files <- inputfiles %||% icefiles(product = "cdr", hemisphere = hemisphere)
+
+  if (returnfiles) return(files)
+
+  if (missing(date)) {
+    date <- if (latest) max(files$date) else min(files$date)
+  }
+  date <- timedateFrom(date)
+  files <- .processFiles(date, files, "daily")
+
+  if (nrow(files) == 0L) {
+    stop("no files found for requested dates")
+  }
+
+  ## address the concentration subdataset by name, not by position
+  r <- .rast_nc(.cdr_conc_dsn(files$fullname))
+
+  if (!nzchar(terra::crs(r))) {
+    terra::crs(r) <- switch(hemisphere,
+      south = "EPSG:3976",
+      north = "EPSG:3413"
+    )
+  }
+
+  if (setNA) {
+    r <- terra::classify(r, matrix(c(1.0001, Inf, NA), ncol = 3, byrow = TRUE),
+                         right = FALSE)
+  }
+
+  terra::time(r) <- as.Date(files$date)
+  names(r) <- format(files$date, "%Y-%m-%d")
+
+  if (!is.null(xylim)) {
+    r <- terra::crop(r, terra::ext(xylim))
+  }
+
+  r
+}
+
+
 #' Read NSIDC monthly sea ice concentration
 #'
 #' Read NSIDC passive microwave sea ice concentration (25km) monthly data.

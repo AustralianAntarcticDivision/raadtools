@@ -82,8 +82,13 @@ readice_area <- function(product = "nsidc", hemisphere = "south", ...) {
 #' This function loads the latest cache of stored files for
 #' ice products. 
 #' 
-#' The 'fullname' is the path to the raw NSIDC binary file, 'vrt_dsn' a VRT string
-#' describing the fullname as a GDAL DSN string. 
+#' The 'fullname' is the path to the source file, 'vrt_dsn' a GDAL DSN string
+#' addressing the concentration band within it.
+#'
+#' \code{product = "cdr"} (the default) is the NOAA/NSIDC Climate Data Record,
+#' G02202 V6. \code{product = "nsidc"} is NSIDC-0051 v2, which is what
+#' \code{icefiles} used to return and what \code{\link{read_nsidc_ice_daily}}
+#' still reads.
 #' @param time.resolution daily or monthly files?
 #' @param product choice of sea ice product, see \code{\link{readice}}
 #' @param hemisphere north or south
@@ -97,13 +102,23 @@ readice_area <- function(product = "nsidc", hemisphere = "south", ...) {
 #' }
 #' @return data.frame of \code{file} and \code{date}
 icefiles <- function(time.resolution = "daily", 
-                     product = "nsidc", hemisphere =c("south", "north"), ...) {
-  
-  if (product != "nsidc") stop("readice no longer supports AMSR or SSM/I, see specfic read functions for those")
+                     product = c("cdr", "nsidc"), hemisphere =c("south", "north"), ...) {
+
+  product <- match.arg(product)
   if (time.resolution != "daily") stop("readice no longer supports monthly time resolution, see specific read function for monthly data")
   
   hemisphere <- match.arg(hemisphere)
-  
+
+  if (product == "cdr") {
+    files <- switch(hemisphere,
+                    north = raadfiles::nsidc_cdr_north_daily_files(),
+                    south = raadfiles::nsidc_cdr_south_daily_files())
+    ## bad_nsidc indexes dud NSIDC-0051 dates and says nothing about the CDR
+    ## archive, so it is not applied here.
+    files$vrt_dsn <- .cdr_conc_dsn(files$fullname)
+    return(files)
+  }
+
   files <- switch(hemisphere, 
                   north = raadfiles::nsidc_north_daily_files(), 
                   south = raadfiles::nsidc_south_daily_files())
@@ -115,6 +130,13 @@ icefiles <- function(time.resolution = "daily",
   files$vrt_dsn <- sprintf(switch(hemisphere, north = .north_nsidc_vrt, south = .south_ndsic_vrt), files$fullname)
   files
 
+}
+
+## The CDR files carry eight subdatasets and the concentration is not the first
+## of them - band 1 is cdr_seaice_conc_interp_spatial_flag. Address it by name
+## rather than by position.
+.cdr_conc_dsn <- function(fullname) {
+  sprintf('NETCDF:"%s":cdr_seaice_conc', fullname)
 }
 # 
 # ## system.time(icf <- icefiles(hemisphere = "south"))

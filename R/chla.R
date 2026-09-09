@@ -1,18 +1,3 @@
-.multi_era_chlafiles <- function(time.resolution = "daily") {
-  f1 <- try(ocfiles(time.resolution, product = "MODISA", type = "L3m"), silent = TRUE)
-  f2 <- try(ocfiles(time.resolution, product = "VIIRS", type = "L3m"), silent = TRUE)
-  f3 <- try(ocfiles(time.resolution, product = "SeaWiFS", type = "L3m"), silent = TRUE)
-  files <- NULL
-  if (!inherits(f1, "try-error")) files <- rbind(files, f1)
-  if (!inherits(f2, "try-error")) files <- rbind(files, f2)
-  if (!inherits(f3, "try-error")) files <- rbind(files, f3)
-  if (is.null(files)) stop("no ocfiles found!")
-  
-  dplyr::arrange(dplyr::distinct(files, date, .keep_all = TRUE), date)
-  }
-
-
-
 #' Read Chlorophyll-a, NASA algorithm
 #' 
 #' Ocean colour Chlorophyll-a data, provide an input of daily dates and these will be averaged into one layer. 
@@ -73,37 +58,8 @@ readchla <- function(date, product = c("any", "MODISA", "SeaWiFS", "VIIRS"),
   
   out <- raster::setValues(template, wdata[[1]])
   return(setZ(out, date[1]))
-  # d <- readchla_mean(date, product = product, xylim = xylim, latest = latest)
-  # if (nrow(d) < 1) {
-  #   warning("no data available in Southern Ocean for these date/s")
-  #  return(NULL)
-  # }
-  # algorithm <- match.arg(algorithm)
-  # thename <- sprintf("chla_%s", algorithm)
-  # d <- d[, c("bin_num", thename)]
-  # names(d) <- c("bin_num", "value")
-  # NROWS <- product2nrows(product)
-  # gridmap <- raster::raster(raster::extent(-180, 180, -90, 90), ncol = NROWS * 2, nrow = NROWS, crs = "+proj=longlat +datum=WGS84 +no_defs")
-  # ## this hack is to align with assumption from here
-  # ## https://github.com/AustralianAntarcticDivision/ocean_colour/blob/master/seawifs_daily_bins_init.R#L37
-  # gridmap <- raster::crop(gridmap, raster::extent(-180, 180, -90, -30), snap = "out")
-  # if (!is.null(xylim)) gridmap <- crop(gridmap, xylim)
-  # if (!is.null(grid)) gridmap <- grid
-  # bin_chl(d$bin_num, d$value, NROWS, gridmap)
 
 }
-
-bin_chl <- function(bins, value, NROWS, gridmap) {
-  bins <- tibble(bin_num = bins, value = value)
-  ll <- coordinates(gridmap)
-  ## removed dep on sosoc/croc 2018-0919
-  bins <- tibble(bin_num = .lonlat2_bin(ll[,1], ll[, 2], NUMROWS = NROWS),
-                 gridcell = seq_len(ncell(gridmap))) %>%
-    dplyr::inner_join(bins, "bin_num")
-  gridmap[bins[["gridcell"]]] <- bins[["value"]]
-  gridmap
-}
-
 
 #' @importFrom dplyr .data
 #' @export
@@ -173,37 +129,29 @@ readchla_old <- function(date, time.resolution = c("weekly", "monthly"),
 
 
 
-  rtemplate <- if (product == "oceancolor") raster(files$fullname[1L], band = files$band[1L]) else raster(files$fullname[1L])
-  ##if (lon180) rtemplate <- .rotate(rtemplate)
-
   ## process xylim
   cropit <- FALSE
   if (!is.null(xylim)) {
     cropit <- TRUE
-    cropext <- extent(xylim)
-    ##rtemplate <- crop(rtemplate, cropext)
+    cropext <- .as_ext(xylim)
   }
 
   nfiles <- nrow(files)
   r <- vector("list", nfiles)
 
   for (ifile in seq_len(nfiles)) {
-    r0 <- if (product == "oceancolor") raster(files$fullname[ifile], band = files$band[ifile]) else raster(files$fullname[ifile])
-    ##if (lon180) r0 <- .rotate(r0)
-    if(cropit) r0 <- raster::crop(r0, cropext)
-    ## r0[r0 < -2] <- NA
+    r0 <- .rast_nc(files$fullname[ifile])
+    if (product == "oceancolor") r0 <- r0[[files$band[ifile]]]
+    if (cropit) r0 <- crop_if_needed(r0, cropext)
     r[[ifile]] <- r0
-    ##if (verbose & ifile %% 10L == 0L) .progressreport(ifile, nfiles)
   }
 
-  if (nfiles > 1)
-    r <- brick(stack(r), ...)
-  else r <- r[[1L]]
+  r <- if (nfiles > 1) terra::rast(r) else r[[1L]]
   names(r) <- basename(files$fullname)
-  if (is.na(projection(r))) projection(r) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
+  if (!nzchar(terra::crs(r))) terra::crs(r) <- "EPSG:4326"
 
-  r <- setZ(r, files$date)
-  return(r)
+  terra::time(r) <- as.Date(files$date)
+  r
 }
 
 #' Chlorophyll-a for the Southern Ocean

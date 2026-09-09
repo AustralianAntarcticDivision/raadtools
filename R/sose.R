@@ -3,6 +3,11 @@
 #' Available variable names from SOSE.
 #'
 #' These varnames can be used in `read_sose(varname = )`.
+#'
+#' They come from the file names and are what selects a file. The variable
+#' inside the file may be spelt differently - the SeaIceArea files hold a
+#' variable called SIarea - so [read_sose()] works that out from the file
+#' rather than from the name.
 #' @return character vector
 #' @export
 #'
@@ -15,10 +20,22 @@ sose_monthly_varnames <- function(iteration = "")  {
 }
 
 
-## the variable name is the last underscore-separated chunk of the file name,
-## the same rule sose_monthly_varnames() uses. Passing it as subds keeps GDAL
-## from picking some other variable in the file.
-.sose_varname <- function(x) sub("\\.nc$", "", sub("^.*_", "", basename(x)))
+## Pick the data variable out of the file. The name in the FILE name is not
+## the name of the variable inside it - bsose_..._SeaIceArea.nc holds a
+## variable called SIarea - and every file also carries the static grid
+## variables Depth and rA, which GDAL will happily hand back instead. So ask
+## the file, and take the subdataset whose layer count is a whole number of
+## time steps; Depth and rA have one layer each and drop out. Returns NULL
+## when there is nothing to choose between, and the caller reads the file
+## plainly.
+.sose_subds <- function(xfile, ntime) {
+  sds <- try(terra::describe(xfile, sds = TRUE), silent = TRUE)
+  if (inherits(sds, "try-error") || !is.data.frame(sds) || nrow(sds) < 1L) return(NULL)
+  n <- as.numeric(sds$nlyr)
+  keep <- which(!is.na(n) & n >= ntime & n %% ntime == 0)
+  if (length(keep) < 1L) keep <- seq_along(n)
+  sds$var[keep[which.max(n[keep])]]
+}
 
 #' Read SOSE Southern Ocean State Estimate
 #'
@@ -74,7 +91,8 @@ read_sose <-  function (date, time.resolution = c("monthly"),
   if (returnfiles)
     return(files)
 
-  ## every time step in the file, for the diagnostic below
+  ## every time step in the file - used to pick the data variable out of the
+  ## file, and in the diagnostic below
   ntime <- nrow(files)
 
   if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
@@ -97,8 +115,8 @@ read_sose <-  function (date, time.resolution = c("monthly"),
   ## order - so their count IS the number of levels, no arithmetic needed. A
   ## file with no depth dimension is just <variable>_<time index>, which lands
   ## in the same place with one level.
-  src <- try(.rast_nc(xfile, subds = .sose_varname(xfile)), silent = TRUE)
-  if (inherits(src, "try-error")) src <- .rast_nc(xfile)
+  subds <- .sose_subds(xfile, ntime)
+  src <- if (is.null(subds)) .rast_nc(xfile) else .rast_nc(xfile, subds = subds)
 
   at_date <- which(sub(".*_", "", names(src)) == as.character(tband))
   if (length(at_date) < 1L) {

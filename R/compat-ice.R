@@ -1,8 +1,8 @@
 # R/compat-ice.R
 # Front door for readice() - dispatches to the terra-native readers
 #
-# The hemisphere = "both" case with vapour warping is implemented inline here.
-#
+# The hemisphere = "both" case warps both grids onto one template with vapour
+# and is implemented inline here.
 
 #' Read sea ice concentration data
 #'
@@ -18,7 +18,8 @@
 #' @param time.resolution deprecated, use \code{readice_daily} or \code{readice_monthly}
 #' @param product only "nsidc" supported
 #' @param hemisphere "south", "north", or "both"
-#' @param xylim spatial extents to crop, or a raster template for warping
+#' @param xylim spatial extents to crop, or a SpatRaster (or Raster*) template
+#'   to warp onto when \code{hemisphere = "both"}
 #' @param setNA mask special values as NA
 #' @param rescale ignored (v2 data is already scaled)
 #' @param latest if TRUE and date missing, return latest available
@@ -154,24 +155,22 @@ readice_monthly <- function(date,
       options("raadtools.both.hemisphere.message" = TRUE)
       message("for both hemispheres, 'xylim' may be specified - assuming global longlat at 0.25 degree")
     }
-    xylim <- raster::raster()
-    raster::res(xylim) <- 0.25
+    xylim <- terra::rast(resolution = 0.25)
   }
 
-  # Extract grid specs from xylim
+  # Normalise the template to a single-layer SpatRaster, then read the grid
+  # specs off it. A Raster* template is still accepted on the way in.
   if (inherits(xylim, "SpatRaster")) {
-    dimension <- dim(xylim)[2:1]
-    projection <- xylim@ptr$get_crs("wkt")
-    ex <- xylim@ptr$extent@.xData$vector
-    xylim <- raster::raster(xylim)
+    template <- xylim[[1]]
   } else if (inherits(xylim, "BasicRaster")) {
-    dimension <- dim(xylim)[2:1]
-    projection <- comment(raster::crs(xylim))
-    ex <- c(raster::xmin(xylim), raster::xmax(xylim),
-            raster::ymin(xylim), raster::ymax(xylim))
+    template <- terra::rast(xylim)[[1]]
   } else {
     stop("xylim must be a raster or SpatRaster template for hemisphere='both'")
   }
+
+  dimension <- c(terra::ncol(template), terra::nrow(template))
+  projection <- terra::crs(template)
+  ex <- as.vector(terra::ext(template))
 
   # Get combined file list
   files <- inputfiles %||% .get_both_hemisphere_files()
@@ -195,21 +194,20 @@ readice_monthly <- function(date,
       resample = resample
     ))
 
-  # Scale and mask
-  rs <- 100
+  # Concentration is a fraction, so nothing is scaled here. setNA only has to
+  # take out the flag codes, which sit above 1 - open water is a legitimate 0
+  # and must survive.
   if (setNA) {
     out <- lapply(out, function(.x) {
-      .x[.x > 250] <- NA
-      .x[!.x > 0] <- NA
-      raster::setValues(xylim[[1]], .x * rs)
-    })
-  } else {
-    out <- lapply(out, function(.x) {
-      raster::setValues(xylim[[1]], .x * rs)
+      .x[.x > 1] <- NA
+      .x
     })
   }
 
-  raster::setZ(raster::brick(out), files$date)
+  out <- terra::rast(lapply(out, function(.x) terra::setValues(template, .x)))
+  terra::time(out) <- as.Date(files$date)
+  names(out) <- format(files$date, "%Y-%m-%d")
+  out
 }
 
 

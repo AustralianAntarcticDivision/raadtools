@@ -1,72 +1,3 @@
-copernicus_is_atlantic <- function(x) {
-  !copernicus_get_maxlon(x) > 180
-}
-
-copernicus_get_maxlon <- function(x) {
-  nc <- RNetCDF::open.nc(x)
-  val <- RNetCDF::var.get.nc(nc, "longitude", start = 1440L, count = 1L)
-  RNetCDF::close.nc(nc)
-  val
-}
-
-read_i_u <- function(file, xylim = NULL, lon180 = FALSE) {
-  x <- raster(file, varname = "ugos")
-  if (copernicus_is_atlantic(file) && !lon180) x <- .rotate(x)
-  if (!copernicus_is_atlantic(file) && lon180) x <- .rotate(x)
-  if (!is.null(xylim)) x <- raster::crop(x, xylim)
-  
-  x
-}
-read_i_v <- function(file, xylim = NULL, lon180 = FALSE) {
-  x <- raster(file, varname = "vgos")
-  if (copernicus_is_atlantic(file) && !lon180) x <- .rotate(x)
-  if (!copernicus_is_atlantic(file) && lon180) x <- .rotate(x)
-  if (!is.null(xylim)) x <- raster::crop(x, xylim)
-  
-  x
-}
-read_i_uv <- function(file, xylim = NULL, lon180 = FALSE) {
-  stack(read_i_u(file, xylim = xylim, lon180 = lon180), 
-        read_i_v(file, xylim = xylim, lon180 = lon180))
-}
-read_i_dir <- function(file, xylim = NULL, lon180 = FALSE) {
-  x <- read_i_uv(file, xylim = xylim, lon180 = lon180)
-  overlay(x[[1]], x[[2]], fun = function(x, y) (90 - atan2(y, x) * 180/pi) %% 360)
-}
-read_i_mag <- function(file, xylim = NULL, lon180 = FALSE) {
-  x <- read_i_uv(file, xylim = xylim, lon180 = lon180)
-  vlen(x[[1]], x[[2]])
-}
-
-vlen <- function(x, y) sqrt(x * x + y * y)
-
-
-readcurr_polar <- function(date, 
-                            xylim = NULL, 
-                            latest = TRUE,
-                            returnfiles = FALSE, ..., inputfiles = NULL) {
-  
-  if (is.null(inputfiles)) {
-    files <- raadfiles::altimetry_currents_polar_files()
-  } else {
-    files <- inputfiles
-  }
-  if (returnfiles)
-    return(files)
-  if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
-  date <- timedateFrom(date)
-  files <- .processFiles(date, files, "daily")
-  
-  nfiles <- nrow(files)
-  
-  if (nfiles > 1) warning("only read one time slice atm with readcurr_polar")
-  
-  out <- raster::setZ(raster::brick(raster::raster(files$ufullname[1L]), raster::raster(files$vfullname[1L])), rep(files$date[1L], 2L))
-  if (!is.null(xylim)) out <- raster::crop(out, xylim)
-  out
-}
-
-
 ##' Load file names and dates of AVISO current data
 ##'
 ##' A data.frame of file names and dates
@@ -76,17 +7,10 @@ readcurr_polar <- function(date,
 ##' @seealso \code{\link{readcurr}}
 ##' @return data.frame of file names and dates
 ##' @export
-##' @importFrom raster filename 
 currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
   time.resolution <- match.arg(time.resolution)
   if (time.resolution != "daily") warning("only daily available, no weekly - ignoring 'time.resolution'")
   raadfiles::altimetry_daily_files()
-}
-
-
-
-.vrt_ds0 <- function(x, sds) {
-  sprintf("NetCDF:%s:%s", x, sds)
 }
 
 
@@ -165,34 +89,3 @@ currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
 # :geospatial_lon_units = "degrees_east" ;
 # :geospatial_lat_resolution = 0.25 ;
 # :geospatial_lon_resolution = 0.25 ;
-
-
-.currentsfiles1 <- function(fromCache = TRUE, ...) {
-  # datadir = getOption("default.datadir")
-  # cachefile <- file.path(datadir, "cache", sprintf("currentsfiles_weekly.Rdata"))
-  # if (fromCache) {
-  #   load(cachefile)
-  #   cfs$fullname <- file.path(datadir, cfs$file)
-  #   return(cfs)
-  # }
-  # 
-  ftx <- .allfilelist()
-  cfiles <- grep("aviso_old", ftx, value = TRUE)
-  cfiles1 <- grep("current", cfiles, value = TRUE)
-  cfiles2 <- grep("merged_madt", cfiles1, value = TRUE)
-  cfiles3 <- grep("nc$", cfiles2, value = TRUE)
-  #data.source = file.path(datadir, "current", "aviso", "upd", "7d")
-  #cfiles <- list.files(data.source, pattern = ".nc$", full.names = TRUE)
-  datepart <- sapply(strsplit(basename(cfiles3), "_"), function(x) x[length(x)-1])
-  currentdates <- timedateFrom(as.Date(strptime(datepart, "%Y%m%d")))
-  
-  cfs <- data.frame(fullname = cfiles3,  date = currentdates, stringsAsFactors = FALSE)
-  cfs <- cfs[diff(cfs$date) > 0, ]
-  
-  ## drop duplicates, this should prefer upd to nrt
-  cfs <- cfs[!duplicated(cfs$date), ]
-  #save(cfs, file = cachefile)
-  #cfs$fullname <- file.path(datadir, cfs$file)
-  cfs
-  
-}

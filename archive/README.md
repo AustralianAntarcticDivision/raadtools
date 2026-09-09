@@ -39,3 +39,26 @@ excludes this directory, so nothing here is installed, checked or documented.
 
   The live ocean colour readers are in `R/read-oc.R` and read NASA L3m
   (mapped) files directly.
+
+- `currents.R` - the raster-era half of `R/currents.R`, plus `.rotate()` from
+  `R/utils.R`.
+
+  Nothing in the package called any of it. `read_i_u()`, `read_i_v()`,
+  `read_i_uv()`, `read_i_dir()`, `read_i_mag()`, `vlen()`,
+  `readcurr_polar()`, `copernicus_is_atlantic()`, `copernicus_get_maxlon()`,
+  `.currentsfiles1()` and `.vrt_ds0()` had no callers left once the readers
+  moved to terra; only `currentsfiles()` is still live, and it stays in
+  `R/currents.R`.
+
+  `.rotate()` was raadtools' copy of an old raster `rotate()`, kept to match
+  historical behaviour. Its last callers were the two functions above, so it
+  goes too, taking `@importFrom raster merge` with it. The live equivalents
+  are `terra::rotate()` for longitude/latitude grids, via
+  `rotate_if_needed()`, and `.rotate_projected()` in `R/utils.R` for grids in
+  projected coordinates.
+
+  The live currents readers are `read_copernicus_current_daily()` and
+  `read_aviso_current_daily()` in `R/read-currents.R`, with `readcurr()` and
+  `readcurrents()` as front doors in `R/compat-currents.R`.
+  `.needs_rotation()` there replaces `copernicus_is_atlantic()`, which decided
+  the same thing from the file path.

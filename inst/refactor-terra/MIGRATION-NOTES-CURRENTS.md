@@ -4,11 +4,11 @@
 
 ```
 raadtools/
-├── R/
-│   ├── read-currents.R   # NEW: terra-native reader
-│   └── compat-currents.R # NEW: backward-compatible shim
-└── tests/testthat/
-    └── test-read-currents.R
+|-- R/
+|   |-- read-currents.R   # NEW: terra-native reader
+|   \-- compat-currents.R # NEW: backward-compatible shim
+\-- tests/testthat/
+    \-- test-read-currents.R
 ```
 
 ## Integration steps
@@ -23,16 +23,16 @@ export(read_aviso_current_daily)  # alias
 # readcurr, readcurrents already exported - shims replace
 ```
 
-### 3. Handle currents.R conflict
-The shim defines `readcurr()` and `readcurrents()`.
+### 3. Handle currents.R conflict - DONE 2026-09-09
+The shim in `compat-currents.R` defines `readcurr()` and `readcurrents()`.
 
-From existing `currents.R`, keep:
-- `copernicus_is_atlantic()` if it exists (or the new `.needs_rotation()` replaces it)
-- `read_i_u()`, `read_i_v()` internal helpers (or remove if not used elsewhere)
-- Any other helper functions
-
-Remove/comment:
-- `readcurr()` / `readcurrents()` function definitions
+`currents.R` now holds only `currentsfiles()` and the AVISO netCDF header
+notes. Everything else went to `archive/currents.R`: `read_i_u()`,
+`read_i_v()`, `read_i_uv()`, `read_i_dir()`, `read_i_mag()`, `vlen()`,
+`readcurr_polar()`, `copernicus_is_atlantic()` (replaced by
+`.needs_rotation()`), `copernicus_get_maxlon()`, `.currentsfiles1()` and
+`.vrt_ds0()`, none of which had callers left. `.rotate()` went with them,
+since those were its last callers.
 
 ### 4. Check raadfiles function name
 The code assumes `raadfiles::altimetry_daily_files()` exists. If it's named differently
@@ -56,7 +56,7 @@ devtools::test(filter = "read-currents")
 
 **Component flags:**
 - Default: returns 2-layer raster (U, V)
-- `magonly = TRUE`: current speed, sqrt(U² + V²)
+- `magonly = TRUE`: current speed, sqrt(U^2 + V^2)
 - `dironly = TRUE`: direction in degrees (oceanographic convention)
 - `uonly = TRUE`: U component only
 - `vonly = TRUE`: V component only

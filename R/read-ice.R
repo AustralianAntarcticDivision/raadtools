@@ -12,8 +12,10 @@
 #'   \item North: EPSG:3413 (WGS 84 / NSIDC Sea Ice Polar Stereographic North)
 #' }
 #'
-#' Values are sea ice concentration as percentage (0-100). When \code{setNA = TRUE},
-#' special values (land, coast, missing, polar hole) are masked to NA.
+#' Values are sea ice concentration as a fraction (0-1), as the files store
+#' them. When \code{setNA = TRUE}, any residual flag value (land, coast,
+#' missing, polar hole) is masked to NA; open water is a legitimate 0 and is
+#' kept.
 #'
 #' The NSIDC archive contains some dates with placeholder files (no ice variable).
 #' These are automatically filtered out using an internal index of known bad files.
@@ -87,11 +89,11 @@ read_nsidc_ice_daily <- function(date,
   }
 
   # --- read ---
- # NSIDC v2 NetCDF - may have multiple sensor variables, take first (lyrs=1)
-  # GDAL returns values scaled 0-1, multiply by 100 for percentage
+  # NSIDC v2 NetCDF - may have multiple sensor variables, take first (lyrs=1)
+  # GDAL applies the file's scale factor, so values arrive as a fraction 0-1,
+  # which is what we return.
   r <- .rast_nc(files$fullname, lyrs = 1)
-  r <- r * 100
-  
+
   # Set CRS explicitly - should be in file but older files may lack it
   terra::crs(r) <- switch(hemisphere,
     south = "EPSG:3976",
@@ -100,11 +102,11 @@ read_nsidc_ice_daily <- function(date,
 
   # --- setNA: mask special values ---
   if (setNA) {
-    # Valid ice concentration is in (0, 100]
-    # Mask: values > 100 (special codes: land, coast, missing, polar hole)
-    # Mask: values <= 0 (no data / missing in original encoding)
-    r <- terra::classify(r, matrix(c(100.001, Inf, NA,
-                                      -Inf, 0.001, NA), ncol = 3, byrow = TRUE), right = FALSE)
+    # Valid ice concentration is [0, 1]. Flag codes (land, coast, missing,
+    # polar hole) sit above 1. Nothing is masked at the bottom: 0 is open
+    # water, not missing data.
+    r <- terra::classify(r, matrix(c(1.0001, Inf, NA), ncol = 3, byrow = TRUE),
+                         right = FALSE)
   }
 
   terra::time(r) <- as.Date(files$date)
@@ -167,7 +169,6 @@ read_nsidc_ice_monthly <- function(date,
 
   # --- read ---
   r <- .rast_nc(files$fullname, lyrs = 1)
-  r <- r * 100
 
   terra::crs(r) <- switch(hemisphere,
     south = "EPSG:3976",
@@ -175,8 +176,8 @@ read_nsidc_ice_monthly <- function(date,
   )
 
   if (setNA) {
-    r <- terra::classify(r, matrix(c(100.001, Inf, NA,
-                                      -Inf, 0.001, NA), ncol = 3, byrow = TRUE), right = FALSE)
+    r <- terra::classify(r, matrix(c(1.0001, Inf, NA), ncol = 3, byrow = TRUE),
+                         right = FALSE)
   }
 
   terra::time(r) <- as.Date(files$date)

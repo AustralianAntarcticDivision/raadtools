@@ -25,7 +25,8 @@ keepOnlyMostComplexLine <- function(x) {
 #' for you then set it explicitly based on the concentration a point is in.)
 #' Future work may generalize this to other data sources. 
 #' @inheritParams readice
-#' @param threshold the sea ice concentration threshold to contour at
+#' @param threshold the sea ice concentration threshold to contour at, as a
+#'   fraction - 0.15 is the conventional 15 percent ice edge
 #' @param hemisphere "north" or "south", default is "south"
 #' @return raster layer with distances to this date's sea ice edge
 #' @export
@@ -43,7 +44,7 @@ keepOnlyMostComplexLine <- function(x) {
 #' extract(distance_to_ice, aurora[17:25, ], hemisphere = "south")
 #' # library(trip)
 #' # extract(distance_to_ice_edge, walrus818[seq(50, 400, by = 20), ], hemisphere = "north")
-distance_to_ice_edge <- function(date, threshold = 15,  xylim = NULL,
+distance_to_ice_edge <- function(date, threshold = 0.15,  xylim = NULL,
                                  hemisphere = "south", returnfiles = FALSE, 
                                  inputfiles = NULL, 
                                  latest = TRUE, ...) {
@@ -64,9 +65,11 @@ distance_to_ice_edge <- function(date, threshold = 15,  xylim = NULL,
                         inputfiles = inputfiles, hemisphere = hemisphere)
 }
 
-distance_to_ice_edge0 <- function(date, threshold = 15,  xylim = NULL,
+distance_to_ice_edge0 <- function(date, threshold = 0.15,  xylim = NULL,
                                   hemisphere = "south", returnfiles = FALSE, inputfiles = NULL) {
-  ice <- .without_shim_warning(readice(date, hemisphere = hemisphere, inputfiles = inputfiles, setNA = FALSE, xylim = xylim))
+  ## contouring and distanceFromPoints are still raster/sp here, so take the
+  ## SpatRaster readice() now returns back to a RasterLayer at the boundary
+  ice <- raster::brick(.without_shim_warning(readice(date, hemisphere = hemisphere, inputfiles = inputfiles, setNA = FALSE, xylim = xylim)))[[1]]
   cl <- keepOnlyMostComplexLine(rasterToContour(ice, levels = threshold))
   pp <- reproj::reproj_xy(coordinates(ice), "+proj=longlat", source = projection(ice))
   pcl <- coordinates(as(cl, "SpatialPointsDataFrame"))
@@ -74,7 +77,7 @@ distance_to_ice_edge0 <- function(date, threshold = 15,  xylim = NULL,
 }  
 #' @name distance_to_ice_edge
 #' @export
-distance_to_ice <- function(date, threshold = 15, xylim = NULL, 
+distance_to_ice <- function(date, threshold = 0.15, xylim = NULL, 
                             hemisphere = "south", returnfiles = FALSE, inputfiles = NULL, 
                             latest = TRUE, ...) {
   if (!is.null(inputfiles)) {
@@ -90,7 +93,8 @@ distance_to_ice <- function(date, threshold = 15, xylim = NULL,
     warning("'date' should be of length = 1, using first supplied")
     date <- date[1L]
   }
-  ice <- .without_shim_warning(readice(date, hemisphere = hemisphere, inputfiles = files, setNA = FALSE, xylim = xylim))
+  ## as above - raster/sp contouring, so convert at the boundary
+  ice <- raster::brick(.without_shim_warning(readice(date, hemisphere = hemisphere, inputfiles = files, setNA = FALSE, xylim = xylim)))[[1]]
   cl <- rasterToContour(ice, levels = threshold)
   pp <- reproj::reproj_xy(coordinates(ice), "+proj=longlat", source = projection(ice))
   pcl <- coordinates(as(cl, "SpatialPointsDataFrame"))

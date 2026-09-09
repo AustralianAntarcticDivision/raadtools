@@ -40,7 +40,7 @@
 #' @param ... ignored
 #' @param hemisphere south (default) or north
 #'
-#' @return raster with the area of the cells in m^2
+#' @return \code{SpatRaster} with the area of the cells in m^2
 #' @export
 #' @seealso readice
 #' @examples
@@ -49,7 +49,7 @@
 readice_area <- function(product = "nsidc", hemisphere = "south", ...) {
   f <- dplyr::filter(raadfiles::get_raad_filenames(), stringr::str_detect(file, "polar-stereo")) %>% 
     dplyr::transmute(fullname = file.path(root, file))
-  template <- readice(product = product, hemisphere = hemisphere)
+  template <- .without_shim_warning(readice(product = product, hemisphere = hemisphere))
   ## find dat file
   south <- hemisphere == "south"
   patt <- if(south) "pss25area" else "psn25area"
@@ -73,7 +73,7 @@ readice_area <- function(product = "nsidc", hemisphere = "south", ...) {
   con <- file(datfile, open = "rb")
   on.exit(close(con))
   dat <- readBin(con, "integer", size = 4, n =  file.info(datfile)$size/4)
-  setNames(raster::setValues(raster::raster(template), dat * 1000), "NSIDC_true_area_m2")
+  setNames(terra::setValues(terra::rast(template[[1]]), dat * 1000), "NSIDC_true_area_m2")
 }
 
 

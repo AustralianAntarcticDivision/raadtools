@@ -30,8 +30,8 @@
 #'
 #' @details
 #' Data are in Antarctic polar stereographic projection. Both sensor eras are
-#' combined into a continuous time series. Earlier AMSR-E files (with values 0-1)
-#' are automatically scaled to percentage (0-100).
+#' combined into a continuous time series. Concentration is returned as a
+#' fraction (0-1); the files that store percentages are scaled down to match.
 #'
 #' @param date date or dates to read (character, Date, or POSIXct).
 #' @param xylim extent to crop (in polar stereographic coordinates), or NULL.
@@ -73,9 +73,10 @@ read_amsr_ice_daily <- function(date,
     r <- terra::flip(r, direction = "vertical")
     # Set extent
     terra::ext(r) <- terra::ext(.antarctic_extent())
-    # Scale older AMSR-E files (0-1 range) to percentage
-    if (grepl("asi.nl.s6250", basename(f))) {
-      r <- r * 100
+    # Concentration is a fraction. The asi.nl.s6250 files already store one;
+    # the rest are percentages and are scaled down.
+    if (!grepl("asi.nl.s6250", basename(f))) {
+      r <- r / 100
     }
     r
   })
@@ -108,9 +109,10 @@ read_amsr_ice <- read_amsr_ice_daily
 #' @details
 #' Data are in Antarctic polar stereographic projection. This is the highest
 #' resolution passive microwave sea ice product, available from 2012 onwards.
+#' Concentration is returned as a fraction (0-1).
 #'
 #' @inheritParams read_amsr_ice_daily
-#' @param setNA logical, mask values > 100 as NA? Default TRUE.
+#' @param setNA logical, mask flag values (above 1) as NA? Default TRUE.
 #'
 #' @return \code{SpatRaster} with time dimension set.
 #'
@@ -139,14 +141,15 @@ read_amsr_ice_3k_daily <- function(date,
     stop("no files found for requested dates")
   }
 
-  # Read files
-  out <- .rast_nc(files$fullname)
+  # Read files. These store percentages; concentration is a fraction.
+  out <- .rast_nc(files$fullname) / 100
   terra::crs(out) <- .antarctic_crs()
   terra::time(out) <- as.Date(files$date)
   names(out) <- format(files$date, "%Y-%m-%d")
 
   if (setNA) {
-    out <- terra::classify(out, matrix(c(100.001, Inf, NA), ncol = 3, byrow = TRUE), right = FALSE)
+    out <- terra::classify(out, matrix(c(1.0001, Inf, NA), ncol = 3, byrow = TRUE),
+                           right = FALSE)
   }
 
   if (!is.null(xylim)) {
@@ -172,9 +175,10 @@ read_amsr2_3k_ice <- read_amsr_ice_3k_daily
 #' @details
 #' Data are in Antarctic polar stereographic projection. This is the longest
 #' passive microwave sea ice record, available from 1991 onwards.
+#' Concentration is returned as a fraction (0-1).
 #'
 #' @inheritParams read_amsr_ice_daily
-#' @param setNA logical, mask values > 100 as NA? Default TRUE.
+#' @param setNA logical, mask flag values (above 1) as NA? Default TRUE.
 #'
 #' @return \code{SpatRaster} with time dimension set.
 #'
@@ -209,14 +213,16 @@ read_cersat_ice_daily <- function(date,
     terra::flip(r, direction = "vertical")
   })
 
-  out <- terra::rast(rlist)
+  # These store percentages; concentration is a fraction.
+  out <- terra::rast(rlist) / 100
   terra::ext(out) <- terra::ext(.antarctic_extent())
   terra::crs(out) <- .antarctic_crs()
   terra::time(out) <- as.Date(files$date)
   names(out) <- format(files$date, "%Y-%m-%d")
 
   if (setNA) {
-    out <- terra::classify(out, matrix(c(100.001, Inf, NA), ncol = 3, byrow = TRUE), right = FALSE)
+    out <- terra::classify(out, matrix(c(1.0001, Inf, NA), ncol = 3, byrow = TRUE),
+                           right = FALSE)
   }
 
   if (!is.null(xylim)) {

@@ -3,31 +3,51 @@
 \name{extract}
 \alias{extract}
 \alias{extract,function,data.frame-method}
-\title{extract}
+\title{Extract values at points in space and time}
 \usage{
-\S4method{extract}{function,data.frame}(x, y, ctstime = FALSE, fact = NULL, verbose = TRUE, ...)
+\S4method{extract}{function,data.frame}(x, y, ctstime = FALSE, when = "previous", ...)
 }
 \arguments{
-\item{x}{A raadtools read function.}
+\item{x}{a raadtools read function}
 
-\item{y}{Object to use for querying from the raadtools read functions, such as a vector of character, Date, or POSIXt values,  data.frame, trip, etc.}
+\item{y}{a data.frame of longitude, latitude, date-time}
 
-\item{ctstime}{specify whether to find the nearest value in time (\code{FALSE}), or interpolate between slices (\code{TRUE})}
+\item{ctstime}{interpolate between the two slices bracketing each point
+(\code{TRUE}), or take the value from a single slice (\code{FALSE}, the default)}
 
-\item{fact}{integer. Aggregation factor expressed as number of cells in each direction (horizontally and vertically). Or two integers (horizontal and vertical aggregation factor). See Details in \code{\link[raster]{aggregate}}}
+\item{when}{which slice a point takes its value from when \code{ctstime} is
+\code{FALSE}: \code{"previous"} is what raadtools has always done, \code{"nearest"} is
+what it always documented. See the note below.}
 
-\item{verbose}{report on progress or keep quiet}
-
-\item{...}{Additional arguments passed to the read function.}
+\item{...}{passed to \code{\link[xyt:extract_xyt]{xyt::extract_xyt()}} and on to the read function}
 }
 \value{
-data values extracted by the read functions
+a numeric vector, one value per row of \code{y}
 }
 \description{
-Extract methods for raadtools read functions
+Extract values from a raadtools reader at points that each carry their own
+date-time. \code{x} is a read function such as \code{\link[=readsst]{readsst()}}, \code{y} a data.frame of
+longitude, latitude and date-time in that column order.
 }
 \details{
-Extract data from read functions in various ways.
+Only the time slices the points actually need are read, and each is read
+once. The work is done by \code{\link[xyt:extract_xyt]{xyt::extract_xyt()}}; this is the raadtools front
+door onto it, so that \code{extract(readsst, xyt)} goes on meaning what it has
+always meant.
+
+\code{xyt} takes further arguments that are passed through here: \code{method} for the
+spatial interpolation, \code{fact} to aggregate each slice before reading,
+\code{tolerance} to return \code{NA} for points that fall too far from any slice in
+time, and \code{map} to spread the reads over \code{mirai} daemons. See
+\code{\link[xyt:extract_xyt]{xyt::extract_xyt()}}.
+}
+\note{
+\code{when = "previous"} is the default here rather than xyt's own
+\code{"nearest"}, because that is what the old \code{findInterval()} implementation
+did and it is what existing results were computed with. The documentation
+always said "nearest in time", so the two have disagreed for years.
+Changing the default should be a deliberate decision, not a side effect of
+this move.
 }
 \examples{
 
@@ -45,5 +65,5 @@ a$time <-  sort(as.Date("2005-01-01") + sample(c(0, 0, 0, 8, 20, 50), nrow(a), r
 extract(readsst, a)
 }
 \seealso{
-\code{\link{readsst}} and \code{\link{extract}}
+\code{\link[xyt:extract_xyt]{xyt::extract_xyt()}}, \code{\link[=readsst]{readsst()}}
 }

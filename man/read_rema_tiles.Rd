@@ -10,7 +10,7 @@ read_rema_tiles(...)
 \item{...}{reserved for future use, ignored currently}
 }
 \value{
-SpatialPolygonsDataFrame of REMA tile outlines
+SpatVector of REMA tile outlines
 }
 \description{
 Read the index of Reference Elevation Model of Antarctica (REMA) tiles, as

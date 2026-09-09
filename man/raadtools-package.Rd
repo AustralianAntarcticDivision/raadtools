@@ -3,7 +3,7 @@
 \docType{package}
 \name{raadtools-package}
 \alias{raadtools-package}
-\title{R tools for spatial data, extensions using raster to read and extract}
+\title{R tools for spatial data, extensions using terra to read and extract}
 \description{
 Tools in R for reading, plotting and manipulating spatial data, originally
 used at the Australian Antarctic Division (AAD).

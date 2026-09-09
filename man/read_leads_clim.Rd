@@ -18,12 +18,12 @@ derived from MOD/MYD-29 IST 5 min granules
 }
 \examples{
 read_leads_clim()
-read_leads_clim_north(xylim = extent(c(-1, 1, -1, 1) * 50000))
+read_leads_clim_north(xylim = terra::ext(c(-1, 1, -1, 1) * 50000))
 south <- read_leads_clim_south()
 
 ## hone in on Mawson
-pt <- reproj::reproj_xy(cbind(62 + 52/60, -(67 +  36/60)), projection(south), source = "+proj=longlat")
-lead <- read_leads_clim_south(xylim = extent(pt[1] + c(-1, 1) * 250000, pt[2] + c(-1, 1) * 250000))
+pt <- reproj::reproj_xy(cbind(62 + 52/60, -(67 +  36/60)), terra::crs(south), source = "+proj=longlat")
+lead <- read_leads_clim_south(xylim = terra::ext(pt[1] + c(-1, 1) * 250000, pt[2] + c(-1, 1) * 250000))
 plot(lead, col = grey.colors(100))
 abline(v = pt[1], h = pt[2])
 }

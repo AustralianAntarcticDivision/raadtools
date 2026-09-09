@@ -6,6 +6,9 @@
 \usage{
 read_srtm_tile(tile_x = 39, tile_y = 6)
 }
+\value{
+SpatRaster
+}
 \description{
 Read a tile by x and y index.
 }

@@ -12,11 +12,11 @@ read_geoid(xylim = NULL, force = FALSE)
 \item{force}{if TRUE ignore cached virtual saved file, and recompute (try this if it otherwise fails)}
 }
 \value{
-RasterLayer, longitude latitue grid of geoid level
+SpatRaster, longitude latitue grid of geoid level
 }
 \description{
 Global 2.5 Minute Geoid Undulations, a big raster from multiple files. We just create a temporary
-virtual raster from the source files, and return as a RasterLayer.
+virtual raster from the source files, and return as a SpatRaster.
 }
 \details{
 Each file is an ESRI GRID raster data set of 2.5-minute geoid undulation values covering a 45 x 45 degree area.

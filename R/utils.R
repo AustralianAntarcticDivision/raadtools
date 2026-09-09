@@ -11,6 +11,16 @@
   terra::rast(x, ..., md = FALSE)
 }
 
+## The raster-era readers passed ... straight to brick(), which in practice
+## meant filename=. terra writes with a separate call, so honour the argument
+## here rather than dropping it silently when a reader is converted.
+.write_if_filename <- function(x, ...) {
+  dots <- list(...)
+  fn <- dots[["filename"]]
+  if (is.null(fn) || !nzchar(fn)) return(x)
+  terra::writeRaster(x, fn, overwrite = isTRUE(dots[["overwrite"]]))
+}
+
 ## An extent in the form terra wants, from whatever the caller had.
 ##
 ## xylim has always been documented as "an extent, or an object that provides

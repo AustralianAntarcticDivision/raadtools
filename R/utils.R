@@ -96,6 +96,22 @@ set_utc_format <- function(x) {
   attr(x, "tz") <- "UTC"
   x
 }
+## Terra rotate for a full-globe grid in PROJECTED coordinates. terra::rotate()
+## only handles longitude/latitude, and these grids are Mercator metres, so the
+## right half is cropped off and shifted a full width to the left. Same result
+## as the non-inverse branch of .rotate() below.
+.rotate_projected <- function(x) {
+  e <- as.vector(terra::ext(x))
+  xrange <- e[["xmax"]] - e[["xmin"]]
+  hx <- e[["xmin"]] + xrange / 2
+  left <- terra::crop(x, terra::ext(e[["xmin"]], hx, e[["ymin"]], e[["ymax"]]))
+  right <- terra::shift(terra::crop(x, terra::ext(hx, e[["xmax"]], e[["ymin"]], e[["ymax"]])),
+                        dx = -xrange)
+  out <- terra::merge(right, left)
+  names(out) <- names(x)
+  out
+}
+
 ## internal rotate to match old behaviour
 ## https://r-forge.r-project.org/scm/viewvc.php/pkg/raster/R/rotate.R?root=raster&r1=2782&r2=2981
 #' @importFrom raster merge

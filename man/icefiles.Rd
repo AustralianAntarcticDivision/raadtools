@@ -6,7 +6,7 @@
 \usage{
 icefiles(
   time.resolution = "daily",
-  product = "nsidc",
+  product = c("cdr", "nsidc"),
   hemisphere = c("south", "north"),
   ...
 )
@@ -28,8 +28,13 @@ This function loads the latest cache of stored files for
 ice products.
 }
 \details{
-The 'fullname' is the path to the raw NSIDC binary file, 'vrt_dsn' a VRT string
-describing the fullname as a GDAL DSN string.
+The 'fullname' is the path to the source file, 'vrt_dsn' a GDAL DSN string
+addressing the concentration band within it.
+
+\code{product = "cdr"} (the default) is the NOAA/NSIDC Climate Data Record,
+G02202 V6. \code{product = "nsidc"} is NSIDC-0051 v2, which is what
+\code{icefiles} used to return and what \code{\link{read_nsidc_ice_daily}}
+still reads.
 }
 \examples{
 \dontrun{

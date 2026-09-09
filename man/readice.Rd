@@ -9,7 +9,7 @@
 readice(
   date,
   time.resolution = "daily",
-  product = "nsidc",
+  product = c("cdr", "nsidc"),
   hemisphere = c("south", "north", "both"),
   xylim = NULL,
   setNA = TRUE,
@@ -24,7 +24,7 @@ readice(
 readice_daily(
   date,
   time.resolution = "daily",
-  product = "nsidc",
+  product = c("cdr", "nsidc"),
   hemisphere = c("south", "north", "both"),
   xylim = NULL,
   setNA = TRUE,
@@ -55,7 +55,8 @@ readice_monthly(
 
 \item{time.resolution}{deprecated, use \code{readice_daily} or \code{readice_monthly}}
 
-\item{product}{only "nsidc" supported}
+\item{product}{"cdr" (default) for the Climate Data Record, or "nsidc" for
+NSIDC-0051 v2}
 
 \item{hemisphere}{"south", "north", or "both"}
 
@@ -81,13 +82,16 @@ to warp onto when \code{hemisphere = "both"}}
 }
 \description{
 \code{readice} picks a sensible default and returns a terra
-\code{SpatRaster}. For the historical defaults pinned explicitly, see
-\code{\link{read_nsidc_ice_daily}} and \code{\link{read_nsidc_ice_monthly}}.
+\code{SpatRaster}. That default is now the NOAA/NSIDC Climate Data Record
+(G02202 V6), read by \code{\link{read_nsidc_cdr_daily}}. For the historical
+defaults pinned explicitly, see \code{\link{read_nsidc_ice_daily}} and
+\code{\link{read_nsidc_ice_monthly}}, which stay on NSIDC-0051 v2.
 
 The \code{hemisphere = "both"} functionality (warping both hemispheres to a
 common grid) is only available through this function.
 }
 \seealso{
-\code{\link{read_nsidc_ice_daily}} for modern terra-based daily reader
-\code{\link{read_nsidc_ice_monthly}} for modern terra-based monthly reader
+\code{\link{read_nsidc_cdr_daily}} for the Climate Data Record reader
+\code{\link{read_nsidc_ice_daily}} for the NSIDC-0051 v2 daily reader
+\code{\link{read_nsidc_ice_monthly}} for the monthly reader
 }

@@ -27,11 +27,15 @@ to warp onto when \code{hemisphere = "both"}}
 
 \item{inputfiles}{optional pre-filtered file catalog}
 }
+\value{
+\code{SpatRaster}
+}
 \description{
 Using the TIF files (these are 2012 onwards)
 }
 \details{
 This function relies on the file-listing of \code{\link[raadfiles:amsre_daily_files]{raadfiles::amsre_daily_files()}}.
+Concentration is returned as a fraction (0-1).
 }
 \seealso{
 raadfiles::amsre_daily_files read_amsr2_ice

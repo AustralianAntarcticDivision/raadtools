@@ -5,14 +5,14 @@
 ##' Derived data are read from files managed by \code{\link{derivaadcfiles}}.
 ##'
 ##' @param products choice of products, see \code{\link{derivaadcproducts}} for available products
-##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
+##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[terra]{ext}}
 ##' @param returnfiles ignore options and just return the file names
-##' @param ... passed to brick, primarily for \code{filename}
+##' @param ... passed on, primarily for \code{filename}
 ##' @export
-##' @return \code{\link[raster]{raster}} object
+##' @return \code{SpatRaster}
 ##' @seealso \code{\link{derivaadcfiles}} for details on the repository of
-##' data files, \code{\link[raster]{raster}} for the return value
-##' @references \link{http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=Polar_Environmental_Data}
+##' data files
+##' @references \url{http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=Polar_Environmental_Data}
 ##' @examples
 ##' \dontrun{
 ##' prods <- c("bathymetry","chl_summer_climatology")
@@ -33,26 +33,20 @@ readderivaadc <- function(products,
 
   ## projection and grid size for the Southern Hemisphere
   prj  <- "+proj=longlat +datum=WGS84"
-  cropit <- FALSE
-  if (!is.null(xylim)) {
-    cropit <- TRUE
-    cropext <- extent(xylim)
-  }
 
   nfiles <- nrow(files)
   r <- vector("list", nfiles)
   ## loop over file indices
   for (ifile in seq_len(nfiles)) {
-    r0 <- raster(files$fullname[ifile])
-    if (cropit) r0 <- raster::crop(r0, cropext)
-    r[[ifile]] <- r0
+    r[[ifile]] <- crop_if_needed(.rast_nc(files$fullname[ifile]), xylim)
   }
-  if (nfiles > 1) r <- brick(stack(r), ...) else r <- r[[1L]]
+  r <- if (nfiles > 1) terra::rast(r) else r[[1L]]
 
-  projection(r) <- prj
-  ## no extent(r) <- extent(-180, 180, -80, -30)
+  ## these files carry no CRS, so this is set rather than filled in
+  terra::crs(r) <- prj
+  ## no terra::ext(r) <- terra::ext(-180, 180, -80, -30)
   names(r) <- gsub("\\.nc$","",basename(files$file)) ## drop .nc extension from names
-  r
+  .write_if_filename(r, ...)
 }
 
 

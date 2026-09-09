@@ -1,13 +1,13 @@
 #' Calculate time since melt from transitions data frame #'
 #' @param date Date: one or more dates of interest 
 #' @param trx : the transitions, in the form of a data.frame, string (giving the file name of the database file), or a connection to the database file #'
-#' @return A raster stack, with one layer per date 
+#' @return A SpatRaster, with one layer per date 
 #' @noRd
 #' @keywords internal
 calc_time_since_melt <- function(date, trx) {
   psproj <- "+proj=stere +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m +no_defs"
-  ice_template <- raster::raster(nrows = 332, ncols = 316, crs = psproj)
-  raster::extent(ice_template) <- c(-3950000, 3950000, -3950000, 4350000)
+  ice_template <- terra::rast(nrows = 332, ncols = 316, crs = psproj,
+                              extent = terra::ext(-3950000, 3950000, -3950000, 4350000))
   
   date <- as.Date(date)
   if (is.character(trx)) {
@@ -31,8 +31,7 @@ calc_time_since_melt <- function(date, trx) {
     ## but for cells that are still frozen at date d, when did they next melt? for this, want the first entry after d
     this2 <- trx[trx$date > d, ]
     this2 <- this2[c(1L, which(diff(this2$idx) > 0) + 1L), ]
-    time_since_melt <- ice_template
-    tv <- rep(NA_integer_, prod(dim(time_since_melt)))
+    tv <- rep(NA_integer_, terra::ncell(ice_template))
     melted_idx <- which(this$state == -1)
     tv[this$idx[melted_idx]] <- d - this$date[melted_idx]
     ## open water, never frozen
@@ -45,10 +44,9 @@ calc_time_since_melt <- function(date, trx) {
     ##tv[this$idx[is.na(this$state)]] <- 199 ## no transitions observed
     tv[intersect(land_idx, which(is.na(tv)))] <- 2^15 - 2L ## 32766 = land
     ## previously we used 32767 = missing data, NA, when exporting to netcdf
-    raster::values(time_since_melt) <- tv
-    time_since_melt
+    terra::setValues(ice_template, tv)
   })
-  raster::stack(out)
+  terra::rast(out)
 }
 
 
@@ -71,10 +69,10 @@ calc_time_since_melt <- function(date, trx) {
 ##' @param date date or dates of data to read, see Details
 ##' @param time.resolution time resoution data to read, daily or monthly
 ##' @param product choice of sea ice product, see Details
-##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}
+##' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[terra]{ext}}
 ##' @param latest if TRUE and date input missing, return the latest time available, otherwise the earliest
 ##' @param returnfiles ignore options and just return the file names and dates
-##' @param ... passed to brick, primarily for \code{filename}
+##' @param ... passed on, primarily for \code{filename}
 ##' @param inputfiles input the file set to avoid rescanning that (for extract point-in-time)
 ##' @details 
 ##' time_since_melt
@@ -91,9 +89,9 @@ calc_time_since_melt <- function(date, trx) {
 ##' either open water in the sea ice zone that hasn't re-frozen during the data period, or missing sea ice data that 
 ##' couldn't be interpolated. 
 ##' @export
-##' @return \code{\link[raster]{raster}} object
+##' @return \code{SpatRaster}
 ##' @seealso \code{\link{derivicefiles}} for details on the repository of
-##' data files, \code{\link[raster]{raster}} for the return value
+##' data files
 readderivice <- function(date,
                     time.resolution = c("daily"),
                     product = c("time_since_melt"),
@@ -123,11 +121,17 @@ readderivice <- function(date,
   ## doesn't matter which file for "time_since_melt"
   if (product == "time_since_melt") {
     
-    out <- raster::stack(lapply(files$date, calc_time_since_melt, trx = files$fullname[1L]))
+    ## calc_time_since_melt() takes the whole date vector and reads the
+    ## transitions table once; calling it per date re-read the table each time
+    out <- calc_time_since_melt(files$date, trx = files$fullname[1L])
   } else {
    print("only product 'time_since_melt' currently supported ")    
   }
-  setZ(out, files$date)
+
+  out <- crop_if_needed(out, xylim)
+  names(out) <- format(files$date, "%Y-%m-%d")
+  terra::time(out) <- as.Date(files$date)
+  .write_if_filename(out, ...)
 }
 
 

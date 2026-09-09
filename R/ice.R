@@ -6,15 +6,6 @@
 # use EPSG codes 3413 and 3976.
 # 
 
-.get_both_hemisphere_files <- function() {
-  north = icefiles(hemisphere = "north")
-  south = icefiles(hemisphere = "south")
-  #north$fullname <- vapour::vapour_vrt(north$fullname, sds = 1)
-  #south$fullname <- vapour::vapour_vrt(north$fullname, sds = 1)
-  
-  tibble::tibble(date = north$date, 
-                 fullname  = split(rbind(north$fullname, south$fullname), rep(seq(1, nrow(north)), each = 2L)))
-}
 
 
 ## note, we might use a date-controlled way to change the SRS to for the older ones (3411 and 3412)

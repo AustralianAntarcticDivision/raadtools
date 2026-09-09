@@ -18,6 +18,7 @@
 #' @importFrom sp as.image.SpatialGridDataFrame bbox CRS GridTopology  proj4string<- SpatialPoints SpatialPointsDataFrame spChFIDs spTransform 
 #' @importFrom raster brick crop deratify extent<- extract getZ nlayers projection projection<- raster res resample rotate setZ stack writeRaster xmax xmin ymax ymin
 #' @importFrom raster atan2 flip t
+#' @importFrom terra crs rast project crop rotate ext setValues xmin xmax ymin ymax
 #' @details
 #'    read functions like \code{\link{readsst}} will read a data set by date-time vector, with a 
 #'  set of shared arguments that work the same and documented against this dummy function. 

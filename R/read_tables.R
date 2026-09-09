@@ -21,7 +21,7 @@
 #' @export
 #'
 #' @examples
-#' uv <- table_uvgos("2001-01-01", xylim = extent(60, 120, -60, -10))
+#' uv <- table_uvgos("2001-01-01", xylim = terra::ext(60, 120, -60, -10))
 #' plot(range(uv$x), range(uv$y), type = "n", asp = 1.1)
 #' scal <- function(x) (x - min(x, na.rm = TRUE))/diff(range(x, na.rm = TRUE))
 #' nn <- 56
@@ -39,32 +39,34 @@ table_uvgos <- function(date, xylim = NULL, ..., xy = TRUE, cell = FALSE, na.rm 
   ustack <- read_ugos_daily(date = date, xylim = xylim, ...)
   vstack <- read_vgos_daily(date = date, xylim = xylim, ...)
   if (!is.null(res)) {
-   rs <- res(ustack)
+   rs <- terra::res(ustack)
    if (res == rs[1L]) {
      
    }  else {
     fact <- res/mean(rs)
     
-    ustack <- raster::aggregate(ustack, fact = fact)
-    vstack <- raster::aggregate(vstack, fact = fact)
+    ustack <- terra::aggregate(ustack, fact = fact)
+    vstack <- terra::aggregate(vstack, fact = fact)
    }
   }
-  uvalues <- as.vector(raster::values(ustack))
+  uvalues <- as.vector(terra::values(ustack))
   mask <- TRUE
   if (na.rm) {
     mask <- !is.na(uvalues)
     uvalues <- uvalues[mask]
   }
-  vvalues <- as.vector(raster::values(vstack))[mask]
+  vvalues <- as.vector(terra::values(vstack))[mask]
   
   out <- tibble::tibble(u = uvalues, v = vvalues)
+  ## nc is needed for the date column below whether or not cells are wanted,
+  ## so it is not computed inside the if
+  nc <- terra::ncell(ustack)
   if (cell || xy) {
-    nc <- raster::ncell(ustack)
-    cells <- rep(1:nc, raster::nlayers(ustack))[mask]
+    cells <- rep(seq_len(nc), terra::nlyr(ustack))[mask]
   }
   if (xy) {
-    out[["x"]] <- raster::xFromCell(ustack[[1L]], cells)
-    out[["y"]] <- raster::yFromCell(ustack[[1L]], cells)
+    out[["x"]] <- terra::xFromCell(ustack, cells)
+    out[["y"]] <- terra::yFromCell(ustack, cells)
   }
   if (cell) {
     out[["cell"]] <- cells

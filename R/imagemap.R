@@ -6,8 +6,8 @@
 ##' ibcso_background: The IBCSO RGB-map rasterlayer in high resolution
 ##' @title Maps of places
 ##' @param map name of the map to load
-##' @param fact resize factor, see \code{\link[raster]{aggregate}}
-##' @return RasterBrick, with R G B bands
+##' @param fact resize factor, see \code{\link[terra]{aggregate}}
+##' @return SpatRaster, with R G B bands
 ##' @references
 ##' \url{http://www.ibcso.org/data.html}
 ##' @export
@@ -25,10 +25,13 @@ imagemap <- function(map = c("ibcso_background_hq"),
   )
   
   if (file.exists(fpath) & interactive()) message("\n\nremember to plot with plotRGB(x)")
-  x <- brick(fpath)
+  x <- .rast_nc(fpath)
   if (fact > 1) {
     ##aggregate(x, fact, fun = function(x, na.rm = TRUE) sample(x, 1L))
-    x <- resample(x, raster(extent(x), nrows = ceiling(nrow(x)/fact), ncol = ceiling(ncol(x)/fact), crs = projection(x)), method = "ngb")
+    ## terra spells raster's "ngb" as "near"
+    template <- terra::rast(terra::ext(x), nrows = ceiling(nrow(x)/fact),
+                            ncols = ceiling(ncol(x)/fact), crs = terra::crs(x))
+    x <- terra::resample(x, template, method = "near")
     
   }
   names(x) <- c("R", "G", "B")

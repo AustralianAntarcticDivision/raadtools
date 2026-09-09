@@ -16,12 +16,19 @@ sstfiles <- function(time.resolution = c("daily","monthly"), ...) {
   } else {
     files <- raadfiles::oisst_monthly_files()
     ## we have to do this for raadfiles now since 0.1.4
-    r <- raster::stack(files$fullname[1], quick = TRUE)
+    r <- .rast_nc(files$fullname[1])
     
-    files <- files[rep(1L, raster::nlayers(r)), ]
-    # files <- files[rep(1L, raster::nlayers(r)), ]
+    files <- files[rep(1L, terra::nlyr(r)), ]
     files$band <- 1:nrow(files)
-    files$date <- as.POSIXct(strptime(names(r), "X%Y.%m.%d"), tz  = "UTC")
+    ## terra carries the netCDF time dimension itself. raster's stack() only
+    ## put it in the layer names, as "X2000.01.01", which is what the parse
+    ## below was for; it stays as a fallback in case a file has no time.
+    tm <- terra::time(r)
+    files$date <- if (!all(is.na(tm))) {
+      timedateFrom(tm)
+    } else {
+      as.POSIXct(strptime(names(r), "X%Y.%m.%d"), tz  = "UTC")
+    }
     files <- files[c("date", "fullname", "band", "root")]
   }
   files

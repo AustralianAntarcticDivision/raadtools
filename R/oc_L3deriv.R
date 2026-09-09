@@ -18,22 +18,22 @@
 #' @return  integer vector of bins
 #' @examples
 #' \dontrun{ init <- .init_bin(24)
-#' .crop_init(init, extent(100, 110, -50, -45))
+#' .crop_init(init, terra::ext(100, 110, -50, -45))
 #' }
 #' @noRd
 #' @importMethodsFrom raster extent
 .crop_init <- function(x, ext) {
-  ext <- extent(ext)
+  ext <- .as_ext(ext)
   nrows <- length(x$basebin)
-  ilat <- which(x$latbin >= raster::ymin(ext) & x$latbin <= raster::ymax(ext) )
+  ilat <- which(x$latbin >= terra::ymin(ext) & x$latbin <= terra::ymax(ext) )
   ilat <- .snapout1(ilat, 1L, nrows)
   
   basebin <- x$basebin[ilat]
   latbin <- x$latbin[ilat]
   listofbins <- vector("list", length(basebin))
   for (i in seq_along(basebin)) {
-    firstbin <- .lonlat2_bin(raster::xmin(ext), latbin[i], nrows)
-    lastbin <- .lonlat2_bin(raster::xmax(ext), latbin[i], nrows)
+    firstbin <- .lonlat2_bin(terra::xmin(ext), latbin[i], nrows)
+    lastbin <- .lonlat2_bin(terra::xmax(ext), latbin[i], nrows)
     firstlast <- .snapout1(c(firstbin, lastbin), basebin[i], basebin[+1] - 1)
     listofbins[[i]] <- .seqfl(firstlast)
   }

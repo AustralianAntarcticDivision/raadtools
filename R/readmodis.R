@@ -14,8 +14,9 @@ readmsst <- function(date, returnfiles = FALSE, latest  = FALSE, rescale = TRUE)
   files <- .processFiles( date, files, "monthly")
   files$sds <- sprintf('HDF4_SDS:UNKNOWN:%s:0', files$fullname)
   
-  x <-  setExtent(brick(stack(files$sds)),  extent(-180, 180, -90, 90))
-  projection(x) <- "+proj=longlat +ellps=WGS84"
+  x <- .rast_nc(files$sds)
+  terra::ext(x) <- terra::ext(-180, 180, -90, 90)
+  terra::crs(x) <- "EPSG:4326"
   if (rescale) x * 0.000717184972 -2 else x
   
 }

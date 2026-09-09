@@ -37,13 +37,15 @@ rapid_responsefiles <- function(product = c("aqua", "terra"), ...) {
 ##' @param date date of image to load
 ##' @param latest if TRUE and date input is missing return the latest time available, otherwise the earliest
 ##' @param returnfiles return just the list of files
-##' @param ... other arguments for \code{\link[raster]{brick}}
+##' @param ... \code{filename} to write the result to, otherwise ignored
+##' @return SpatRaster
 ##' @export
 readrapid_response <- function(date, product = c("aqua", "terra"), latest = TRUE, returnfiles = FALSE, ...) {
   product <- match.arg(product)
   files <- rapid_responsefiles(product = product)
   ## something's wrong with the files
   if (returnfiles) return(files)
+  .shim_notice("readrapid_response")
 
   if (missing(date)){
     date <-  if (latest)  max(files$date) else min(files$date)
@@ -56,5 +58,5 @@ readrapid_response <- function(date, product = c("aqua", "terra"), latest = TRUE
     warning("only one time-step can be read, for now")
     files <- files[1L,]
   }
-  return(brick(files$fullname[1L], ...))
+  .write_if_filename(.rast_nc(files$fullname[1L]), ...)
 }

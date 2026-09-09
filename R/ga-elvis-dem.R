@@ -9,5 +9,5 @@
 read_ga_srtm <- function() {
    f <- topofile("ga_srtm")
     if (!file.exists(f)) stop(sprintf("no such file %s", f))
-  raster::raster(f)
+  .rast_nc(f)
 }

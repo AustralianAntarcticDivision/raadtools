@@ -27,7 +27,6 @@ read_altimetry_antarctica_daily <- function(date, xylim = NULL, latest = TRUE, r
   }
   date <- timedateFrom(date)
   files <- .processFiles(date, files, "daily")
-  read0 <- function(x, varname) raster(x)
   
   nfiles <- nrow(files)
   ## progress
@@ -35,10 +34,15 @@ read_altimetry_antarctica_daily <- function(date, xylim = NULL, latest = TRUE, r
     format = "  extracting [:bar] :percent in :elapsed",
     total = nfiles, clear = FALSE, width= 60)
   pb$tick(0)
+  ## this source arrives transposed and mirrored in both axes, and carries no
+  ## georeference of its own
   read_fun <- function(xfile, ext, msk, rot, varname = "", band = 1) {
     pb$tick()
-    rrr <- raster(xfile, varname = varname, band = band)
-    rrr <- raster::setExtent(flip(flip(t(rrr), "x"), "y"), raster::extent(c(-1, 1, -1, 1) * 4375000 ))
+    rrr <- .rast_nc(xfile, subds = varname)
+    if (band > 1L) rrr <- rrr[[band]]
+    rrr <- terra::flip(terra::flip(terra::trans(rrr), direction = "horizontal"),
+                       direction = "vertical")
+    terra::ext(rrr) <- terra::ext(c(-1, 1, -1, 1) * 4375000)
     rrr <- crop_if_needed(rrr, ext)
     rrr[rrr > 1e36] <- NA
     rrr
@@ -48,10 +52,11 @@ read_altimetry_antarctica_daily <- function(date, xylim = NULL, latest = TRUE, r
   rot <- FALSE
   files$band <- 1
   op <- options(warn = -1)
-  r0 <- brick(stack(lapply(seq_len(nrow(files)), function(xi)
-    read_fun(files$fullname[xi], ext = xylim, msk = msk, rot = rot, varname = varname, band = files$band[xi]))), ...)
+  r0 <- terra::rast(lapply(seq_len(nrow(files)), function(xi)
+    read_fun(files$fullname[xi], ext = xylim, msk = msk, rot = rot, varname = varname, band = files$band[xi])))
   options(op)
   
-  r0 <- setZ(r0, files$date)
-  r0
+  terra::time(r0) <- files$date
+  names(r0) <- format(files$date, "%Y-%m-%d")
+  .write_if_filename(r0, ...)
 }

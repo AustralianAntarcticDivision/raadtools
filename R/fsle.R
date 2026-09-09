@@ -8,14 +8,14 @@
 #' @param date date or dates of data to read, see Details
 #' @param time.resolution time resolution to read (only daily)
 #' @param varname either `fsle_max` or `theta_max``
-#' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
+#' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[terra]{ext}}, see Details
 #' @param latest if TRUE and input date is missing return the latest time available, otherwise the earliest
 #' @param returnfiles ignore options and just return the file names and dates
 #' @param verbose print messages on progress etc.
-#' @param ... passed to brick, primarily for \code{filename}
+#' @param ... \code{filename} to write the result to, otherwise ignored
 #' @param inputfiles input the files data base to speed up initialization
 #' @export
-#' @return data.frame
+#' @return SpatRaster, or a data.frame of files if \code{returnfiles = TRUE}
 readfsle <- function (date, time.resolution = c("daily"),
                      xylim = NULL, 
                      latest = TRUE,
@@ -23,6 +23,7 @@ readfsle <- function (date, time.resolution = c("daily"),
                      returnfiles = FALSE, verbose = TRUE, ..., inputfiles = NULL) {
   time.resolution <- match.arg(time.resolution)
   varname <- match.arg(varname)
+  if (!returnfiles) .shim_notice("readfsle")
     out <- read_fsle_daily(date, xylim = xylim, latest = latest, returnfiles = returnfiles, varname = varname, ..., inputfiles = inputfiles) 
   
   out
@@ -44,7 +45,6 @@ if (missing(date)) {
 }
 date <- timedateFrom(date)
 files <- .processFiles(date, files, "daily")
-read0 <- function(x, varname) raster(x)
 
 nfiles <- nrow(files)
 ## progress
@@ -52,18 +52,18 @@ pb <- progress::progress_bar$new(
   format = "  extracting [:bar] :percent in :elapsed",
   total = nfiles, clear = FALSE, width= 60)
 pb$tick(0)
-read_fun <- function(xfile, ext, msk, rot, varname = "", band = 1) {
-  pb$tick()
-  mask_if_needed(crop_if_needed(rotate_if_needed(raster(xfile, varname = varname, band = band), rot), ext), msk)
-}
 
 msk <- NULL
 rot <- FALSE
 files$band <- 1
 op <- options(warn = -1)
-r0 <- brick(stack(lapply(seq_len(nrow(files)), function(xi) 
-  read_fun(files$fullname[xi], ext = xylim, msk = msk, rot = rot, varname = varname, band = files$band[xi]))), ...)
+r0 <- terra::rast(lapply(seq_len(nrow(files)), function(xi) {
+  pb$tick()
+  read_one(files$fullname[xi], ext = xylim, msk = msk, rot = rot,
+           varname = varname, band = files$band[xi])
+}))
 options(op)
-r0 <- setZ(r0, files$date)
-r0  
+terra::time(r0) <- files$date
+names(r0) <- format(files$date, "%Y-%m-%d")
+.write_if_filename(r0, ...)
 }

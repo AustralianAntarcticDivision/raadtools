@@ -27,7 +27,7 @@ ghrsstfiles <- function() {
 #' @param lon180 currently ignored
 #' @param ... arguments passed to raster brick
 #' @inheritParams raadtools
-#' @return RasterStack or RasterLayer
+#' @return SpatRaster, or a data.frame of files if \code{returnfiles = TRUE}
 #' @export
 readghrsst  <- function (date, time.resolution = c("daily"),
                          xylim = NULL, lon180 = TRUE,
@@ -41,6 +41,7 @@ readghrsst  <- function (date, time.resolution = c("daily"),
 
   files <- if (is.null(inputfiles))  ghrsstfiles() else inputfiles
   if (returnfiles)  return(files)
+  .shim_notice("readghrsst")
   
   
   if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
@@ -55,24 +56,16 @@ xylim <- force(xylim)
     format = "  extracting [:bar] :percent in :elapsed",
     total = nfiles, clear = FALSE, width= 60)
   pb$tick(0)
-  read_fun <- function(xfile, ext, varname = "", band = 1) {
+  r0 <- terra::rast(lapply(seq_len(nfiles), function(xi) {
     pb$tick()
-    crop_if_needed(raster::raster(.rast_nc(xfile, varname)), ext)
-  }
-   r0 <- stack(lapply(seq_len(nfiles), function(xi) read_fun(files$fullname[xi], ext = xylim, varname = varname)))
-  if (is.na(projection(r0))) projection(r0) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
-  r0 <- setZ(r0, files$date)
-  
-  ## need to determine if "filename" was passed in
-  dots <- list(...)
-  if ("filename" %in% names(dots)) {
-    r0 <- writeRaster(r0, ...)
-  }
-  
-  if (nfiles == 1) {
-    r0 <- r0[[1L]]
-    r0 <- setZ(r0, files$date)
-  }
+    read_one(files$fullname[xi], ext = xylim, varname = varname)
+  }))
+  if (!nzchar(terra::crs(r0))) terra::crs(r0) <- "EPSG:4326"
+
+  if (nfiles == 1) r0 <- r0[[1L]]
+  terra::time(r0) <- files$date
+  names(r0) <- format(files$date, "%Y-%m-%d")
+  r0 <- .write_if_filename(r0, ...)
  
   #wtf
  # r0 <- setZ(r0, getZ(r0) + ISOdatetime(1981, 1, 1, 0, 0, 0, tz = "GMT")) ##1981-01-01 00:00:00)

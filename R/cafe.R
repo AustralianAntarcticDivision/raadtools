@@ -25,6 +25,7 @@ readcafe <-  function (date, time.resolution = c("monthly"),
   if (returnfiles) {
     return(files)
   }
+  .shim_notice("readcafe")
   if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
 
   date <- timedateFrom(date)
@@ -35,11 +36,6 @@ readcafe <-  function (date, time.resolution = c("monthly"),
     format = "  extracting [:bar] :percent in :elapsed",
     total = nfiles, clear = FALSE, width= 60)
   pb$tick(0)
-  read_fun <- function(xfile, ext, msk, rot, varname = "", band = 1) {
-    pb$tick()
-    mask_if_needed(crop_if_needed(rotate_if_needed(raster(xfile), rot), ext), msk)
-  }
-
   ## TODO determine if we need to rotate, or just shift, or not anything
   rot <- !lon180
   msk <- NULL
@@ -48,16 +44,20 @@ readcafe <-  function (date, time.resolution = c("monthly"),
   if (!"band" %in% names(files)) files$band <- 1
 
 
-  r0 <- brick(stack(lapply(seq_len(nrow(files)), function(xi) read_fun(files$fullname[xi], ext = xylim, msk = msk, rot = rot,  band = files$band[xi]))),
-              ...)
+  r0 <- terra::rast(lapply(seq_len(nrow(files)), function(xi) {
+    pb$tick()
+    read_one(files$fullname[xi], ext = xylim, msk = msk, rot = rot,
+             band = files$band[xi])
+  }))
 
-  if (is.na(projection(r0))) projection(r0) <- "+proj=longlat +datum=WGS84"
-  r0 <- raster::setExtent(r0, raster::extent(-180, 180, -90, 90))
+  if (!nzchar(terra::crs(r0))) terra::crs(r0) <- "EPSG:4326"
+  terra::ext(r0) <- terra::ext(-180, 180, -90, 90)
   if (nfiles == 1) r0 <- r0[[1L]]
-  r0 <- setZ(r0, files$date)
+  terra::time(r0) <- files$date
+  names(r0) <- format(files$date, "%Y-%m-%d")
   if (setNA) {
     r0[r0 < 0] <- NA_real_
   }
-  r0
+  .write_if_filename(r0, ...)
 
 }

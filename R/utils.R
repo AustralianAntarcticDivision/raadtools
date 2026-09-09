@@ -1,3 +1,11 @@
+## Internal calls into the compat shims should not raise the user-facing
+## deprecation warning - it is aimed at package users, not at raadtools itself.
+.without_shim_warning <- function(expr) {
+  op <- options(raadtools.shim.warn = FALSE)
+  on.exit(options(op), add = TRUE)
+  force(expr)
+}
+
 
 nc_rawdata <- function(x, var) {
   nc <- ncdf4::nc_open(x)

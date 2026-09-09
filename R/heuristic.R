@@ -62,7 +62,7 @@ read_sst_heuristic <- function (date, time.resolution = c("daily", "monthly"), x
   files <- .processFiles(date, files, time.resolution)
 
   varname <- match.arg(varname)
-  dummy <- crop_if_needed(readsst(varname = varname), xylim)
+  dummy <- crop_if_needed(.without_shim_warning(readsst(varname = varname)), xylim)
   nlayer_ <- length(date)
   dims <- c(nrow(dummy), ncol(dummy), nlayer_)
   ## really big

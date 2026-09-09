@@ -8,7 +8,7 @@
     raster::rasterOptions(maxmemory = 4e9)
   }
   read_rema_tiles <<- memoise::memoize(read_rema_tiles)
-  .multi_era_chlafiles <<- memoise::memoize(.multi_era_chlafiles)
+  .multi_era_ocfiles <<- memoise::memoize(.multi_era_ocfiles)
   options(raadtools.geoid_tile_vrt = NULL, raadtools.message.rescale = TRUE)
   allfiles <<- memoise::memoize(allfiles, ~memoise::timeout(24 * 3600))
   ## send this message once per session

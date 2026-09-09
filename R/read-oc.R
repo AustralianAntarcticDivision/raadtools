@@ -53,15 +53,17 @@
     stop("no files found for requested dates")
   }
 
-  # Read each file
-  read_one <- function(f) {
+  # Read each file. Not read_one(): that is the shared helper in
+  # common-readfuns.R, and these files need their extent standardised, which
+  # it does not do.
+  read_l3m_file <- function(f) {
     r <- .rast_nc(f, subds = subds)
     # Source files have slight extent noise, standardize
     terra::ext(r) <- terra::ext(-180, 180, -90, 90)
     r
   }
 
-  out <- terra::rast(lapply(files$fullname, read_one))
+  out <- terra::rast(lapply(files$fullname, read_l3m_file))
 
   # Handle lon180 - NASA L3m is typically -180 to 180 already
   # but check and rotate if needed
@@ -78,7 +80,9 @@
   }
 
   # Set CRS and time
-  if (is.na(terra::crs(out, proj = TRUE))) {
+  ## terra::crs() returns an empty string for an undefined CRS, never NA, so
+  ## an is.na() guard here would never fire
+  if (!nzchar(terra::crs(out))) {
     terra::crs(out) <- "EPSG:4326"
   }
   terra::time(out) <- as.Date(files$date)

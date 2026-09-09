@@ -20,7 +20,7 @@ test_that("requested files only are returned as a data.frame", {
     ffs <- readice(returnfiles = TRUE)
     expect_that(ffs, is_a("data.frame"))
 
-    expect_true(all(names(ffs) %in% c("date",  "fullname", "vrt_dsn")))
+    expect_true(all(names(ffs) %in% c("date",  "fullname")))
     expect_true(all(file.exists(ffs$fullname[sample(nrow(ffs), 100)])))
     expect_that(sum(is.na(ffs$date)), equals(0))
 

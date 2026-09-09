@@ -232,12 +232,18 @@ readice_monthly <- function(date,
   ## same days, so pair them by date rather than by position - a length or
   ## offset difference would otherwise silently pair a northern grid with the
   ## wrong southern one.
-  col <- if (product == "cdr") "vrt_dsn" else "fullname"
   both <- dplyr::inner_join(
-    tibble::tibble(date = north$date, .north = north[[col]]),
-    tibble::tibble(date = south$date, .south = south[[col]]),
+    tibble::tibble(date = north$date, .north = north$fullname),
+    tibble::tibble(date = south$date, .south = south$fullname),
     by = "date"
   )
+
+  ## a CDR warp must address cdr_seaice_conc by name - band 1 of a CDR file is
+  ## an interpolation flag
+  if (product == "cdr") {
+    both$.north <- .cdr_conc_dsn(both$.north)
+    both$.south <- .cdr_conc_dsn(both$.south)
+  }
 
   tibble::tibble(
     date = both$date,

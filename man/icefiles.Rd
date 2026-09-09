@@ -28,8 +28,7 @@ This function loads the latest cache of stored files for
 ice products.
 }
 \details{
-The 'fullname' is the path to the source file, 'vrt_dsn' a GDAL DSN string
-addressing the concentration band within it.
+The 'fullname' is the path to the source file.
 
 \code{product = "cdr"} (the default) is the NOAA/NSIDC Climate Data Record,
 G02202 V6. \code{product = "nsidc"} is NSIDC-0051 v2, which is what

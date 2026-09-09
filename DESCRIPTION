@@ -15,7 +15,7 @@ Imports:
     ncdf4,
     progress,
     purrr,
-    raadfiles (>= 0.1.4.9021),
+    raadfiles (>= 0.1.4.9022),
     sp,
     tibble,
     furrr,

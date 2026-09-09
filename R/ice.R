@@ -7,30 +7,6 @@
 # 
 
 
-## note, we might use a date-controlled way to change the SRS to for the older ones (3411 and 3412)
-.north_nsidc_vrt <- '<VRTDataset rasterXSize="304" rasterYSize="448"> 
-  <VRTRasterBand dataType="Byte" band="1" subClass="VRTRawRasterBand"> 
-    <SourceFilename relativetoVRT="0">%s</SourceFilename> 
-      <ImageOffset>300</ImageOffset> 
-      <PixelOffset>1</PixelOffset> 
-      <LineOffset>304</LineOffset> 
-      </VRTRasterBand> 
-      <SRS dataAxisToSRSAxisMapping="1,2">EPSG:3413</SRS>
-      <GeoTransform> -3.8375000000000000e+06,  2.5000000000000000e+04,  0.0000000000000000e+00,  5.8375000000000000e+06,  0.0000000000000000e+00, -2.5000000000000000e+04</GeoTransform>
-      </VRTDataset>'
-
-
-.south_ndsic_vrt <- '<VRTDataset rasterXSize="316" rasterYSize="332"> 
-  <VRTRasterBand dataType="Byte" band="1" subClass="VRTRawRasterBand"> 
-    <SourceFilename relativetoVRT="0">%s</SourceFilename> 
-    <ImageOffset>300</ImageOffset> 
-    <PixelOffset>1</PixelOffset> 
-    <LineOffset>316</LineOffset> 
-  </VRTRasterBand> 
-  <SRS dataAxisToSRSAxisMapping="1,2">EPSG:3976</SRS>
-  <GeoTransform> -3.9500000000000000e+06,  2.5000000000000000e+04,  0.0000000000000000e+00,  4.3500000000000000e+06,  0.0000000000000000e+00, -2.5000000000000000e+04</GeoTransform>
-</VRTDataset>'
-
 #' Area of pixels in sea ice
 #'
 #' Read the NSIDC pixel-area files for either hemisphere. 
@@ -82,8 +58,7 @@ readice_area <- function(product = "nsidc", hemisphere = "south", ...) {
 #' This function loads the latest cache of stored files for
 #' ice products. 
 #' 
-#' The 'fullname' is the path to the source file, 'vrt_dsn' a GDAL DSN string
-#' addressing the concentration band within it.
+#' The 'fullname' is the path to the source file.
 #'
 #' \code{product = "cdr"} (the default) is the NOAA/NSIDC Climate Data Record,
 #' G02202 V6. \code{product = "nsidc"} is NSIDC-0051 v2, which is what
@@ -115,7 +90,6 @@ icefiles <- function(time.resolution = "daily",
                     south = raadfiles::nsidc_cdr_south_daily_files())
     ## bad_nsidc indexes dud NSIDC-0051 dates and says nothing about the CDR
     ## archive, so it is not applied here.
-    files$vrt_dsn <- .cdr_conc_dsn(files$fullname)
     return(files)
   }
 
@@ -126,9 +100,7 @@ icefiles <- function(time.resolution = "daily",
   ## a bit of a kludge but saves us from the dates that don't exist in the new NSIDC NetCDF files
   rawdate <- as.integer(as.Date(files$date))
   bad <- rawdate %in% bad_nsidc
-  files <- files[!bad, ]
-  files$vrt_dsn <- sprintf(switch(hemisphere, north = .north_nsidc_vrt, south = .south_ndsic_vrt), files$fullname)
-  files
+  files[!bad, ]
 
 }
 

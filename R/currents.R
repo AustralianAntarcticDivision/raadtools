@@ -84,30 +84,6 @@ currentsfiles <- function(time.resolution = c("daily", "weekly"), ...) {
 }
 
 
-altimetry_daily_ugos_files <- function() {
-  files <- raadfiles::altimetry_daily_files()
-  files$vrt_dsn <- .vrt_ds0(files$fullname, sds = "ugos")
-  files
-}
-altimetry_daily_vgos_files <- function() {
-  files <- raadfiles::altimetry_daily_files()
-  files$vrt_dsn <- .vrt_ds0(files$fullname, sds = "vgos")
-  files
-}
-
-# read_altimetry_u <- function(x, extent, dimension) {
-#  vapour::vapour_warp_raster_dbl(x, 
-#                                      extent = vc$extent, dimension = vc$dimension)
-# }
-# read_altimetry_v <- function(x, extent, dimension) {
-#  files <- altimetry_daily_vgos_files() 
-#  i <- 1
-#  vrt <- files$vrt_dsn[i]
-#  vapour::vapour_warp_raster_dbl(vrt, 
-#                                 extent = vc$extent, dimension = vc$dimension)
-#  
-# }
-
 
 .vrt_ds0 <- function(x, sds) {
   sprintf("NetCDF:%s:%s", x, sds)

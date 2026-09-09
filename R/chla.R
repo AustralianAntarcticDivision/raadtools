@@ -1,64 +1,64 @@
 #' Read Chlorophyll-a, NASA algorithm
-#' 
-#' Ocean colour Chlorophyll-a data, provide an input of daily dates and these will be averaged into one layer. 
-#' @param date date or dates of data to read, see Details
-#' @param product choice of product, see Details
-
-#' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, ignored if grid is provided
+#'
+#' Ocean colour Chlorophyll-a from the NASA L3m (mapped) products, across the
+#' SeaWiFS, MODISA and VIIRS eras. This is the legacy front door onto
+#' \code{\link{read_oc_chl_daily}}; use that directly, or
+#' \code{\link{read_oc_chl_8day}} and \code{\link{read_oc_chl_monthly}}, to
+#' pin a particular temporal resolution.
+#'
+#' One layer is returned per date. Earlier versions of this function averaged
+#' every requested date down into a single layer; to get that, average the
+#' result yourself with \code{terra::mean()} or \code{terra::app()}.
+#'
+#' @param date date or dates of data to read
+#' @param product sensor to read from, or "any" to draw on all three eras
+#' @param xylim spatial extents to crop from source data, anything acceptable
+#' to \code{\link[terra]{ext}}, ignored if grid is provided
 #' @param algorithm nasa only
-#' @param grid template raster object for output
+#' @param grid template \code{SpatRaster} to resample the output onto
 #' @param latest if TRUE (and date not supplied) return the latest time available, otherwise the earliest
-#' @param returnfiles 	ignore options and just return the file names and dates
-#' @param inputfiles 	input the files data base to speed up initialization 
+#' @param returnfiles ignore options and just return the file names and dates
+#' @param inputfiles input the files data base to speed up initialization
 #' @param ... currently ignored
-#' @seealso readCHL_month
 #' @export
-#' @return \code{\link[raster]{raster}} object
-#' @seealso \code{\link{chlafiles}} for details on the repository of
-#' data files, \code{\link[raster]{raster}} for the return value
+#' @return \code{SpatRaster}
+#' @seealso \code{\link{read_oc_chl_daily}} for the reader this calls,
+#' \code{\link{ocfiles}} for the repository of data files
 #' @examples
 #' \dontrun{
-#' d <- readchla(c("2003-01-01", c("2003-06-01")),
-#'          xylim = extent(100, 150, -70, -30))
+#' d <- readchla(c("2003-01-01", "2003-06-01"),
+#'          xylim = terra::ext(100, 150, -70, -30))
 #' }
-#' @export
 readchla <- function(date, product = c("any", "MODISA", "SeaWiFS", "VIIRS"),
                      xylim = NULL,
                      algorithm = c("nasa"),
-
-                     latest = TRUE, 
+                     latest = TRUE,
                      grid = NULL, ..., returnfiles = FALSE, inputfiles = NULL) {
-  
+
   if (!algorithm == "nasa") warning("only 'nasa' algorithm is currently supported")
   product <- match.arg(product)
-  
-  if (is.null(inputfiles)) {
-    files <- ocfiles("daily", product = product, varname = "CHL", type = "L3m")
-  } else {
-    files <- inputfiles
-  }
-  if (returnfiles) return(files)
 
-  
-  if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
-  date <- timedateFrom(date)
-  
-  files <- files[match(as.Date(date), as.Date(files$date)), ]
-  files <- dplyr::arrange(dplyr::distinct(files), date)
-  if (nrow(files) < 1) {
-    warning("no data available in Southern Ocean for these date/s")
-    return(NULL)
+  ## "any" leaves the file catalogue to read_oc_chl_daily(), which stitches
+  ## the three sensor eras together
+  if (is.null(inputfiles) && product != "any") {
+    inputfiles <- ocfiles("daily", product = product, varname = "CHL", type = "L3m")
   }
-  template <- raster(files$fullname[1], varname = "chlor_a")  
-  if (!is.null(xylim)) {
-      template <- raster::crop(template, extent(xylim))
-  }
-  ex <- c(raster::xmin(template), raster::xmax(template), raster::ymin(template), raster::ymax(template))
-  wdata <- vapour::gdal_raster_data(.vrt_ds0( files$fullname, "chlor_a"), target_ext = ex, target_res = res(template), resample = "average")
-  
-  out <- raster::setValues(template, wdata[[1]])
-  return(setZ(out, date[1]))
 
+  .shim_notice("readchla", "read_oc_chl_daily")
+
+  out <- read_oc_chl_daily(
+    date = date,
+    xylim = if (is.null(grid)) xylim else NULL,
+    latest = latest,
+    returnfiles = returnfiles,
+    inputfiles = inputfiles
+  )
+
+  if (returnfiles) return(out)
+
+  if (!is.null(grid)) out <- terra::resample(out, grid)
+
+  out
 }
 
 #' @importFrom dplyr .data

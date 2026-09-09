@@ -103,8 +103,8 @@ read_copernicus_current_daily <- function(date,
     f <- files$fullname[i]
 
     # Read U and V components
-    u <- terra::rast(f, subds = "ugos")
-    v <- terra::rast(f, subds = "vgos")
+    u <- .rast_nc(f, subds = "ugos")
+    v <- .rast_nc(f, subds = "vgos")
 
     # Handle rotation based on file orientation and lon180 preference
     needs_rotate <- .needs_rotation(u, lon180)

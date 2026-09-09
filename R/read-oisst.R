@@ -90,7 +90,7 @@ read_oisst_daily <- function(date,
 
   # --- read ---
  # OISST files are non-compliant netCDF (no grid_mapping), set CRS explicitly
-  r <- terra::rast(files$fullname, subds = varname)
+  r <- .rast_nc(files$fullname, subds = varname)
   terra::crs(r) <- "EPSG:4326"
   terra::time(r) <- as.Date(files$date)
   names(r) <- format(files$date, "%Y-%m-%d")
@@ -162,7 +162,7 @@ read_oisst_monthly <- function(date,
   }
 
   # --- read ---
-  r <- terra::rast(files$fullname, subds = varname)
+  r <- .rast_nc(files$fullname, subds = varname)
   terra::crs(r) <- "EPSG:4326"
   terra::time(r) <- as.Date(files$date)
   names(r) <- format(files$date, "%Y-%m")

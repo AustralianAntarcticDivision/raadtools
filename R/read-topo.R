@@ -92,7 +92,7 @@ read_topo <- function(topo = c("gebco_23", "gebco_21", "gebco_19", "gebco_14", "
   }
 
   # Read the data
- r <- terra::rast(tfile)
+ r <- .rast_nc(tfile)
 
   # Set CRS if missing but looks like lonlat
  if (is.na(terra::crs(r, proj = TRUE))) {

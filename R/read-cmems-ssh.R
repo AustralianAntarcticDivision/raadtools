@@ -35,7 +35,7 @@
   }
 
   # Read
-  r <- terra::rast(files$fullname, subds = varname)
+  r <- .rast_nc(files$fullname, subds = varname)
 
   # Set CRS if missing (CMEMS uses a slightly non-standard ellipsoid)
   if (is.na(terra::crs(r, proj = TRUE))) {

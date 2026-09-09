@@ -55,7 +55,7 @@
 
   # Read each file
   read_one <- function(f) {
-    r <- terra::rast(f, subds = subds)
+    r <- .rast_nc(f, subds = subds)
     # Source files have slight extent noise, standardize
     terra::ext(r) <- terra::ext(-180, 180, -90, 90)
     r
@@ -240,7 +240,7 @@ read_oc_par_8day <- function(date,
   }
 
   read_one <- function(f) {
-    r <- terra::rast(f, subds = "par")
+    r <- .rast_nc(f, subds = "par")
     terra::ext(r) <- terra::ext(-180, 180, -90, 90)
     r
   }

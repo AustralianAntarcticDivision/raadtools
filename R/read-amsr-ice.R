@@ -68,7 +68,7 @@ read_amsr_ice_daily <- function(date,
 
   # Read and process each file
   rlist <- lapply(files$fullname, function(f) {
-    r <- terra::rast(f)
+    r <- .rast_nc(f)
     # Flip vertically (AMSR TIFs are upside down)
     r <- terra::flip(r, direction = "vertical")
     # Set extent
@@ -140,7 +140,7 @@ read_amsr_ice_3k_daily <- function(date,
   }
 
   # Read files
-  out <- terra::rast(files$fullname)
+  out <- .rast_nc(files$fullname)
   terra::crs(out) <- .antarctic_crs()
   terra::time(out) <- as.Date(files$date)
   names(out) <- format(files$date, "%Y-%m-%d")
@@ -205,7 +205,7 @@ read_cersat_ice_daily <- function(date,
 
   # Read and flip (CERSAT NetCDF is upside down)
   rlist <- lapply(files$fullname, function(f) {
-    r <- terra::rast(f, subds = "concentration")
+    r <- .rast_nc(f, subds = "concentration")
     terra::flip(r, direction = "vertical")
   })
 

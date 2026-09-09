@@ -53,7 +53,7 @@ readwrf0 <- function(x, band = 1) {
   gridspec <- amps_grid_spec(grid)
   #print(band)
 
-  dat <- suppressWarnings(raster::raster(terra::rast(x, lyr = band)))
+  dat <- suppressWarnings(raster::raster(.rast_nc(x, lyrs = band)))
   dat <- setExtent(dat, gridspec$ex)
   projection(dat) <- gridspec$proj
   data("amps_metadata", package = "raadtools")

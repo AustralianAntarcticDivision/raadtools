@@ -89,7 +89,7 @@ read_nsidc_ice_daily <- function(date,
   # --- read ---
  # NSIDC v2 NetCDF - may have multiple sensor variables, take first (lyrs=1)
   # GDAL returns values scaled 0-1, multiply by 100 for percentage
-  r <- terra::rast(files$fullname, lyrs = 1)
+  r <- .rast_nc(files$fullname, lyrs = 1)
   r <- r * 100
   
   # Set CRS explicitly - should be in file but older files may lack it
@@ -166,7 +166,7 @@ read_nsidc_ice_monthly <- function(date,
   }
 
   # --- read ---
-  r <- terra::rast(files$fullname, lyrs = 1)
+  r <- .rast_nc(files$fullname, lyrs = 1)
   r <- r * 100
 
   terra::crs(r) <- switch(hemisphere,

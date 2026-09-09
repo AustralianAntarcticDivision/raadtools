@@ -114,11 +114,11 @@ read_ccmp_wind_6hourly <- function(date,
 
     if (nobsonly) {
       # Read nobs only
-      r <- terra::rast(f, subds = "nobs")[[band]]
+      r <- .rast_nc(f, subds = "nobs")[[band]]
     } else {
       # Read U and V from subdatasets, specific band
-      u <- terra::rast(f, subds = "uwnd")[[band]]
-      v <- terra::rast(f, subds = "vwnd")[[band]]
+      u <- .rast_nc(f, subds = "uwnd")[[band]]
+      v <- .rast_nc(f, subds = "vwnd")[[band]]
 
       # Handle rotation
       if (lon180) {

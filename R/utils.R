@@ -1,3 +1,16 @@
+## Read a raster source from a file path.
+##
+## md = FALSE keeps terra on the classic GDAL raster path. The multidimensional
+## route is only lightly exercised, it works against raadtools' design of 2D
+## rasters with bands, and it pulls in geolocation-array determination that
+## recent versions of the GDAL netCDF driver have made unnecessary.
+##
+## Every read of a file in raadtools goes through here, so the flag is set in
+## one place rather than at each call site.
+.rast_nc <- function(x, ...) {
+  terra::rast(x, ..., md = FALSE)
+}
+
 ## Compass direction in degrees [0, 360) from U and V components.
 ##
 ## The legacy raster readers computed this inside raster::overlay(), so the

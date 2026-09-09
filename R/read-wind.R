@@ -103,8 +103,8 @@ read_ncep2_wind_6hourly <- function(date,
 
   for (i in seq_len(nrow(files))) {
     # Read U and V from separate files, specific band
-    u <- terra::rast(files$ufullname[i], lyrs = files$band[i])
-    v <- terra::rast(files$vfullname[i], lyrs = files$band[i])
+    u <- .rast_nc(files$ufullname[i], lyrs = files$band[i])
+    v <- .rast_nc(files$vfullname[i], lyrs = files$band[i])
 
     e <- terra::ext(u)
     res_x <- terra::res(u)[1]

@@ -15,6 +15,11 @@ sose_monthly_varnames <- function(iteration = "")  {
 }
 
 
+## the variable name is the last underscore-separated chunk of the file name,
+## the same rule sose_monthly_varnames() uses. Passing it as subds keeps GDAL
+## from picking some other variable in the file.
+.sose_varname <- function(x) sub("\\.nc$", "", sub("^.*_", "", basename(x)))
+
 #' Read SOSE Southern Ocean State Estimate
 #'
 #' Model data read from files managed by
@@ -69,8 +74,7 @@ read_sose <-  function (date, time.resolution = c("monthly"),
   if (returnfiles)
     return(files)
 
-  ## every time step in the file, needed below to work out how many depth
-  ## layers there are
+  ## every time step in the file, for the diagnostic below
   ntime <- nrow(files)
 
   if (missing(date)) date <- if (latest) max(files$date) else min(files$date)
@@ -90,17 +94,21 @@ read_sose <-  function (date, time.resolution = c("monthly"),
   ## <variable>_Z=<depth>_<time index> whichever way round the two dimensions
   ## are stored in the file (checked both ways). So the layers for one time
   ## step are the ones whose trailing index matches, and they arrive in depth
-  ## order. A file with no depth dimension is just <variable>_<time index>,
-  ## which lands in the same place with one level.
-  src <- .rast_nc(xfile)
+  ## order - so their count IS the number of levels, no arithmetic needed. A
+  ## file with no depth dimension is just <variable>_<time index>, which lands
+  ## in the same place with one level.
+  src <- try(.rast_nc(xfile, subds = .sose_varname(xfile)), silent = TRUE)
+  if (inherits(src, "try-error")) src <- .rast_nc(xfile)
+
   at_date <- which(sub(".*_", "", names(src)) == as.character(tband))
-  nlevel <- terra::nlyr(src) / ntime
-  if (length(at_date) != nlevel) {
-    stop(sprintf("cannot identify the depth layers of '%s': expected %g per time step, found %i",
-                 basename(xfile), nlevel, length(at_date)))
+  if (length(at_date) < 1L) {
+    stop(sprintf("cannot identify the layers of '%s' for time index %i: %i bands for %i time steps, named like %s",
+                 basename(xfile), tband, terra::nlyr(src), ntime,
+                 paste(names(src)[seq_len(min(3L, terra::nlyr(src)))], collapse = ", ")))
   }
+  nlevel <- length(at_date)
   if (any(level < 1L | level > nlevel)) {
-    stop(sprintf("level must be between 1 and %g for this file", nlevel))
+    stop(sprintf("level must be between 1 and %i for '%s'", nlevel, basename(xfile)))
   }
 
   r0 <- src[[at_date[level]]]

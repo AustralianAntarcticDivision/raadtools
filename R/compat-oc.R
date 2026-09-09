@@ -1,20 +1,18 @@
 # R/compat-oc.R
-# Legacy shims for ocean colour readers
-# Returns raster objects for backward compatibility
+# Front doors for the ocean colour readers
 
 #' Read daily chlorophyll-a
 #'
 #' @description
-#' `r lifecycle::badge("superseded")`
-#'
-#' \code{read_chla_daily} is superseded by \code{\link{read_oc_chl_daily}},
-#' which returns terra \code{SpatRaster} objects.
+#' \code{read_chla_daily} picks a sensible default and returns a terra
+#' \code{SpatRaster}. For the historical defaults pinned explicitly, see
+#' \code{\link{read_oc_chl_daily}}.
 #'
 #' @inheritParams read_oc_chl_daily
 #' @param setNA ignored (for backward compatibility)
 #' @param time.resolution ignored, use specific functions for different resolutions
 #'
-#' @return \code{RasterBrick} or \code{RasterLayer}
+#' @return \code{SpatRaster}
 #'
 #' @seealso \code{\link{read_oc_chl_daily}}
 #'
@@ -30,14 +28,7 @@ read_chla_daily <- function(date,
                              ...,
                              inputfiles = NULL) {
 
-  if (isTRUE(getOption("raadtools.shim.warn", TRUE))) {
-    .Deprecated("read_oc_chl_daily", package = "raadtools",
-      msg = paste0(
-        "'read_chla_daily' is deprecated. ",
-        "Use 'read_oc_chl_daily' for terra-native output.\n",
-        "Set options(raadtools.shim.warn = FALSE) to suppress this warning."
-      ))
-  }
+  .shim_notice("read_chla_daily", "read_oc_chl_daily")
 
   r <- read_oc_chl_daily(
     date = date,
@@ -52,9 +43,7 @@ read_chla_daily <- function(date,
 
   if (returnfiles) return(r)
 
-  out <- raster::brick(r)
-  if (raster::nlayers(out) == 1) out <- out[[1]]
-  raster::setZ(out, terra::time(r))
+  r
 }
 
 
@@ -70,9 +59,7 @@ read_chla_weekly <- function(date,
                               ...,
                               inputfiles = NULL) {
 
-  if (isTRUE(getOption("raadtools.shim.warn", TRUE))) {
-    .Deprecated("read_oc_chl_8day", package = "raadtools")
-  }
+  .shim_notice("read_chla_weekly", "read_oc_chl_8day")
 
   r <- read_oc_chl_8day(
     date = date,
@@ -87,9 +74,7 @@ read_chla_weekly <- function(date,
 
   if (returnfiles) return(r)
 
-  out <- raster::brick(r)
-  if (raster::nlayers(out) == 1) out <- out[[1]]
-  raster::setZ(out, terra::time(r))
+  r
 }
 
 
@@ -105,9 +90,7 @@ read_chla_monthly <- function(date,
                                ...,
                                inputfiles = NULL) {
 
-  if (isTRUE(getOption("raadtools.shim.warn", TRUE))) {
-    .Deprecated("read_oc_chl_monthly", package = "raadtools")
-  }
+  .shim_notice("read_chla_monthly", "read_oc_chl_monthly")
 
   r <- read_oc_chl_monthly(
     date = date,
@@ -122,9 +105,7 @@ read_chla_monthly <- function(date,
 
   if (returnfiles) return(r)
 
-  out <- raster::brick(r)
-  if (raster::nlayers(out) == 1) out <- out[[1]]
-  raster::setZ(out, terra::time(r))
+  r
 }
 
 
@@ -140,9 +121,7 @@ read_par <- function(date,
                      ...,
                      inputfiles = NULL) {
 
-  if (isTRUE(getOption("raadtools.shim.warn", TRUE))) {
-    .Deprecated("read_oc_par_8day", package = "raadtools")
-  }
+  .shim_notice("read_par", "read_oc_par_8day")
 
   r <- read_oc_par_8day(
     date = date,
@@ -156,8 +135,7 @@ read_par <- function(date,
 
   if (returnfiles) return(r)
 
-  out <- raster::stack(r)
-  raster::setZ(out, terra::time(r))
+  r
 }
 
 

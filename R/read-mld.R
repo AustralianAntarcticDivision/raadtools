@@ -114,14 +114,7 @@ readmld <- function(date,
                     returnfiles = FALSE,
                     ...) {
 
-  if (isTRUE(getOption("raadtools.shim.warn", TRUE))) {
-    .Deprecated("read_mld_climatology", package = "raadtools",
-      msg = paste0(
-        "'readmld' is deprecated. ",
-        "Use 'read_mld_climatology' for terra-native output.\n",
-        "Set options(raadtools.shim.warn = FALSE) to suppress this warning."
-      ))
-  }
+  .shim_notice("readmld", "read_mld_climatology")
 
   r <- read_mld_climatology(
     date = date,
@@ -134,6 +127,5 @@ readmld <- function(date,
 
   warning("MLD data is only a climatology, returning matching month only")
 
-  # Convert to raster for backward compat
-  raster::brick(r)
+  r
 }

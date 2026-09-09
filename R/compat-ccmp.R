@@ -1,14 +1,12 @@
 # R/compat-ccmp.R
-# Legacy shim for read_ccmp() - dispatches to terra-native reader
-# Returns raster::stack for backward compatibility
+# Front door for read_ccmp() - dispatches to the terra-native reader
 
 #' Read CCMP wind files
 #'
 #' @description
-#' `r lifecycle::badge("superseded")`
-#'
-#' \code{read_ccmp} is superseded by \code{\link{read_ccmp_wind_6hourly}},
-#' which returns terra \code{SpatRaster} objects.
+#' \code{read_ccmp} picks a sensible default and returns a terra
+#' \code{SpatRaster}. For the historical defaults pinned explicitly, see
+#' \code{\link{read_ccmp_wind_6hourly}}.
 #'
 #' @param date date or dates of data to read
 #' @param time.resolution time resolution, currently only "6hourly"
@@ -24,7 +22,7 @@
 #' @param ... passed to underlying reader
 #' @param inputfiles optional pre-filtered file catalog
 #'
-#' @return \code{RasterStack} or \code{RasterLayer}, or tibble if \code{returnfiles = TRUE}
+#' @return \code{SpatRaster}, or tibble if \code{returnfiles = TRUE}
 #'
 #' @seealso \code{\link{read_ccmp_wind_6hourly}} for modern terra-based reader
 #'
@@ -47,14 +45,7 @@ read_ccmp <- function(date,
 
   time.resolution <- match.arg(time.resolution)
 
-  if (isTRUE(getOption("raadtools.shim.warn", TRUE))) {
-    .Deprecated("read_ccmp_wind_6hourly", package = "raadtools",
-      msg = paste0(
-        "'read_ccmp' is deprecated. ",
-        "Use 'read_ccmp_wind_6hourly' for terra-native output.\n",
-        "Set options(raadtools.shim.warn = FALSE) to suppress this warning."
-      ))
-  }
+  .shim_notice("read_ccmp", "read_ccmp_wind_6hourly")
 
   r <- read_ccmp_wind_6hourly(
     date = date,
@@ -74,7 +65,5 @@ read_ccmp <- function(date,
 
   if (returnfiles) return(r)
 
-  # Convert to raster for backward compat
-  out <- raster::stack(r)
-  raster::setZ(out, terra::time(r))
+  r
 }

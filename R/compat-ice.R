@@ -1,21 +1,18 @@
 # R/compat-ice.R
-# Legacy shim for readice() - dispatches to terra-native readers
-# Returns raster::brick() for backward compatibility
+# Front door for readice() - dispatches to the terra-native readers
 #
-# The hemisphere = "both" case with vapour warping is kept inline here
-# as it's complex and not worth terra-forming yet.
+# The hemisphere = "both" case with vapour warping is implemented inline here.
+#
 
 #' Read sea ice concentration data
 #'
 #' @description
-#' `r lifecycle::badge("superseded")`
-#'
-#' For single-hemisphere reads, \code{readice} is superseded by
-#' \code{\link{read_nsidc_ice_daily}} and \code{\link{read_nsidc_ice_monthly}},
-#' which return terra \code{SpatRaster} objects.
+#' \code{readice} picks a sensible default and returns a terra
+#' \code{SpatRaster}. For the historical defaults pinned explicitly, see
+#' \code{\link{read_nsidc_ice_daily}} and \code{\link{read_nsidc_ice_monthly}}.
 #'
 #' The \code{hemisphere = "both"} functionality (warping both hemispheres to a
-#' common grid) is only available through this legacy function.
+#' common grid) is only available through this function.
 #'
 #' @param date date or dates of data to read
 #' @param time.resolution deprecated, use \code{readice_daily} or \code{readice_monthly}
@@ -30,7 +27,7 @@
 #' @param inputfiles optional pre-filtered file catalog
 #' @param resample resampling method for warper (when hemisphere = "both")
 #'
-#' @return \code{RasterBrick} or \code{RasterLayer}, or tibble if \code{returnfiles = TRUE}
+#' @return \code{SpatRaster}, or tibble if \code{returnfiles = TRUE}
 #'
 #' @seealso
 #' \code{\link{read_nsidc_ice_daily}} for modern terra-based daily reader
@@ -76,14 +73,7 @@ readice <- function(date,
   }
 
   # === SINGLE HEMISPHERE - dispatch to terra-native, convert to raster ===
-  if (isTRUE(getOption("raadtools.shim.warn", TRUE))) {
-    .Deprecated("read_nsidc_ice_daily", package = "raadtools",
-      msg = paste0(
-        "'readice' is deprecated for single-hemisphere reads. ",
-        "Use 'read_nsidc_ice_daily' for terra-native output.\n",
-        "Set options(raadtools.shim.warn = FALSE) to suppress this warning."
-      ))
-  }
+  .shim_notice("readice", "read_nsidc_ice_daily")
 
   r <- read_nsidc_ice_daily(
     date = date,
@@ -98,9 +88,7 @@ readice <- function(date,
 
   if (returnfiles) return(r)
 
-  # Convert to raster for backward compat
-  out <- raster::brick(r)
-  raster::setZ(out, terra::time(r))
+  r
 }
 
 
@@ -126,9 +114,7 @@ readice_monthly <- function(date,
   product <- match.arg(product)
  hemisphere <- match.arg(hemisphere)
 
-  if (isTRUE(getOption("raadtools.shim.warn", TRUE))) {
-    .Deprecated("read_nsidc_ice_monthly", package = "raadtools")
-  }
+  .shim_notice("readice_monthly", "read_nsidc_ice_monthly")
 
   r <- read_nsidc_ice_monthly(
     date = date,
@@ -143,8 +129,7 @@ readice_monthly <- function(date,
 
   if (returnfiles) return(r)
 
-  out <- raster::brick(r)
-  raster::setZ(out, terra::time(r))
+  r
 }
 
 

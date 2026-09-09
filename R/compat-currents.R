@@ -1,13 +1,12 @@
 # R/compat-currents.R
-# Legacy shim for readcurr() - dispatches to terra-native CMEMS readers
-# Returns raster::brick() for backward compatibility
+# Front door for readcurr() - dispatches to the terra-native readers
 
 #' Read ocean current data
 #'
 #' @description
-#' `r lifecycle::badge("superseded")`
-#'
-#' \code{readcurr} is superseded by the CMEMS current readers:
+#' \code{readcurr} picks a sensible default and returns a terra
+#' \code{SpatRaster}. For the historical defaults pinned explicitly, see the
+#' CMEMS current readers:
 #' \itemize{
 #'   \item \code{\link{read_cmems_ugos_daily}} - U component
 #'   \item \code{\link{read_cmems_vgos_daily}} - V component
@@ -27,7 +26,7 @@
 #' @param ... passed to underlying reader
 #' @param inputfiles optional pre-filtered file catalog
 #'
-#' @return \code{RasterBrick} or \code{RasterLayer}, or tibble if \code{returnfiles = TRUE}
+#' @return \code{SpatRaster}, or tibble if \code{returnfiles = TRUE}
 #'
 #' @seealso \code{\link{read_cmems_ugos_daily}}, \code{\link{read_cmems_vgos_daily}},
 #'   \code{\link{read_cmems_current_speed_daily}}, \code{\link{read_cmems_current_direction_daily}}
@@ -51,20 +50,12 @@ readcurr <- function(date,
     stop("only one of 'magonly', 'dironly', 'uonly', 'vonly' may be TRUE")
   }
 
-  if (isTRUE(getOption("raadtools.shim.warn", TRUE))) {
-    new_fn <- if (magonly) "read_cmems_current_speed_daily"
-              else if (dironly) "read_cmems_current_direction_daily"
-              else if (uonly) "read_cmems_ugos_daily"
-              else if (vonly) "read_cmems_vgos_daily"
-              else "read_cmems_ugos_daily/read_cmems_vgos_daily"
-
-    .Deprecated(new_fn, package = "raadtools",
-      msg = paste0(
-        "'readcurr' is deprecated. ",
-        "Use '", new_fn, "' for terra-native output.\n",
-        "Set options(raadtools.shim.warn = FALSE) to suppress this warning."
-      ))
-  }
+  new_fn <- if (magonly) "read_cmems_current_speed_daily"
+            else if (dironly) "read_cmems_current_direction_daily"
+            else if (uonly) "read_cmems_ugos_daily"
+            else if (vonly) "read_cmems_vgos_daily"
+            else "read_cmems_ugos_daily/read_cmems_vgos_daily"
+  .shim_notice("readcurr", new_fn)
 
   # Dispatch based on flags
   if (magonly) {
@@ -118,9 +109,7 @@ readcurr <- function(date,
 
   if (returnfiles) return(r)
 
-  # Convert to raster for backward compat
-  out <- raster::brick(r)
-  raster::setZ(out, terra::time(r))
+  r
 }
 
 

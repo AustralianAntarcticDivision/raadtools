@@ -25,8 +25,23 @@
   (d %% 360 + 360) %% 360
 }
 
+## The legacy read* names are not going away - they are the front doors that
+## pick a sensible default, while the more specific names pin the historical
+## defaults. What changed is the return class, so that is what we announce.
+## Noisy by default: options(raadtools.shim.warn = FALSE) turns it off.
+.shim_notice <- function(fun, specific = NULL) {
+  if (!isTRUE(getOption("raadtools.shim.warn", TRUE))) return(invisible(NULL))
+  msg <- sprintf("'%s' now returns a terra SpatRaster, not a Raster* object.", fun)
+  if (!is.null(specific)) {
+    msg <- paste0(msg, sprintf("\n  For the historical defaults see '%s'.", specific))
+  }
+  msg <- paste0(msg, "\n  Set options(raadtools.shim.warn = FALSE) to silence this.")
+  warning(msg, call. = FALSE)
+  invisible(NULL)
+}
+
 ## Internal calls into the compat shims should not raise the user-facing
-## deprecation warning - it is aimed at package users, not at raadtools itself.
+## notice - it is aimed at package users, not at raadtools itself.
 .without_shim_warning <- function(expr) {
   op <- options(raadtools.shim.warn = FALSE)
   on.exit(options(op), add = TRUE)

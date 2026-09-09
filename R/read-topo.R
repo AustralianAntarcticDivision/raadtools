@@ -158,14 +158,7 @@ readtopo <- function(topo = c("gebco_23", "gebco_21", "gebco_19", "gebco_14", "g
 
   topo <- match.arg(topo)
 
-  if (isTRUE(getOption("raadtools.shim.warn", TRUE))) {
-    .Deprecated("read_topo", package = "raadtools",
-      msg = paste0(
-        "'readtopo' is deprecated. ",
-        "Use 'read_topo' for terra-native output.\n",
-        "Set options(raadtools.shim.warn = FALSE) to suppress this warning."
-      ))
-  }
+  .shim_notice("readtopo", "read_topo")
 
  # Handle legacy raster/extent inputs for xylim
   if (!is.null(xylim)) {
@@ -188,8 +181,7 @@ readtopo <- function(topo = c("gebco_23", "gebco_21", "gebco_19", "gebco_14", "g
 
   if (returnfiles) return(r)
 
-  # Convert to raster for backward compat
-  raster::raster(r)
+  r
 }
 
 

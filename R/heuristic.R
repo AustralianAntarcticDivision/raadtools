@@ -105,11 +105,3 @@ read_sst_heuristic <- function (date, time.resolution = c("daily", "monthly"), x
   }
   r
 }
-
-crop_if_needed <- function(x, ext = NULL) {
-  if (!is.null(ext)) {
-    crop(x, ext, snap = "out") 
-  } else {
-    x
-  }
-}

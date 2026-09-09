@@ -35,7 +35,9 @@
     return(terra::ext(c(x@xmin, x@xmax, x@ymin, x@ymax)))
   }
   if (inherits(x, "BasicRaster")) {
-    e <- raster::extent(x)
+    ## the extent is a slot on the object, so this still accepts a raster
+    ## object without raster being loaded
+    e <- x@extent
     return(terra::ext(c(e@xmin, e@xmax, e@ymin, e@ymax)))
   }
   terra::ext(x)
@@ -84,9 +86,6 @@ nc_rawdata <- function(x, var) {
   on.exit(ncdf4::nc_close(nc))
   ncdf4::ncvar_get(nc, var)
 }
-
-xrange <- function(x) c(raster::xmin(x), raster::xmax(x))
-yrange <- function(x) c(raster::ymin(x), raster::ymax(x))
 
 update <- function() {
   cat('\ndevtools::install_github("AustralianAntarcticDivision/raadtools")\n\n')
@@ -147,18 +146,6 @@ set_utc_format <- function(x) {
 #   require(ncdf4)
 #   ncvar_get(nc_open(x), varname)
 # }
-.expandFileDateList <- function(x) {
-  vl <- vector("list", length(x))
-  for (i in seq_along(x)) {
-    b <- brick(x[i], quick = TRUE)
-    dates <- timedateFrom(getZ(b))
-    
-    vl[[i]] <- data.frame(file = rep(x[i], length(dates)), date = dates, band = seq_along(dates), 
-                          stringsAsFactors = FALSE)
-  }
-  do.call("rbind", vl)
-}
-
 .valiDates <- function(x, allOK = TRUE) {
   xs <- timedateFrom(x)
   bad <- is.na(xs)

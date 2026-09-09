@@ -141,12 +141,6 @@ chlafiles <- function(time.resolution = c("weekly", "monthly"),
   dates <- timedateFrom(strptime(substr(basename(cfiles3), 2, 8), "%Y%j"))
   if (product == "oceancolor") {
     return(cfiles3)
-    xfs <- .expandFileDateList(cfiles3)
-    # nc <- ncdf4::nc_open(cfiles3)
-    #  dates <-
-    # dates <- timedateFrom(strptime(substr(basename(cfiles3), 2, 8), "%Y%j"))
-    dates <- xfs$date
-    cfiles3 <- xfs$fullname
   }
   chlf <- tibble::tibble(fullname= cfiles3, date = dates)[order(dates), ]
   chlf

@@ -1,4 +1,3 @@
-#' @importFrom raster setExtent mask
 readmsst <- function(date, returnfiles = FALSE, latest  = FALSE, rescale = TRUE) {
   
   

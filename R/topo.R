@@ -97,10 +97,10 @@ topofile <- function(topo = c("gebco_23", "gebco_08",  "ibcso",
 #' polygon outlines. Use \code{\link{read_topo}} with one of the 'rema_'
 #' data sets to read the elevation data itself.
 #' @param ... reserved for future use, ignored currently
-#' @return SpatialPolygonsDataFrame of REMA tile outlines
+#' @return SpatVector of REMA tile outlines
 #' @seealso \code{\link{read_topo}}
 #' @export
 read_rema_tiles <- function(...) {
-  raster::shapefile(raadfiles::rema_tile_files(all = FALSE)$fullname[1])
+  terra::vect(raadfiles::rema_tile_files(all = FALSE)$fullname[1])
 }
 

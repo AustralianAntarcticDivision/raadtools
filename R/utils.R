@@ -11,6 +11,26 @@
   terra::rast(x, ..., md = FALSE)
 }
 
+## An extent in the form terra wants, from whatever the caller had.
+##
+## xylim has always been documented as "an extent, or an object that provides
+## one", which in the raster era meant a raster Extent, a bare numeric of
+## four, or a raster object. terra::ext() knows the last two and not the
+## first, so that one is unpacked by hand. Readers being converted can go on
+## accepting everything they used to.
+.as_ext <- function(x) {
+  if (is.null(x)) return(NULL)
+  if (inherits(x, "SpatExtent")) return(x)
+  if (inherits(x, "Extent")) {
+    return(terra::ext(c(x@xmin, x@xmax, x@ymin, x@ymax)))
+  }
+  if (inherits(x, "BasicRaster")) {
+    e <- raster::extent(x)
+    return(terra::ext(c(e@xmin, e@xmax, e@ymin, e@ymax)))
+  }
+  terra::ext(x)
+}
+
 ## Compass direction in degrees [0, 360) from U and V components.
 ##
 ## The legacy raster readers computed this inside raster::overlay(), so the

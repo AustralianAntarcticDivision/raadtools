@@ -20,7 +20,7 @@ Imports:
     tibble,
     furrr,
     vapour (>= 0.8.8.9007),
-    terra (>= 1.5-21),
+    terra (>= 1.9.50),
     reproj (>= 0.4.3),
     ncmeta,
     RNetCDF,

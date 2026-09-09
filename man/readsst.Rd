@@ -52,23 +52,20 @@ readsst_daily(
 \item{inputfiles}{optional pre-filtered file catalog}
 }
 \value{
-\code{RasterBrick} or \code{RasterLayer}, or tibble if \code{returnfiles = TRUE}
+\code{SpatRaster}, or tibble if \code{returnfiles = TRUE}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
-
-\code{readsst} has been superseded by \code{\link{read_oisst_daily}} and
-\code{\link{read_oisst_monthly}}, which return terra \code{SpatRaster} objects.
-This function is retained for backward compatibility and returns
-\code{raster::brick} objects.
+\code{readsst} picks a sensible default and returns a terra
+\code{SpatRaster}. For the historical defaults pinned explicitly, see
+\code{\link{read_oisst_daily}} and \code{\link{read_oisst_monthly}}.
 }
 \examples{
 \dontrun{
-# Legacy usage (still works)
+# sensible default
 sst <- readsst("2023-01-15")
-class(sst)  # RasterLayer
+class(sst)  # SpatRaster, one layer
 
-# Modern usage (preferred)
+# historical default pinned explicitly
 sst <- read_oisst_daily("2023-01-15")
 class(sst)  # SpatRaster
 }

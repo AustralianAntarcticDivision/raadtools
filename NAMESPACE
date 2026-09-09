@@ -121,6 +121,7 @@ importFrom(dplyr,
   "%>%",
   .data,
   arrange,
+  bind_rows,
   filter,
   mutate
 )
@@ -149,6 +150,7 @@ importFrom(raster,
   overlay,
   projection,
   raster,
+  rasterToContour,
   res,
   resample,
   rotate,
@@ -170,6 +172,7 @@ importFrom(sp,
   SpatialPointsDataFrame,
   as.image.SpatialGridDataFrame,
   bbox,
+  coordinates,
   spChFIDs,
   spTransform
 )

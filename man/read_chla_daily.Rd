@@ -78,13 +78,12 @@ read_par(
 \item{inputfiles}{optional pre-filtered file catalog (from \code{ocfiles()}).}
 }
 \value{
-\code{RasterBrick} or \code{RasterLayer}
+\code{SpatRaster}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
-
-\code{read_chla_daily} is superseded by \code{\link{read_oc_chl_daily}},
-which returns terra \code{SpatRaster} objects.
+\code{read_chla_daily} picks a sensible default and returns a terra
+\code{SpatRaster}. For the historical defaults pinned explicitly, see
+\code{\link{read_oc_chl_daily}}.
 }
 \seealso{
 \code{\link{read_oc_chl_daily}}

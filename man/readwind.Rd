@@ -45,13 +45,12 @@ readwind(
 \item{inputfiles}{optional pre-filtered file catalog}
 }
 \value{
-\code{RasterStack} or \code{RasterLayer}, or tibble if \code{returnfiles = TRUE}
+\code{SpatRaster}, or tibble if \code{returnfiles = TRUE}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
-
-\code{readwind} is superseded by \code{\link{read_ncep2_wind_6hourly}},
-which returns terra \code{SpatRaster} objects.
+\code{readwind} picks a sensible default and returns a terra
+\code{SpatRaster}. For the historical defaults pinned explicitly, see
+\code{\link{read_ncep2_wind_6hourly}}.
 }
 \seealso{
 \code{\link{read_ncep2_wind_6hourly}} for modern terra-based reader

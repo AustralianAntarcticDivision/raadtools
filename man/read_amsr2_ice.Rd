@@ -17,7 +17,8 @@ read_amsr2_ice(
 \arguments{
 \item{date}{date or dates of data to read}
 
-\item{xylim}{spatial extents to crop, or a raster template for warping}
+\item{xylim}{spatial extents to crop, or a SpatRaster (or Raster*) template
+to warp onto when \code{hemisphere = "both"}}
 
 \item{latest}{if TRUE and date missing, return latest available}
 

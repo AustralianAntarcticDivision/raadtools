@@ -14,7 +14,7 @@ readice_area(product = "nsidc", hemisphere = "south", ...)
 \item{...}{ignored}
 }
 \value{
-raster with the area of the cells in m^2
+\code{SpatRaster} with the area of the cells in m^2
 }
 \description{
 Read the NSIDC pixel-area files for either hemisphere.

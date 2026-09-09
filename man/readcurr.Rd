@@ -57,12 +57,12 @@ readcurrents(
 \item{inputfiles}{optional pre-filtered file catalog}
 }
 \value{
-\code{RasterBrick} or \code{RasterLayer}, or tibble if \code{returnfiles = TRUE}
+\code{SpatRaster}, or tibble if \code{returnfiles = TRUE}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
-
-\code{readcurr} is superseded by the CMEMS current readers:
+\code{readcurr} picks a sensible default and returns a terra
+\code{SpatRaster}. For the historical defaults pinned explicitly, see the
+CMEMS current readers:
 \itemize{
 \item \code{\link{read_cmems_ugos_daily}} - U component
 \item \code{\link{read_cmems_vgos_daily}} - V component

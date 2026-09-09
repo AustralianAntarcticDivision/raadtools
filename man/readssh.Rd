@@ -39,13 +39,12 @@ readssh(
 \item{inputfiles}{optional pre-filtered file catalog}
 }
 \value{
-\code{RasterBrick} or \code{RasterLayer}, or tibble if \code{returnfiles = TRUE}
+\code{SpatRaster}, or tibble if \code{returnfiles = TRUE}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
-
-\code{readssh} is superseded by \code{\link{read_cmems_adt_daily}} and
-\code{\link{read_cmems_sla_daily}}, which return terra \code{SpatRaster} objects.
+\code{readssh} picks a sensible default and returns a terra
+\code{SpatRaster}. For the historical defaults pinned explicitly, see
+\code{\link{read_cmems_adt_daily}} and \code{\link{read_cmems_sla_daily}}.
 }
 \seealso{
 \code{\link{read_cmems_adt_daily}}, \code{\link{read_cmems_sla_daily}}

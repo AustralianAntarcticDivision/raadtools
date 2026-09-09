@@ -45,8 +45,10 @@ Data are returned in the native polar stereographic projection:
 \item North: EPSG:3413 (WGS 84 / NSIDC Sea Ice Polar Stereographic North)
 }
 
-Values are sea ice concentration as percentage (0-100). When \code{setNA = TRUE},
-special values (land, coast, missing, polar hole) are masked to NA.
+Values are sea ice concentration as a fraction (0-1), as the files store
+them. When \code{setNA = TRUE}, any residual flag value (land, coast,
+missing, polar hole) is masked to NA; open water is a legitimate 0 and is
+kept.
 
 The NSIDC archive contains some dates with placeholder files (no ice variable).
 These are automatically filtered out using an internal index of known bad files.

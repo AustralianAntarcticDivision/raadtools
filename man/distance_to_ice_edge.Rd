@@ -7,7 +7,7 @@
 \usage{
 distance_to_ice_edge(
   date,
-  threshold = 15,
+  threshold = 0.15,
   xylim = NULL,
   hemisphere = "south",
   returnfiles = FALSE,
@@ -18,7 +18,7 @@ distance_to_ice_edge(
 
 distance_to_ice(
   date,
-  threshold = 15,
+  threshold = 0.15,
   xylim = NULL,
   hemisphere = "south",
   returnfiles = FALSE,
@@ -30,9 +30,11 @@ distance_to_ice(
 \arguments{
 \item{date}{date or dates of data to read}
 
-\item{threshold}{the sea ice concentration threshold to contour at}
+\item{threshold}{the sea ice concentration threshold to contour at, as a
+fraction - 0.15 is the conventional 15 percent ice edge}
 
-\item{xylim}{spatial extents to crop, or a raster template for warping}
+\item{xylim}{spatial extents to crop, or a SpatRaster (or Raster*) template
+to warp onto when \code{hemisphere = "both"}}
 
 \item{hemisphere}{"north" or "south", default is "south"}
 

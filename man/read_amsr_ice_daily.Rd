@@ -45,8 +45,8 @@ AMSR2 (2012+) sensors at 6.25km resolution.
 }
 \details{
 Data are in Antarctic polar stereographic projection. Both sensor eras are
-combined into a continuous time series. Earlier AMSR-E files (with values 0-1)
-are automatically scaled to percentage (0-100).
+combined into a continuous time series. Concentration is returned as a
+fraction (0-1); the files that store percentages are scaled down to match.
 }
 \seealso{
 \code{\link{read_amsr_ice_3k_daily}} for higher resolution AMSR2 data

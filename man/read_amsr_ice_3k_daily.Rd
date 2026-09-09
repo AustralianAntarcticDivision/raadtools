@@ -30,7 +30,7 @@ read_amsr2_3k_ice(
 
 \item{xylim}{extent to crop (in polar stereographic coordinates), or NULL.}
 
-\item{setNA}{logical, mask values > 100 as NA? Default TRUE.}
+\item{setNA}{logical, mask flag values (above 1) as NA? Default TRUE.}
 
 \item{latest}{if TRUE and date missing, return latest; if FALSE, earliest.}
 
@@ -49,6 +49,7 @@ Read Antarctic sea ice concentration from AMSR2 sensor at 3.125km resolution.
 \details{
 Data are in Antarctic polar stereographic projection. This is the highest
 resolution passive microwave sea ice product, available from 2012 onwards.
+Concentration is returned as a fraction (0-1).
 }
 \seealso{
 \code{\link{read_amsr_ice_daily}} for longer time series at 6km

@@ -59,7 +59,8 @@ readice_monthly(
 
 \item{hemisphere}{"south", "north", or "both"}
 
-\item{xylim}{spatial extents to crop, or a raster template for warping}
+\item{xylim}{spatial extents to crop, or a SpatRaster (or Raster*) template
+to warp onto when \code{hemisphere = "both"}}
 
 \item{setNA}{mask special values as NA}
 
@@ -76,17 +77,15 @@ readice_monthly(
 \item{resample}{resampling method for warper (when hemisphere = "both")}
 }
 \value{
-\code{RasterBrick} or \code{RasterLayer}, or tibble if \code{returnfiles = TRUE}
+\code{SpatRaster}, or tibble if \code{returnfiles = TRUE}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
-
-For single-hemisphere reads, \code{readice} is superseded by
-\code{\link{read_nsidc_ice_daily}} and \code{\link{read_nsidc_ice_monthly}},
-which return terra \code{SpatRaster} objects.
+\code{readice} picks a sensible default and returns a terra
+\code{SpatRaster}. For the historical defaults pinned explicitly, see
+\code{\link{read_nsidc_ice_daily}} and \code{\link{read_nsidc_ice_monthly}}.
 
 The \code{hemisphere = "both"} functionality (warping both hemispheres to a
-common grid) is only available through this legacy function.
+common grid) is only available through this function.
 }
 \seealso{
 \code{\link{read_nsidc_ice_daily}} for modern terra-based daily reader

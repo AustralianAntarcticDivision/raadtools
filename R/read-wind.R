@@ -126,7 +126,7 @@ read_ncep2_wind_6hourly <- function(date,
     } else if (dironly) {
       # Meteorological convention: direction wind is coming FROM
       # N=0, E=90, S=180, W=270
-      (90 - terra::atan2(v, u) * 180 / pi) %% 360
+      .uv_direction(u, v)
     } else if (uonly) {
       u
     } else if (vonly) {

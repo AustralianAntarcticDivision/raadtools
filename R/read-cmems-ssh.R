@@ -367,7 +367,7 @@ read_cmems_current_direction_daily <- function(date,
                               latest = latest, inputfiles = inputfiles)
 
   # Oceanographic convention: direction current is flowing TO
-  r <- (90 - terra::atan2(v, u) * 180 / pi) %% 360
+  r <- .uv_direction(u, v)
   terra::time(r) <- terra::time(u)
   names(r) <- paste0("direction_", names(u))
 

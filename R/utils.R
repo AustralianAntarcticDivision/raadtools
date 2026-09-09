@@ -1,3 +1,17 @@
+## Compass direction in degrees [0, 360) from U and V components.
+##
+## The legacy raster readers computed this inside raster::overlay(), so the
+## modulo ran in base R, where the result takes the sign of the divisor and
+## negatives wrap up into [0, 360). terra's `%%` follows C fmod and keeps the
+## sign of the dividend instead, so the bare
+## `(90 - atan2(v, u) * 180/pi) %% 360` used by the terra readers returns
+## negative degrees wherever atan2 exceeds 90, i.e. a quarter of the compass.
+## The doubled modulo below is correct under both conventions.
+.uv_direction <- function(u, v) {
+  d <- 90 - terra::atan2(v, u) * 180 / pi
+  (d %% 360 + 360) %% 360
+}
+
 ## Internal calls into the compat shims should not raise the user-facing
 ## deprecation warning - it is aimed at package users, not at raadtools itself.
 .without_shim_warning <- function(expr) {

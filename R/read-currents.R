@@ -118,7 +118,7 @@ read_copernicus_current_daily <- function(date,
       sqrt(u^2 + v^2)
     } else if (dironly) {
       # Oceanographic convention: direction current is flowing TO
-      (90 - terra::atan2(v, u) * 180 / pi) %% 360
+      .uv_direction(u, v)
     } else if (uonly) {
       u
     } else if (vonly) {

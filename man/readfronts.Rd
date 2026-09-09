@@ -24,7 +24,7 @@ readfronts(
 
 \item{product}{choice of product, see Details}
 
-\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details}
+\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[terra]{ext}}, see Details}
 
 \item{lon180}{if TRUE, data originally in Pacific view will be returned in Atlantic view (-180:180)}
 
@@ -34,12 +34,12 @@ readfronts(
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 
-\item{RAT}{if \code{TRUE} data is returned with region names as a raster attribute table on the gridded data, see \code{\link[raster]{ratify}}}
+\item{RAT}{if \code{TRUE} data is returned as a categorical raster with the region names as its levels, see \code{\link[terra]{levels}}}
 
 \item{...}{reserved for future use, currently ignored}
 }
 \value{
-\code{\link[raster]{raster}} object
+\code{SpatRaster}
 }
 \description{
 Sokolov Rintoul

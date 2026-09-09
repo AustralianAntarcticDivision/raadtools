@@ -9,14 +9,14 @@ readderivaadc(products, xylim = NULL, returnfiles = FALSE, ...)
 \arguments{
 \item{products}{choice of products, see \code{\link{derivaadcproducts}} for available products}
 
-\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}}
+\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[terra]{ext}}}
 
 \item{returnfiles}{ignore options and just return the file names}
 
-\item{...}{passed to brick, primarily for \code{filename}}
+\item{...}{passed on, primarily for \code{filename}}
 }
 \value{
-\code{\link[raster]{raster}} object
+\code{SpatRaster}
 }
 \description{
 Derived data are read from files managed by \code{\link{derivaadcfiles}}.
@@ -28,9 +28,9 @@ x <- readderivaadc(prods)
 }
 }
 \references{
-\link{http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=Polar_Environmental_Data}
+\url{http://data.aad.gov.au/aadc/metadata/metadata.cfm?entry_id=Polar_Environmental_Data}
 }
 \seealso{
 \code{\link{derivaadcfiles}} for details on the repository of
-data files, \code{\link[raster]{raster}} for the return value
+data files
 }

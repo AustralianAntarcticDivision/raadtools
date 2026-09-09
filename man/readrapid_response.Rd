@@ -19,7 +19,10 @@ readrapid_response(
 
 \item{returnfiles}{return just the list of files}
 
-\item{...}{other arguments for \code{\link[raster]{brick}}}
+\item{...}{\code{filename} to write the result to, otherwise ignored}
+}
+\value{
+SpatRaster
 }
 \description{
 Read MODIS Rapid Response RGB images

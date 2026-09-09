@@ -9,10 +9,10 @@ imagemap(map = c("ibcso_background_hq"), fact = 1L)
 \arguments{
 \item{map}{name of the map to load}
 
-\item{fact}{resize factor, see \code{\link[raster]{aggregate}}}
+\item{fact}{resize factor, see \code{\link[terra]{aggregate}}}
 }
 \value{
-RasterBrick, with R G B bands
+SpatRaster, with R G B bands
 }
 \description{
 Read map images.

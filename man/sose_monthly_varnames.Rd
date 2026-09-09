@@ -6,14 +6,22 @@
 \usage{
 sose_monthly_varnames(iteration = "")
 }
+\arguments{
+\item{iteration}{SOSE iteration, passed to \code{\link[raadfiles:sose_monthly_files]{raadfiles::sose_monthly_files()}}}
+}
 \value{
-chacter vector
+character vector
 }
 \description{
 Available variable names from SOSE.
 }
 \details{
 These varnames can be used in \code{read_sose(varname = )}.
+
+They come from the file names and are what selects a file. The variable
+inside the file may be spelt differently - the SeaIceArea files hold a
+variable called SIarea - so \code{\link[=read_sose]{read_sose()}} works that out from the file
+rather than from the name.
 }
 \examples{
 sose_monthly_varnames()

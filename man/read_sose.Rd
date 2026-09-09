@@ -17,13 +17,28 @@ read_sose(
 )
 }
 \arguments{
+\item{date}{date to read, the nearest match is used}
+
+\item{time.resolution}{monthly, the only resolution available}
+
 \item{varname}{variable to return from the data files, default is whatever first value
 from \code{\link[=sose_monthly_varnames]{sose_monthly_varnames()}}}
 
 \item{level, }{defaults to 1L - there are 52}
+
+\item{setNA}{unused, kept for backwards compatibility; terra applies the
+file's own _FillValue}
+
+\item{latest}{if TRUE (and date not supplied) return the latest time available, otherwise the earliest}
+
+\item{returnfiles}{ignore options and just return the file names and dates}
+
+\item{...}{currently ignored}
+
+\item{inputfiles}{input the files data base to speed up initialization}
 }
 \value{
-\code{\link[raster]{raster}} object
+\code{SpatRaster}, one layer per requested level
 }
 \description{
 Model data read from files managed by

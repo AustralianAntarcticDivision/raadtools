@@ -21,7 +21,6 @@ export(get_data_roots)
 export(ghrsstfiles)
 export(icefiles)
 export(imagemap)
-export(oc_sochla_files)
 export(ocfiles)
 export(polar_map)
 export(query_grid)
@@ -67,7 +66,6 @@ export(read_oc_chl_8day)
 export(read_oc_chl_daily)
 export(read_oc_chl_monthly)
 export(read_oc_par_8day)
-export(read_oc_sochla)
 export(read_oisst_daily)
 export(read_oisst_monthly)
 export(read_par)
@@ -79,12 +77,12 @@ export(read_ugos_daily)
 export(read_ugosa_daily)
 export(read_vgos_daily)
 export(read_vgosa_daily)
+export(readamps_d1ice)
 export(readamps_d1wind)
 export(readamps_d2wind)
 export(readbathy)
 export(readcafe)
 export(readchla)
-export(readchla_mean)
 export(readchla_old)
 export(readcurr)
 export(readcurrents)
@@ -120,7 +118,6 @@ exportMethods(extract)
 import(methods)
 importFrom(dplyr,
   "%>%",
-  .data,
   arrange,
   bind_rows,
   filter,
@@ -135,29 +132,15 @@ importFrom(raadfiles,
   nsidc_south_monthly_files
 )
 importFrom(raster,
-  "extent<-",
-  "projection<-",
-  atan2,
   brick,
-  deratify,
   extract,
-  filename,
-  flip,
   getZ,
   mask,
-  merge,
-  nlayers,
   overlay,
   projection,
   raster,
-  rasterToContour,
-  res,
-  resample,
   setExtent,
-  setZ,
-  stack,
-  t,
-  writeRaster
+  stack
 )
 importFrom(sp,
   "proj4string<-",
@@ -166,7 +149,6 @@ importFrom(sp,
   SpatialPoints,
   SpatialPointsDataFrame,
   as.image.SpatialGridDataFrame,
-  bbox,
   coordinates,
   spChFIDs,
   spTransform
@@ -184,9 +166,5 @@ importFrom(terra,
   ymax,
   ymin
 )
-importFrom(tibble,
-  as_tibble,
-  tibble
-)
+importFrom(tibble,tibble)
 importFrom(vapour,vapour_vrt)
-importMethodsFrom(raster,extent)

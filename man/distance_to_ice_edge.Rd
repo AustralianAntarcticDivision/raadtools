@@ -9,7 +9,9 @@ distance_to_ice_edge(
   date,
   threshold = 0.15,
   xylim = NULL,
-  hemisphere = "south",
+  hemisphere = c("south", "north"),
+  product = c("cdr", "nsidc"),
+  min_length = NULL,
   returnfiles = FALSE,
   inputfiles = NULL,
   latest = TRUE,
@@ -20,7 +22,8 @@ distance_to_ice(
   date,
   threshold = 0.15,
   xylim = NULL,
-  hemisphere = "south",
+  hemisphere = c("south", "north"),
+  product = c("cdr", "nsidc"),
   returnfiles = FALSE,
   inputfiles = NULL,
   latest = TRUE,
@@ -38,6 +41,12 @@ to warp onto when \code{hemisphere = "both"}}
 
 \item{hemisphere}{"north" or "south", default is "south"}
 
+\item{product}{"cdr" (default) for the Climate Data Record, or "nsidc" for
+NSIDC-0051 v2}
+
+\item{min_length}{if set, keep every contour line longer than this many
+metres rather than only the single longest one}
+
 \item{returnfiles}{if TRUE, return file catalog}
 
 \item{inputfiles}{optional pre-filtered file catalog}
@@ -47,7 +56,7 @@ to warp onto when \code{hemisphere = "both"}}
 \item{...}{passed to underlying reader}
 }
 \value{
-raster layer with distances to this date's sea ice edge
+\code{SpatRaster} of distances (metres) to this date's sea ice edge
 }
 \description{
 Calculate the shortest distance (metres) to a threshold sea ice contour.  If in
@@ -60,6 +69,18 @@ the higher resolution products and near the coast.
 The distance is always positive, use \code{readice} in the usual way to determine if a
 location is inside or out of the ice field itself. (If inside means zero distance to ice
 for you then set it explicitly based on the concentration a point is in.)
+
+The contour is measured as lines, so the distance reported for a cell is its
+distance to the edge itself and not to the nearest contour vertex.
+
+The sea ice product contoured is whatever \code{readice} reads, which is the
+NOAA/NSIDC Climate Data Record by default; pass \code{product = "nsidc"} for
+NSIDC-0051 v2. Both are 25km products on which a single \code{min_length} free
+\code{distance_to_ice_edge} gives a clean continental edge. Finer products (AMSR2
+at 3km, say) break the edge into many pieces and are better served by setting
+\code{min_length} to drop the short ones - but they are not available through
+\code{readice}, so contour them directly with \code{terra::as.contour}.
+
 Future work may generalize this to other data sources.
 }
 \note{
@@ -72,10 +93,14 @@ The argument \code{hemisphere} may be north or south (default is south), but thi
 are on the actual map, so it's not possible to request the distance to ice in both poles for any point.
 }
 \examples{
-plot(distance_to_ice(latest = TRUE))
-plot(distance_to_ice_edge(latest = TRUE))
-a = extract(distance_to_ice, aurora[17:25, ])
+\dontrun{
+terra::plot(distance_to_ice(latest = TRUE))
+terra::plot(distance_to_ice_edge(latest = TRUE))
+## every piece of the edge longer than 500km, rather than just the longest
+terra::plot(distance_to_ice_edge(min_length = 5e5))
+extract(distance_to_ice, aurora[17:25, ])
 extract(distance_to_ice, aurora[17:25, ], hemisphere = "south")
 # library(trip)
 # extract(distance_to_ice_edge, walrus818[seq(50, 400, by = 20), ], hemisphere = "north")
+}
 }

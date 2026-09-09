@@ -44,7 +44,7 @@ rotation in the transformation (we might write some helpers for this ...).
 Argument \code{lon180} may be used to specify Pacific or Atlantic orientation.
 }
 \examples{
-uv <- table_uvgos("2001-01-01", xylim = extent(60, 120, -60, -10))
+uv <- table_uvgos("2001-01-01", xylim = terra::ext(60, 120, -60, -10))
 plot(range(uv$x), range(uv$y), type = "n", asp = 1.1)
 scal <- function(x) (x - min(x, na.rm = TRUE))/diff(range(x, na.rm = TRUE))
 nn <- 56

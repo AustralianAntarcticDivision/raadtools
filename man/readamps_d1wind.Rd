@@ -2,6 +2,7 @@
 % Please edit documentation in R/amps.R
 \name{readamps_d1wind}
 \alias{readamps_d1wind}
+\alias{readamps_d2wind}
 \title{read AMPS data}
 \usage{
 readamps_d1wind(
@@ -18,71 +19,87 @@ readamps_d1wind(
   ...,
   inputfiles = NULL
 )
+
+readamps_d2wind(
+  date,
+  time.resolution = "4hourly",
+  xylim = NULL,
+  magonly = FALSE,
+  dironly = FALSE,
+  uonly = FALSE,
+  vonly = FALSE,
+  latest = TRUE,
+  returnfiles = FALSE,
+  level = 1,
+  ...,
+  inputfiles = NULL
+)
+}
+\arguments{
+\item{date}{date or dates of data to read}
+
+\item{time.resolution}{ignored, kept for backward compatibility}
+
+\item{xylim}{spatial extents to crop from source data, anything acceptable
+to \code{\link[terra]{ext}}}
+
+\item{magonly}{return wind magnitude only}
+
+\item{dironly}{return wind direction only}
+
+\item{uonly}{return the u component only}
+
+\item{vonly}{return the v component only}
+
+\item{latest}{if TRUE (and date not supplied) return the latest time available, otherwise the earliest}
+
+\item{returnfiles}{ignore options and just return the file names and dates}
+
+\item{level}{1 for the 10 m wind, 2 onwards for the isobaric levels}
+
+\item{...}{passed to \code{\link[terra]{writeRaster}} if \code{filename} is given}
+
+\item{inputfiles}{input the files data base to speed up initialization}
 }
 \value{
-Raster
+\code{SpatRaster}, or the file catalogue if \code{returnfiles = TRUE}
 }
 \description{
 Read from 	The Antarctic Mesoscale Prediction System (AMPS) files.
 \code{readamps_d1wind} reads the "d1" \code{level} wind (defaults to 1).
 }
 \details{
-\code{readamps} reads the  \code{band} (defaults to 1).
+\code{readamps_d2wind} reads the same fields from the finer "d2" domain.
 
-See \code{\link{amps_metadata}} for a description of the bands.
+\code{level} 1 is the 10 m wind; 2 onwards are the isobaric levels in file
+order, starting at 1000 hPa and working up. How many there are varies with
+the file, and an out of range \code{level} is an error rather than a silent
+substitution.
+
+See \code{\link{amps_metadata}} for a description of the bands of one
+2015-era file. It is a snapshot, not an index: the band layout has changed
+three times since, so these readers find their bands by name in the file at
+hand rather than by position in that table.
 
 Data  http://www2.mmm.ucar.edu/rt/amps/wrf_grib/, and contain gridded forecast data from the AMPS-WRF model.
-The 'd1' (domain 1) files are on a 30km grid, while the 'd2' (domain 2) files are on a 10km grid.
+The 'd1' (domain 1) files were on a 30km grid and are now 24km, while the 'd2' (domain 2) files
+were 10km and are now 8km; the change happened around 2018-11-16 and the grid comes from each file.
 The grid domains are shown at  http://polarmet.osu.edu/AMPS/ - d2 extends out to southern Australia and the tip of South America, and
 d1 covers just Antarctica (including Davis) and parts of the Southern Ocean.
 There are two forecast cycles, starting at 00UT and 12UT daily. Forecasts are for +00, +03, +06, +09, +12 and +15 hours.
 These steps can be used to see how the wind field is forecast as changing, and to obtain two different data sets each
 3 hour timestep (e.g. the +15h forecast for the 00UT run is at the same time as the +03h forecast from the 12UT run).
-The 00UT and 12UT runs contain fewer parameters that the +03h and later forecasts
-
-\preformatted{
-An example file date is "2015-10-25 UTC"
-gdalinfo 2015102512_WRF_d1_f000.grb
-
-uonly is
-
-Band 5 Block=329x1 Type=Float64, ColorInterp=Undefined
-Description = 10[m] HTGL (Specified height level above ground)
-Metadata:
-  GRIB_COMMENT=u-component of wind [m/s]
-  GRIB_ELEMENT=UGRD
-  GRIB_FORECAST_SECONDS=0 sec
-  GRIB_REF_TIME=  1445774400 sec UTC
-  GRIB_SHORT_NAME=10-HTGL
-  GRIB_UNIT=[m/s]
-  GRIB_VALID_TIME=  1445774400 sec UTC
-
-vonly is
-Band 27 Block=329x1 Type=Float64, ColorInterp=Undefined
-Description = 10[m] HTGL (Specified height level above ground)
-Metadata:
-  GRIB_COMMENT=v-component of wind [m/s]
-GRIB_ELEMENT=VGRD
-GRIB_FORECAST_SECONDS=0 sec
-GRIB_REF_TIME=  1445774400 sec UTC
-GRIB_SHORT_NAME=10-HTGL
-GRIB_UNIT=[m/s]
-GRIB_VALID_TIME=  1445774400 sec UTC
-}
+The 00UT and 12UT runs of the pre-2018 files are the only ones that carry the surface fields, so
+\code{\link{readamps_d1ice}} reads from those alone.
 }
 \examples{
+\dontrun{
 af <- amps_d1files()
 w <- readamps_d1wind(latest = TRUE, inputfiles = af)
-#w <- readamps_d2wind(latest = TRUE)
 vlen <- function(a, b) sqrt(a * a + b * b)
-plot(vlen(w[[1]], w[[2]]))
+terra::plot(vlen(w[[1]], w[[2]]))
 
-## arrow jigger
-arr <- function(x, sub = seq(ncell(x[[1]])), scale = 1) {
- cr <- coordinates(x[[1]]); cr1 <- cr;
- cr1[,1] <- cr[,1] + values(x[[1]])*scale;
- cr1[,2] <- cr1[,2] + values(x[[2]]*scale);
- segments(cr[sub,1], cr[sub,2], cr1[sub,1], cr1[sub,2])
+## the 850 hPa wind rather than the 10 m wind
+readamps_d1wind(latest = TRUE, inputfiles = af, level = 8)
 }
-arr(w, sample(ncell(w), 10000), scale = 15000)
 }

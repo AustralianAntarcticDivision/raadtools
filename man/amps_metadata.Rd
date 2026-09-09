@@ -21,6 +21,12 @@ represent
 \description{
 GRIB format metadata from the Antarctic Mesoscale Prediction System (AMPS) files.
 }
+\details{
+A snapshot of one 2015-era d1 file, not a current index. The band layout has
+changed three times since - see the notes at the top of R/amps.R - so
+\code{\link{readamps_d1wind}} and \code{\link{readamps_d1ice}} find their
+bands by name in the file being read rather than by position in this table.
+}
 \examples{
 print(amps_metadata)
 ## u_wind_at_900 <- read  ## unfinished

@@ -22,18 +22,18 @@ readderivice(
 
 \item{product}{choice of sea ice product, see Details}
 
-\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}}
+\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[terra]{ext}}}
 
 \item{latest}{if TRUE and date input missing, return the latest time available, otherwise the earliest}
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 
-\item{...}{passed to brick, primarily for \code{filename}}
+\item{...}{passed on, primarily for \code{filename}}
 
 \item{inputfiles}{input the file set to avoid rescanning that (for extract point-in-time)}
 }
 \value{
-\code{\link[raster]{raster}} object
+\code{SpatRaster}
 }
 \description{
 Derived sea ice data is read from files managed by \code{\link{derivicefiles}}.
@@ -64,5 +64,5 @@ couldn't be interpolated.
 }
 \seealso{
 \code{\link{derivicefiles}} for details on the repository of
-data files, \code{\link[raster]{raster}} for the return value
+data files
 }

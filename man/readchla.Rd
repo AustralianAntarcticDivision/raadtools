@@ -17,17 +17,18 @@ readchla(
 )
 }
 \arguments{
-\item{date}{date or dates of data to read, see Details}
+\item{date}{date or dates of data to read}
 
-\item{product}{choice of product, see Details}
+\item{product}{sensor to read from, or "any" to draw on all three eras}
 
-\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, ignored if grid is provided}
+\item{xylim}{spatial extents to crop from source data, anything acceptable
+to \code{\link[terra]{ext}}, ignored if grid is provided}
 
 \item{algorithm}{nasa only}
 
 \item{latest}{if TRUE (and date not supplied) return the latest time available, otherwise the earliest}
 
-\item{grid}{template raster object for output}
+\item{grid}{template \code{SpatRaster} to resample the output onto}
 
 \item{...}{currently ignored}
 
@@ -36,20 +37,27 @@ readchla(
 \item{inputfiles}{input the files data base to speed up initialization}
 }
 \value{
-\code{\link[raster]{raster}} object
+\code{SpatRaster}
 }
 \description{
-Ocean colour Chlorophyll-a data, provide an input of daily dates and these will be averaged into one layer.
+Ocean colour Chlorophyll-a from the NASA L3m (mapped) products, across the
+SeaWiFS, MODISA and VIIRS eras. This is the legacy front door onto
+\code{\link{read_oc_chl_daily}}; use that directly, or
+\code{\link{read_oc_chl_8day}} and \code{\link{read_oc_chl_monthly}}, to
+pin a particular temporal resolution.
+}
+\details{
+One layer is returned per date. Earlier versions of this function averaged
+every requested date down into a single layer; to get that, average the
+result yourself with \code{terra::mean()} or \code{terra::app()}.
 }
 \examples{
 \dontrun{
-d <- readchla(c("2003-01-01", c("2003-06-01")),
-         xylim = extent(100, 150, -70, -30))
+d <- readchla(c("2003-01-01", "2003-06-01"),
+         xylim = terra::ext(100, 150, -70, -30))
 }
 }
 \seealso{
-readCHL_month
-
-\code{\link{chlafiles}} for details on the repository of
-data files, \code{\link[raster]{raster}} for the return value
+\code{\link{read_oc_chl_daily}} for the reader this calls,
+\code{\link{ocfiles}} for the repository of data files
 }

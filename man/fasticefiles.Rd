@@ -10,7 +10,7 @@ fasticefiles(...)
 \item{...}{ignored}
 }
 \value{
-RasterLayer
+data.frame of \code{fullname}, \code{date} and \code{band}
 }
 \description{
 Provided by Alex Fraser

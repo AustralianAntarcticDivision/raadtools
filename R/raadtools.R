@@ -17,8 +17,7 @@
 #' @importFrom raster overlay
 #' @importFrom sp as.image.SpatialGridDataFrame coordinates CRS GridTopology  proj4string<- SpatialPoints SpatialPointsDataFrame spChFIDs spTransform 
 #' @importFrom dplyr bind_rows
-#' @importFrom raster brick extent<- extract getZ projection projection<- raster setZ stack writeRaster
-#' @importFrom raster atan2 flip t
+#' @importFrom raster brick extract getZ projection raster stack
 #' @importFrom terra crs rast project crop rotate ext setValues xmin xmax ymin ymax
 #' @details
 #'    read functions like \code{\link{readsst}} will read a data set by date-time vector, with a 
@@ -67,6 +66,11 @@ commonprojections <- list(longlat = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no
 
 
 #' GRIB format metadata from the Antarctic Mesoscale Prediction System (AMPS) files. 
+#'
+#' A snapshot of one 2015-era d1 file, not a current index. The band layout has
+#' changed three times since - see the notes at the top of R/amps.R - so
+#' \code{\link{readamps_d1wind}} and \code{\link{readamps_d1ice}} find their
+#' bands by name in the file being read rather than by position in this table.
 #' @name amps_metadata
 #' @docType data
 #' @title AMPS GRIB file metadata

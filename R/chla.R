@@ -66,12 +66,12 @@ readchla <- function(date, product = c("any", "MODISA", "SeaWiFS", "VIIRS"),
   }
   template <- raster(files$fullname[1], varname = "chlor_a")  
   if (!is.null(xylim)) {
-      template <- crop(template, extent(xylim))
+      template <- raster::crop(template, extent(xylim))
   }
-  ex <- c(xmin(template), xmax(template), ymin(template), ymax(template))
+  ex <- c(raster::xmin(template), raster::xmax(template), raster::ymin(template), raster::ymax(template))
   wdata <- vapour::gdal_raster_data(.vrt_ds0( files$fullname, "chlor_a"), target_ext = ex, target_res = res(template), resample = "average")
   
-  out <- setValues(template, wdata[[1]])
+  out <- raster::setValues(template, wdata[[1]])
   return(setZ(out, date[1]))
   # d <- readchla_mean(date, product = product, xylim = xylim, latest = latest)
   # if (nrow(d) < 1) {
@@ -190,7 +190,7 @@ readchla_old <- function(date, time.resolution = c("weekly", "monthly"),
   for (ifile in seq_len(nfiles)) {
     r0 <- if (product == "oceancolor") raster(files$fullname[ifile], band = files$band[ifile]) else raster(files$fullname[ifile])
     ##if (lon180) r0 <- .rotate(r0)
-    if(cropit) r0 <- crop(r0, cropext)
+    if(cropit) r0 <- raster::crop(r0, cropext)
     ## r0[r0 < -2] <- NA
     r[[ifile]] <- r0
     ##if (verbose & ifile %% 10L == 0L) .progressreport(ifile, nfiles)

@@ -137,7 +137,7 @@ readfastice_circum <- function(date, time.resolution = "weekly3",
   for (ifile in seq_len(nfiles)) {
     r0 <- read0(files$fullname[ifile], files$band[ifile])
     if (cropit) {
-      r0 <- crop(r0, cropext)
+      r0 <- raster::crop(r0, cropext)
     }
     r[[ifile]] <- r0
   }

@@ -44,7 +44,7 @@ readderivaadc <- function(products,
   ## loop over file indices
   for (ifile in seq_len(nfiles)) {
     r0 <- raster(files$fullname[ifile])
-    if (cropit) r0 <- crop(r0, cropext)
+    if (cropit) r0 <- raster::crop(r0, cropext)
     r[[ifile]] <- r0
   }
   if (nfiles > 1) r <- brick(stack(r), ...) else r <- r[[1L]]

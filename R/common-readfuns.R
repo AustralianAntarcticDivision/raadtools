@@ -1,6 +1,6 @@
 crop_if_needed <- function(x, ext = NULL) {
   if (!is.null(ext)) {
-    crop(x, ext, snap = "out") 
+    raster::crop(x, ext, snap = "out") 
   } else {
     x
   }

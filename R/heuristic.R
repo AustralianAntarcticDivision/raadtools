@@ -84,7 +84,7 @@ read_sst_heuristic <- function (date, time.resolution = c("daily", "monthly"), x
     }
     message(sprintf("writing to file: %s", filename))
     if (!is.null(xylim)) {
-      r <- brick(crop(r, xylim, snap = "out"), filename = filename)  
+      r <- brick(raster::crop(r, xylim, snap = "out"), filename = filename)  
     } else {
       r <- brick(r, filename = filename)  
     }

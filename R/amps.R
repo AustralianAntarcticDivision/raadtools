@@ -110,7 +110,7 @@ readamps_d1ice <- function(date, time.resolution = "daily", xylim = NULL,
 
   for (ifile in seq_len(nfiles)) {
     r1 <- readwrf0(files$fullname[ifile], band = 3) #raster(files$ufullname[ifile], band = files$band[ifile])
-    if (cropit) r1 <- crop(r1, cropext)
+    if (cropit) r1 <- raster::crop(r1, cropext)
     r[[ifile]] <- r1
 
   }
@@ -122,8 +122,8 @@ readamps_d1ice <- function(date, time.resolution = "daily", xylim = NULL,
 
 
   ## get alignment right (put this in raster?)
-  extent(r) <- extent(c(xmin(r) + res(r)[1]/2, xmax(r) + res(r)[1]/2,
-                        ymin(r), ymax(r)))
+  extent(r) <- extent(c(raster::xmin(r) + res(r)[1]/2, raster::xmax(r) + res(r)[1]/2,
+                        raster::ymin(r), raster::ymax(r)))
 
   ##if (is.na(projection(r))) projection(r) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
 
@@ -270,7 +270,7 @@ readamps_d1wind <- function(date, time.resolution = "4hourly", xylim = NULL,
     r2 <- readwrf0(files$fullname[ifile], band = bands[2L] + is_first_hour[ifile] * 4) #raster(files$vfullname[ifile], band = files$band[ifile])
     r0 <- rasterfun(r1, r2)
     #if (lon180)     r0 <- suppressWarnings(.rotate(r0))
-    if (cropit) r0 <- crop(r0, cropext)
+    if (cropit) r0 <- raster::crop(r0, cropext)
     r[[ifile]] <- r0
 
   }
@@ -286,8 +286,8 @@ readamps_d1wind <- function(date, time.resolution = "4hourly", xylim = NULL,
 
 
   ## get alignment right (put this in raster?)
-  extent(r) <- extent(c(xmin(r) + res(r)[1]/2, xmax(r) + res(r)[1]/2,
-                        ymin(r), ymax(r)))
+  extent(r) <- extent(c(raster::xmin(r) + res(r)[1]/2, raster::xmax(r) + res(r)[1]/2,
+                        raster::ymin(r), raster::ymax(r)))
 
   ##if (is.na(projection(r))) projection(r) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
 
@@ -368,7 +368,7 @@ readamps_d2wind <- function(date, time.resolution = "4hourly", xylim = NULL,
     r2 <- readwrf0(files$fullname[ifile], band = bands[2L] + is_first_hour[ifile] * 4) #raster(files$vfullname[ifile], band = files$band[ifile])
     r0 <- rasterfun(r1, r2)
     #if (lon180)     r0 <- suppressWarnings(.rotate(r0))
-    if (cropit) r0 <- crop(r0, cropext)
+    if (cropit) r0 <- raster::crop(r0, cropext)
     r[[ifile]] <- r0
 
   }
@@ -384,8 +384,8 @@ readamps_d2wind <- function(date, time.resolution = "4hourly", xylim = NULL,
 
 
   ## get alignment right (put this in raster?)
-  extent(r) <- extent(c(xmin(r) + res(r)[1]/2, xmax(r) + res(r)[1]/2,
-                        ymin(r), ymax(r)))
+  extent(r) <- extent(c(raster::xmin(r) + res(r)[1]/2, raster::xmax(r) + res(r)[1]/2,
+                        raster::ymin(r), raster::ymax(r)))
 
   ##if (is.na(projection(r))) projection(r) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
 

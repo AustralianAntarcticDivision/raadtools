@@ -29,7 +29,7 @@ read_leads_clim_south <- function(xylim = NULL) {
   projection(r) <- prj
   r <- setExtent(r, ext)
   if (!is.null(xylim)) {
-    r <- crop(r, xylim)
+    r <- raster::crop(r, xylim)
   }
   r[r > 254] <- NA
   r
@@ -49,7 +49,7 @@ read_leads_clim_north <- function(xylim = NULL) {
   projection(r) <- prj
   r <- setExtent(r, ext)
   if (!is.null(xylim)) {
-    r <- crop(r, xylim)
+    r <- raster::crop(r, xylim)
   }
   r[r > 254] <- NA
   r

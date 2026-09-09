@@ -55,8 +55,8 @@ nc_rawdata <- function(x, var) {
   ncdf4::ncvar_get(nc, var)
 }
 
-xrange <- function(x) c(xmin(x), xmax(x))
-yrange <- function(x) c(ymin(x), ymax(x))
+xrange <- function(x) c(raster::xmin(x), raster::xmax(x))
+yrange <- function(x) c(raster::ymin(x), raster::ymax(x))
 
 update <- function() {
   cat('\ndevtools::install_github("AustralianAntarcticDivision/raadtools")\n\n')
@@ -81,8 +81,8 @@ set_utc_format <- function(x) {
     }
   }
   hx <- e@xmin + xrange / 2
-  r1 <- crop(x, extent(e@xmin, hx, e@ymin, e@ymax))
-  r2 <- crop(x, extent(hx, e@xmax, e@ymin, e@ymax))
+  r1 <- raster::crop(x, extent(e@xmin, hx, e@ymin, e@ymax))
+  r2 <- raster::crop(x, extent(hx, e@xmax, e@ymin, e@ymax))
   if (inverse) {
     r1@extent@xmin <- r2@extent@xmax
     r1@extent@xmax <- r1@extent@xmin + 0.5 * xrange

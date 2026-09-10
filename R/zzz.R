@@ -12,5 +12,9 @@
 
 
 .onAttach <- function(libname, pkgname) {
-
+  ## Sunset this once the transition has bedded in.
+  packageStartupMessage(
+    "raadtools now returns terra SpatRaster objects, not raster Raster* objects.\n",
+    "  What changed, and how to translate existing code:\n",
+    "    vignette(\"terra-transition\", package = \"raadtools\")")
 }

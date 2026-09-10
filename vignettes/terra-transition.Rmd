@@ -1,0 +1,129 @@
+---
+title: "Moving raadtools from raster to terra"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 7
+    fig_height: 7
+vignette: >
+  %\VignetteIndexEntry{Moving raadtools from raster to terra}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+Every `read*()` function in raadtools now returns a terra `SpatRaster`. It used
+to return a raster `RasterLayer`, `RasterBrick` or `RasterStack`.
+
+Nothing else about how you call them has changed. The same function names take
+the same arguments and mean the same things, and a call that read a time series
+before reads the same time series now.
+
+## The two names to know
+
+`rast()` is terra's `raster()`, `brick()` and `stack()` in one. There is one
+class, `SpatRaster`, whether it holds one layer or a thousand.
+
+```{r}
+library(terra)
+
+## was: raster("file.tif"), brick("file.nc"), stack(files)
+r <- rast("file.tif")
+```
+
+`ext()` is terra's `extent()`.
+
+```{r}
+## was: extent(r), and extent(xmin, xmax, ymin, ymax)
+ext(r)
+ext(c(100, 160, -70, -40))
+```
+
+Those two carry most of the translation. For everything else, terra's own
+comparison table is the reference, and it is the best place to look when a
+raster function you use is not mentioned here:
+
+<https://rspatial.github.io/terra/reference/terra-package.html#comparison-with-the-raster-package>
+
+## The ones you are most likely to hit
+
+| raster | terra |
+|---|---|
+| `raster()`, `brick()`, `stack()` | `rast()` |
+| `extent()` | `ext()` |
+| `nlayers()` | `nlyr()` |
+| `getZ()`, `setZ()` | `time()`, `time()<-` |
+| `projection()` | `crs()` |
+| `projectRaster()` | `project()` |
+| `cellStats(x, "mean")` | `global(x, "mean", na.rm = TRUE)` |
+| `rasterToContour()` | `as.contour()` |
+| `rasterToPoints()` | `as.data.frame(x, xy = TRUE)` |
+| `calc()`, `overlay()` | `app()`, `lapp()` |
+| `couldBeLonLat()` | `is.lonlat()` |
+
+`crop()`, `mask()`, `aggregate()`, `resample()`, `writeRaster()`, `plot()` and
+`x[[i]]` keep their names and work the way you expect.
+
+One difference that is easy to miss: `values()` returns a **matrix** in terra
+where it returned a vector in raster. Ask for a vector explicitly.
+
+```{r}
+values(r, mat = FALSE)
+```
+
+## What raadtools does about it
+
+The legacy names are **not deprecated**. `readsst()`, `readice()`, `readcurr()`
+and the rest are still the front doors, and each one picks a sensible default
+and hands back a `SpatRaster`. Use them.
+
+Alongside them are functions naming a specific product, such as
+`read_oisst_daily()` or `read_nsidc_cdr_daily()`. Those pin the choice the
+legacy name makes for you, so reach for one when you want to be explicit about
+which product you are reading rather than take the default.
+
+The first time you call one of the legacy readers in a session, it says so
+once:
+
+```
+'readsst' now returns a terra SpatRaster, not a Raster* object.
+  This call reads through 'read_oisst_daily'.
+```
+
+Once per function, per session. It is not repeated on every call, so reading a
+long time series in a loop stays quiet. To turn it off entirely:
+
+```{r}
+options(raadtools.shim.warn = FALSE)
+```
+
+## Two other things worth knowing
+
+`extract()` on a read function still works the same way, and still takes a
+data.frame of longitude, latitude and date-time:
+
+```{r}
+extract(readsst, xyt)
+```
+
+It is now the [xyt](https://github.com/AustralianAntarcticDivision/xyt) package
+underneath, which reads only the time slices your points actually need.
+
+`xylim` still accepts everything it always did: a bare numeric of four, a
+raster `Extent`, a raster object, or a terra `SpatExtent`. Existing code that
+passes one does not need changing.
+
+```{r}
+readice("2020-01-15", xylim = ext(c(-1e6, 1e6, -1e6, 1e6)))
+```
+
+## If something looks wrong
+
+Please report it. The conversion touched every reader in the package, and the
+data sets behind them span decades and several changes of file format each, so
+the remaining problems are the ones that only show up against real data and
+real questions.
+
+<https://github.com/AustralianAntarcticDivision/raadtools/issues>

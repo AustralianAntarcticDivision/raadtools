@@ -57,17 +57,39 @@
   (d %% 360 + 360) %% 360
 }
 
+## Which readers have already announced themselves this session. An
+## environment rather than an option, because the notice is per function and
+## an option is one global switch; options(raadtools.shim.warn = FALSE) stays
+## the master off switch.
+.shim_said <- new.env(parent = emptyenv())
+
+## Forget what has been said, so the next call to each reader announces itself
+## again. For tests, and for anyone who wants to see the notices a second time.
+.shim_notice_reset <- function() {
+  rm(list = ls(.shim_said, all.names = TRUE), envir = .shim_said)
+  invisible(NULL)
+}
+
 ## The legacy read* names are not going away - they are the front doors that
 ## pick a sensible default. What changed is the return class, so that is what
 ## we announce, alongside the specific reader this call resolved to.
-## Noisy by default: options(raadtools.shim.warn = FALSE) turns it off.
+##
+## Once per function per session. Saying it on every call punishes exactly the
+## code that is doing the right thing, since reading a time series means
+## calling the same reader in a loop; once is enough to send someone to the
+## vignette, which is where the detail belongs.
 .shim_notice <- function(fun, specific = NULL) {
   if (!isTRUE(getOption("raadtools.shim.warn", TRUE))) return(invisible(NULL))
+  if (exists(fun, envir = .shim_said, inherits = FALSE)) return(invisible(NULL))
+  assign(fun, TRUE, envir = .shim_said)
   msg <- sprintf("'%s' now returns a terra SpatRaster, not a Raster* object.", fun)
   if (!is.null(specific)) {
     msg <- paste0(msg, sprintf("\n  This call reads through '%s'.", specific))
   }
-  msg <- paste0(msg, "\n  Set options(raadtools.shim.warn = FALSE) to silence this.")
+  msg <- paste0(msg,
+                "\n  See vignette(\"terra-transition\", package = \"raadtools\").",
+                "\n  Said once per function per session;",
+                " options(raadtools.shim.warn = FALSE) turns it off entirely.")
   warning(msg, call. = FALSE)
   invisible(NULL)
 }

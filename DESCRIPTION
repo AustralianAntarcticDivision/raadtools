@@ -34,6 +34,7 @@ Suggests:
     rgdal,
     RSQLite,
     testthat,
+    withr,
     rmarkdown,
     covr
 Roxygen: list(markdown = TRUE)

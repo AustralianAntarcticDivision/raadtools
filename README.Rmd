@@ -19,6 +19,21 @@ library(raadtools)
 
 # R Tools for Synoptic Environmental Spatial Data
 
+<!-- terra-transition-notice: remove this block once the transition has bedded in -->
+> ### raadtools now returns terra `SpatRaster` objects
+>
+> Every `read*()` function used to return a raster `RasterLayer`, `RasterBrick`
+> or `RasterStack`, and now returns a terra `SpatRaster`. The function names and
+> their arguments have not changed, and the legacy `read*()` names are not
+> deprecated.
+>
+> `rast()` and `ext()` are the two terra names that replace most of what you
+> used from raster. See
+> [Moving raadtools from raster to terra](https://australianantarcticdivision.github.io/raadtools/articles/terra-transition.html),
+> or `vignette("terra-transition", package = "raadtools")`, for what to change
+> in existing code.
+<!-- end terra-transition-notice -->
+
 Tools for reading, plotting and manipulating spatial data used at the Australian Antarctic Division (AAD).
 
 A common example is to read an environmental layer as a function of date: 
@@ -33,7 +48,7 @@ The available data sources are accessed using **read\*()** functions for a [wide
 
 There are data sets from oceanography, topography, meteorology, altimetry, sea ice, ocean colour, and many other data sources. These are mostly remote sensing but include re-analysis and model output products. 
 
-The package uses the R [raster package]( https://CRAN.R-project.org/package=raster) and always provides data as a standard raster (RasterLayer, RasterBrick, or RasterStack). Each data set is invdividually handled by a function to ensure the spatial and temporal registration is correct. 
+The package uses the R [terra package](https://CRAN.R-project.org/package=terra) and always provides data as a `SpatRaster`. Each data set is individually handled by a function to ensure the spatial and temporal registration is correct. 
 
 The contents of the data library itself is listed in the [technical configuration](https://github.com/AustralianAntarcticDivision/blueant#data-source-summary). 
 

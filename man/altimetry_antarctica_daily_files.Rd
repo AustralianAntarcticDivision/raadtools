@@ -10,10 +10,10 @@ altimetry_antarctica_daily_files()
 data.frame of \code{date}, \code{fullname}, \code{band} and \code{root}
 }
 \description{
-A one-row-per-date catalogue of the Antarctic altimetry time series, read
-from the time dimension of the single source file found by
-\code{\link[raadfiles:altimetry_antarctica_files]{raadfiles::altimetry_antarctica_files()}}. Each row carries the \code{fullname}
-of that file and the \code{band} within it for that date.
+A one-row-per-date catalogue of the Antarctic altimetry time series. Each
+source file found by \code{\link[raadfiles:altimetry_antarctica_files]{raadfiles::altimetry_antarctica_files()}} holds the
+whole of its own series, one band per date, so this reads the time dimension
+of each and returns a row per date with the \code{band} to read within its file.
 }
 \seealso{
 \code{\link[=read_altimetry_antarctica_daily]{read_altimetry_antarctica_daily()}}

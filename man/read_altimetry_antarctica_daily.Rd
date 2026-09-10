@@ -7,10 +7,9 @@
 read_altimetry_antarctica_daily(
   date,
   xylim = NULL,
+  varname = c("sla", "std_sla", "number_sla"),
   latest = TRUE,
   returnfiles = FALSE,
-  varname = "",
-  lon180 = FALSE,
   ...,
   inputfiles = NULL
 )
@@ -20,15 +19,13 @@ read_altimetry_antarctica_daily(
 
 \item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[terra]{ext}}, see Details}
 
+\item{varname}{variable to read: \code{"sla"} (the anomaly, the default),
+\code{"std_sla"} (its standard deviation) or \code{"number_sla"} (the count of
+observations behind it)}
+
 \item{latest}{if TRUE (and date not supplied) return the latest time available}
 
 \item{returnfiles}{ignore options and just return the file names and dates}
-
-\item{varname}{variable to read from the source file. The default reads the
-file without naming one, which is only sensible for a file with a single
-variable in it.}
-
-\item{lon180}{defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]}
 
 \item{...}{passed to \code{\link[terra]{writeRaster}}, primarily for \code{filename}}
 
@@ -39,14 +36,13 @@ SpatRaster with one layer per date, or a data.frame of files if
 \code{returnfiles = TRUE}
 }
 \description{
-Read one or more dates from the Antarctic altimetry time series catalogued
-by \code{\link[=altimetry_antarctica_daily_files]{altimetry_antarctica_daily_files()}}.
+Read one or more dates of gridded Antarctic sea level anomaly, catalogued by
+\code{\link[=altimetry_antarctica_daily_files]{altimetry_antarctica_daily_files()}}.
 }
 \details{
-The source arrives transposed and mirrored in both axes and carries no
-georeference of its own, so the reader transposes it back and sets the
-extent to a 8750 km square in the projection of the source. Values above
-1e36 are the source's fill and are set to NA.
+The source has no georeference of its own, so the extent and CRS are
+asserted here: a square of 8750000 m about the pole, in Lambert azimuthal
+equal area on \code{+lat_0=-90 +lon_0=-90}.
 }
 \examples{
 \dontrun{

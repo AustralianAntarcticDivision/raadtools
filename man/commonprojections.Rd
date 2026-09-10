@@ -24,6 +24,6 @@ commonprojections[["polar"]]
 \url{http://www.spatialreference.org}
 }
 \seealso{
-\code{\link[raster]{projection}}, \code{\link[sp]{CRS}}, \code{\link[sp]{proj4string}}
+\code{\link[terra]{crs}}
 }
 \keyword{data}

@@ -22,7 +22,7 @@ readghrsst(
 
 \item{time.resolution}{daily}
 
-\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details}
+\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[terra]{ext}}, see Details}
 
 \item{lon180}{currently ignored}
 

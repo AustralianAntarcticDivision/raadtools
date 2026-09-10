@@ -67,7 +67,7 @@ Accepts anything \code{terra::ext()} understands: numeric vector
 \code{c(xmin, xmax, ymin, ymax)}, SpatExtent, or SpatRaster.
 If a SpatRaster with CRS is provided, data is warped to match.}
 
-\item{lon180}{logical, return Atlantic-centered \link{-180,180} view? Default TRUE.}
+\item{lon180}{logical, return Atlantic-centered [-180,180] view? Default TRUE.}
 
 \item{polar}{logical, for IBCSO return polar stereographic version?}
 

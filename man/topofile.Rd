@@ -19,7 +19,7 @@ topofile(
 
 \item{polar}{Flag for returning the polar version of the IBCSO data.}
 
-\item{lon180}{Flag for returning data in Atlantic \link{-180, 180} rather than Pacific \link{0, 360} view.}
+\item{lon180}{Flag for returning data in Atlantic [-180, 180] rather than Pacific [0, 360] view.}
 
 \item{...}{reserved for future use, ignored currently}
 }

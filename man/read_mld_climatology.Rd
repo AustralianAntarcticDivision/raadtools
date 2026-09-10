@@ -22,11 +22,11 @@ readmld(date, xylim = NULL, returnfiles = FALSE, ...)
 \code{SpatRaster} with one layer per month requested.
 }
 \description{
-Read the Sallée et al. (2013) Southern Ocean Mixed Layer Depth climatology.
+Read the Sallee et al. (2013) Southern Ocean Mixed Layer Depth climatology.
 }
 \details{
 This is a monthly climatology (12 layers, one per month) covering the
-Southern Ocean south of 30°S. Data represent typical mixed layer depth
+Southern Ocean south of 30S. Data represent typical mixed layer depth
 for each month, not actual dates.
 
 When a date is provided, the corresponding month is extracted. Multiple
@@ -45,7 +45,7 @@ mld_summer <- read_mld_climatology(c("2020-12-01", "2020-01-01", "2020-02-01"))
 }
 }
 \references{
-Sallée, J.-B., et al. (2013). Assessment of Southern Ocean mixed-layer
+Sallee, J.-B., et al. (2013). Assessment of Southern Ocean mixed-layer
 depths in CMIP5 models: Historical bias and forcing response.
 Journal of Geophysical Research: Oceans, 118.
 }

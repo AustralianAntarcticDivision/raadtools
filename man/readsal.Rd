@@ -22,9 +22,9 @@ readsal(
 
 \item{time.resolution}{time resoution data to read, daily or monthly}
 
-\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details}
+\item{xylim}{spatial extents to crop from source data, can be anything accepted by \code{\link[terra]{ext}}, see Details}
 
-\item{lon180}{defaults to TRUE, to "rotate" Pacific view \link{0, 360} data to Atlantic view \link{-180, 180}}
+\item{lon180}{defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]}
 
 \item{varname}{variable to return from the data files, default is
 "sss_smap", also available is "nobs", "sss_ref", "gland", "gice", "surtep"}
@@ -35,7 +35,7 @@ readsal(
 
 \item{returnfiles}{ignore options and just return the file names and dates}
 
-\item{...}{passed in to brick, primarily for \code{filename}}
+\item{...}{passed to \code{\link[terra]{writeRaster}}, primarily for \code{filename}}
 
 \item{inputfiles}{input the files data base to speed up initialization}
 

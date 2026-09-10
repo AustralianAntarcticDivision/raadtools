@@ -16,7 +16,7 @@ chlafiles(
 
 \item{product}{choice of chla product, see \code{readchla}}
 
-\item{platform}{(modis\link{a} or seawifs)}
+\item{platform}{one of "MODISA" or "SeaWiFS"}
 
 \item{...}{reserved for future use, currently ignored}
 }

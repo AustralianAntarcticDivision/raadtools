@@ -69,7 +69,7 @@ both components are returned as a 2-layer SpatRaster. Use the component
 arguments to return derived quantities instead:
 
 \itemize{
-\item \code{magonly = TRUE}: current speed (magnitude), sqrt(U² + V²)
+\item \code{magonly = TRUE}: current speed (magnitude), sqrt(U^2 + V^2)
 \item \code{dironly = TRUE}: current direction (degrees, oceanographic convention)
 \item \code{uonly = TRUE}: U component only
 \item \code{vonly = TRUE}: V component only
@@ -79,7 +79,7 @@ Only one of these flags may be TRUE. When reading multiple dates with the
 default (both U and V), only one date can be read at a time - use a component
 flag to read time series.
 
-Data are on a global 0.25° grid. Source orientation varies by file; use
+Data are on a global 0.25 degree grid. Source orientation varies by file; use
 \code{lon180 = TRUE} (default) to ensure Atlantic-centered output (-180 to 180).
 }
 \examples{

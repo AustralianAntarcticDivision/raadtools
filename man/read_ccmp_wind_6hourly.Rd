@@ -61,7 +61,7 @@ in the same file. By default both components are returned as a 2-layer
 SpatRaster. Use the component arguments to return derived quantities:
 
 \itemize{
-\item \code{magonly = TRUE}: wind speed (magnitude), sqrt(U² + V²)
+\item \code{magonly = TRUE}: wind speed (magnitude), sqrt(U^2 + V^2)
 \item \code{dironly = TRUE}: wind direction (degrees, meteorological: N=0, E=90, S=180, W=270)
 \item \code{uonly = TRUE}: U component only
 \item \code{vonly = TRUE}: V component only
@@ -71,7 +71,7 @@ SpatRaster. Use the component arguments to return derived quantities:
 Only one of these flags may be TRUE. When reading multiple dates with the
 default (both U and V), only one timestep can be read at a time.
 
-Data are 6-hourly on a global 0.25° grid.
+Data are 6-hourly on a global 0.25 degree grid.
 }
 \examples{
 \dontrun{

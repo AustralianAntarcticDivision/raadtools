@@ -30,7 +30,6 @@ Suggests:
     duckdb,
     knitr,
     rgdal,
-    sp,
     RSQLite,
     reproj (>= 0.4.3),
     testthat,

@@ -8,5 +8,7 @@
 # pmap <- raadtools:::pmap
 # usethis::use_data( pmap, bad_nsidc, internal = TRUE)
 # 
-# pmap <- terra::vect(pmap)
+# ## Store it WRAPPED. A SpatVector is an external pointer, so use_data() on one
+# ## writes a handle that is dead the next time the package is loaded.
+# pmap <- terra::wrap(terra::vect(pmap))
 # usethis::use_data(pmap, bad_nsidc, internal = TRUE, overwrite = T)

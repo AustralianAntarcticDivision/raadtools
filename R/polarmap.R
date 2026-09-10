@@ -6,13 +6,17 @@
 #' Use 'crs' to modify the projection, or set to 'NA' to leave in longlat. 
 #' @param crs PROJ.4 string
 #'
-#' @return SpatialLinesDataFrame
+#' @return SpatVector of lines
 #' @export
 #'
 #' @examples
 #' plot(polar_map())
 polar_map <- function(crs = commonprojections$polar) {
-  if (is.na(crs)) return(pmap)
-  .need_sp()
-  sp::spTransform(pmap, crs)
+  ## pmap is stored wrapped. A SpatVector is an external pointer, so saving one
+  ## into sysdata.rda gives back a dead handle on load - every method on it
+  ## fails with "NULL value passed as symbol address". terra::wrap() turns it
+  ## into a PackedSpatVector, which is plain data and serialises fine.
+  out <- terra::unwrap(pmap)
+  if (is.na(crs)) return(out)
+  terra::project(out, crs)
 }

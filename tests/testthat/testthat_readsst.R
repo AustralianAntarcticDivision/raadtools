@@ -55,7 +55,7 @@ test_that("daily is different from monthly", {
   x1 <- readsst("1981-11-18", time.resolution = "monthly")
   x2 <- readsst("1981-11-18", time.resolution = "daily")
 
-  expect_error(compareRaster(x1, x2), "different number or columns")
+  expect_true(!all(na.omit(values(x1)[,1]) == na.omit(values(x2)[,1])))
 })
 
 

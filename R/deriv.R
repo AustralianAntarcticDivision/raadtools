@@ -11,10 +11,12 @@ calc_time_since_melt <- function(date, trx) {
   
   date <- as.Date(date)
   if (is.character(trx)) {
+    .need_duckdb()
     dbh <- DBI::dbConnect(duckdb::duckdb(dbdir = trx, read_only = TRUE))
     trx <- dplyr::collect(dplyr::tbl(dbh, "transitions")) ## get the whole table
     DBI::dbDisconnect(dbh, shutdown = TRUE) ## close after use if we were given a filename, but not if we were given the db handle directly
   } else if (inherits(trx, "DBIConnection")) {
+    .need_duckdb()
     trx <- dplyr::collect(dplyr::tbl(trx, "transitions"))
   }
   ## pre-sort it by idx and date (ascending)
@@ -154,6 +156,7 @@ idx0 <- grep("smmr_ssmi_nasateam/time_since_melt/time_since_melt.duckdb", ftx$fi
  
 if (length(cfiles0) < 1 || !file.exists(cfiles0)) stop("no time_since_melt resource found")
 
+ .need_duckdb()
  dbh <- DBI::dbConnect(duckdb::duckdb(dbdir = cfiles0, read_only = TRUE))
  trx <- dplyr::collect(dplyr::arrange(dplyr::distinct(dplyr::tbl(dbh, "transitions"), date), date))
  trx$date <- as.POSIXct(trx$date, tz = "UTC")

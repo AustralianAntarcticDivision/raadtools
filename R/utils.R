@@ -103,6 +103,28 @@
 }
 
 
+## duckdb and DBI are in Suggests, not Imports. Only the time_since_melt
+## reader touches them, and loading duckdb costs about 0.4 s of every
+## library(raadtools) whether or not anybody calls it.
+##
+## dbplyr too: dplyr::tbl() on a DBIConnection dispatches to it, so the reader
+## has always needed it, and it was never declared.
+.need_duckdb <- function() {
+  missing <- Filter(function(p) !requireNamespace(p, quietly = TRUE),
+                    c("DBI", "duckdb", "dbplyr"))
+  if (length(missing)) {
+    quoted <- sprintf("'%s'", missing)
+    listed <- if (length(quoted) > 1L) {
+      n <- length(quoted)
+      paste(paste(quoted[-n], collapse = ", "), "and", quoted[n])
+    } else quoted
+    stop(sprintf("reading time_since_melt needs %s.\n  install.packages(c(%s))",
+                 listed, paste(sprintf('"%s"', missing), collapse = ", ")),
+         call. = FALSE)
+  }
+  invisible(NULL)
+}
+
 nc_rawdata <- function(x, var) {
   nc <- ncdf4::nc_open(x)
   on.exit(ncdf4::nc_close(nc))

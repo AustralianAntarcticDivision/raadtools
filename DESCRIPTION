@@ -24,11 +24,12 @@ Imports:
     RNetCDF,
     memoise,
     fs,
-    stringr, 
-    duckdb, 
-    DBI
+    stringr
 Suggests:
     graticule,
+    DBI,
+    dbplyr,
+    duckdb,
     knitr,
     rgdal,
     RSQLite,

@@ -157,7 +157,7 @@ readamps_d1ice <- function(date, time.resolution = "12hourly", xylim = NULL,
 
   out <- if (length(r) > 1L) terra::rast(r) else r[[1L]]
   names(out) <- sprintf("ice_%s", format(files$date, "%Y%m%d_%H%M"))
-  terra::time(out) <- files$date
+  .utctime(out) <- files$date
   .write_if_filename(out, ...)
 }
 
@@ -212,10 +212,10 @@ readamps_d1ice <- function(date, time.resolution = "12hourly", xylim = NULL,
     ## the archive is 3-hourly, so the old "%Y%m%d" gave colliding names
     ## whenever more than one forecast time from a day was read
     names(out) <- sprintf("wind_%s", format(files$date, "%Y%m%d_%H%M"))
-    terra::time(out) <- files$date
+    .utctime(out) <- files$date
   } else {
     names(out) <- sprintf("%swind_%s", c("U", "V"), format(files$date, "%Y%m%d_%H%M"))
-    terra::time(out) <- rep(files$date, 2L)
+    .utctime(out) <- rep(files$date, 2L)
   }
 
   .write_if_filename(out, ...)

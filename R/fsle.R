@@ -63,7 +63,7 @@ r0 <- terra::rast(lapply(seq_len(nrow(files)), function(xi) {
            varname = varname, band = files$band[xi])
 }))
 options(op)
-terra::time(r0) <- files$date
+.utctime(r0) <- files$date
 names(r0) <- format(files$date, "%Y-%m-%d")
 .write_if_filename(r0, ...)
 }

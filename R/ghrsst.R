@@ -63,7 +63,7 @@ xylim <- force(xylim)
   if (!nzchar(terra::crs(r0))) terra::crs(r0) <- "EPSG:4326"
 
   if (nfiles == 1) r0 <- r0[[1L]]
-  terra::time(r0) <- files$date
+  .utctime(r0) <- files$date
   names(r0) <- format(files$date, "%Y-%m-%d")
   r0 <- .write_if_filename(r0, ...)
  

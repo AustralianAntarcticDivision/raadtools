@@ -132,7 +132,7 @@ readderivice <- function(date,
 
   out <- crop_if_needed(out, xylim)
   names(out) <- format(files$date, "%Y-%m-%d")
-  terra::time(out) <- as.Date(files$date)
+  .utctime(out) <- files$date
   .write_if_filename(out, ...)
 }
 

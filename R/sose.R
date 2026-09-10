@@ -136,7 +136,7 @@ read_sose <-  function (date, time.resolution = c("monthly"),
 
   names(r0) <- sprintf("level%i", level)
   terra::depth(r0) <- level
-  terra::time(r0) <- rep(as.Date(files$date), length(level))
+  .utctime(r0) <- rep(files$date, length(level))
 
   r0
 

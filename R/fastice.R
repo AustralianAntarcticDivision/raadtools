@@ -139,6 +139,6 @@ readfastice_circum <- function(date, time.resolution = "weekly3",
   r <- if (nfiles > 1) terra::rast(r) else r[[1L]]
   names(r) <- sprintf("fastice_%s", format(files$date, "%Y%m%d"))
   
-  terra::time(r) <- as.Date(files$date)
+  .utctime(r) <- files$date
   .write_if_filename(r, ...)
 }

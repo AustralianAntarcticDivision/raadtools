@@ -110,7 +110,7 @@ readchla_old <- function(date, time.resolution = c("weekly", "monthly"),
   names(r) <- basename(files$fullname)
   if (!nzchar(terra::crs(r))) terra::crs(r) <- "EPSG:4326"
 
-  terra::time(r) <- as.Date(files$date)
+  .utctime(r) <- files$date
   r
 }
 

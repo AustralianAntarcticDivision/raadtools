@@ -159,7 +159,7 @@ read_ncep2_wind_6hourly <- function(date,
   }
 
   # Set time
-  terra::time(out) <- rep(files$date, each = if (single_output) 1L else 2L)
+  .utctime(out) <- rep(files$date, each = if (single_output) 1L else 2L)
 
   # Set names
   if (single_output) {

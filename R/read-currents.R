@@ -151,7 +151,7 @@ read_copernicus_current_daily <- function(date,
   }
 
   # Set time
-  terra::time(out) <- as.Date(rep(files$date, each = if (single_output) 1L else 2L))
+  .utctime(out) <- rep(files$date, each = if (single_output) 1L else 2L)
 
   # Set names
   if (single_output) {

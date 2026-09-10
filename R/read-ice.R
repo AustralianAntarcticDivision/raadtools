@@ -109,7 +109,7 @@ read_nsidc_ice_daily <- function(date,
                          right = FALSE)
   }
 
-  terra::time(r) <- as.Date(files$date)
+  .utctime(r) <- files$date
   names(r) <- format(files$date, "%Y-%m-%d")
 
   # --- crop ---
@@ -197,7 +197,7 @@ read_nsidc_cdr_daily <- function(date,
                          right = FALSE)
   }
 
-  terra::time(r) <- as.Date(files$date)
+  .utctime(r) <- files$date
   names(r) <- format(files$date, "%Y-%m-%d")
 
   if (!is.null(xylim)) {
@@ -267,7 +267,7 @@ read_nsidc_ice_monthly <- function(date,
                          right = FALSE)
   }
 
-  terra::time(r) <- as.Date(files$date)
+  .utctime(r) <- files$date
   names(r) <- format(files$date, "%Y-%m")
 
   if (!is.null(xylim)) {

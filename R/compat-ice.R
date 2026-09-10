@@ -217,7 +217,7 @@ readice_monthly <- function(date,
   }
 
   out <- terra::rast(lapply(out, function(.x) terra::setValues(template, .x)))
-  terra::time(out) <- as.Date(files$date)
+  .utctime(out) <- files$date
   names(out) <- format(files$date, "%Y-%m-%d")
   out
 }

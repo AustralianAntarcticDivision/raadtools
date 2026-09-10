@@ -92,6 +92,6 @@ readfronts <- function(date,
   if (trim) r <- terra::trim(r)
 
   names(r) <- format(files$date, "%Y-%m-%d")
-  terra::time(r) <- as.Date(files$date)
+  .utctime(r) <- files$date
   r
 }

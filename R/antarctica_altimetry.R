@@ -77,7 +77,7 @@ read_altimetry_antarctica_daily <- function(date, xylim = NULL,
   ## the source's fill, which comes through as a very large number rather than NA
   r <- terra::clamp(r, upper = 1e36, values = FALSE)
   r <- crop_if_needed(r, xylim)
-  terra::time(r) <- files$date
+  .utctime(r) <- files$date
   names(r) <- format(files$date, "%Y-%m-%d")
   .write_if_filename(r, ...)
 }

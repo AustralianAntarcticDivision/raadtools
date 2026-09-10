@@ -83,7 +83,7 @@ read_amsr_ice_daily <- function(date,
 
   out <- terra::rast(rlist)
   terra::crs(out) <- .antarctic_crs()
-  terra::time(out) <- as.Date(files$date)
+  .utctime(out) <- files$date
   names(out) <- format(files$date, "%Y-%m-%d")
 
   if (!is.null(xylim)) {
@@ -144,7 +144,7 @@ read_amsr_ice_3k_daily <- function(date,
   # Read files. These store percentages; concentration is a fraction.
   out <- .rast_nc(files$fullname) / 100
   terra::crs(out) <- .antarctic_crs()
-  terra::time(out) <- as.Date(files$date)
+  .utctime(out) <- files$date
   names(out) <- format(files$date, "%Y-%m-%d")
 
   if (setNA) {
@@ -217,7 +217,7 @@ read_cersat_ice_daily <- function(date,
   out <- terra::rast(rlist) / 100
   terra::ext(out) <- terra::ext(.antarctic_extent())
   terra::crs(out) <- .antarctic_crs()
-  terra::time(out) <- as.Date(files$date)
+  .utctime(out) <- files$date
   names(out) <- format(files$date, "%Y-%m-%d")
 
   if (setNA) {

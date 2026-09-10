@@ -274,3 +274,17 @@
 timedateFrom <- function(x, ...) {
   as.POSIXct(x, tz = "UTC", ...)
 }
+
+
+## Set a reader's time axis, always as UTC POSIXct.
+##
+## raster-era raadtools assigned every time axis through getZ(), which was
+## POSIXct by construction, so downstream code could count on seconds. terra
+## keeps whatever class it is handed and records a matching step: hand it a
+## Date and time() gives a Date back with a "days" step, so as.integer() on
+## the result counts days, and any sub-daily stamp is gone. Reader time is set
+## through here so the class, the step and the zone are decided in one place.
+`.utctime<-` <- function(x, value) {
+  terra::time(x) <- timedateFrom(value)
+  x
+}

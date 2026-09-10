@@ -104,7 +104,7 @@ readcurr <- function(date,
 
     r <- c(u, v)
     names(r) <- c("U", "V")
-    terra::time(r) <- rep(terra::time(u), 2)
+    .utctime(r) <- rep(terra::time(u), 2)
   }
 
   if (returnfiles) return(r)

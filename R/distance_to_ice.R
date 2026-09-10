@@ -40,7 +40,7 @@
   }
   out <- terra::distance(ice, cl)
   names(out) <- name
-  terra::time(out) <- as.Date(timedateFrom(date))
+  .utctime(out) <- timedateFrom(date)
   out
 }
 

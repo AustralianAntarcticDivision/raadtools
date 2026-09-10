@@ -20,7 +20,7 @@ read_amsre_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles =
 
   out <- terra::rast(purrr::map(files$fullname, .readAMSRE, ext = xylim))
   terra::crs(out) <- .antarctic_crs()
-  terra::time(out) <- as.Date(files$date)
+  .utctime(out) <- files$date
   names(out) <- format(files$date, "%Y-%m-%d")
   out
 }
@@ -47,7 +47,7 @@ read_amsr2_ice <- function(date, xylim = NULL, latest = TRUE, ..., setNA = TRUE,
 
   out <- terra::rast(purrr::map(files$fullname, .readAMSR2, ext = xylim, setNA = setNA))
   terra::crs(out) <- .antarctic_crs()
-  terra::time(out) <- as.Date(files$date)
+  .utctime(out) <- files$date
   names(out) <- format(files$date, "%Y-%m-%d")
   out
 }

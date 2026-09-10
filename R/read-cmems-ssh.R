@@ -56,7 +56,7 @@
   }
 
   # Time
-  terra::time(r) <- as.Date(files$date)
+  .utctime(r) <- files$date
   names(r) <- format(files$date, "%Y-%m-%d")
 
   r
@@ -329,7 +329,7 @@ read_cmems_current_speed_daily <- function(date,
                               latest = latest, inputfiles = inputfiles)
 
   r <- sqrt(u^2 + v^2)
-  terra::time(r) <- terra::time(u)
+  .utctime(r) <- terra::time(u)
   names(r) <- paste0("speed_", names(u))
 
   r
@@ -368,7 +368,7 @@ read_cmems_current_direction_daily <- function(date,
 
   # Oceanographic convention: direction current is flowing TO
   r <- .uv_direction(u, v)
-  terra::time(r) <- terra::time(u)
+  .utctime(r) <- terra::time(u)
   names(r) <- paste0("direction_", names(u))
 
   r

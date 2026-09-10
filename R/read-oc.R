@@ -85,7 +85,7 @@
   if (!nzchar(terra::crs(out))) {
     terra::crs(out) <- "EPSG:4326"
   }
-  terra::time(out) <- as.Date(files$date)
+  .utctime(out) <- files$date
   names(out) <- format(files$date, "%Y-%m-%d")
 
   out
@@ -265,7 +265,7 @@ read_oc_par_8day <- function(date,
   if (is.na(terra::crs(out, proj = TRUE))) {
     terra::crs(out) <- "EPSG:4326"
   }
-  terra::time(out) <- as.Date(files$date)
+  .utctime(out) <- files$date
   names(out) <- format(files$date, "%Y-%m-%d")
 
   out

@@ -52,7 +52,7 @@ readcafe <-  function (date, time.resolution = c("monthly"),
   if (!nzchar(terra::crs(r0))) terra::crs(r0) <- "EPSG:4326"
   terra::ext(r0) <- terra::ext(-180, 180, -90, 90)
   if (nfiles == 1) r0 <- r0[[1L]]
-  terra::time(r0) <- files$date
+  .utctime(r0) <- files$date
   names(r0) <- format(files$date, "%Y-%m-%d")
   if (setNA) {
     r0[r0 < 0] <- NA_real_

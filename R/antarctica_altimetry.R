@@ -1,4 +1,13 @@
-
+#' Antarctic altimetry files
+#'
+#' A one-row-per-date catalogue of the Antarctic altimetry time series, read
+#' from the time dimension of the single source file found by
+#' [raadfiles::altimetry_antarctica_files()]. Each row carries the `fullname`
+#' of that file and the `band` within it for that date.
+#'
+#' @return data.frame of `date`, `fullname`, `band` and `root`
+#' @seealso [read_altimetry_antarctica_daily()]
+#' @export
 altimetry_antarctica_daily_files <- function() {
     files <- raadfiles::altimetry_antarctica_files()
   nc <- RNetCDF::open.nc(files$fullname[1])    
@@ -10,7 +19,29 @@ altimetry_antarctica_daily_files <- function() {
   out$root <- files$root[1L]
   out
 }
-read_altimetry_antarctica_daily <- function(date, xylim = NULL, latest = TRUE, returnfiles = FALSE, varname, lon180 = FALSE, ..., inputfiles = NULL) {
+#' Read Antarctic altimetry
+#'
+#' Read one or more dates from the Antarctic altimetry time series catalogued
+#' by [altimetry_antarctica_daily_files()].
+#'
+#' The source arrives transposed and mirrored in both axes and carries no
+#' georeference of its own, so the reader transposes it back and sets the
+#' extent to a 8750 km square in the projection of the source. Values above
+#' 1e36 are the source's fill and are set to NA.
+#'
+#' @inheritParams raadtools
+#' @param varname variable to read from the source file. The default reads the
+#'   file without naming one, which is only sensible for a file with a single
+#'   variable in it.
+#' @return SpatRaster with one layer per date, or a data.frame of files if
+#'   `returnfiles = TRUE`
+#' @seealso [altimetry_antarctica_daily_files()]
+#' @export
+#' @examples
+#' \dontrun{
+#' read_altimetry_antarctica_daily(latest = TRUE)
+#' }
+read_altimetry_antarctica_daily <- function(date, xylim = NULL, latest = TRUE, returnfiles = FALSE, varname = "", lon180 = FALSE, ..., inputfiles = NULL) {
   if (is.null(inputfiles)){
     files <- altimetry_antarctica_daily_files()
     
@@ -38,7 +69,7 @@ read_altimetry_antarctica_daily <- function(date, xylim = NULL, latest = TRUE, r
   ## georeference of its own
   read_fun <- function(xfile, ext, msk, rot, varname = "", band = 1) {
     pb$tick()
-    rrr <- .rast_nc(xfile, subds = varname)
+    rrr <- if (nzchar(varname)) .rast_nc(xfile, subds = varname) else .rast_nc(xfile)
     if (band > 1L) rrr <- rrr[[band]]
     rrr <- terra::flip(terra::flip(terra::trans(rrr), direction = "horizontal"),
                        direction = "vertical")

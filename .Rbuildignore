@@ -1,0 +1,9 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.github$
+^README\.Rmd$
+^CODE_OF_CONDUCT\.md$
+^archive$
+^data-raw$
+^docs$
+^raadtools\.Rmd$

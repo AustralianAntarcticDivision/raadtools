@@ -254,7 +254,7 @@ read_oc_par_8day <- function(date,
   if (!lon180) {
     ext <- as.vector(terra::ext(out))
     if (ext[1] < 0) {
-      out <- terra::rotate(out, left = FALSE)
+      out <- terra::rotate(out)
     }
   }
 

@@ -21,8 +21,3 @@ files <- dplyr::filter(files, stringr::str_detect(file, "cpolar.*nc$"))
 }
 
 
-cpolarfiles_old <- function(...) {
-  dplyr::mutate(dplyr::filter(raadtools::allfiles(), 
-                              grepl("s_corney/cpolar", fullname)), 
-                date = as.POSIXct(strptime(sprintf("197%s-01", substr(basename(fullname), 12, 14)), "%Y%m-%d")) + 29 * 365.25 * 24 * 3600)
-}

@@ -15,7 +15,7 @@
 #' SpatRaster. Use the component arguments to return derived quantities:
 #'
 #' \itemize{
-#'   \item \code{magonly = TRUE}: wind speed (magnitude), sqrt(U² + V²)
+#'   \item \code{magonly = TRUE}: wind speed (magnitude), sqrt(U^2 + V^2)
 #'   \item \code{dironly = TRUE}: wind direction (degrees, meteorological: N=0, E=90, S=180, W=270)
 #'   \item \code{uonly = TRUE}: U component only
 #'   \item \code{vonly = TRUE}: V component only
@@ -25,7 +25,7 @@
 #' Only one of these flags may be TRUE. When reading multiple dates with the
 #' default (both U and V), only one timestep can be read at a time.
 #'
-#' Data are 6-hourly on a global 0.25° grid.
+#' Data are 6-hourly on a global 0.25 degree grid.
 #'
 #' @param date date or dates to read (character, Date, or POSIXct).
 #' @param time.resolution time resolution, currently only "6hourly" supported.

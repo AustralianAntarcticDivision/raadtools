@@ -1,16 +1,16 @@
 # R/read-mld.R
 # Terra-native MLD (Mixed Layer Depth) climatology reader
 #
-# Sallée et al. 2013 Southern Ocean MLD climatology
+# Sallee et al. 2013 Southern Ocean MLD climatology
 # 12 monthly layers
 
 #' Read Mixed Layer Depth climatology
 #'
-#' Read the Sallée et al. (2013) Southern Ocean Mixed Layer Depth climatology.
+#' Read the Sallee et al. (2013) Southern Ocean Mixed Layer Depth climatology.
 #'
 #' @details
 #' This is a monthly climatology (12 layers, one per month) covering the
-#' Southern Ocean south of 30°S. Data represent typical mixed layer depth
+#' Southern Ocean south of 30S. Data represent typical mixed layer depth
 #' for each month, not actual dates.
 #'
 #' When a date is provided, the corresponding month is extracted. Multiple
@@ -24,7 +24,7 @@
 #' @return \code{SpatRaster} with one layer per month requested.
 #'
 #' @references
-#' Sallée, J.-B., et al. (2013). Assessment of Southern Ocean mixed-layer
+#' Sallee, J.-B., et al. (2013). Assessment of Southern Ocean mixed-layer
 #' depths in CMIP5 models: Historical bias and forcing response.
 #' Journal of Geophysical Research: Oceans, 118.
 #'

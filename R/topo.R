@@ -10,7 +10,7 @@
 #' section of \code{\link{read_topo}}.
 #' @param topo Data source, see \code{\link{read_topo}}.
 #' @param polar Flag for returning the polar version of the IBCSO data.
-#' @param lon180 Flag for returning data in Atlantic [-180, 180] rather than Pacific [0, 360] view.
+#' @param lon180 Flag for returning data in Atlantic \[-180, 180\] rather than Pacific \[0, 360\] view.
 #' @param ... reserved for future use, ignored currently
 #' @return character string of the full path to a file name
 #' @seealso \code{\link{read_topo}} to read the data

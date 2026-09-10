@@ -1,6 +1,4 @@
 .onLoad <- function(libname, pkgname) {
-  ## cannot remember why for ncdf4, probably should check and warn (or fail) here?
-  base::loadNamespace("ncdf4")
   read_rema_tiles <<- memoise::memoize(read_rema_tiles)
   .multi_era_ocfiles <<- memoise::memoize(.multi_era_ocfiles)
   options(raadtools.geoid_tile_vrt = NULL, raadtools.message.rescale = TRUE)

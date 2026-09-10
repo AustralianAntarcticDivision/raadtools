@@ -27,7 +27,6 @@ salfiles <- function(time.resolution = c("daily"), ...) {
 ##' SMAP surface salinity data read from files managed by
 ##' \code{\link{salfiles}}.  
 ##' @inheritParams raadtools
-#' @inheritDotParams raadtools
 ##' @param varname variable to return from the data files, default is
 ##' "sss_smap", also available is "nobs", "sss_ref", "gland", "gice", "surtep"
 

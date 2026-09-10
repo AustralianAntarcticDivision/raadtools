@@ -7,7 +7,6 @@
 #' Files are found with `raadfiles::cafe_monthly_files()`.
 #' 
 #' @inheritParams raadtools
-#' @inheritDotParams raadtools
 #' @name readcafe
 #' @export
 #' @examples

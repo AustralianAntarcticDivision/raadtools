@@ -34,7 +34,7 @@
 #'   Accepts anything \code{terra::ext()} understands: numeric vector
 #'   \code{c(xmin, xmax, ymin, ymax)}, SpatExtent, or SpatRaster.
 #'   If a SpatRaster with CRS is provided, data is warped to match.
-#' @param lon180 logical, return Atlantic-centered [-180,180] view? Default TRUE.
+#' @param lon180 logical, return Atlantic-centered \[-180,180\] view? Default TRUE.
 #' @param polar logical, for IBCSO return polar stereographic version?
 #' @param resample character, resampling method for warping (default "bilinear")
 #' @param returnfiles logical, return file path instead of data?

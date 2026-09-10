@@ -12,7 +12,6 @@ Depends:
 Imports:
     dplyr (>= 0.7.0),
     methods,
-    ncdf4,
     progress,
     purrr,
     raadfiles (>= 0.1.4.9022),

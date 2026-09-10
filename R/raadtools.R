@@ -26,12 +26,12 @@
 #' Dummy function
 #' @param date date or dates of data to read, 
 #' @param time.resolution time resoution data to read, daily or monthly
-#' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[raster]{extent}}, see Details
-#' @param lon180 defaults to TRUE, to "rotate" Pacific view [0, 360] data to Atlantic view [-180, 180]
+#' @param xylim spatial extents to crop from source data, can be anything accepted by \code{\link[terra]{ext}}, see Details
+#' @param lon180 defaults to TRUE, to "rotate" Pacific view \[0, 360\] data to Atlantic view \[-180, 180\]
 #' @param setNA mask out land values (only applies to monthly time.resolution)
 #' @param latest if TRUE (and date not supplied) return the latest time available
 #' @param returnfiles ignore options and just return the file names and dates
-#' @param ... passed in to brick, primarily for \code{filename}
+#' @param ... passed to \code{\link[terra]{writeRaster}}, primarily for \code{filename}
 #' @param inputfiles input the files data base to speed up initialization
 raadtools <- function(date, time.resolution = "daily", lon180 = TRUE, setNA = TRUE, latest = FALSE, returnfiles = FALSE, ...) {
   stop("I don't do anything")
@@ -50,7 +50,7 @@ raadtools <- function(date, time.resolution = "daily", lon180 = TRUE, setNA = TR
 #' @section Warning:
 #' This should be use only for a convenient reference to look up the projection strings commonly in use. There's
 #' no guarantee that this would be appropriate and you should seek cartographic expertise.
-#' @seealso \code{\link[raster]{projection}}, \code{\link[sp]{CRS}}, \code{\link[sp]{proj4string}}
+#' @seealso \code{\link[terra]{crs}}
 #' @keywords data
 #' @examples
 #' names(commonprojections)

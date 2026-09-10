@@ -120,7 +120,7 @@ readchla_old <- function(date, time.resolution = c("weekly", "monthly"),
 #' @title Chlorophyll-a
 #' @param time.resolution weekly (8day) or monthly
 #' @param product choice of chla product, see \code{readchla}
-#' @param platform (modis[a] or seawifs)
+#' @param platform one of "MODISA" or "SeaWiFS"
 #' @param ... reserved for future use, currently ignored
 #' @return data.frame
 #' @export

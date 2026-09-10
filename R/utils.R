@@ -138,20 +138,6 @@
   invisible(NULL)
 }
 
-nc_rawdata <- function(x, var) {
-  nc <- ncdf4::nc_open(x)
-  on.exit(ncdf4::nc_close(nc))
-  ncdf4::ncvar_get(nc, var)
-}
-
-update <- function() {
-  cat('\ndevtools::install_github("AustralianAntarcticDivision/raadtools")\n\n')
-}
-
-set_utc_format <- function(x) {
-  attr(x, "tz") <- "UTC"
-  x
-}
 ## Terra rotate for a full-globe grid in PROJECTED coordinates. terra::rotate()
 ## only handles longitude/latitude, and these grids are Mercator metres, so the
 ## right half is cropped off and shifted a full width to the left. Same result

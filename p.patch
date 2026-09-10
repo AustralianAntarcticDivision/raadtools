@@ -1,0 +1,519 @@
+From ffa4e1d39e72441cf07bb0870b9ecafc2103e567 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 10 Sep 2026 11:46:12 +0000
+Subject: [PATCH 1/2] Always set reader time as UTC POSIXct
+
+raster-era raadtools assigned every time axis through getZ(), which was
+POSIXct by construction, so downstream code could count on seconds since
+the epoch. terra keeps whatever class it is handed and records a matching
+step, so `terra::time(r) <- as.Date(files$date)` gives a Date back with a
+"days" step: as.integer() on it counts days rather than seconds, and any
+time of day in the catalogue is discarded on the way in.
+
+Add an internal replacement function `.utctime<-` in R/utils.R that routes
+the value through timedateFrom(), and use it at all 34 sites that set a
+reader's time. Twenty-one of those were wrapping the value in as.Date();
+that wrapper is now gone. The thirteen that already passed POSIXct through
+are unchanged in behaviour but go through the same door.
+
+This is what tests/testthat/testthat-timezone-modify.R measures. Its
+fixture is unclass()ed POSIXct, so with the Date-valued readers it saw
+4261 where it wanted 368150400 (readsst), and likewise for readice,
+readcurr and readssh. readwind and readamps_d1wind were already POSIXct
+and already passed - the AMPS reference value 1445774400 is
+2015-10-25 12:00:00 UTC, a stamp as.Date() would have truncated.
+
+No exported object changes, so this needs no roxygenise.
+
+Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01FxfVsMKWJce64vRsZgurfB
+---
+ R/amps.R                 |  6 +++---
+ R/antarctica_altimetry.R |  2 +-
+ R/cafe.R                 |  2 +-
+ R/chla.R                 |  2 +-
+ R/compat-currents.R      |  2 +-
+ R/compat-ice.R           |  2 +-
+ R/deriv.R                |  2 +-
+ R/distance_to_ice.R      |  2 +-
+ R/fastice.R              |  2 +-
+ R/fronts.R               |  2 +-
+ R/fsle.R                 |  2 +-
+ R/ghrsst.R               |  2 +-
+ R/ice_amsr_ssmi.R        |  4 ++--
+ R/read-amsr-ice.R        |  6 +++---
+ R/read-ccmp.R            |  2 +-
+ R/read-cmems-ssh.R       |  6 +++---
+ R/read-currents.R        |  2 +-
+ R/read-ice.R             |  6 +++---
+ R/read-oc.R              |  4 ++--
+ R/read-oisst.R           |  4 ++--
+ R/read-wind.R            |  2 +-
+ R/salinity.R             |  2 +-
+ R/sose.R                 |  2 +-
+ R/utils.R                | 14 ++++++++++++++
+ 24 files changed, 48 insertions(+), 34 deletions(-)
+
+diff --git a/R/amps.R b/R/amps.R
+index 8f392c5..cdec828 100644
+--- a/R/amps.R
++++ b/R/amps.R
+@@ -157,7 +157,7 @@ readamps_d1ice <- function(date, time.resolution = "12hourly", xylim = NULL,
+ 
+   out <- if (length(r) > 1L) terra::rast(r) else r[[1L]]
+   names(out) <- sprintf("ice_%s", format(files$date, "%Y%m%d_%H%M"))
+-  terra::time(out) <- files$date
++  .utctime(out) <- files$date
+   .write_if_filename(out, ...)
+ }
+ 
+@@ -212,10 +212,10 @@ readamps_d1ice <- function(date, time.resolution = "12hourly", xylim = NULL,
+     ## the archive is 3-hourly, so the old "%Y%m%d" gave colliding names
+     ## whenever more than one forecast time from a day was read
+     names(out) <- sprintf("wind_%s", format(files$date, "%Y%m%d_%H%M"))
+-    terra::time(out) <- files$date
++    .utctime(out) <- files$date
+   } else {
+     names(out) <- sprintf("%swind_%s", c("U", "V"), format(files$date, "%Y%m%d_%H%M"))
+-    terra::time(out) <- rep(files$date, 2L)
++    .utctime(out) <- rep(files$date, 2L)
+   }
+ 
+   .write_if_filename(out, ...)
+diff --git a/R/antarctica_altimetry.R b/R/antarctica_altimetry.R
+index 9dda7a4..be14bf3 100644
+--- a/R/antarctica_altimetry.R
++++ b/R/antarctica_altimetry.R
+@@ -77,7 +77,7 @@ read_altimetry_antarctica_daily <- function(date, xylim = NULL,
+   ## the source's fill, which comes through as a very large number rather than NA
+   r <- terra::clamp(r, upper = 1e36, values = FALSE)
+   r <- crop_if_needed(r, xylim)
+-  terra::time(r) <- files$date
++  .utctime(r) <- files$date
+   names(r) <- format(files$date, "%Y-%m-%d")
+   .write_if_filename(r, ...)
+ }
+diff --git a/R/cafe.R b/R/cafe.R
+index 370a708..36b48b9 100644
+--- a/R/cafe.R
++++ b/R/cafe.R
+@@ -52,7 +52,7 @@ readcafe <-  function (date, time.resolution = c("monthly"),
+   if (!nzchar(terra::crs(r0))) terra::crs(r0) <- "EPSG:4326"
+   terra::ext(r0) <- terra::ext(-180, 180, -90, 90)
+   if (nfiles == 1) r0 <- r0[[1L]]
+-  terra::time(r0) <- files$date
++  .utctime(r0) <- files$date
+   names(r0) <- format(files$date, "%Y-%m-%d")
+   if (setNA) {
+     r0[r0 < 0] <- NA_real_
+diff --git a/R/chla.R b/R/chla.R
+index e097c31..75ff705 100644
+--- a/R/chla.R
++++ b/R/chla.R
+@@ -110,7 +110,7 @@ readchla_old <- function(date, time.resolution = c("weekly", "monthly"),
+   names(r) <- basename(files$fullname)
+   if (!nzchar(terra::crs(r))) terra::crs(r) <- "EPSG:4326"
+ 
+-  terra::time(r) <- as.Date(files$date)
++  .utctime(r) <- files$date
+   r
+ }
+ 
+diff --git a/R/compat-currents.R b/R/compat-currents.R
+index 1d24744..967a314 100644
+--- a/R/compat-currents.R
++++ b/R/compat-currents.R
+@@ -104,7 +104,7 @@ readcurr <- function(date,
+ 
+     r <- c(u, v)
+     names(r) <- c("U", "V")
+-    terra::time(r) <- rep(terra::time(u), 2)
++    .utctime(r) <- rep(terra::time(u), 2)
+   }
+ 
+   if (returnfiles) return(r)
+diff --git a/R/compat-ice.R b/R/compat-ice.R
+index 861a2d1..669e0d0 100644
+--- a/R/compat-ice.R
++++ b/R/compat-ice.R
+@@ -217,7 +217,7 @@ readice_monthly <- function(date,
+   }
+ 
+   out <- terra::rast(lapply(out, function(.x) terra::setValues(template, .x)))
+-  terra::time(out) <- as.Date(files$date)
++  .utctime(out) <- files$date
+   names(out) <- format(files$date, "%Y-%m-%d")
+   out
+ }
+diff --git a/R/deriv.R b/R/deriv.R
+index 17d8e22..a9539bb 100644
+--- a/R/deriv.R
++++ b/R/deriv.R
+@@ -132,7 +132,7 @@ readderivice <- function(date,
+ 
+   out <- crop_if_needed(out, xylim)
+   names(out) <- format(files$date, "%Y-%m-%d")
+-  terra::time(out) <- as.Date(files$date)
++  .utctime(out) <- files$date
+   .write_if_filename(out, ...)
+ }
+ 
+diff --git a/R/distance_to_ice.R b/R/distance_to_ice.R
+index 7334268..69ddc5d 100644
+--- a/R/distance_to_ice.R
++++ b/R/distance_to_ice.R
+@@ -40,7 +40,7 @@
+   }
+   out <- terra::distance(ice, cl)
+   names(out) <- name
+-  terra::time(out) <- as.Date(timedateFrom(date))
++  .utctime(out) <- timedateFrom(date)
+   out
+ }
+ 
+diff --git a/R/fastice.R b/R/fastice.R
+index 09b3032..8ec4b8b 100644
+--- a/R/fastice.R
++++ b/R/fastice.R
+@@ -139,6 +139,6 @@ readfastice_circum <- function(date, time.resolution = "weekly3",
+   r <- if (nfiles > 1) terra::rast(r) else r[[1L]]
+   names(r) <- sprintf("fastice_%s", format(files$date, "%Y%m%d"))
+   
+-  terra::time(r) <- as.Date(files$date)
++  .utctime(r) <- files$date
+   .write_if_filename(r, ...)
+ }
+\ No newline at end of file
+diff --git a/R/fronts.R b/R/fronts.R
+index b7e077b..b73cfc6 100644
+--- a/R/fronts.R
++++ b/R/fronts.R
+@@ -92,6 +92,6 @@ readfronts <- function(date,
+   if (trim) r <- terra::trim(r)
+ 
+   names(r) <- format(files$date, "%Y-%m-%d")
+-  terra::time(r) <- as.Date(files$date)
++  .utctime(r) <- files$date
+   r
+ }
+diff --git a/R/fsle.R b/R/fsle.R
+index d62122d..8fda94e 100644
+--- a/R/fsle.R
++++ b/R/fsle.R
+@@ -63,7 +63,7 @@ r0 <- terra::rast(lapply(seq_len(nrow(files)), function(xi) {
+            varname = varname, band = files$band[xi])
+ }))
+ options(op)
+-terra::time(r0) <- files$date
++.utctime(r0) <- files$date
+ names(r0) <- format(files$date, "%Y-%m-%d")
+ .write_if_filename(r0, ...)
+ }
+diff --git a/R/ghrsst.R b/R/ghrsst.R
+index 78f170a..d92ded5 100644
+--- a/R/ghrsst.R
++++ b/R/ghrsst.R
+@@ -63,7 +63,7 @@ xylim <- force(xylim)
+   if (!nzchar(terra::crs(r0))) terra::crs(r0) <- "EPSG:4326"
+ 
+   if (nfiles == 1) r0 <- r0[[1L]]
+-  terra::time(r0) <- files$date
++  .utctime(r0) <- files$date
+   names(r0) <- format(files$date, "%Y-%m-%d")
+   r0 <- .write_if_filename(r0, ...)
+  
+diff --git a/R/ice_amsr_ssmi.R b/R/ice_amsr_ssmi.R
+index 3a5e661..c8805d0 100644
+--- a/R/ice_amsr_ssmi.R
++++ b/R/ice_amsr_ssmi.R
+@@ -20,7 +20,7 @@ read_amsre_ice <- function(date, xylim = NULL, latest = TRUE, ..., returnfiles =
+ 
+   out <- terra::rast(purrr::map(files$fullname, .readAMSRE, ext = xylim))
+   terra::crs(out) <- .antarctic_crs()
+-  terra::time(out) <- as.Date(files$date)
++  .utctime(out) <- files$date
+   names(out) <- format(files$date, "%Y-%m-%d")
+   out
+ }
+@@ -47,7 +47,7 @@ read_amsr2_ice <- function(date, xylim = NULL, latest = TRUE, ..., setNA = TRUE,
+ 
+   out <- terra::rast(purrr::map(files$fullname, .readAMSR2, ext = xylim, setNA = setNA))
+   terra::crs(out) <- .antarctic_crs()
+-  terra::time(out) <- as.Date(files$date)
++  .utctime(out) <- files$date
+   names(out) <- format(files$date, "%Y-%m-%d")
+   out
+ }
+diff --git a/R/read-amsr-ice.R b/R/read-amsr-ice.R
+index d612fc9..b81c4d0 100644
+--- a/R/read-amsr-ice.R
++++ b/R/read-amsr-ice.R
+@@ -83,7 +83,7 @@ read_amsr_ice_daily <- function(date,
+ 
+   out <- terra::rast(rlist)
+   terra::crs(out) <- .antarctic_crs()
+-  terra::time(out) <- as.Date(files$date)
++  .utctime(out) <- files$date
+   names(out) <- format(files$date, "%Y-%m-%d")
+ 
+   if (!is.null(xylim)) {
+@@ -144,7 +144,7 @@ read_amsr_ice_3k_daily <- function(date,
+   # Read files. These store percentages; concentration is a fraction.
+   out <- .rast_nc(files$fullname) / 100
+   terra::crs(out) <- .antarctic_crs()
+-  terra::time(out) <- as.Date(files$date)
++  .utctime(out) <- files$date
+   names(out) <- format(files$date, "%Y-%m-%d")
+ 
+   if (setNA) {
+@@ -217,7 +217,7 @@ read_cersat_ice_daily <- function(date,
+   out <- terra::rast(rlist) / 100
+   terra::ext(out) <- terra::ext(.antarctic_extent())
+   terra::crs(out) <- .antarctic_crs()
+-  terra::time(out) <- as.Date(files$date)
++  .utctime(out) <- files$date
+   names(out) <- format(files$date, "%Y-%m-%d")
+ 
+   if (setNA) {
+diff --git a/R/read-ccmp.R b/R/read-ccmp.R
+index 04ff065..13e5883 100644
+--- a/R/read-ccmp.R
++++ b/R/read-ccmp.R
+@@ -177,7 +177,7 @@ read_ccmp_wind_6hourly <- function(date,
+   }
+ 
+   # Set time
+-  terra::time(out) <- rep(files$date, each = if (single_output) 1L else 2L)
++  .utctime(out) <- rep(files$date, each = if (single_output) 1L else 2L)
+ 
+   # Set names
+   if (single_output) {
+diff --git a/R/read-cmems-ssh.R b/R/read-cmems-ssh.R
+index a10ab0d..8d2284f 100644
+--- a/R/read-cmems-ssh.R
++++ b/R/read-cmems-ssh.R
+@@ -56,7 +56,7 @@
+   }
+ 
+   # Time
+-  terra::time(r) <- as.Date(files$date)
++  .utctime(r) <- files$date
+   names(r) <- format(files$date, "%Y-%m-%d")
+ 
+   r
+@@ -329,7 +329,7 @@ read_cmems_current_speed_daily <- function(date,
+                               latest = latest, inputfiles = inputfiles)
+ 
+   r <- sqrt(u^2 + v^2)
+-  terra::time(r) <- terra::time(u)
++  .utctime(r) <- terra::time(u)
+   names(r) <- paste0("speed_", names(u))
+ 
+   r
+@@ -368,7 +368,7 @@ read_cmems_current_direction_daily <- function(date,
+ 
+   # Oceanographic convention: direction current is flowing TO
+   r <- .uv_direction(u, v)
+-  terra::time(r) <- terra::time(u)
++  .utctime(r) <- terra::time(u)
+   names(r) <- paste0("direction_", names(u))
+ 
+   r
+diff --git a/R/read-currents.R b/R/read-currents.R
+index 2626b69..e3237e2 100644
+--- a/R/read-currents.R
++++ b/R/read-currents.R
+@@ -151,7 +151,7 @@ read_copernicus_current_daily <- function(date,
+   }
+ 
+   # Set time
+-  terra::time(out) <- as.Date(rep(files$date, each = if (single_output) 1L else 2L))
++  .utctime(out) <- rep(files$date, each = if (single_output) 1L else 2L)
+ 
+   # Set names
+   if (single_output) {
+diff --git a/R/read-ice.R b/R/read-ice.R
+index 41eac16..80df00b 100644
+--- a/R/read-ice.R
++++ b/R/read-ice.R
+@@ -109,7 +109,7 @@ read_nsidc_ice_daily <- function(date,
+                          right = FALSE)
+   }
+ 
+-  terra::time(r) <- as.Date(files$date)
++  .utctime(r) <- files$date
+   names(r) <- format(files$date, "%Y-%m-%d")
+ 
+   # --- crop ---
+@@ -197,7 +197,7 @@ read_nsidc_cdr_daily <- function(date,
+                          right = FALSE)
+   }
+ 
+-  terra::time(r) <- as.Date(files$date)
++  .utctime(r) <- files$date
+   names(r) <- format(files$date, "%Y-%m-%d")
+ 
+   if (!is.null(xylim)) {
+@@ -267,7 +267,7 @@ read_nsidc_ice_monthly <- function(date,
+                          right = FALSE)
+   }
+ 
+-  terra::time(r) <- as.Date(files$date)
++  .utctime(r) <- files$date
+   names(r) <- format(files$date, "%Y-%m")
+ 
+   if (!is.null(xylim)) {
+diff --git a/R/read-oc.R b/R/read-oc.R
+index 6eedb44..6031aea 100644
+--- a/R/read-oc.R
++++ b/R/read-oc.R
+@@ -85,7 +85,7 @@
+   if (!nzchar(terra::crs(out))) {
+     terra::crs(out) <- "EPSG:4326"
+   }
+-  terra::time(out) <- as.Date(files$date)
++  .utctime(out) <- files$date
+   names(out) <- format(files$date, "%Y-%m-%d")
+ 
+   out
+@@ -265,7 +265,7 @@ read_oc_par_8day <- function(date,
+   if (is.na(terra::crs(out, proj = TRUE))) {
+     terra::crs(out) <- "EPSG:4326"
+   }
+-  terra::time(out) <- as.Date(files$date)
++  .utctime(out) <- files$date
+   names(out) <- format(files$date, "%Y-%m-%d")
+ 
+   out
+diff --git a/R/read-oisst.R b/R/read-oisst.R
+index 2c96c9f..08e46c1 100644
+--- a/R/read-oisst.R
++++ b/R/read-oisst.R
+@@ -92,7 +92,7 @@ read_oisst_daily <- function(date,
+  # OISST files are non-compliant netCDF (no grid_mapping), set CRS explicitly
+   r <- .rast_nc(files$fullname, subds = varname)
+   terra::crs(r) <- "EPSG:4326"
+-  terra::time(r) <- as.Date(files$date)
++  .utctime(r) <- files$date
+   names(r) <- format(files$date, "%Y-%m-%d")
+ 
+   # --- transforms ---
+@@ -164,7 +164,7 @@ read_oisst_monthly <- function(date,
+   # --- read ---
+   r <- .rast_nc(files$fullname, subds = varname)
+   terra::crs(r) <- "EPSG:4326"
+-  terra::time(r) <- as.Date(files$date)
++  .utctime(r) <- files$date
+   names(r) <- format(files$date, "%Y-%m")
+ 
+   # --- transforms ---
+diff --git a/R/read-wind.R b/R/read-wind.R
+index 325bcfe..2266dab 100644
+--- a/R/read-wind.R
++++ b/R/read-wind.R
+@@ -159,7 +159,7 @@ read_ncep2_wind_6hourly <- function(date,
+   }
+ 
+   # Set time
+-  terra::time(out) <- rep(files$date, each = if (single_output) 1L else 2L)
++  .utctime(out) <- rep(files$date, each = if (single_output) 1L else 2L)
+ 
+   # Set names
+   if (single_output) {
+diff --git a/R/salinity.R b/R/salinity.R
+index 885be73..0e29a61 100644
+--- a/R/salinity.R
++++ b/R/salinity.R
+@@ -85,7 +85,7 @@ readsal <-  function (date, time.resolution = c("daily"),
+   if (!nzchar(terra::crs(r0))) terra::crs(r0) <- "EPSG:4326"
+   
+   if (nfiles == 1) r0 <- r0[[1L]]
+-  terra::time(r0) <- files$date
++  .utctime(r0) <- files$date
+   names(r0) <- format(files$date, "%Y-%m-%d")
+   
+   .write_if_filename(r0, ...)
+diff --git a/R/sose.R b/R/sose.R
+index 247a5f1..21b9e80 100644
+--- a/R/sose.R
++++ b/R/sose.R
+@@ -136,7 +136,7 @@ read_sose <-  function (date, time.resolution = c("monthly"),
+ 
+   names(r0) <- sprintf("level%i", level)
+   terra::depth(r0) <- level
+-  terra::time(r0) <- rep(as.Date(files$date), length(level))
++  .utctime(r0) <- rep(files$date, length(level))
+ 
+   r0
+ 
+diff --git a/R/utils.R b/R/utils.R
+index 79cb998..5bd3e8d 100644
+--- a/R/utils.R
++++ b/R/utils.R
+@@ -274,3 +274,17 @@
+ timedateFrom <- function(x, ...) {
+   as.POSIXct(x, tz = "UTC", ...)
+ }
++
++
++## Set a reader's time axis, always as UTC POSIXct.
++##
++## raster-era raadtools assigned every time axis through getZ(), which was
++## POSIXct by construction, so downstream code could count on seconds. terra
++## keeps whatever class it is handed and records a matching step: hand it a
++## Date and time() gives a Date back with a "days" step, so as.integer() on
++## the result counts days, and any sub-daily stamp is gone. Reader time is set
++## through here so the class, the step and the zone are decided in one place.
++`.utctime<-` <- function(x, value) {
++  terra::time(x) <- timedateFrom(value)
++  x
++}
+-- 
+2.43.0
+
+
+From e37ed509ecc82e477552dda5511b43d4c3fc18d7 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 10 Sep 2026 11:46:12 +0000
+Subject: [PATCH 2/2] Use terra::time() in the timezone fixture test
+
+raster is gone from the package, so getZ() is not available to the test
+suite. The fixture values themselves are unchanged - they are seconds
+since the epoch, which is what terra::time() now returns.
+
+tests/testthat/testthat_readice.R:90 has the last remaining getZ() call
+and needs the same substitution; it is left alone here because it is a
+line the expect_that patch also rewrites.
+
+Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01FxfVsMKWJce64vRsZgurfB
+---
+ tests/testthat/testthat-timezone-modify.R | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/tests/testthat/testthat-timezone-modify.R b/tests/testthat/testthat-timezone-modify.R
+index 4284733..bab1b73 100644
+--- a/tests/testthat/testthat-timezone-modify.R
++++ b/tests/testthat/testthat-timezone-modify.R
+@@ -13,12 +13,12 @@ ref <- as.integer(c(368150400, 278208000, 283996800, 725846400, 1445774400, 1025
+ 
+ ffw <- function(x) {x <- as.integer(c(x)); attributes(x) <- NULL; x}
+ test_that("date time underlying values don't change", {
+-  expect_equal(ffw(getZ(readsst(latest = FALSE))), ref[1])
+-  expect_equal(ffw(getZ(readice(latest = FALSE))), ref[2])
+-  expect_equal(ffw(getZ(readwind(latest = FALSE))[1]), ref[3])
+-  expect_equal(ffw(getZ(readcurr(latest = FALSE))[1]), ref[4])
+-  expect_equal(ffw(getZ(readamps_d1wind(latest = FALSE))[1]), ref[5])
++  expect_equal(ffw(terra::time(readsst(latest = FALSE))), ref[1])
++  expect_equal(ffw(terra::time(readice(latest = FALSE))), ref[2])
++  expect_equal(ffw(terra::time(readwind(latest = FALSE))[1]), ref[3])
++  expect_equal(ffw(terra::time(readcurr(latest = FALSE))[1]), ref[4])
++  expect_equal(ffw(terra::time(readamps_d1wind(latest = FALSE))[1]), ref[5])
+   ## oc_sochla_files() retired 2026-09-09, see archive/
+-  expect_equal(ffw(getZ(readssh(latest = FALSE))), ref[7])
++  expect_equal(ffw(terra::time(readssh(latest = FALSE))), ref[7])
+ 
+ })
+-- 
+2.43.0
+

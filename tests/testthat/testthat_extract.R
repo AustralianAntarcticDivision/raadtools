@@ -6,12 +6,12 @@ library(raadtools)
 data(aurora)
 aurora$DATE_TIME_UTC <- aurora$DATE_TIME_UTC - 720 * 24 * 3600
 test_that("we get values", {
-  #  expect_that(extract(readchla, aurora), is_a("numeric"))
+  #  expect_type(extract(readchla, aurora), "double")
   #expect_equivalent(extract(readssh, aurora[c(1, 5, 10, 15), ]), 
   #            c( 0.5424,  0.4929, -0.6060, -1.2465))
   ## warning about tzone
-    expect_that(extract(readwind, aurora[c(1, 5, 10, 15), ], magonly = TRUE), is_a("numeric"))  
-    ##expect_that(extract(readprod, aurora), is_a("numeric"))
+    expect_type(extract(readwind, aurora[c(1, 5, 10, 15), ], magonly = TRUE), "double")  
+    ##expect_type(extract(readprod, aurora), "double")
 })
 
 
@@ -35,6 +35,6 @@ d <- structure(list(X1 = c(-21.6151966875637, -21.6151966875637, -21.61519668756
 -20L), class = "data.frame")
 
 test_that("another example works", {
-    expect_that(extract(readwind, d, magonly = TRUE), is_a("numeric"))
+    expect_type(extract(readwind, d, magonly = TRUE), "double")
 })
 

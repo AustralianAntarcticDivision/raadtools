@@ -23,22 +23,22 @@ test_that("all file options give existing files, with warnings where appropriate
 
 
 test_that("file options result in actual data layers", {
-          expect_that(readtopo(), is_a("RasterLayer"))
-          expect_that(readtopo("ibcso"), is_a("RasterLayer"))
-          expect_that(readtopo("etopo1"), is_a("RasterLayer"))
-          expect_that(readtopo("etopo2"), is_a("RasterLayer"))
-          expect_that(readtopo("kerguelen"), is_a("RasterLayer"))
+          expect_s4_class(readtopo(), "RasterLayer")
+          expect_s4_class(readtopo("ibcso"), "RasterLayer")
+          expect_s4_class(readtopo("etopo1"), "RasterLayer")
+          expect_s4_class(readtopo("etopo2"), "RasterLayer")
+          expect_s4_class(readtopo("kerguelen"), "RasterLayer")
           expect_error(readtopo("george_v_terre_adelie"), "not available")
-          expect_that(readtopo("smith_sandwell"), is_a("RasterLayer"))
+          expect_s4_class(readtopo("smith_sandwell"), "RasterLayer")
 
-          #expect_that(readtopo("ibcso", polar = TRUE), is_a("RasterLayer"))
-          #expect_that(readtopo("ibcso", lon180 = FALSE), is_a("RasterLayer"))
-          expect_that(readtopo("smith_sandwell", lon180 = TRUE), is_a("RasterLayer"))
+          #expect_s4_class(readtopo("ibcso", polar = TRUE), "RasterLayer")
+          #expect_s4_class(readtopo("ibcso", lon180 = FALSE), "RasterLayer")
+          expect_s4_class(readtopo("smith_sandwell", lon180 = TRUE), "RasterLayer")
 
           ## these aren't working, is raster somehow swallowing warnings?
-          ##expect_that(readtopo("ibcso", lon180 = FALSE), gives_warning())
-          ##expect_that(readtopo("kerguelen", lon180 = FALSE), gives_warning())
-          ##expect_that(readtopo("kerguelen", lon180 = TRUE, polar = TRUE), gives_warning())
+          ##expect_warning(readtopo("ibcso", lon180 = FALSE))
+          ##expect_warning(readtopo("kerguelen", lon180 = FALSE))
+          ##expect_warning(readtopo("kerguelen", lon180 = TRUE, polar = TRUE))
 
       })
 

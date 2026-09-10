@@ -14,33 +14,33 @@ test_that("using filename with two dates gives a brick", {
 })
 
 test_that("nuances of different defaults for multilayer object", {
-  expect_that(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10")), is_a("RasterBrick"))
-  expect_that(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10"), lon180 = FALSE), is_a("RasterBrick"))
-  expect_that(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10"), xylim = extent(-180, 180, -90, -40)), is_a("RasterBrick"))
+  expect_s4_class(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10")), "RasterBrick")
+  expect_s4_class(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10"), lon180 = FALSE), "RasterBrick")
+  expect_s4_class(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10"), xylim = extent(-180, 180, -90, -40)), "RasterBrick")
 })
 
 test_that("date ranges are valid", {
   dr <- range(sshfiles()$date)
-  expect_that(dr, is_a("POSIXct"))
+  expect_s3_class(dr, "POSIXct")
   expect_true(all(!is.na(dr)))
   dr2 <- range(sshfiles(ssha=TRUE)$date)
-  expect_that(dr2, is_a("POSIXct"))
+  expect_s3_class(dr2, "POSIXct")
   expect_true(all(!is.na(dr2)))
   
   dr3 <- range(sshfiles(time.resolution = "daily", ssha=TRUE)$date)
-  expect_that(dr3, is_a("POSIXct"))
+  expect_s3_class(dr3, "POSIXct")
   expect_true(all(!is.na(dr3)))
   
   # dr4 <- range(sshfiles(time.resolution = "monthly_clim", ssha=TRUE)$date)
-  # expect_that(dr4, is_a("POSIXct"))
+  # expect_s3_class(dr4, "POSIXct")
   # expect_true(all(!is.na(dr4)))
   # 
   # dr5 <- range(sshfiles(time.resolution = "seasonal_clim", ssha=TRUE)$date)
-  # expect_that(dr5, is_a("POSIXct"))
+  # expect_s3_class(dr5, "POSIXct")
   # expect_true(all(!is.na(dr5)))
   # 
-  # expect_that(nrow(sshfiles(time.resolution = "seasonal_clim", ssha=TRUE)), equals(4))
-  # expect_that(nrow(sshfiles(time.resolution = "monthly_clim", ssha=TRUE)), equals(12))
+  # expect_equal(nrow(sshfiles(time.resolution = "seasonal_clim", ssha=TRUE)), 4)
+  # expect_equal(nrow(sshfiles(time.resolution = "monthly_clim", ssha=TRUE)), 12)
 
 })
 
@@ -59,8 +59,8 @@ xyt <- data.frame(x = c(100, 120, 130, 145, 150), y = seq(-80, 20, length = 5),
 test_that("read is ok with inputfiles", {
   expect_s4_class(readssh("2015-01-01",  time.resolution = "daily", inputfiles = cf),"BasicRaster")
   expect_s4_class(readssh("2015-01-01", ssha = TRUE, time.resolution = "daily", inputfiles = cfa), "BasicRaster")
-  expect_that(extract(readssh, xyt), is_a("numeric"))
+  expect_type(extract(readssh, xyt), "double")
   # 
-  # expect_that(extract(readssh, xyt, ssha = TRUE,  inputfiles = cfa), is_a("numeric"))
+  # expect_type(extract(readssh, xyt, ssha = TRUE, inputfiles = cfa), "double")
 })
 

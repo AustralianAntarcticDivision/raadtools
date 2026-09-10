@@ -10,7 +10,7 @@ polar_map(crs = commonprojections$polar)
 \item{crs}{PROJ.4 string}
 }
 \value{
-SpatialLinesDataFrame
+SpatVector of lines
 }
 \description{
 Spatial lines in the standard (71S) South Polar projection. Data is

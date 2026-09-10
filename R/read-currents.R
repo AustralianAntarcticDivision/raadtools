@@ -179,20 +179,13 @@ read_aviso_current_daily <- read_copernicus_current_daily
 #' @return logical, TRUE if rotation needed
 #' @noRd
 .needs_rotation <- function(r, lon180) {
-  ext <- as.vector(terra::ext(r))
-  xmin <- ext[1]
-  xmax <- ext[2]
+  ## A global grid in the Pacific view carries cells east of 180, whatever its
+  ## western edge happens to be. Testing xmin < 0 instead gets NCEP2 wrong:
+  ## its longitudes are 0, 1.875, ... 358.125, so GDAL puts the western cell
+  ## edge half a cell below zero at -0.9375 and a Pacific grid looks Atlantic.
+  ## CCMP happens to escape that only because its longitudes start at half a
+  ## cell, putting its western edge exactly on zero.
+  is_pacific <- as.vector(terra::ext(r))[["xmax"]] > 180
 
- # Determine current orientation
-  is_atlantic <- xmin < 0  # has negative longitudes = Atlantic view
-
-  # Need to rotate if current doesn't match desired
-  if (lon180 && !is_atlantic) {
-    return(TRUE)  # want Atlantic, have Pacific -> rotate
- }
-  if (!lon180 && is_atlantic) {
-    return(TRUE)  # want Pacific, have Atlantic -> rotate
-  }
-
-  FALSE
+  (lon180 && is_pacific) || (!lon180 && !is_pacific)
 }

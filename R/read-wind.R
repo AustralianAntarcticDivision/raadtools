@@ -102,15 +102,12 @@ read_ncep2_wind_6hourly <- function(date,
   results <- vector("list", nrow(files))
 
   for (i in seq_len(nrow(files))) {
-    # Read U and V from separate files, specific band
-    u <- .rast_nc(files$ufullname[i], lyrs = files$band[i])
-    v <- .rast_nc(files$vfullname[i], lyrs = files$band[i])
+    # Read U and V from separate files, specific band. Name the variable: a
+    # bare read happens to find uwnd/vwnd on these files today, but which
+    # subdataset GDAL hands back is not something to leave to chance.
+    u <- .rast_nc(files$ufullname[i], subds = "uwnd", lyrs = files$band[i])
+    v <- .rast_nc(files$vfullname[i], subds = "vwnd", lyrs = files$band[i])
 
-    e <- terra::ext(u)
-    res_x <- terra::res(u)[1]
-    terra::ext(u) <- c(e[1] + res_x/2, e[2] + res_x/2, e[3], e[4])
-    terra::ext(v) <- c(e[1] + res_x/2, e[2] + res_x/2, e[3], e[4])
-    
     # Handle rotation
     if (lon180) {
       needs_rotate <- .needs_rotation(u, lon180 = TRUE)
@@ -153,8 +150,9 @@ read_ncep2_wind_6hourly <- function(date,
     out <- terra::rast(results)
   }
 
-  # Set CRS if missing
-  if (is.na(terra::crs(out, proj = TRUE))) {
+  # Set CRS if missing. terra returns "" for an unset CRS, never NA, and for a
+  # bare SpatRaster it returns longlat outright, so is.na() here never fired.
+  if (!nzchar(terra::crs(out))) {
     terra::crs(out) <- "EPSG:4326"
   }
 

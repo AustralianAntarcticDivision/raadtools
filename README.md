@@ -4,19 +4,19 @@
 # R Tools for Synoptic Environmental Spatial Data
 
 <!-- terra-transition-notice: remove this block once the transition has bedded in -->
+
 > ### raadtools now returns terra `SpatRaster` objects
 >
-> Every `read*()` function used to return a raster `RasterLayer`, `RasterBrick`
-> or `RasterStack`, and now returns a terra `SpatRaster`. The function names and
-> their arguments have not changed, and the legacy `read*()` names are not
-> deprecated.
+> Every `read*()` function used to return a raster `RasterLayer`,
+> `RasterBrick` or `RasterStack`, and now returns a terra `SpatRaster`.
+> The function names and their arguments have not changed, and the
+> legacy `read*()` names are not deprecated.
 >
-> `rast()` and `ext()` are the two terra names that replace most of what you
-> used from raster. See
-> [Moving raadtools from raster to terra](https://australianantarcticdivision.github.io/raadtools/articles/terra-transition.html),
-> or `vignette("terra-transition", package = "raadtools")`, for what to change
-> in existing code.
-<!-- end terra-transition-notice -->
+> `rast()` and `ext()` are the two terra names that replace most of what
+> you used from raster. See [Moving raadtools from raster to
+> terra](https://australianantarcticdivision.github.io/raadtools/articles/terra-transition.html),
+> or `vignette("terra-transition", package = "raadtools")`, for what to
+> change in existing code. <!-- end terra-transition-notice -->
 
 Tools for reading, plotting and manipulating spatial data used at the
 Australian Antarctic Division (AAD).
@@ -27,6 +27,10 @@ date:
 ``` r
 library(raadtools)
 ice <- readice(c("2018-06-01", "2019-06-01"))
+#> Warning: 'readice' now returns a terra SpatRaster, not a Raster* object.
+#>   This call reads through 'read_nsidc_cdr_daily'.
+#>   See vignette("terra-transition", package = "raadtools").
+#>   Said once per function per session; options(raadtools.shim.warn = FALSE) turns it off entirely.
 plot(ice)
 ```
 
@@ -58,10 +62,10 @@ There are two main ways to use it.
 
 The typical use-cases for raadtools are
 
-  - read a time series gridded data set as a function of date,
-    optionally with spatial subsetting
-  - match a data set of longitude, latitude, time to the corresponding
-    value in a time series gridded data set
+- read a time series gridded data set as a function of date, optionally
+  with spatial subsetting
+- match a data set of longitude, latitude, time to the corresponding
+  value in a time series gridded data set
 
 Examples of these workflows are outlined in this [rOpenSci blog
 post](https://ropensci.org/blog/2018/11/13/antarctic/).
@@ -75,7 +79,7 @@ within the AAD.
 There are two main ways to access raadtools. (If neither of 1 or 2 work
 for you you, see your local raadtools expert.)
 
-## 1\. RStudio raadtools server
+## 1. RStudio raadtools server
 
 If you have access to a “raadtools-RStudio-server” then you need only
 load the package to get started:
@@ -84,7 +88,7 @@ load the package to get started:
 library(raadtools)
 ```
 
-## 2\. Local computer, within the AAD network
+## 2. Local computer, within the AAD network
 
 If it’s not installed, trying installing with
 
@@ -100,7 +104,7 @@ collection.
 
 Anyone with a [Nectar account](https://dashboard.rc.nectar.org.au) may
 run this by creating a VM from our `raadclient` image. Search the public
-images for **raadclient** (e.g. ’ raadclient06\_20181016’ but choose the
+images for **raadclient** (e.g. ’ raadclient06_20181016’ but choose the
 latest one) and ensure that the SSH and RStudio port (8787) is open. Use
 the default *rstudio/rstudio* account, or create your own.
 
@@ -109,7 +113,7 @@ your own use, but please respect the citation and usage requests of the
 data providers [listed in the
 summary](https://github.com/AustralianAntarcticDivision/blueant#data-source-summary).
 
------
+------------------------------------------------------------------------
 
 Please note that the ‘raadtools’ project is released with a [Contributor
 Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this project,

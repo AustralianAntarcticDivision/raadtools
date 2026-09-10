@@ -209,7 +209,7 @@ read_cersat_ice_daily <- function(date,
 
   # Read and flip (CERSAT NetCDF is upside down)
   rlist <- lapply(files$fullname, function(f) {
-    r <- .rast_nc(f, subds = "concentration")
+    invisible(capture.output(r <- .rast_nc(f, subds = "concentration")))
     terra::flip(r, direction = "vertical")
   })
 

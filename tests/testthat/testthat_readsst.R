@@ -68,7 +68,7 @@ xyt <- data.frame(x = c(100, 120, 130, 145, 150), y = seq(-80, 20, length = 5),
                   dts = seq(as.Date("2001-01-03"), by = "1 month", length = 5)
 )
 test_that("read is ok with inputfiles", {
-  expect_that(readsst("2015-01-01", time.resolution = "daily", inputfiles = cf), is_a("RasterLayer"))
+  expect_s4_class(readsst("2015-01-01", time.resolution = "daily", inputfiles = cf), "SpatRaster")
   #expect_that(extract(readsst, xyt,  time.resolution = "daily"), is_a("numeric"))
 })
 

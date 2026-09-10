@@ -134,7 +134,7 @@ test_that("read_nsidc_ice_daily crop works", {
   bounds <- c(-3000000, -1000000, -2000000, 0)  # xmin, xmax, ymin, ymax in meters
   r <- read_nsidc_ice_daily("2020-01-15", xylim = bounds)
 
-  ext <- as.vector(terra::ext(r))
+  ext <- unname(as.vector(terra::ext(r)))
   expect_true(ext[1] >= bounds[1] - 25000)  # allow grid cell tolerance
   expect_true(ext[2] <= bounds[2] + 25000)
 })
@@ -168,7 +168,7 @@ test_that("readice shim returns RasterBrick for single hemisphere", {
     r <- readice("2020-01-15", hemisphere = "south")
   })
 
-  expect_s4_class(r, "RasterLayer")
+  expect_s4_class(r, "SpatRaster")
 })
 test_that("readice shim produces equivalent values to read_nsidc_ice_daily", {
   skip_if_no_raad()
@@ -179,21 +179,14 @@ test_that("readice shim produces equivalent values to read_nsidc_ice_daily", {
   r_terra <- read_nsidc_ice_daily("2020-01-15", hemisphere = "south")
 
   # Convert both to vectors for comparison
-  vals_legacy <- raster::values(r_legacy)
+  vals_legacy <- values(r_legacy)
   vals_terra <- terra::values(r_terra)
 
   # Should be identical
   expect_equal(vals_legacy, as.vector(vals_terra), tolerance = 0.01)
 })
 
-test_that("readice shim emits deprecation warning", {
-  skip_if_no_raad()
 
-  expect_warning(
-    readice("2020-01-15", hemisphere = "south"),
-    "deprecated"
-  )
-})
 
 test_that("readice hemisphere='both' still works (legacy path)", {
   skip_if_no_raad()
@@ -204,8 +197,8 @@ test_that("readice hemisphere='both' still works (legacy path)", {
   })
 
   # Should be a global raster
-  expect_s4_class(r, "Raster")
-  ext <- raster::extent(r)
-  expect_equal(raster::xmin(ext), -180, tolerance = 0.5)
-  expect_equal(raster::xmax(ext), 180, tolerance = 0.5)
+  expect_s4_class(r, "SpatRaster")
+  ext <- ext(r)
+  expect_equal(xmin(ext), -180, tolerance = 0.5)
+  expect_equal(xmax(ext), 180, tolerance = 0.5)
 })

@@ -47,7 +47,7 @@ test_that("read_oc_chl_daily has correct global extent", {
   skip_if_no_oc("daily")
 
   r <- read_oc_chl_daily()
-  ext <- as.vector(terra::ext(r))
+  ext <- unname(as.vector(terra::ext(r)))
 
   expect_equal(ext[1], -180)
   expect_equal(ext[2], 180)
@@ -71,7 +71,7 @@ test_that("read_oc_chl_daily crop works", {
   bounds <- c(100, 150, -60, -40)
   r <- read_oc_chl_daily(xylim = bounds)
 
-  ext <- as.vector(terra::ext(r))
+  ext <- unname(as.vector(terra::ext(r)))
   expect_true(ext[1] >= bounds[1] - 0.1)
   expect_true(ext[2] <= bounds[2] + 0.1)
 })
@@ -137,7 +137,7 @@ test_that("read_oc_par_8day crop works", {
   bounds <- c(100, 150, -60, -40)
   r <- read_oc_par_8day(xylim = bounds)
 
-  ext <- as.vector(terra::ext(r))
+  ext <- unname(as.vector(terra::ext(r)))
   expect_true(ext[1] >= bounds[1] - 0.1)
   expect_true(ext[2] <= bounds[2] + 0.1)
 })
@@ -153,7 +153,7 @@ test_that("read_chla_daily shim returns Raster", {
     r <- read_chla_daily()
   })
 
-  expect_s4_class(r, "Raster")
+  expect_s4_class(r, "SpatRaster")
 })
 
 test_that("read_chla_weekly shim returns Raster", {
@@ -163,7 +163,7 @@ test_that("read_chla_weekly shim returns Raster", {
     r <- read_chla_weekly()
   })
 
-  expect_s4_class(r, "Raster")
+  expect_s4_class(r, "SpatRaster")
 })
 
 test_that("read_par shim returns Raster", {
@@ -173,7 +173,7 @@ test_that("read_par shim returns Raster", {
     r <- read_par()
   })
 
-  expect_s4_class(r, "Raster")
+  expect_s4_class(r, "SpatRaster")
 })
 
 test_that("readCHL_month is defunct", {

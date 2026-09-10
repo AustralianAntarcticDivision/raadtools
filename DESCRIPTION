@@ -1,7 +1,7 @@
 Package: raadtools
 Type: Package
 Title: Tools for Synoptic Environmental Spatial Data
-Version: 0.7.0.7
+Version: 0.7.0.8
 Authors@R: c(
    person("Michael D.","Sumner", role = c("aut", "cre"), email = "michael.sumner@aad.gov.au"), 
    person("Ben", "Raymond", role = "ctb", email = "ben.raymond@aad.gov.au")
@@ -29,10 +29,8 @@ Suggests:
     dbplyr,
     duckdb,
     knitr,
-    rgdal,
-    RSQLite,
     reproj (>= 0.4.3),
-    testthat,
+    testthat (>= 3.0.0),
     withr,
     rmarkdown,
     covr
@@ -47,3 +45,5 @@ Description: Tools for reading, plotting and manipulating spatial data,
 License: GPL-3
 Remotes: AustralianAntarcticDivision/raadfiles, AustralianAntarcticDivision/xyt
 Config/roxygen2/version: 8.1.0
+Config/testthat/edition: 3
+Config/testthat/parallel: true

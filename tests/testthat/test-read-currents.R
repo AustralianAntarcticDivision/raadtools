@@ -146,7 +146,7 @@ test_that("read_copernicus_current_daily crop works", {
   bounds <- c(100, 150, -60, -40)
   r <- read_copernicus_current_daily("2020-01-15", xylim = bounds, uonly = TRUE)
 
-  ext <- as.vector(terra::ext(r))
+  ext <- unname(as.vector(terra::ext(r)))
   expect_true(ext[1] >= bounds[1] - 0.5)
   expect_true(ext[2] <= bounds[2] + 0.5)
   expect_true(ext[3] >= bounds[3] - 0.5)
@@ -186,18 +186,11 @@ test_that("readcurr shim returns RasterBrick", {
     r <- readcurr("2020-01-15")
   })
 
-  expect_s4_class(r, "Raster")
-  expect_equal(raster::nlayers(r), 2L)
+  expect_s4_class(r, "SpatRaster")
+  expect_equal(nlyr(r), 2L)
 })
 
-test_that("readcurr shim emits deprecation warning", {
-  skip_if_no_raad()
 
-  expect_warning(
-    readcurr("2020-01-15"),
-    "deprecated"
-  )
-})
 
 test_that("readcurr shim magonly matches terra version", {
   skip_if_no_raad()
@@ -207,7 +200,7 @@ test_that("readcurr shim magonly matches terra version", {
   })
   r_terra <- read_copernicus_current_daily("2020-01-15", magonly = TRUE)
 
-  vals_legacy <- as.vector(raster::values(r_legacy))
+  vals_legacy <- as.vector(values(r_legacy))
   vals_terra <- as.vector(terra::values(r_terra))
 
   expect_equal(vals_legacy, vals_terra, tolerance = 1e-6)

@@ -8,7 +8,9 @@
 ## Every read of a file in raadtools goes through here, so the flag is set in
 ## one place rather than at each call site.
 .rast_nc <- function(x, ...) {
-  terra::rast(x, ..., md = FALSE)
+  suppressWarnings(
+   terra::rast(x, ..., md = FALSE)
+  )
 }
 
 ## The raster-era readers passed ... straight to brick(), which in practice

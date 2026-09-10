@@ -17,8 +17,8 @@ fasticefiles <- function(...) {
   ## latitude, longitude and area variables, and GDAL will hand one of those
   ## back instead. The extent warning is expected - there is no georeferencing
   ## in the file, readfastice_circum() sets it.
-  time <- lapply(files$fullname,
-                 function(x) suppressWarnings(terra::time(.rast_nc(x, subds = .fastice_var))))
+  invisible(capture.output(time <- lapply(files$fullname,
+                 function(x) suppressWarnings(terra::time(.rast_nc(x, subds = .fastice_var))))))
   files <- files[rep(seq_len(nrow(files)), lengths(time)), ]
   files$date <- as.POSIXct(as.Date("1970-01-01") + unlist(time), tz = "UTC")
   files$band <- unlist(lapply(lengths(time), seq_len))
@@ -112,7 +112,7 @@ readfastice_circum <- function(date, time.resolution = "weekly3",
     ## against a file built the same way (2D lat/lon, no 1D y/x coordinates).
     ## The extent warning is expected, since the extent comes from here.
     
-    r <- suppressWarnings(.rast_nc(x, subds = .fastice_var)[[band]])
+    invisible(capture.output(r <- suppressWarnings(.rast_nc(x, subds = .fastice_var)[[band]])))
     r <- terra::flip(r, "vertical")
     terra::ext(r) <- ex
     terra::crs(r) <- prj

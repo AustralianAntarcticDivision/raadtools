@@ -5,19 +5,19 @@ context("surface currents")
 cf <- currentsfiles()
 
 test_that("current data is returned as a raster object", {
-           expect_that(readcurr("2000-01-01"), is_a("RasterStack"))
-  expect_that(readcurr("2000-01-01", inputfiles = cf), is_a("RasterStack"))
+           expect_s4_class(readcurr("2000-01-01"), "SpatRaster")
+  expect_s4_class(readcurr("2000-01-01", inputfiles = cf), "SpatRaster")
       })
 
 test_that("multiple dates are supported only with magonly/dironly, and if given the length is 2", {
-           expect_that(readcurr(c("2000-01-01", "2003-01-10"), inputfiles = cf), gives_warning())
-           expect_that(readcurr(c("2000-01-01", "2003-01-10"), dironly = TRUE, inputfiles = cf), is_a("RasterStack"))
-           expect_that(nlayers(readcurr(c("2000-01-01", "2003-01-10"), magonly = TRUE, inputfiles = cf)), equals(2))
+           expect_warning(readcurr(c("2000-01-01", "2003-01-10"), inputfiles = cf))
+           expect_s4_class(readcurr(c("2000-01-01", "2003-01-10"), dironly = TRUE, inputfiles = cf), "SpatRaster")
+           expect_equals(nlyr(readcurr(c("2000-01-01", "2003-01-10"), magonly = TRUE, inputfiles = cf)), 2L)
                  })
 
 test_that("multi layers returned with magonly or dironly", {
-    expect_that(nlayers(readcurr(c("2000-01-01", "2003-01-10"), magonly = TRUE, inputfiles = cf)), equals(2))
-    expect_that(nlayers(readcurr(c("2000-01-01", "2003-01-10"), dironly = TRUE, inputfiles = cf)), equals(2))
+    expect_that(nlyr(readcurr(c("2000-01-01", "2003-01-10"), magonly = TRUE, inputfiles = cf)), equals(2))
+    expect_that(nlyr(readcurr(c("2000-01-01", "2003-01-10"), dironly = TRUE, inputfiles = cf)), equals(2))
     expect_that(readcurr(c("2000-01-01"), magonly = TRUE, dironly = TRUE, inputfiles = cf), throws_error())
     expect_that(readcurr(c("2000-01-01"), vonly = TRUE, dironly = TRUE, inputfiles = cf), throws_error())
 })

@@ -81,7 +81,7 @@ test_that("scalar readers handle crop", {
   bounds <- c(100, 150, -60, -40)
   r <- read_cmems_adt_daily("2020-01-15", xylim = bounds)
 
-  ext <- as.vector(terra::ext(r))
+  ext <- unname(as.vector(terra::ext(r)))
   expect_true(ext[1] >= bounds[1] - 0.5)
   expect_true(ext[2] <= bounds[2] + 0.5)
   expect_true(ext[3] >= bounds[3] - 0.5)
@@ -149,8 +149,8 @@ test_that("readssh shim returns Raster object for adt", {
     r <- readssh("2020-01-15", ssha = FALSE)
   })
 
-  expect_s4_class(r, "Raster")
-  expect_equal(raster::nlayers(r), 1L)
+  expect_s4_class(r, "SpatRaster")
+  expect_equal(nlyr(r), 1L)
 })
 
 test_that("readssh shim returns Raster object for sla", {
@@ -160,8 +160,8 @@ test_that("readssh shim returns Raster object for sla", {
     r <- readssh("2020-01-15", ssha = TRUE)
   })
 
-  expect_s4_class(r, "Raster")
-  expect_equal(raster::nlayers(r), 1L)
+  expect_s4_class(r, "SpatRaster")
+  expect_equal(nlyr(r), 1L)
 })
 
 test_that("readcurr shim magonly works", {
@@ -171,8 +171,8 @@ test_that("readcurr shim magonly works", {
     r <- readcurr("2020-01-15", magonly = TRUE)
   })
 
-  expect_s4_class(r, "Raster")
-  expect_equal(raster::nlayers(r), 1L)
+  expect_s4_class(r, "SpatRaster")
+  expect_equal(nlyr(r), 1L)
 })
 
 test_that("readcurr shim dironly works", {
@@ -182,8 +182,8 @@ test_that("readcurr shim dironly works", {
     r <- readcurr("2020-01-15", dironly = TRUE)
   })
 
-  expect_s4_class(r, "Raster")
-  expect_equal(raster::nlayers(r), 1L)
+  expect_s4_class(r, "SpatRaster")
+  expect_equal(nlyr(r), 1L)
 })
 
 test_that("readcurr shim uonly works", {
@@ -193,8 +193,8 @@ test_that("readcurr shim uonly works", {
     r <- readcurr("2020-01-15", uonly = TRUE)
   })
 
-  expect_s4_class(r, "Raster")
-  expect_equal(raster::nlayers(r), 1L)
+  expect_s4_class(r, "SpatRaster")
+  expect_equal(nlyr(r), 1L)
 })
 
 test_that("readcurr shim default returns 2 layers", {
@@ -204,8 +204,8 @@ test_that("readcurr shim default returns 2 layers", {
     r <- readcurr("2020-01-15")
   })
 
-  expect_s4_class(r, "Raster")
-  expect_equal(raster::nlayers(r), 2L)
+  expect_s4_class(r, "SpatRaster")
+  expect_equal(nlyr(r), 2L)
 })
 
 test_that("readcurr shim warns on multiple dates without flag", {

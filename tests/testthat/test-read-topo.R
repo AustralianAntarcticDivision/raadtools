@@ -53,7 +53,7 @@ test_that("read_topo crop works with numeric vector", {
   bounds <- c(100, 110, -50, -40)
   r <- read_topo("gebco_23", xylim = bounds)
 
-  ext <- as.vector(terra::ext(r))
+  ext <- unname(as.vector(terra::ext(r)))
   expect_true(ext[1] >= bounds[1] - 0.1)
   expect_true(ext[2] <= bounds[2] + 0.1)
   expect_true(ext[3] >= bounds[3] - 0.1)
@@ -131,7 +131,7 @@ test_that("readtopo shim returns RasterLayer", {
     r <- readtopo("gebco_23", xylim = c(100, 102, -42, -40))
   })
 
-  expect_s4_class(r, "RasterLayer")
+  expect_s4_class(r, "SpatRaster")
 })
 
 test_that("readbathy alias works", {
@@ -141,7 +141,7 @@ test_that("readbathy alias works", {
     r <- readbathy("gebco_23", xylim = c(100, 102, -42, -40))
   })
 
-  expect_s4_class(r, "RasterLayer")
+  expect_s4_class(r, "SpatRaster")
 })
 
 test_that("read_bathy alias works", {

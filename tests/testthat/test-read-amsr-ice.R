@@ -47,7 +47,7 @@ skip_if_no_cersat <- function() {
 test_that("read_amsr_ice_daily returns SpatRaster", {
   skip_if_no_amsr()
 
-  r <- read_amsr_ice_daily()
+  expect_silent(r <- read_amsr_ice_daily())
 
   expect_s4_class(r, "SpatRaster")
   expect_equal(terra::nlyr(r), 1L)
@@ -57,7 +57,7 @@ test_that("read_amsr_ice_daily has correct Antarctic extent", {
   skip_if_no_amsr()
 
   r <- read_amsr_ice_daily()
-  ext <- as.vector(terra::ext(r))
+  ext <- unname(as.vector(terra::ext(r)))
 
   expect_equal(ext[1], -3950000)
   expect_equal(ext[2], 3950000)
@@ -102,7 +102,7 @@ test_that("read_amsr_ice_daily crop works", {
   bounds <- c(-1000000, 1000000, -1000000, 1000000)
   r <- read_amsr_ice_daily(xylim = bounds)
 
-  ext <- as.vector(terra::ext(r))
+  ext <- unname(as.vector(terra::ext(r)))
   expect_true(ext[1] >= bounds[1] - 10000)
   expect_true(ext[2] <= bounds[2] + 10000)
 })
@@ -172,7 +172,7 @@ test_that("read_cersat_ice_daily has correct extent", {
   skip_if_no_cersat()
 
   r <- read_cersat_ice_daily()
-  ext <- as.vector(terra::ext(r))
+  ext <- unname(as.vector(terra::ext(r)))
 
   expect_equal(ext[1], -3950000)
   expect_equal(ext[2], 3950000)

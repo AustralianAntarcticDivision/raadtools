@@ -1,18 +1,15 @@
-context("sea surface height")
 
-require(testthat)
-require(raadtools)
 test_that("ssh data is returned as a raster object", {
-          expect_that(readssh("2000-01-01"), is_a("RasterBrick"))
-          expect_that(readssh("2000-01-01", ssha = TRUE), is_a("RasterBrick"))
+          expect_s4_class(readssh("2000-01-01"), "SpatRaster")
+          expect_s4_class(readssh("2000-01-01", ssha = TRUE), "SpatRaster")
       })
 
 test_that("multiple dates return a multilayer object", {
-          expect_that(suppressWarnings(readssh(c("2000-01-01", "2003-01-10", "1998-08-01"))), is_a("RasterBrick"))
+          expect_s4_class(suppressWarnings(readssh(c("2000-01-01", "2003-01-10", "1998-08-01"))), "SpatRaster")
          
       })
 test_that("using filename with two dates gives a brick", {
-  expect_that(readssh(c("2000-01-01", "2002-01-01"), filename = sprintf("%s.grd", tempfile())), is_a("RasterBrick"))
+  expect_s4_class(readssh(c("2000-01-01", "2002-01-01"), filename = sprintf("%s.grd", tempfile())), "SpatRaster")
 
 })
 

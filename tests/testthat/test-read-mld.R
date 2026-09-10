@@ -48,7 +48,7 @@ test_that("read_mld_climatology crop works", {
   bounds <- c(100, 150, -70, -50)
   r <- read_mld_climatology(xylim = bounds)
 
-  ext <- as.vector(terra::ext(r))
+  ext <- unname(as.vector(terra::ext(r)))
   expect_true(ext[1] >= bounds[1] - 1)
   expect_true(ext[2] <= bounds[2] + 1)
 })
@@ -70,5 +70,5 @@ test_that("readmld shim returns RasterBrick", {
     expect_warning(r <- readmld(), "climatology")
   })
 
-  expect_s4_class(r, "RasterBrick")
+  expect_s4_class(r, "SpatRaster")
 })

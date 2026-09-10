@@ -142,7 +142,7 @@ test_that("read_ccmp_wind_6hourly crop works", {
   bounds <- c(100, 150, -60, -40)
   r <- read_ccmp_wind_6hourly("2020-01-15", xylim = bounds, uonly = TRUE)
 
-  ext <- as.vector(terra::ext(r))
+  ext <- unname(as.vector(terra::ext(r)))
   # Allow for grid cell alignment
   expect_true(ext[1] >= bounds[1] - 1)
   expect_true(ext[2] <= bounds[2] + 1)
@@ -184,8 +184,8 @@ test_that("read_ccmp shim returns Raster object", {
     r <- read_ccmp("2020-01-15")
   })
 
-  expect_s4_class(r, "Raster")
-  expect_equal(raster::nlayers(r), 2L)
+  expect_s4_class(r, "SpatRaster")
+  expect_equal(nlyr(r), 2L)
 })
 
 test_that("read_ccmp shim magonly works", {
@@ -195,8 +195,8 @@ test_that("read_ccmp shim magonly works", {
     r <- read_ccmp("2020-01-15", magonly = TRUE)
   })
 
-  expect_s4_class(r, "Raster")
-  expect_equal(raster::nlayers(r), 1L)
+  expect_s4_class(r, "SpatRaster")
+  expect_equal(nlyr(r), 1L)
 })
 
 test_that("read_ccmp shim nobsonly works", {
@@ -206,6 +206,6 @@ test_that("read_ccmp shim nobsonly works", {
     r <- read_ccmp("2020-01-15", nobsonly = TRUE)
   })
 
-  expect_s4_class(r, "Raster")
-  expect_equal(raster::nlayers(r), 1L)
+  expect_s4_class(r, "SpatRaster")
+  expect_equal(nlyr(r), 1L)
 })

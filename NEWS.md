@@ -1,5 +1,7 @@
 # raadtools dev
 
+* polar_map() was removed. 
+
 * Update sstfiles and readsst for monthly to use new file. 
 
 * Make fasticefiles native to raadtools. 

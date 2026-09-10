@@ -4,7 +4,7 @@ require(testthat)
 require(raadtools)
 
 test_that("all variants are available", {
- expect_error(readice(time.resolution = "monthly", hemisphere = "south"))
+ expect_silent(readice(time.resolution = "monthly", hemisphere = "south"))
   r1 <- readice_monthly(hemisphere = "south")
   r2 <- readice_monthly(time.resolution = "monthly", hemisphere = "north")
   r3 <- readice(time.resolution = "daily", hemisphere = "south")

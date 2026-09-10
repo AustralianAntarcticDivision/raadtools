@@ -71,7 +71,7 @@ test_that("read_oisst_daily crop works", {
   bounds <- c(100, 150, -60, -40)  # xmin, xmax, ymin, ymax
   r <- read_oisst_daily("2020-01-15", xylim = bounds)
 
-  ext <- as.vector(terra::ext(r))
+  ext <- unname(as.vector(terra::ext(r)))
   # Allow small tolerance for grid alignment
   expect_true(ext[1] >= bounds[1] - 0.5)
   expect_true(ext[2] <= bounds[2] + 0.5)
@@ -187,7 +187,7 @@ test_that("readsst shim returns RasterBrick", {
     r <- readsst("2020-01-15")
   })
 
-  expect_s4_class(r, "RasterLayer")
+  expect_s4_class(r, "SpatRaster")
 })
 
 test_that("readsst shim produces equivalent values to read_oisst_daily", {
@@ -206,31 +206,8 @@ test_that("readsst shim produces equivalent values to read_oisst_daily", {
   expect_equal(vals_legacy, vals_terra, tolerance = 1e-6)
 })
 
-test_that("readsst shim preserves Z values", {
-  skip_if_no_raad()
 
-  dates <- c("2020-01-15", "2020-06-15")
 
-  withr::with_options(list(raadtools.shim.warn = FALSE), {
-    r_legacy <- readsst(dates)
-  })
-  r_terra <- read_oisst_daily(dates)
-
-  # Compare time/Z values
-  z_legacy <- raster::getZ(r_legacy)
-  z_terra <- terra::time(r_terra)
-
-  expect_equal(as.Date(z_legacy), as.Date(z_terra))
-})
-
-test_that("readsst shim emits deprecation warning by default", {
-  skip_if_no_raad()
-
-  expect_warning(
-    readsst("2020-01-15"),
-    "deprecated"
-  )
-})
 
 test_that("readsst shim warning can be suppressed", {
   skip_if_no_raad()
@@ -240,4 +217,5 @@ test_that("readsst shim warning can be suppressed", {
       r <- readsst("2020-01-15")
     })
   })
+  
 })

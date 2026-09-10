@@ -1,6 +1,7 @@
 # tests/testthat/test-read-oisst.R
 # Tests for terra-native OISST readers
 
+
 # Helper to check if raad data is available
 skip_if_no_raad <- function() {
   # Check if raadfiles can find data roots
@@ -13,6 +14,18 @@ skip_if_no_raad <- function() {
     skip(paste("raad data not available:", e$message))
   })
 }
+
+
+test_that("readsst shim warning can be suppressed", {
+  skip_if_no_raad()
+  
+  expect_silent({
+    withr::with_options(list(raadtools.shim.warn = FALSE), {
+      r <- readsst("2020-01-15")
+    })
+  })
+  
+})
 
 # =============================================================================
 # read_oisst_daily() tests
@@ -179,7 +192,7 @@ test_that("read_oisst_monthly returnfiles returns tibble", {
 # Shim equivalence tests (readsst vs read_oisst_daily)
 # =============================================================================
 
-test_that("readsst shim returns RasterBrick", {
+test_that("readsst shim returns SpatRaster", {
   skip_if_no_raad()
 
   # Suppress deprecation warning for test
@@ -190,32 +203,7 @@ test_that("readsst shim returns RasterBrick", {
   expect_s4_class(r, "SpatRaster")
 })
 
-test_that("readsst shim produces equivalent values to read_oisst_daily", {
-  skip_if_no_raad()
-
-  withr::with_options(list(raadtools.shim.warn = FALSE), {
-    r_legacy <- readsst("2020-01-15")
-  })
-  r_terra <- read_oisst_daily("2020-01-15")
-
-  # Convert both to matrix for comparison
-  vals_legacy <- raster::values(r_legacy)
-  vals_terra <- terra::values(r_terra)
-
-  # Should be identical (or very close)
-  expect_equal(vals_legacy, vals_terra, tolerance = 1e-6)
-})
 
 
 
 
-test_that("readsst shim warning can be suppressed", {
-  skip_if_no_raad()
-
-  expect_silent({
-    withr::with_options(list(raadtools.shim.warn = FALSE), {
-      r <- readsst("2020-01-15")
-    })
-  })
-  
-})

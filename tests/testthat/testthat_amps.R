@@ -1,7 +1,5 @@
 
-context("AMPS data")
-library(testthat)
-#library(raadtools)
+
 
 files <- amps_d1files()
 aurora$DATE_TIME_UTC <- aurora$DATE_TIME_UTC + 24 * 3 * 3600 * 365

@@ -14,9 +14,9 @@ test_that("using filename with two dates gives a brick", {
 })
 
 test_that("nuances of different defaults for multilayer object", {
-  expect_s4_class(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10")), "RasterBrick")
-  expect_s4_class(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10"), lon180 = FALSE), "RasterBrick")
-  expect_s4_class(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10"), xylim = extent(-180, 180, -90, -40)), "RasterBrick")
+  expect_s4_class(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10")), "SpatRaster")
+  expect_s4_class(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10"), lon180 = FALSE), "SpatRaster")
+  expect_s4_class(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10"), xylim = ext(-180, 180, -90, -40)), "SpatRaster")
 })
 
 test_that("date ranges are valid", {
@@ -45,8 +45,8 @@ test_that("date ranges are valid", {
 })
 
 test_that("ssh projection is not missing", {
-  prj <- projection(readssh())
-  expect_false(is.na(prj))
+  prj <- crs(readssh())
+  expect_true(nzchar(prj))
   
 })
 
@@ -57,8 +57,8 @@ xyt <- data.frame(x = c(100, 120, 130, 145, 150), y = seq(-80, 20, length = 5),
                   dts = as.POSIXct(seq(as.Date("2011-01-03"), by = "1 month", length = 5), tz = "UTC")
 )
 test_that("read is ok with inputfiles", {
-  expect_s4_class(readssh("2015-01-01",  time.resolution = "daily", inputfiles = cf),"BasicRaster")
-  expect_s4_class(readssh("2015-01-01", ssha = TRUE, time.resolution = "daily", inputfiles = cfa), "BasicRaster")
+  expect_s4_class(readssh("2015-01-01",  time.resolution = "daily", inputfiles = cf),"SpatRaster")
+  expect_s4_class(readssh("2015-01-01", ssha = TRUE, time.resolution = "daily", inputfiles = cfa), "SpatRaster")
   expect_type(extract(readssh, xyt), "double")
   # 
   # expect_type(extract(readssh, xyt, ssha = TRUE, inputfiles = cfa), "double")

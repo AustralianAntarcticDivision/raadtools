@@ -1,4 +1,3 @@
-context("fronts")
 
 
 test_that("requested files only are returned as a data.frame", {
@@ -12,7 +11,7 @@ test_that("requested files only are returned as a data.frame", {
 })
 
 test_that("fronts data is returned as a raster object", {
-          expect_s4_class(readfronts("2000-06-01"), "RasterLayer")
+          expect_s4_class(readfronts("2000-06-01"), "SpatRaster")
       })
 
 test_that("dates not available within 1.5 days give error", {
@@ -20,7 +19,7 @@ test_that("dates not available within 1.5 days give error", {
 })
 
 test_that("fronts projection is not missing", {
-  prj <- projection(readfronts())
-  expect_true(!is.na(prj))
+  prj <- crs(readfronts())
+  expect_true(nzchar(prj))
   
 })

@@ -144,7 +144,7 @@ read_oisst_monthly <- function(date,
   varname <- match.arg(varname)
 
   # --- file catalog ---
-  files <- inputfiles %||% raadfiles::oisst_monthly_files()
+  files <- inputfiles %||% sstfiles("monthly")
 
   if (returnfiles) return(files)
 
@@ -162,7 +162,7 @@ read_oisst_monthly <- function(date,
   }
 
   # --- read ---
-  r <- .rast_nc(files$fullname, subds = varname)
+  r <- .rast_nc(files$fullname, subds = varname)[[files$band]]
   terra::crs(r) <- "EPSG:4326"
   terra::time(r) <- as.Date(files$date)
   names(r) <- format(files$date, "%Y-%m")

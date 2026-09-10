@@ -223,3 +223,4 @@ test_that("read_cersat_ice_daily returnfiles returns tibble", {
 
   expect_s3_class(files, "tbl_df")
 })
+

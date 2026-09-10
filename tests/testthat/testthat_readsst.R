@@ -1,19 +1,16 @@
-library(testthat)
-library(raadtools)
 
-context("sea surface temperature")
 
 
 test_that("sst data is returned as a raster object", {
-          expect_s4_class(readsst("2000-01-01"), "RasterLayer")
+          expect_s4_class(readsst("2000-01-01"), "SpatRaster")
       })
 
 test_that("multiple dates return a multilayer object", {
-          expect_true(nlayers(readsst(c("2000-01-01", "2003-01-10", "1998-08-01"))) > 1L) %>% expect_warning()
-
+          expect_true(suppressWarnings(nlyr(readsst(c("2000-01-01", "2003-01-10", "1998-08-01"))) > 1L))
+expect_warning(readsst(c("2000-01-01", "2003-01-10", "1998-08-01")))
         
           expect_warning(tmon <- readsst(c("2000-01-01", "2003-01-10", "1998-08-01"), time.resolution = "monthly"), "dates out of order")
-          expect_s4_class(tmon, "RasterBrick")
+          expect_s4_class(tmon, "SpatRaster")
       })
 
 d <- readsst(c("2000-01-01", "2003-01-10"))
@@ -24,7 +21,7 @@ test_that("readsst multi read returns data in -180,180", {
 })
 
 test_that("readsst latest works", {
-  expect_s4_class(readsst(latest = TRUE), "RasterLayer")
+  expect_s4_class(readsst(latest = TRUE), "SpatRaster")
 })
 d <- readsst(c("2003-01-10"))
 test_that("readsst single read returns data in -180,180", {
@@ -35,23 +32,23 @@ test_that("readsst single read returns data in -180,180", {
 
 test_that("input crop extent works for a time series", {
 
-  ext <- extent(100, 150, -75, -30)
+  ext <- ext(100, 150, -75, -30)
 
   dts <- seq(as.Date("2001-01-03"), by = "1 week", length = 10)
   sst <- readsst(dts, xylim = ext)
-  expect_s4_class(sst, "RasterBrick")
+  expect_s4_class(sst, "SpatRaster")
   expect_equal(dim(sst), c(180, 200, 10))
 
 })
 
 test_that("object projection is not missing", {
-  prj <- projection(readsst())
-  expect_false(is.na(prj))
+  prj <- crs(readsst())
+  expect_true(nzchar(prj))
 
 })
 
 test_that("dates  within 1.5 months succeed", {
-  expect_s4_class(readsst("1981-11-18", time.resolution = "monthly"), "RasterLayer")
+  expect_s4_class(readsst("1981-11-18", time.resolution = "monthly"), "SpatRaster")
 })
 
 test_that("daily is different from monthly", {
@@ -74,10 +71,6 @@ test_that("read is ok with inputfiles", {
 
 
 
-
-library(testthat)
-library(raadtools)
-context("basic extract")
 
 data(aurora)
 aurora$DATE_TIME_UTC <- aurora$DATE_TIME_UTC - 720 * 24 * 3600

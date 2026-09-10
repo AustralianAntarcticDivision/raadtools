@@ -97,12 +97,11 @@ test_that("read_topo returnfiles returns path", {
 # Different datasets
 # =============================================================================
 
-test_that("read_topo works for etopo1",
+test_that("read_topo - GRD format removed from GDAL, so error",
  {
-  skip_if_no_topo("etopo1")
 
-  r <- read_topo("etopo1", xylim = c(100, 102, -42, -40))
-  expect_s4_class(r, "SpatRaster")
+  expect_error(read_topo("etopo1", xylim = c(100, 102, -42, -40)))
+ 
 })
 
 test_that("read_topo works for ibcso", {
@@ -124,7 +123,7 @@ test_that("read_topo works for rema_1km", {
 # Legacy shim tests
 # =============================================================================
 
-test_that("readtopo shim returns RasterLayer", {
+test_that("readtopo shim returns SpatRaster", {
   skip_if_no_topo("gebco_23")
 
   withr::with_options(list(raadtools.shim.warn = FALSE), {

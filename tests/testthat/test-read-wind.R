@@ -153,7 +153,7 @@ test_that("readwind shim returns Raster object", {
   })
 
   expect_s4_class(r, "SpatRaster")
-  expect_equal(raster::nlayers(r), 2L)
+  expect_equal(nlyr(r), 2L)
 })
 
 test_that("readwind shim magonly works", {
@@ -164,5 +164,5 @@ test_that("readwind shim magonly works", {
   })
 
   expect_s4_class(r, "SpatRaster")
-  expect_equal(raster::nlayers(r), 1L)
+  expect_equal(nlyr(r), 1L)
 })

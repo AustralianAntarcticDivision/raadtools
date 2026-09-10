@@ -1,4 +1,3 @@
-context("distance-ice")
 
 test_that("ice distance", {
   ## concentration is a fraction now, not a percentage

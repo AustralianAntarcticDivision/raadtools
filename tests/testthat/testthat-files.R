@@ -1,4 +1,3 @@
-context("files")
 
 ## library(raadtools)
 ## writeLines(grep("files", ls("package:raadtools"), value = TRUE))
@@ -28,7 +27,6 @@ listoffuns <- setNames(lapply(fnames, get), fnames)
 
 test_that("file set/s sensible", {
   for (i in seq_along(listoffuns)) {
-    context(names(listoffuns)[i])
     db <- listoffuns[[i]]()
     db %>% expect_s3_class("data.frame")
   }

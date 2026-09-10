@@ -33,7 +33,7 @@ topofile <- function(topo = c("gebco_23", "gebco_08",  "ibcso",
                      ...) {
   topo <- match.arg(topo)
   if (topo == "ibcso") topo <- "ibcso_is" ## ??
-
+  if (topo == "etopo1") stop("etopo1 format is not longer supported")
   if (topo == "rema_8m") {
     r8m_files <- raadfiles::rema_8m_files()
     ##warning(sprintf("rema_8m is a very large **virtual** raster consisting of many (%i) files on disk,\n beware of making subsets that will pull a lot of data into memory", nrow(r8m_files)))

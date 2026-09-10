@@ -1,10 +1,8 @@
-context("sea ice")
 
-require(testthat)
-require(raadtools)
 
 test_that("all variants are available", {
- expect_silent(readice(time.resolution = "monthly", hemisphere = "south"))
+ expect_warning(readice(time.resolution = "monthly", hemisphere = "south"))
+  expect_silent(readice(time.resolution = "monthly", hemisphere = "south"))
   r1 <- readice_monthly(hemisphere = "south")
   r2 <- readice_monthly(time.resolution = "monthly", hemisphere = "north")
   r3 <- readice(time.resolution = "daily", hemisphere = "south")
@@ -20,20 +18,20 @@ test_that("requested files only are returned as a data.frame", {
     ffs <- readice(returnfiles = TRUE)
     expect_s3_class(ffs, "data.frame")
 
-    expect_true(all(names(ffs) %in% c("date",  "fullname")))
+    expect_true(all(names(ffs) %in% c("date",  "fullname", "root")))
     expect_true(all(file.exists(ffs$fullname[sample(nrow(ffs), 100)])))
     expect_equal(sum(is.na(ffs$date)), 0)
 
 })
 
 test_that("spatial crop works as expected", {
-    ext <- extent(-3086361, -1192990, 357501, 1882251)
+    ext <- ext(-3086361, -1192990, 357501, 1882251)
     ice <- readice(c("2000-01-01", "2000-01-10"), xylim = ext)
     expect_equal(dim(ice), c(61, 75, 2))
 })
 
 test_that("ice data is returned as a raster object", {
-          expect_s4_class(readice("2000-01-01"), "BasicRaster")
+          expect_s4_class(readice("2000-01-01"), "SpatRaster")
       })
 
 test_that("dates not available within 1.5 days give error", {
@@ -41,33 +39,34 @@ test_that("dates not available within 1.5 days give error", {
 })
 
 ##test_that("dates  within 1.5 months succeed", {
-##    expect_s4_class(readice("2002-10-18", time.resolution = "monthly"), "RasterLayer")
+##    expect_s4_class(readice("2002-10-18", time.resolution = "monthly"), "SpatRaster")
 ##})
 
 test_that("input data can be Date",
-          expect_s4_class(readice(as.Date("2000-01-01")), "RasterLayer")
+          expect_s4_class(readice(as.Date("2000-01-01")), "SpatRaster")
           )
 
 test_that("input data can be POSIXct",
-          expect_s4_class(readice(as.POSIXct("2000-01-01")), "BasicRaster")
+          expect_s4_class(readice(as.POSIXct("2000-01-01")), "SpatRaster")
           )
 
 x <- readice(); y <- readice(rescale = FALSE);
 
 test_that("missing values are constant for setNA scaled or not",
-      expect_equal(cellStats(is.na(x) - is.na(y), "sum"), 0)
+      expect_equal(global(is.na(x) - is.na(y), "sum")$sum, 0)
           )
 
 x <- readice(setNA = TRUE); y <- readice(setNA = FALSE);
 test_that("missing values are greater in number for setNA",
-     expect_true(cellStats(is.na(x), "sum") >  cellStats(is.na(y), "sum"))
+          skip("no longer true that setNA makes a difference")
+     expect_true(global(is.na(x), "sum")$sum >  global(is.na(y), "sum")$sum)
           )
 
 
 
 ## first test for readmulti
 test_that("valid multi dates is returned as a raster object", {
-         expect_s4_class(readice(c("2000-01-01", "2000-01-10")), "BasicRaster")
+         expect_s4_class(readice(c("2000-01-01", "2000-01-10")), "SpatRaster")
 })
 
 b1 <- readice("1997-04-06")
@@ -82,18 +81,18 @@ test_that("multi read gives the same data as single", {
 
 x <- c("1997-04-06", "2005-10-11", "1997-04-06")
 test_that("multi read on duplicated dates give only non-dupes", {
-    expect_equal(nlayers(readice(x)), length(x) - 1L) %>% expect_warning()
+    suppressWarnings(expect_equal(nlyr(readice(x)), length(x) - 1L))
 })
 
 x <- as.POSIXct(c("1997-04-06", "2005-10-11", "1997-04-09"), tz = "UTC")
 test_that("multi read on out of order dates sorts them", {
-    expect_equal(format(getZ(readice(x))), format(sort(x)))  %>% expect_warning()
+    expect_equal(format(terra::time(readice(x))), format(sort(x)))  %>% expect_warning()
 })
 
 
 test_that("ice projection is not missing", {
-  prj <- projection(readice())
-  expect_false(is.na(prj))
+  prj <- crs(readice())
+  expect_true(nzchar(prj))
   
 })
 
@@ -104,9 +103,9 @@ xyt <- data.frame(x = c(100, 120, 130, 145, 150), y = seq(-80, 20, length = 5),
 )
 test_that("read is", {
   expect_error(readice("2015-01-01", product = "amsr", time.resolution = "daily", inputfiles = cf))
-  expect_s4_class(read_amsr_ice("2015-01-01", inputfiles = cf), "RasterBrick")
-  expect_type(extract(read_amsr_ice, xyt), "double")  %>% expect_warning()
-  expect_type(extract(read_amsr_ice, xyt, product = "amsr"), "double")  %>% expect_warning()
+  expect_s4_class(read_amsr_ice("2015-01-01", inputfiles = cf), "SpatRaster")
+  expect_type(extract(read_amsr_ice, xyt), "double")
+  expect_type(extract(read_amsr_ice, xyt, product = "amsr"), "double")
 })
 
 

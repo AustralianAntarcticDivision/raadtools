@@ -1,7 +1,7 @@
 # tests/testthat/test-read-wind.R
 # Tests for terra-native NCEP2 wind readers
 
-skip("wind too slow atm")
+
 skip_if_no_raad <- function() {
   tryCatch({
     roots <- raadfiles::get_raad_data_roots()

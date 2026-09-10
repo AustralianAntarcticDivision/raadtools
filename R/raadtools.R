@@ -14,7 +14,6 @@
 #' @name raadtools-package
 #' @keywords package
 #' @import methods
-#' @importFrom sp as.image.SpatialGridDataFrame coordinates CRS GridTopology  proj4string<- SpatialPoints SpatialPointsDataFrame spChFIDs spTransform 
 #' @importFrom dplyr bind_rows
 #' @importFrom terra crs rast project crop rotate ext extract setValues xmin xmax ymin ymax
 #' @details

@@ -103,6 +103,19 @@
 }
 
 
+## sp is in Suggests, not Imports. polar_map() is the only thing in the
+## package that touches it, and it holds an sp object because pmap in
+## sysdata.rda is a SpatialLinesDataFrame. Converting pmap to a SpatVector
+## would drop sp outright, but it changes what polar_map() returns, so that
+## is a separate decision.
+.need_sp <- function() {
+  if (!requireNamespace("sp", quietly = TRUE)) {
+    stop("polar_map() needs the 'sp' package:\n  install.packages(\"sp\")",
+         call. = FALSE)
+  }
+  invisible(NULL)
+}
+
 ## duckdb and DBI are in Suggests, not Imports. Only the time_since_melt
 ## reader touches them, and loading duckdb costs about 0.4 s of every
 ## library(raadtools) whether or not anybody calls it.

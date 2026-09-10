@@ -13,5 +13,6 @@
 #' plot(polar_map())
 polar_map <- function(crs = commonprojections$polar) {
   if (is.na(crs)) return(pmap)
+  .need_sp()
   sp::spTransform(pmap, crs)
 }

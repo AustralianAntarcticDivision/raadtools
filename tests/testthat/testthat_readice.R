@@ -1,15 +1,15 @@
 
 
 test_that("all variants are available", {
- expect_warning(readice(time.resolution = "monthly", hemisphere = "south"))
+
   expect_silent(readice(time.resolution = "monthly", hemisphere = "south"))
-  r1 <- readice_monthly(hemisphere = "south")
-  r2 <- readice_monthly(time.resolution = "monthly", hemisphere = "north")
-  r3 <- readice(time.resolution = "daily", hemisphere = "south")
-  r4 <- readice(time.resolution = "daily", hemisphere = "north")
+  expect_silent(r1 <- readice_monthly(hemisphere = "south"))
+  expect_silent(r2 <- readice_monthly(time.resolution = "monthly", hemisphere = "north"))
+  expect_silent(r3 <- readice(time.resolution = "daily", hemisphere = "south"))
+  expect_silent(r4 <- readice(time.resolution = "daily", hemisphere = "north"))
   
   expect_error(readice(product = "amsr"))
-  r5 <- read_amsr_ice()
+  expect_silent(r5 <- read_amsr_ice())
   expect_error(readice(product = "ssmi"))
   
 })
@@ -57,9 +57,10 @@ test_that("missing values are constant for setNA scaled or not",
           )
 
 x <- readice(setNA = TRUE); y <- readice(setNA = FALSE);
-test_that("missing values are greater in number for setNA",
+test_that("missing values are greater in number for setNA", {
           skip("no longer true that setNA makes a difference")
      expect_true(global(is.na(x), "sum")$sum >  global(is.na(y), "sum")$sum)
+}
           )
 
 
@@ -74,8 +75,8 @@ b2 <- readice("2005-10-11")
 b <- readice(c("1997-04-06", "2005-10-11"))
 ## does multi-read give the same result?
 test_that("multi read gives the same data as single", {
-    expect_equal(quantile(b1), quantile(b[[1]]))
-    expect_equal(quantile(b2), quantile(b[[2]]))
+    expect_equal(quantile(values(b1), na.rm = TRUE), quantile(values(b[[1]]), na.rm = TRUE))
+    expect_equal(quantile(values(b2, na.rm = TRUE)), quantile(values(b[[2]]), na.rm = TRUE))
 
 })
 

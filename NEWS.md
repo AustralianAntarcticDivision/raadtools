@@ -1,5 +1,9 @@
 # raadtools dev
 
+* Major speed up to `windfiles()` temporal expansion. 
+
+* Fixed 'read_leads_clim_north' which georeferenced to the wrong hemisphere ...
+
 * polar_map() was removed. 
 
 * Update sstfiles and readsst for monthly to use new file. 

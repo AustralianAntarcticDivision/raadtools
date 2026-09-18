@@ -1,3 +1,14 @@
+# get_time_len_rnetcdf <- function(.x) {
+#   on.exit(RNetCDF::close.nc(nc), add = TRUE)
+#   nc <- RNetCDF::open.nc(.x)
+#   RNetCDF::dim.inq.nc(nc, "time")$length
+# }
+get_time_len_ncdf4 <- function(.x) {
+  on.exit(ncdf4::nc_close(nc), add = TRUE)
+  nc <- ncdf4::nc_open(.x)
+  nc$dim$time$len
+}
+
 
 
 ##' NCEP2 wind files
@@ -13,7 +24,7 @@ windfiles <-
   function(data.source = "", time.resolution = c("6hourly"),  ...) {
     time.resolution <- match.arg(time.resolution)
     wf <- dplyr::rename(raadfiles::ncep2_uwnd_6hr_files(), ufullname = fullname)
-    lens <- purrr::map_dbl(wf$ufullname, ~ncmeta::nc_dims(.x, "uwnd")$length[4])
+    lens <- purrr::map_dbl(wf$ufullname, get_time_len_ncdf4)
     times0 <- purrr::map(lens, ~seq(0, by = 6 * 3600, length.out = .x))
     wfU <- dplyr::slice(wf, rep(dplyr::row_number(), lens))
     wfU <- dplyr::group_by(wfU, .data$date)

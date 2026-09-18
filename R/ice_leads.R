@@ -45,15 +45,9 @@ read_leads_clim_north <- function(xylim = NULL) {
 
   r <- terra::flip(.rast_nc(file, subds = "LeadFrequency"), direction = "vertical")
 
-  ## NOTE: this is the SOUTH grid, applied to a north file. lat_0 is -90 and
-  ## the extent is the psn25 south one, where the Arctic product wants
-  ## lat_0 = 90, lat_ts = 70, lon_0 = -45 (EPSG:3411) and its own extent.
-  ## Carried over unchanged because converting to terra should not also
-  ## change where the data lands; see the note in the commit that converted
-  ## this file.
-  prj <- "+proj=stere +lat_0=-90 +lat_ts=-70 +lon_0=0 +x_0=0 +y_0=0 +a=6378273 +b=6356889.449 +units=m +no_defs"
+  prj <- "EPSG:3411"
   terra::crs(r) <- prj
-  terra::ext(r) <- terra::ext(-3950000, 3950000, -3950000, 4350000)
+  terra::ext(r) <- terra::ext(-3850000, 3750000, -5350000, 5850000)
   if (!is.null(xylim)) {
     r <- terra::crop(r, .as_ext(xylim))
   }

@@ -257,8 +257,7 @@ Some of this has required changes in GDAL itself, the most important of these ha
 
 [GRIB: fix reading South Polar Stereographic from GRIB1 datasets (fixes #7298)](https://github.com/OSGeo/gdal/pull/7310)
 
-The great value of contributing to GDAL and other lower level libraries like this is that our acquired knowledge of various data sets contributes to other downstream languages uses the tools, so that usage in Python and R and others becomes more consistent and simple. 
-
+The great value of contributing to GDAL and other lower level libraries like this is that our acquired knowledge of various data sets contributes to other downstream languages uses the tools, so that usage in Python and R and others becomes more consistent and simple.
 
 ### The software stack
 
@@ -266,10 +265,10 @@ Behind raadtools is the [raster](https://CRAN.R-project.org/package=raster) pack
 
 Some examples where raadtools uses GDAL more directly:
 
--   global ice, with simple vrt we can drive two files through the warper for a single grid anywhere on earth (not two incompatible polar grids), this was necessary for animal tracking which is what we originally implemented it for
--   SST and some others can specify a target grid, for any map projection output
--   to read global bathymetry/topography, we have wrapped COG facilities for the modern data source for GEBCO
--   for REMA v2 we have simply indexed the online URLs in an R package in [remav2](https://github.com/AustralianAntarcticDivision/remav2), rather than synchronize them locally
+- global ice, with simple vrt we can drive two files through the warper for a single grid anywhere on earth (not two incompatible polar grids), this was necessary for animal tracking which is what we originally implemented it for
+- SST and some others can specify a target grid, for any map projection output
+- to read global bathymetry/topography, we have wrapped COG facilities for the modern data source for GEBCO
+- for REMA v2 we have simply indexed the online URLs in an R package in [remav2](https://github.com/AustralianAntarcticDivision/remav2), rather than synchronize them locally
 
 #### Global sea ice
 

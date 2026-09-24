@@ -29,6 +29,7 @@ Suggests:
     dbplyr,
     duckdb,
     knitr,
+    palr,
     reproj (>= 0.4.3),
     testthat (>= 3.0.0),
     withr,

@@ -18,11 +18,11 @@ knitr::opts_chunk$set(
 library(raadtools)
 ```
 
-[Sea ice concentration](https://nsidc.org/cryosphere/seaice/data/terminology.html) describes the relative amount of area covered by ice. In raadtools there are different resolutions available and each covers the entire ice-affected area of the Southern Ocean. Each product provides a *percentage* of sea ice concentration, a value from 0 to 100. 
+[Sea ice concentration](https://nsidc.org/cryosphere/seaice/data/terminology.html) describes the relative amount of area covered by ice. In raadtools there are different resolutions available and each covers the entire ice-affected area of the Southern Ocean. Each read function returns sea ice concentration as a *fraction*, a value from 0 to 1, whatever the product stores on disk. 
 
 The products are
 
-- **NSIDC:**           25km sea ice concentration, available daily since 1979 
+- **NSIDC:**           25km sea ice concentration, available since October 1978 (every other day until August 1987, then daily), from the NOAA/NSIDC Climate Data Record (the default) or NSIDC-0051 
 - **CERSAT:**                     12.5km sea ice concentration, available since 1992
 - **AMSR-E/AMSR2**:     6.25km sea ice concentration, available in two parts (2002-2012, and 2012-current)
 - **AMSR2 (3km)**:           3.125km sea ice concentration, available since 2012
@@ -36,10 +36,13 @@ Each read function has a matching *get files* function that it uses.
 product     | read                  | files 
 ------------|-----------------------|------
 NSIDC       | `readice()`           | `icefiles()`
+NSIDC-0051  | `readice(product = "nsidc")` | `icefiles(product = "nsidc")`
 CERSAT      | `read_cersat_ice()`   | `raadfiles::cersat_daily_files()`
 AMSR-E      | `read_amsre_ice()`    | `raadfiles::amsre_daily_files()`
 AMSR2       | `read_amsr2_ice()`    | `raadfiles::amsr2_daily_files()`
 AMSR2 (3km) | `read_amsr2_3k_ice()` | `raadfiles::amsr2_3k_daily_files()`
+
+`readice()` reads the Climate Data Record by default, through `read_nsidc_cdr_daily()`. `product = "nsidc"` reads NSIDC-0051 instead, and `read_nsidc_ice_daily()` reads it directly. 
 
 The documentation for each function is available in R itself or on this site: 
 http://australianantarcticdivision.github.io/raadtools/reference/index.html
@@ -51,7 +54,7 @@ Most of the file-getter function are in the package raadfiles, this reflects the
 
 ## Take care with date queries
 
-Not every day is available in every case. Each function when given a date (or date-time) value will find the nearest available data in time within a certain tolerance. This means that sometimes we would obtain the same layer for slightly different inputs (i.e. 2 consecutive days may not be differentiated). This is a convenience for casual usage. For more rigorous use we should obtain each set of files directly and use the available dates explicitly. 
+Not every day is available in every case. Each function when given a date (or date-time) value will find the latest available data at or before that time, within a certain tolerance (a day and a half for daily data). This means that sometimes we would obtain the same layer for slightly different inputs (i.e. 2 consecutive days may not be differentiated, and the repeated layer is dropped with a warning). This is a convenience for casual usage. For more rigorous use we should obtain each set of files directly and use the available dates explicitly. 
 
 
 ## The northern hemisphere
@@ -69,7 +72,7 @@ The best way to explore a data set is to read some, plot it, map it against your
 
 ## Regridding, mapping, aggregation
 
-These can be regridded or aggregated temporarily in any way that's required using spatial tools in R. 
+These can be regridded or aggregated temporarily in any way that's required using spatial tools in R. Every read function returns a terra `SpatRaster`, so `terra::project()`, `terra::resample()` and `terra::aggregate()` apply directly. 
 
 ## Example
 
@@ -81,9 +84,9 @@ library(raadtools)
 ice <- readice()
 
 pt <- cbind(61 + 25.7/60, -(66+1.4/60))
-xy <- reproj::reproj_xy(pt, projection(ice), source = "OGC:CRS84")
+xy <- project(pt, "OGC:CRS84", crs(ice))
 buf <- 640000
-ex <- raster::extent(xy[1] + c(-0.5, 1) * 1 * buf * 1.852,
+ex <- ext(xy[1] + c(-0.5, 1) * 1 * buf * 1.852,
 xy[2] + c(-0.5, 1) * 1 * buf * 1.852)
 x <- NULL
 par(mfrow = c(2, 2), mar = rep(0, 4))

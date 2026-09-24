@@ -16,8 +16,6 @@ editor_options:
 
 
 ```{r,include=FALSE}
-## included only to make the vignette work (temporary hack)
-#options(default.datadir = "/rdsi/PRIVATE")
 
 library(raadtools)
 ```
@@ -29,7 +27,7 @@ All of the read functions have an "xylim" argument, which will take a terra `ext
 
 library(raadtools)
 library(raadfiles)
-readsst("2010-01-01", xylim = ext(100, 160, -50, -40))
+read_oisst_daily("2010-01-01", xylim = ext(100, 160, -50, -40))
 ```
 
 That extent must make sense for the data set though, so see what this returns first (it will be a longlat-grid in [-180, 180, -90, 90]. 
@@ -42,7 +40,7 @@ That is a useful technique to see what a function does, since it will return a l
 ```{r}
 library(raadtools)
 library(raadfiles)
-readsst()
+read_oisst_daily()
 ```
 
 That works for `readssh`, `readcurr`, and `readwind` just the same, and the date argument can be a single date or a vector of them. Every read function returns a terra `SpatRaster`, which is one class whether it holds one layer or many: one layer per date, with the date-time of each layer recorded on it (see `terra::time()`). After the read function is finished we are back to using the `terra` package, so familiarity with that package and its documentation is important. If you are used to the `raster` package, the transition vignette in raadtools has a short translation table. 
@@ -57,7 +55,7 @@ Some of the functions respect `lon180 = FALSE` because they have a grid that was
 For ice, and some other data, the grids are not in longlat so `xylim` needs an extent in that projection. You can always draw one like this, with code that must be run interactively as the plot will wait for you to click twice on the plot (defining a rectangle) before the `e` object is created. 
 
 ```{r,eval=FALSE}
-ice <- readice()  
+ice <- read_nsidc_cdr_daily()  
 plot(ice)
 e <- draw()
 ```
@@ -65,11 +63,12 @@ e <- draw()
 ```{r,eval=TRUE, echo=FALSE}
 library(raadtools)
 library(raadfiles)
-ice <- readice()  
+ice <- read_nsidc_cdr_daily()  
 plot(ice)
 e <- ext(1059036.6077237, 3280191.02253238, 873709.267254125, 3119406.82476787)
 lines(e, col = "red")
 ```
+
 Notice that we can also make `SpatExtent` objects from scratch, and perform operations on them (`+ 10` moves each edge out by 10). 
 
 ```{r}
@@ -87,10 +86,10 @@ Sea ice concentration is a fraction from 0 to 1. The `range` below leaves open w
 ```{r}
 library(raadtools)
 library(raadfiles)
-ice <- readice() 
+ice <- read_nsidc_cdr_daily() 
 pex <- project(ext(100, 160, -70, -50), "OGC:CRS84", crs(ice))
 
-ice_ex <- readice("2016-09-01", xylim = pex)
+ice_ex <- read_nsidc_cdr_daily("2016-09-01", xylim = pex)
 
 plot(ice_ex, col = grey(seq(0, 1, length = 100)), range = c(0.01, 1))
 ```
@@ -101,7 +100,7 @@ Please note that the `xylim` argument just applies `crop`, so you can avoid it a
 ```{r}
 library(raadtools)
 library(raadfiles)
-crop(readsst(),  ext(100, 160, -50, -40), snap = "out")
+crop(read_nsidc_cdr_daily(),  ext(100, 160, -50, -40), snap = "out")
 ```
 
 (`snap = "out"` makes the intersection *inclusive*, i.e. any overlapping part of a pixel means that pixel is included in the result. By default `crop` snaps to the nearest cell edge, which can drop partial overlaps on the edge). 
@@ -127,7 +126,7 @@ Plot the projected data with a graticule, and add a "transect".
 ```{r}
 library(raadtools)
 library(raadfiles)
-ice <- readice() 
+ice <- read_nsidc_cdr_daily() 
 pex <- project(ext(100, 160, -70, -50), "OGC:CRS84", crs(ice))
 
 ice_ex <- readice("2016-09-01", xylim = pex)
@@ -158,9 +157,12 @@ plot(lons, iceconc[[1]], main = "ice concentration at latitude -63 between 100E 
 When each point has its own date, give `extract()` the read function itself rather than a grid, with a data.frame of longitude, latitude and date-time in that order. Only the dates the points need are read, and each point takes its value from the latest layer at or before its date-time (see `?raadtools::extract`, and the xyt package that does the work). 
 
 ```{r,eval=FALSE}
+## optionally set daemons for parallelization
+#mirai::daemons(12)  ## and unset later #mirai::daemons(0)
+
 pts <- data.frame(lon = lons, lat = -63, 
                   date = seq(as.Date("2016-09-01"), by = "1 day", length.out = length(lons)))
-extract(readice, pts)
+extract(read_nsidc_cdr_daily, pts)
 ```
 
 
@@ -171,7 +173,7 @@ Plot mean SST and contour.
 library(raadtools)
 library(raadfiles)
 dates <- seq(as.Date("2016-01-01"), length = 31, by = "1 day")
-sst <- readsst(dates,  xylim = ext(100, 160, -50, -40))
+sst <- read_oisst_daily(dates,  xylim = ext(100, 160, -50, -40))
 msst <- app(sst, mean)
 sdsst <- app(sst, sd)
 plot(msst, col = hcl.colors(50, "viridis"), main = "mean SST Jan 2016",  fun = function() contour(sdsst, add = TRUE))

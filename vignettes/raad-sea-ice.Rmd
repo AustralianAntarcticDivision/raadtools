@@ -6,8 +6,10 @@ output:
     fig_height: 7
 vignette: >
   %\VignetteIndexEntry{Sea Ice Concentation Data in raadtools}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -81,7 +83,7 @@ What follows is a quick example of sea ice concentration around Mawson station c
 ```{r mawson-example-compare}
 
 library(raadtools)
-ice <- readice()
+ice <- read_nsidc_cdr_daily()
 
 pt <- cbind(61 + 25.7/60, -(66+1.4/60))
 xy <- project(pt, "OGC:CRS84", crs(ice))

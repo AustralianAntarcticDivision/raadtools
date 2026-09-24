@@ -123,6 +123,16 @@ passes one does not need changing.
 readice("2020-01-15", xylim = ext(c(-1e6, 1e6, -1e6, 1e6)))
 ```
 
+We can also parallelize in-time extract with something like 
+
+
+```{r}
+mirai::daemons(2)
+extract(readsst, xyt)
+mirai::daemons(0)
+```
+
+
 ## If something looks wrong
 
 Please report it. The conversion touched every reader in the package, and the

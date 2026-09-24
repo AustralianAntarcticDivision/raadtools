@@ -21,7 +21,6 @@ Imports:
     ncmeta,
     RNetCDF,
     memoise,
-    fs,
     stringr
 Suggests:
     graticule,

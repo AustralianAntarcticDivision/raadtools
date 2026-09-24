@@ -23,13 +23,13 @@ library(raadtools)
 ```
 The `raadtools` package contains a number of `read[something]` functions, mostly for gridded time-series remote sensing data. 
 
-All of the read functions have an "xylim" argument, which will take a `raster::extent(xmin, xmax, ymin, ymax)`. E.g. 
+All of the read functions have an "xylim" argument, which will take a terra `ext(xmin, xmax, ymin, ymax)`. E.g. 
 
 ```{r}
 
 library(raadtools)
 library(raadfiles)
-readsst("2010-01-01", xylim = extent(100, 160, -50, -40))
+readsst("2010-01-01", xylim = ext(100, 160, -50, -40))
 ```
 
 That extent must make sense for the data set though, so see what this returns first (it will be a longlat-grid in [-180, 180, -90, 90]. 
@@ -45,10 +45,11 @@ library(raadfiles)
 readsst()
 ```
 
-That works for `readssh`, `readcurr`, and `readwind` just the same, and the date argument can be a single date or a vector of them. In the `raster` package there are single `RasterLayer` objects and multi-layer `RasterBrick` (or `RasterStack`) objects. Raadtools will usually return a RasterStack or a RasterLayer, and it will record the time-step/s on the data as well (when relevant). After the read function is finished we are back to using the `raster` package, so familiarity with that package and its documentation is important. 
+That works for `readssh`, `readcurr`, and `readwind` just the same, and the date argument can be a single date or a vector of them. Every read function returns a terra `SpatRaster`, which is one class whether it holds one layer or many: one layer per date, with the date-time of each layer recorded on it (see `terra::time()`). After the read function is finished we are back to using the `terra` package, so familiarity with that package and its documentation is important. If you are used to the `raster` package, the transition vignette in raadtools has a short translation table. 
 
 ```{r,eval=FALSE}
-vignette("Raster", package= "raster")
+help("terra-package", package = "terra")
+vignette("terra-transition", package = "raadtools")
 ```
 
 Some of the functions respect `lon180 = FALSE` because they have a grid that was originally in `[0, 360, -90, 90]` and in that case it can be faster to use that domain for the extent rather than the common `[-180, 180, -90, 90]` one.   (Please feel free to ask about this for specific data sets, it's one of those boring details). 
@@ -58,7 +59,7 @@ For ice, and some other data, the grids are not in longlat so `xylim` needs an e
 ```{r,eval=FALSE}
 ice <- readice()  
 plot(ice)
-e <- drawExtent()
+e <- draw()
 ```
 
 ```{r,eval=TRUE, echo=FALSE}
@@ -66,37 +67,32 @@ library(raadtools)
 library(raadfiles)
 ice <- readice()  
 plot(ice)
-e <- new("Extent"
-    , xmin = 1059036.6077237
-    , xmax = 3280191.02253238
-    , ymin = 873709.267254125
-    , ymax = 3119406.82476787
-)
-plot(e, add = TRUE, col = "red")
+e <- ext(1059036.6077237, 3280191.02253238, 873709.267254125, 3119406.82476787)
+lines(e, col = "red")
 ```
-Notice that we can also make `Extent` objects from scratch, and perform operations on them. 
+Notice that we can also make `SpatExtent` objects from scratch, and perform operations on them (`+ 10` moves each edge out by 10). 
 
 ```{r}
-my_extent <- extent(100, 120, -40, -20)
+my_extent <- ext(100, 120, -40, -20)
 my_extent
 my_extent + 10
 
 ```
 
 
-otherwise there are functions `projectExtent` and some others to do it more automatically. It's not that straightforward because of the polar aspect. 
+otherwise `project()` will transform a longlat extent into the grid's projection. It's not that straightforward because of the polar aspect, which is why `project()` adds points along each edge of the extent before transforming it, so the result covers the curved edges and not just the four corners. 
+
+Sea ice concentration is a fraction from 0 to 1. The `range` below leaves open water (below 1%) uncoloured. 
 
 ```{r}
 library(raadtools)
 library(raadfiles)
 ice <- readice() 
-rex <- raster( extent(100, 160, -70, -50), crs = "+proj=longlat +datum=WGS84")
-pex <- projectExtent(rex, projection(ice))
-res(pex) <- 25000
+pex <- project(ext(100, 160, -70, -50), "OGC:CRS84", crs(ice))
 
 ice_ex <- readice("2016-09-01", xylim = pex)
 
-plot(ice_ex, col = grey(seq(0, 1, length = 100)), zlim = c(1, 100))
+plot(ice_ex, col = grey(seq(0, 1, length = 100)), range = c(0.01, 1))
 ```
 
 
@@ -105,16 +101,17 @@ Please note that the `xylim` argument just applies `crop`, so you can avoid it a
 ```{r}
 library(raadtools)
 library(raadfiles)
-crop(readsst(),  extent(100, 160, -50, -40), snap = "out")
+crop(readsst(),  ext(100, 160, -50, -40), snap = "out")
 ```
 
-(Internally `raadtools` always uses `snap=out` since that makes sure the intersection is *inclusive*, i.e. any overlapping part of a pixel means that pixel is included in the result. By default `crop` would drop partial overlaps on the edge). 
+(`snap = "out"` makes the intersection *inclusive*, i.e. any overlapping part of a pixel means that pixel is included in the result. By default `crop` snaps to the nearest cell edge, which can drop partial overlaps on the edge). 
 
 
-If there's a really long time series though it will be better to do that with xylim, and even to pass it out to a file: 
+A long time series is cheap to read, because terra does not read cell values until something asks for them. To keep a cropped series, crop it with xylim and write it out to a file: 
 
 ```R
-sst <- readsst(dates,  xylim = extent(100, 160, -50, -40), filename = "mymegasplat.grd")
+sst <- readsst(dates,  xylim = ext(100, 160, -50, -40))
+writeRaster(sst, "mymegasplat.tif")
 ```
 
 More details ... TBD
@@ -131,33 +128,39 @@ Plot the projected data with a graticule, and add a "transect".
 library(raadtools)
 library(raadfiles)
 ice <- readice() 
-rex <- raster( extent(100, 160, -70, -50), crs = "+proj=longlat +datum=WGS84")
-pex <- projectExtent(rex, projection(ice))
-res(pex) <- 25000
+pex <- project(ext(100, 160, -70, -50), "OGC:CRS84", crs(ice))
 
 ice_ex <- readice("2016-09-01", xylim = pex)
 
 ## create a graticule for this region
 
-g <- graticule::graticule(seq(100, 160, by = 15), seq(-75, -50, by = 5), proj = projection(ice))
-plot(ice_ex, col = grey(seq(0, 1, length = 100)), zlim = c(1, 100), axes = FALSE, 
-     addfun = function() plot(g, add = TRUE, lty = 2, col = "firebrick"))
+g <- graticule(seq(100, 160, by = 15), seq(-75, -50, by = 5), crs = crs(ice))
+plot(ice_ex, col = grey(seq(0, 1, length = 100)), range = c(0.01, 1), axes = FALSE, 
+     fun = function() lines(g, lty = 2, col = "firebrick"))
 
 ## add a "transect"
 lons <- seq(100, 160, by = 1)
-transect <- reproj::reproj_xy(cbind(lons, -63), projection(ice_ex), source = "OGC:CRS84")
+transect <- project(cbind(lons, -63), "OGC:CRS84", crs(ice_ex))
 
 
 points(transect, cex = 0.5, pch = 19, col = "dodgerblue")
 ```
 
-Extract values at specific points. 
+Extract values at specific points. This is terra's `extract()` on a grid we have already read, so every point takes its value from the one date in `ice_ex`. It returns a data.frame with one column per layer. 
 
 ```{r}
 library(raadtools)
 library(raadfiles)
 iceconc <- extract(ice_ex, transect, method = "bilinear")
-plot(lons, iceconc, main = "ice concentration at latitude -65 between 100E and 160E")
+plot(lons, iceconc[[1]], main = "ice concentration at latitude -63 between 100E and 160E")
+```
+
+When each point has its own date, give `extract()` the read function itself rather than a grid, with a data.frame of longitude, latitude and date-time in that order. Only the dates the points need are read, and each point takes its value from the latest layer at or before its date-time (see `?raadtools::extract`, and the xyt package that does the work). 
+
+```{r,eval=FALSE}
+pts <- data.frame(lon = lons, lat = -63, 
+                  date = seq(as.Date("2016-09-01"), by = "1 day", length.out = length(lons)))
+extract(readice, pts)
 ```
 
 
@@ -168,8 +171,8 @@ Plot mean SST and contour.
 library(raadtools)
 library(raadfiles)
 dates <- seq(as.Date("2016-01-01"), length = 31, by = "1 day")
-sst <- readsst(dates,  xylim = extent(100, 160, -50, -40))
-msst <- calc(sst, mean)
-sdsst <- calc(sst, sd)
-plot(msst, col = viridis::viridis(50), main = "mean SST Jan 2016",  addfun = function() contour(sdsst, add = TRUE))
+sst <- readsst(dates,  xylim = ext(100, 160, -50, -40))
+msst <- app(sst, mean)
+sdsst <- app(sst, sd)
+plot(msst, col = hcl.colors(50, "viridis"), main = "mean SST Jan 2016",  fun = function() contour(sdsst, add = TRUE))
 ```

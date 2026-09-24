@@ -1,35 +1,15 @@
 
-## library(raadtools)
-## writeLines(grep("files", ls("package:raadtools"), value = TRUE))
-# allfiles
-# amps_d1files
-# chlafiles
-# cpolarfiles
-# currentsfiles
-# derivaadcfiles
-# derivicefiles
-# fasticefiles
-# ghrsstfiles
-# icefiles
-# ocfiles
-# rapid_responsefiles
-# sshfiles
-# sstfiles
-# windfiles
-fnames <- c("amps_d1files", "chlafiles", "cpolarfiles", "currentsfiles", 
-             "fasticefiles", "ghrsstfiles", 
-            "icefiles", "ocfiles", "rapid_responsefiles", 
+## One block per lister, so a lister that errors is named in the results
+## instead of stopping the loop over the rest.
+fnames <- c("amps_d1files", "chlafiles", "cpolarfiles", "currentsfiles",
+            "fasticefiles", "ghrsstfiles",
+            "icefiles", "ocfiles", "rapid_responsefiles",
             "sshfiles", "sstfiles", "windfiles")
 
-fnames2 <- c("derivaadcfiles", "derivicefiles")
-listoffuns <- setNames(lapply(fnames, get), fnames)
-
-
-test_that("file set/s sensible", {
-  for (i in seq_along(listoffuns)) {
-    db <- listoffuns[[i]]()
-    db %>% expect_s3_class("data.frame")
-  }
-  
-  
-})
+for (fname in fnames) {
+  test_that(sprintf("%s() returns a data.frame", fname), {
+    skip_if_no_raad()
+    db <- get(fname)()
+    expect_s3_class(db, "data.frame")
+  })
+}

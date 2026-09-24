@@ -1,6 +1,7 @@
 
 
 test_that("we get ocean colour files", {
+  skip_if_no_raad()
   ocd <- ocfiles()
   #ocw <- ocfiles(time.resolution = "weekly")
   expect_s3_class(ocd, "data.frame")

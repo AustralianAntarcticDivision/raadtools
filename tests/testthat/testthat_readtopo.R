@@ -1,4 +1,5 @@
 test_that("all file options give existing files, with warnings where appropriate", {
+  skip_if_no_raad()
           expect_true(file.exists(topofile()))  
           expect_true(file.exists(topofile("ibcso")))
           expect_error(topofile("etopo1"))
@@ -19,6 +20,7 @@ test_that("all file options give existing files, with warnings where appropriate
 
 
 test_that("file options result in actual data layers", {
+  skip_if_no_raad()
           expect_s4_class(readtopo(), "SpatRaster")
           expect_s4_class(readtopo("ibcso"), "SpatRaster")
           expect_error(readtopo("etopo1"))
@@ -40,6 +42,7 @@ test_that("file options result in actual data layers", {
 
 
 test_that("topo projection is not missing", {
+  skip_if_no_raad()
   prj <- crs(readtopo("kerguelen"))
   expect_true(nzchar(prj))
   

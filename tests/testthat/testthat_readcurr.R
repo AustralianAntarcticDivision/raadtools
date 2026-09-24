@@ -1,17 +1,22 @@
-cf <- currentsfiles()
 
 test_that("current data is returned as a raster object", {
+  skip_if_no_raad()
+  cf <- currentsfiles()
            expect_s4_class(readcurr("2000-01-01"), "SpatRaster")
   expect_s4_class(readcurr("2000-01-01", inputfiles = cf), "SpatRaster")
       })
 
 test_that("multiple dates are supported only with magonly/dironly, and if given the length is 2", {
+  skip_if_no_raad()
+  cf <- currentsfiles()
            expect_warning(readcurr(c("2000-01-01", "2003-01-10"), inputfiles = cf))
            expect_s4_class(readcurr(c("2000-01-01", "2003-01-10"), dironly = TRUE, inputfiles = cf), "SpatRaster")
            expect_equal(nlyr(readcurr(c("2000-01-01", "2003-01-10"), magonly = TRUE, inputfiles = cf)), 2L)
                  })
 
 test_that("multi layers returned with magonly or dironly", {
+  skip_if_no_raad()
+  cf <- currentsfiles()
     expect_equal(nlyr(readcurr(c("2000-01-01", "2003-01-10"), magonly = TRUE, inputfiles = cf)), 2)
     expect_equal(nlyr(readcurr(c("2000-01-01", "2003-01-10"), dironly = TRUE, inputfiles = cf)), 2)
     expect_error(readcurr(c("2000-01-01"), magonly = TRUE, dironly = TRUE, inputfiles = cf))
@@ -21,6 +26,8 @@ test_that("multi layers returned with magonly or dironly", {
 
 
 test_that("dates not available within 4 days give error", {
+  skip_if_no_raad()
+  cf <- currentsfiles()
     expect_error(readcurr("1992-10-08", inputfiles = cf), "no data file within")
     ## we now have data for this date
     expect_s4_class(readcurr("1999-11-19", inputfiles = cf), "SpatRaster")
@@ -31,6 +38,8 @@ test_that("dates not available within 4 days give error", {
 
 
 test_that("input crop extent works for a time series", {
+  skip_if_no_raad()
+  cf <- currentsfiles()
 
  
 ext <- ext(-180, 180, -90, -30)
@@ -43,6 +52,8 @@ ext <- ext(-180, 180, -90, -30)
 })
 
 test_that("curr projection is not missing", {
+  skip_if_no_raad()
+  cf <- currentsfiles()
   prj <- crs(readcurr(inputfiles = cf))
   expect_true(nzchar(prj))
   
@@ -54,6 +65,8 @@ xyt <- data.frame(x = c(100, 120, 130, 145, 150), y = seq(-80, 20, length = 5),
                   dts = seq(as.Date("2001-01-03"), by = "1 month", length = 5)
 )
 test_that("read is ok with inputfiles", {
+  skip_if_no_raad()
+  cf <- currentsfiles()
   expect_s4_class(readcurr("2015-01-01", inputfiles = cf), "SpatRaster")
   expect_type(extract(readcurr, xyt, uonly = TRUE), "double") 
 })

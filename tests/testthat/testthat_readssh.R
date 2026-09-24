@@ -1,25 +1,30 @@
 
 test_that("ssh data is returned as a raster object", {
+  skip_if_no_raad()
           expect_s4_class(readssh("2000-01-01"), "SpatRaster")
           expect_s4_class(readssh("2000-01-01", ssha = TRUE), "SpatRaster")
       })
 
 test_that("multiple dates return a multilayer object", {
+  skip_if_no_raad()
           expect_s4_class(suppressWarnings(readssh(c("2000-01-01", "2003-01-10", "1998-08-01"))), "SpatRaster")
          
       })
 test_that("using filename with two dates gives a brick", {
+  skip_if_no_raad()
   expect_s4_class(readssh(c("2000-01-01", "2002-01-01"), filename = sprintf("%s.grd", tempfile())), "SpatRaster")
 
 })
 
 test_that("nuances of different defaults for multilayer object", {
+  skip_if_no_raad()
   expect_s4_class(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10")), "SpatRaster")
   expect_s4_class(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10"), lon180 = FALSE), "SpatRaster")
   expect_s4_class(readssh(c( "1998-08-01", "2000-01-01", "2003-01-10"), xylim = ext(-180, 180, -90, -40)), "SpatRaster")
 })
 
 test_that("date ranges are valid", {
+  skip_if_no_raad()
   dr <- range(sshfiles()$date)
   expect_s3_class(dr, "POSIXct")
   expect_true(all(!is.na(dr)))
@@ -45,18 +50,20 @@ test_that("date ranges are valid", {
 })
 
 test_that("ssh projection is not missing", {
+  skip_if_no_raad()
   prj <- crs(readssh())
   expect_true(nzchar(prj))
   
 })
 
 
-cf <- sshfiles(time.resolution = "daily", ssha = FALSE)
-cfa <- sshfiles(time.resolution = "daily", ssha = TRUE)
 xyt <- data.frame(x = c(100, 120, 130, 145, 150), y = seq(-80, 20, length = 5),   
                   dts = as.POSIXct(seq(as.Date("2011-01-03"), by = "1 month", length = 5), tz = "UTC")
 )
 test_that("read is ok with inputfiles", {
+  skip_if_no_raad()
+  cf <- sshfiles(time.resolution = "daily", ssha = FALSE)
+  cfa <- sshfiles(time.resolution = "daily", ssha = TRUE)
   expect_s4_class(readssh("2015-01-01",  time.resolution = "daily", inputfiles = cf),"SpatRaster")
   expect_s4_class(readssh("2015-01-01", ssha = TRUE, time.resolution = "daily", inputfiles = cfa), "SpatRaster")
   expect_type(extract(readssh, xyt), "double")

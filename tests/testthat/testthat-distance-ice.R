@@ -1,5 +1,6 @@
 
 test_that("ice distance", {
+  skip_if_no_raad()
   ## concentration is a fraction now, not a percentage
   s <- distance_to_ice(threshold = 0.5) %>% expect_s4_class("SpatRaster")
   n <- distance_to_ice(threshold = 0.5, hemisphere = "north") %>% expect_s4_class("SpatRaster")

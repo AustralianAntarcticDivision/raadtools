@@ -1,15 +1,6 @@
 # tests/testthat/test-read-oc.R
 # Tests for terra-native ocean colour readers
 
-skip_if_no_raad <- function() {
-  tryCatch({
-    roots <- raadfiles::get_raad_data_roots()
-    if (length(roots) == 0) skip("raad data roots not configured")
-  }, error = function(e) {
-    skip(paste("raad data not available:", e$message))
-  })
-}
-
 skip_if_no_oc <- function(time.resolution = "daily") {
   skip_if_no_raad()
   tryCatch({

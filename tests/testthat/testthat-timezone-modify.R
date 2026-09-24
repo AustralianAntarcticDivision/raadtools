@@ -10,6 +10,7 @@ ref <- as.integer(c(368150400, 278208000, 283996800, 725846400, 1445774400, 1025
                     725846400, 278121600))
 ffw <- function(x) {x <- as.integer(c(x)); attributes(x) <- NULL; x}
 test_that("date time underlying values don't change", {
+  skip_if_no_raad()
   expect_equal(ffw(terra::time(readsst(latest = FALSE))), ref[1])
   ## readice() defaults to the CDR now, which starts a day before NSIDC-0051
   expect_equal(ffw(terra::time(readice(latest = FALSE))), ref[8])

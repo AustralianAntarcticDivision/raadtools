@@ -57,6 +57,9 @@ raster function you use is not mentioned here:
 | `getZ()`, `setZ()` | `time()`, `time()<-` |
 | `projection()` | `crs()` |
 | `projectRaster()` | `project()` |
+| `projectExtent()` | `project(ext(...), from, to)` |
+| `drawExtent()` | `draw()` |
+| `stack(a, b)` | `c(a, b)` |
 | `cellStats(x, "mean")` | `global(x, "mean", na.rm = TRUE)` |
 | `rasterToContour()` | `as.contour()` |
 | `rasterToPoints()` | `as.data.frame(x, xy = TRUE)` |
@@ -64,7 +67,8 @@ raster function you use is not mentioned here:
 | `couldBeLonLat()` | `is.lonlat()` |
 
 `crop()`, `mask()`, `aggregate()`, `resample()`, `writeRaster()`, `plot()` and
-`x[[i]]` keep their names and work the way you expect.
+`x[[i]]` keep their names and work the way you expect. Two `plot()` arguments
+are renamed: `zlim` is `range`, and `addfun` is `fun`.
 
 One difference that is easy to miss: `values()` returns a **matrix** in terra
 where it returned a vector in raster. Ask for a vector explicitly.

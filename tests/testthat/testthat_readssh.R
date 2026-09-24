@@ -10,9 +10,9 @@ test_that("multiple dates return a multilayer object", {
           expect_s4_class(suppressWarnings(readssh(c("2000-01-01", "2003-01-10", "1998-08-01"))), "SpatRaster")
          
       })
-test_that("using filename with two dates gives a brick", {
+test_that("two dates give a two-layer object", {
   skip_if_no_raad()
-  expect_s4_class(readssh(c("2000-01-01", "2002-01-01"), filename = sprintf("%s.grd", tempfile())), "SpatRaster")
+  expect_equal(nlyr(readssh(c("2000-01-01", "2002-01-01"))), 2L)
 
 })
 

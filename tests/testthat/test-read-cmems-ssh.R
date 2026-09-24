@@ -65,14 +65,13 @@ test_that("scalar readers handle lon180 rotation", {
   skip_if_no_raad()
 
   r_atlantic <- read_cmems_adt_daily("2020-01-15", lon180 = TRUE)
-  r_pacific <- read_cmems_adt_daily("2020-01-15", lon180 = FALSE)
 
   ext_atl <- as.vector(terra::ext(r_atlantic))
-  ext_pac <- as.vector(terra::ext(r_pacific))
 
-  # One should have negative xmin (Atlantic), one should not (Pacific)
-  # (depends on source file orientation)
-  expect_true(TRUE)  # rotation logic is file-dependent
+  # lon180 = TRUE rotates a grid that reaches past 180, and lon180 = FALSE
+  # keeps the file's own orientation, so only the Atlantic view is fixed
+  expect_true(ext_atl[1] < 0)
+  expect_true(ext_atl[2] <= 180.5)
 })
 
 test_that("scalar readers handle crop", {

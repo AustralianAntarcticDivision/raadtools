@@ -181,11 +181,12 @@ test_that("read_oisst_monthly returns SpatRaster", {
 test_that("read_oisst_monthly returnfiles returns tibble", {
   skip_if_no_raad()
 
-  tryCatch({
-    files <- read_oisst_monthly(returnfiles = TRUE)
-    expect_s3_class(files, "tbl_df")
-    expect_true(nrow(files) > 0)
-  }, error = function(e) skip("monthly files not available"))
+  ## a failed expectation is an "error" condition, so the expectations stay
+  ## outside the tryCatch() or a failure would be reported as a skip
+  files <- tryCatch(read_oisst_monthly(returnfiles = TRUE),
+                    error = function(e) skip("monthly files not available"))
+  expect_s3_class(files, "tbl_df")
+  expect_true(nrow(files) > 0)
 })
 
 # =============================================================================

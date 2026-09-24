@@ -66,7 +66,7 @@ test_that("read_amsr_ice_daily has polar stereographic CRS", {
   expect_true(grepl("lat_0=-90", crs_str))
 })
 
-test_that("read_amsr_ice_daily values are 0-100 percentage", {
+test_that("read_amsr_ice_daily values are a fraction 0-1", {
   skip_if_no_amsr()
 
   r <- read_amsr_ice_daily()
@@ -74,7 +74,7 @@ test_that("read_amsr_ice_daily values are 0-100 percentage", {
   vals <- vals[!is.na(vals)]
 
   expect_true(all(vals >= 0))
-  expect_true(all(vals <= 100))
+  expect_true(all(vals <= 1))
 })
 
 test_that("read_amsr_ice_daily handles multiple dates", {
@@ -134,9 +134,9 @@ test_that("read_amsr_ice_3k_daily setNA masks high values", {
   r_na <- read_amsr_ice_3k_daily(setNA = TRUE)
   r_raw <- read_amsr_ice_3k_daily(setNA = FALSE)
 
-  # With setNA, max should be <= 100
+  # With setNA, max should be <= 1 (concentration is a fraction)
   max_na <- terra::global(r_na, "max", na.rm = TRUE)$max
-  expect_true(max_na <= 100)
+  expect_true(max_na <= 1)
 })
 
 test_that("read_amsr2_3k_ice alias works", {
@@ -175,7 +175,7 @@ test_that("read_cersat_ice_daily setNA masks high values", {
   r <- read_cersat_ice_daily(setNA = TRUE)
   max_val <- terra::global(r, "max", na.rm = TRUE)$max
 
-  expect_true(max_val <= 100)
+  expect_true(max_val <= 1)
 })
 
 test_that("read_cersat_ice alias works", {

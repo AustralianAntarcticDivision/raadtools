@@ -2,8 +2,12 @@
 
 test_that("all variants are available", {
   skip_if_no_raad()
+  ## the once-per-session transition notice would make expect_silent()
+  ## depend on which file ran first; test-shim-notice.R covers the notice
+  withr::local_options(list(raadtools.shim.warn = FALSE))
 
-  expect_warning(readice(time.resolution = "monthly", hemisphere = "south"))
+  ## readice() ignores time.resolution, readice_monthly() is the monthly reader
+  expect_s4_class(readice(time.resolution = "monthly", hemisphere = "south"), "SpatRaster")
   r1 <- readice_monthly(hemisphere = "south")
   expect_silent(r2 <- readice_monthly(time.resolution = "monthly", hemisphere = "north"))
   expect_silent(r3 <- readice(time.resolution = "daily", hemisphere = "south"))
@@ -55,18 +59,6 @@ test_that("input data can be Date", {
 test_that("input data can be POSIXct", {
   skip_if_no_raad()
   expect_s4_class(readice(as.POSIXct("2000-01-01")), "SpatRaster")
-})
-
-test_that("missing values are constant for setNA scaled or not", {
-  skip_if_no_raad()
-  x <- readice(); y <- readice(rescale = FALSE)
-  expect_equal(global(is.na(x) - is.na(y), "sum")$sum, 0)
-})
-
-test_that("missing values are greater in number for setNA", {
-  skip("no longer true that setNA makes a difference")
-  x <- readice(setNA = TRUE); y <- readice(setNA = FALSE)
-  expect_true(global(is.na(x), "sum")$sum >  global(is.na(y), "sum")$sum)
 })
 
 

@@ -124,20 +124,13 @@ test_that("read_copernicus_current_daily lon180 rotation works", {
   skip_if_no_raad()
 
   r_atlantic <- read_copernicus_current_daily("2020-01-15", lon180 = TRUE, uonly = TRUE)
-  r_pacific <- read_copernicus_current_daily("2020-01-15", lon180 = FALSE, uonly = TRUE)
 
   ext_atl <- as.vector(terra::ext(r_atlantic))
-  ext_pac <- as.vector(terra::ext(r_pacific))
 
-  # Check that the extents differ appropriately
-  # Atlantic: should have negative xmin
-  # Pacific: should have xmin >= 0
-  # (One of these should be true depending on source file orientation)
-  extent_differs <- (ext_atl[1] < 0) != (ext_pac[1] < 0)
-
-  # If source is already in desired orientation, no rotation happens
- # so this test may pass trivially - that's OK
-  expect_true(TRUE)  # placeholder - rotation logic is file-dependent
+  # .needs_rotation() rotates any grid that reaches past 180 when
+  # lon180 = TRUE, so the Atlantic view is fixed whatever the file holds
+  expect_true(ext_atl[1] < 0)
+  expect_true(ext_atl[2] <= 180.5)
 })
 
 test_that("read_copernicus_current_daily crop works", {

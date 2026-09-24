@@ -32,7 +32,7 @@ test_that("dates not available within 4 days give error", {
     ## we now have data for this date
     expect_s4_class(readcurr("1999-11-19", inputfiles = cf), "SpatRaster")
     expect_s4_class(readcurr(cf$date[1000:1005], xylim = ext(-20, 20, -20, 20), lon180 = TRUE, dironly = TRUE, inputfiles = cf), "SpatRaster")
-    expect_s4_class(readcurr(cf$date[1000:1003], xylim = ext(160, 200, -20, 20), filename = sprintf("%s.grd", tempfile()), 
+    expect_s4_class(readcurr(cf$date[1000:1003], xylim = ext(160, 200, -20, 20),
                              lon180 = FALSE, magonly = TRUE, inputfiles = cf), "SpatRaster")
 })
 

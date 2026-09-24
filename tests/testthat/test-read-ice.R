@@ -66,16 +66,16 @@ test_that("read_nsidc_ice_daily handles multiple dates", {
   expect_equal(as.Date(terra::time(r)), as.Date(dates))
 })
 
-test_that("read_nsidc_ice_daily values are in percentage range with setNA", {
+test_that("read_nsidc_ice_daily values are a fraction with setNA", {
   skip_if_no_raad()
 
   r <- read_nsidc_ice_daily("2020-01-15", setNA = TRUE)
   vals <- terra::values(r)
   vals <- vals[!is.na(vals)]
 
-  # With setNA, values should be 0-100
+  # With setNA, concentration is a fraction 0-1
   expect_true(all(vals >= 0))
-  expect_true(all(vals <= 100))
+  expect_true(all(vals <= 1))
 })
 
 test_that("read_nsidc_ice_daily setNA=FALSE preserves special values", {
@@ -173,17 +173,25 @@ test_that("readice shim returns RasterBrick for single hemisphere", {
 test_that("readice shim produces equivalent values to read_nsidc_ice_daily", {
   skip_if_no_raad()
 
+  ## readice() defaults to the CDR, so the NSIDC-0051 reader is only
+  ## comparable with product = "nsidc"
   withr::with_options(list(raadtools.shim.warn = FALSE), {
-    r_legacy <- readice("2020-01-15", hemisphere = "south")
+    r_legacy <- readice("2020-01-15", hemisphere = "south", product = "nsidc")
   })
   r_terra <- read_nsidc_ice_daily("2020-01-15", hemisphere = "south")
 
-  # Convert both to vectors for comparison
-  vals_legacy <- values(r_legacy)
-  vals_terra <- terra::values(r_terra)
+  expect_equal(as.vector(terra::values(r_legacy)), as.vector(terra::values(r_terra)))
+})
 
-  # Should be identical  (tolerance should be 0.01 but I changed it to reduce noise, these are different values)
-  expect_equal(vals_legacy, as.vector(vals_terra), tolerance = 1)
+test_that("readice default produces equivalent values to read_nsidc_cdr_daily", {
+  skip_if_no_raad()
+
+  withr::with_options(list(raadtools.shim.warn = FALSE), {
+    r_legacy <- readice("2020-01-15", hemisphere = "south")
+  })
+  r_terra <- read_nsidc_cdr_daily("2020-01-15", hemisphere = "south")
+
+  expect_equal(as.vector(terra::values(r_legacy)), as.vector(terra::values(r_terra)))
 })
 
 

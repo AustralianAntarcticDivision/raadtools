@@ -270,3 +270,18 @@ timedateFrom <- function(x, ...) {
   terra::time(x) <- timedateFrom(value)
   x
 }
+
+
+# get_time_len_rnetcdf <- function(.x) {
+#   on.exit(RNetCDF::close.nc(nc), add = TRUE)
+#   nc <- RNetCDF::open.nc(.x)
+#   RNetCDF::dim.inq.nc(nc, "time")$length
+# }
+
+get_time_len_ncdf4 <- function(.x) {
+  on.exit(ncdf4::nc_close(nc), add = TRUE)
+  nc <- ncdf4::nc_open(.x)
+  nc$dim$time$len
+}
+
+

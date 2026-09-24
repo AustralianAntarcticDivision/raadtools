@@ -20,21 +20,8 @@
 #' }
 read_geoid <- function(xylim = NULL, force = FALSE) {
   .shim_notice("read_geoid")
-
-  test <- system("gdalinfo", ignore.stdout = TRUE, ignore.stderr = TRUE)
-  if (test == 127) stop("cannot read Geoid files on this system (ask the authors of raadtools)")
-  ## just do it quick and dirty
-  geoid_tile_vrt <- getOption("raadtools.geoid_tile_vrt")
   tiles <- raadfiles::geoid_files()
-
-  if (is.null(geoid_tile_vrt) || !file.exists(geoid_tile_vrt)) {
-    geoid_tile_vrt <- tempfile(fileext = ".vrt")
-    system(sprintf("gdalbuildvrt %s %s", geoid_tile_vrt, paste(tiles$fullname, collapse = " ")), ignore.stdout = TRUE, ignore.stderr = TRUE)
-
-  }
-  r <- .rast_nc(geoid_tile_vrt)
-  ## so far so good, let's update the option
-  options(raadtools.geoid_tile_vrt = geoid_tile_vrt)
+  r <- terra::vrt(tiles$fullname, filename = tf <- tempfile(fileext = ".vrt"))
   if (!is.null(xylim)) r <- terra::crop(r, .as_ext(xylim))
   names(r) <- "EGM2008"
   r

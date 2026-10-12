@@ -1,7 +1,7 @@
 Package: raadtools
 Type: Package
 Title: Tools for Synoptic Environmental Spatial Data
-Version: 0.7.0.11
+Version: 0.7.1
 Authors@R: c(
    person("Michael D.","Sumner", role = c("aut", "cre"), email = "michael.sumner@aad.gov.au"), 
    person("Ben", "Raymond", role = "ctb", email = "ben.raymond@aad.gov.au")
@@ -16,8 +16,8 @@ Imports:
     purrr,
     raadfiles (>= 0.1.4.9022),
     tibble,
-    vapour (>= 0.8.8.9007),
-    xyt,
+    vapour (>= 0.9.0),
+    xyt (>= 0.1.0),
     ncmeta,
     RNetCDF,
     memoise,
@@ -43,7 +43,7 @@ BugReports: https://github.com/AustralianAntarcticDivision/raadtools/issues
 Description: Tools for reading, plotting and manipulating spatial data,
     particularly from remote sensing and model output.
 License: GPL-3
-Remotes: AustralianAntarcticDivision/raadfiles, AustralianAntarcticDivision/xyt
-Config/roxygen2/version: 8.1.0
+Remotes: AustralianAntarcticDivision/raadfiles
+Config/roxygen2/version: 8.1.1
 Config/testthat/edition: 3
 Config/testthat/parallel: true

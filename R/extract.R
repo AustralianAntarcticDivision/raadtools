@@ -47,6 +47,7 @@
 #' extract(readsst, a)
 #' @name extract
 #' @export
+#' @importFrom xyt extract_xyt
 #' @aliases extract,function,data.frame-method
 setMethod("extract", signature(x = "function", y = "data.frame"),
           function(x, y, ctstime = FALSE, when = "previous", ...) {

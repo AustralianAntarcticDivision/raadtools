@@ -91,8 +91,7 @@ you get it remodelled to the grid. extent doesn't need crs, grid does).
  view (and behaves correctly no matter the source file arrangement). The other functions include `readssh()`, `read_sla_daily()`, `read_ugosa_daily()`, 
  `read_vgosa_daily()`, `read_ugos_daily()`, `read_vgos_daily()`, `read_err_daily()`. 
  
- 
-* New data set `stations` with locations of Mawson, Davis, and Casey. 
+ * New data set `stations` with locations of Mawson, Davis, and Casey. 
 
 * New functions `read_amsre_ice()`, `read_amsr2_ice()`, `read_amsr2_3k_ice()`  to round out read
 of AMRS2 and AMSRE at 6km and 3km resolutions using new file list functions from raadfiles. 
@@ -100,6 +99,8 @@ of AMRS2 and AMSRE at 6km and 3km resolutions using new file list functions from
 * AMSR read ice functions now correctly apply `xylim` argument. 
 
 * Lead frequency functions `read_leads_clim()`, `read_leads_north_clim()`, `read_leads_south_clim()`. 
+
+* raadtools now imports new CRAN package xyt. 
 
 # raadtools 0.6.0
 

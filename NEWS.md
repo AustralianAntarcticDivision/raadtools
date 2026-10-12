@@ -1,4 +1,4 @@
-# raadtools dev
+# raadtools 0.8.0
 
 * Major speed up to `windfiles()` temporal expansion. 
 

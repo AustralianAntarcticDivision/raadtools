@@ -148,3 +148,4 @@ importFrom(terra,
 )
 importFrom(tibble,tibble)
 importFrom(vapour,vapour_vrt)
+importFrom(xyt,extract_xyt)

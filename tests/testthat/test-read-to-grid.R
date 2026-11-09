@@ -119,3 +119,18 @@ test_that("read_oisst_monthly reads the right band of each date onto a grid", {
   expect_equal(names(g), names(native))
   expect_equal(terra::values(g), terra::values(native), ignore_attr = TRUE)
 })
+
+test_that("readsst() passes grid = through to the OISST readers", {
+  skip_if_no_raad()
+  g <- list(crs = "EPSG:3031", extent = c(-1, 1, -1, 1) * 4e6, dim = c(100, 100))
+  withr::local_options(raadtools.shim.warn = FALSE)
+  d <- readsst("2020-01-15", grid = g, inputfiles = oisst_files("daily"))
+  expect_equal(dim(d), c(100, 100, 1))
+  expect_equal(terra::values(d),
+               terra::values(read_oisst_daily("2020-01-15", grid = g,
+                                              inputfiles = oisst_files("daily"))))
+  m <- readsst("2020-01-15", time.resolution = "monthly", grid = g,
+               inputfiles = oisst_files("monthly"))
+  expect_equal(dim(m), c(100, 100, 1))
+  expect_match(terra::crs(m, describe = TRUE)$code, "3031")
+})

@@ -59,6 +59,12 @@ readsst_daily(
 \code{SpatRaster}. For the historical defaults pinned explicitly, see
 \code{\link{read_oisst_daily}} and \code{\link{read_oisst_monthly}}.
 }
+\details{
+Arguments in \code{...} go to the underlying reader, so
+\code{grid =} reads onto a target grid in any CRS, e.g.
+\code{readsst(date, grid = list(crs = "EPSG:3031", extent = c(-1, 1, -1, 1) * 4e6, dim = c(400, 400)))}.
+See \code{\link{read_oisst_daily}}.
+}
 \examples{
 \dontrun{
 # sensible default

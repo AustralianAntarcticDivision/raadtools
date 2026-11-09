@@ -1,3 +1,12 @@
+# raadtools (development version)
+
+* `read_oisst_daily()` and `read_oisst_monthly()` gain `grid =` (and
+  `resample =`): read with the GDAL warper directly onto a target grid, given
+  as a SpatRaster template or a list of `crs`, `extent` and `dim`, in any CRS
+  (polar included). This is the data side of a viewer mode, where the view's
+  CRS, extent and pixel size drive the read. Internally this is the new
+  `.read_to_grid()`, which other readers can adopt.
+
 # raadtools 0.8.0
 
 * Major speed up to `windfiles()` temporal expansion. 

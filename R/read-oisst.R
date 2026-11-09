@@ -37,6 +37,13 @@
 #' @param inputfiles optionally provide a pre-filtered file catalog (tibble with
 #'   \code{date} and \code{fullname} columns).
 #' @param ... currently ignored.
+#' @param grid optional target grid to read onto: a \code{SpatRaster} template,
+#'   or a list with \code{crs}, \code{extent} = \code{c(xmin, xmax, ymin, ymax)}
+#'   and \code{dim} = \code{c(ncol, nrow)}. The data are read with the GDAL
+#'   warper directly onto that grid, in any CRS (polar included), and
+#'   \code{xylim} and \code{lon180} are ignored.
+#' @param resample resampling method used when \code{grid} is given, default
+#'   \code{"bilinear"}.
 #'
 #' @return \code{SpatRaster} with time dimension set to file dates, or tibble if
 #'   \code{returnfiles = TRUE}.
@@ -66,6 +73,8 @@ read_oisst_daily <- function(date,
                               latest = TRUE,
                               returnfiles = FALSE,
                               ...,
+                              grid = NULL,
+                              resample = "bilinear",
                               inputfiles = NULL) {
 
   varname <- match.arg(varname)
@@ -89,7 +98,14 @@ read_oisst_daily <- function(date,
   }
 
   # --- read ---
- # OISST files are non-compliant netCDF (no grid_mapping), set CRS explicitly
+  # OISST files are non-compliant netCDF (no grid_mapping), set CRS explicitly
+  if (!is.null(grid)) {
+    r <- .read_to_grid(.nc_dsn(files$fullname, varname), grid,
+                       resample = resample, source_crs = "EPSG:4326")
+    .utctime(r) <- files$date
+    names(r) <- format(files$date, "%Y-%m-%d")
+    return(r)
+  }
   r <- .rast_nc(files$fullname, subds = varname)
   terra::crs(r) <- "EPSG:4326"
   .utctime(r) <- files$date
@@ -139,6 +155,8 @@ read_oisst_monthly <- function(date,
                                 latest = TRUE,
                                 returnfiles = FALSE,
                                 ...,
+                                grid = NULL,
+                                resample = "bilinear",
                                 inputfiles = NULL) {
 
   varname <- match.arg(varname)
@@ -162,6 +180,14 @@ read_oisst_monthly <- function(date,
   }
 
   # --- read ---
+  if (!is.null(grid)) {
+    r <- .read_to_grid(.nc_dsn(files$fullname, varname), grid,
+                       band = files$band, resample = resample,
+                       source_crs = "EPSG:4326")
+    .utctime(r) <- files$date
+    names(r) <- format(files$date, "%Y-%m")
+    return(r)
+  }
   r <- .rast_nc(files$fullname, subds = varname)[[files$band]]
   terra::crs(r) <- "EPSG:4326"
   .utctime(r) <- files$date

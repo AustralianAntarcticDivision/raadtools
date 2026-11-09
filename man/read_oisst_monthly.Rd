@@ -12,6 +12,8 @@ read_oisst_monthly(
   latest = TRUE,
   returnfiles = FALSE,
   ...,
+  grid = NULL,
+  resample = "bilinear",
   inputfiles = NULL
 )
 }
@@ -33,6 +35,15 @@ if \code{FALSE}, return earliest.}
 \item{returnfiles}{if \code{TRUE}, return the file catalog instead of reading data.}
 
 \item{...}{currently ignored.}
+
+\item{grid}{optional target grid to read onto: a \code{SpatRaster} template,
+or a list with \code{crs}, \code{extent} = \code{c(xmin, xmax, ymin, ymax)}
+and \code{dim} = \code{c(ncol, nrow)}. The data are read with the GDAL
+warper directly onto that grid, in any CRS (polar included), and
+\code{xylim} and \code{lon180} are ignored.}
+
+\item{resample}{resampling method used when \code{grid} is given, default
+\code{"bilinear"}.}
 
 \item{inputfiles}{optionally provide a pre-filtered file catalog (tibble with
 \code{date} and \code{fullname} columns).}

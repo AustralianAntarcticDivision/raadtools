@@ -123,3 +123,18 @@
   })
   terra::rast(vals)
 }
+
+## Where a reader's result came from: one row per layer, with the GDAL data
+## source name and band it reads, and the CRS, extent and dim of the grid.
+## This is what a warp onto a target grid needs from a reader. NULL when any
+## layer is in memory (a rotate(), classify() or arithmetic materialised it),
+## because then there is no source to read again.
+.source_spec <- function(r) {
+  s <- terra::sources(r, nlyr = TRUE, bands = TRUE)
+  if (!nrow(s) || any(!nzchar(s$source))) return(NULL)
+  list(dsn = s$source,
+       band = as.integer(s$bands),
+       crs = terra::crs(r),
+       extent = as.vector(terra::ext(r)),
+       dim = as.integer(c(terra::ncol(r), terra::nrow(r))))
+}
